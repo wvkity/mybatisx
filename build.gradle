@@ -1,0 +1,71 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.15.0" apply true
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+}
+
+ext {
+    configuration = [
+            JAVA_VERSION = JavaVersion.VERSION_1_8
+    ]
+}
+
+allprojects {
+    group 'io.github.wvkity'
+    version '1.0.0-SNAPSHOT'
+    apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    sourceCompatibility = "${JAVA_VERSION}"
+    targetCompatibility = "${JAVA_VERSION}"
+
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url 'https://jcenter.bintray.com/' }
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.deprecation = true
+        options.compilerArgs += ["-parameters"]
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['src/main/java']
+            }
+            resources {
+                srcDirs = ['src/main/resources']
+            }
+        }
+        test {
+            java {
+                srcDirs = ['src/test/java']
+            }
+            resources {
+                srcDirs = ['src/test/resources']
+            }
+        }
+    }
+}
