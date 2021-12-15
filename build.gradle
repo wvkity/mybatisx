@@ -21,7 +21,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'maven'
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
@@ -44,13 +43,7 @@ subprojects {
         options.compilerArgs += ["-parameters"]
     }
 
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
-    }
-
-    sourceSets {
+    /*sourceSets {
         main {
             java {
                 srcDirs = ['src/main/java']
@@ -67,5 +60,10 @@ subprojects {
                 srcDirs = ['src/test/resources']
             }
         }
+    }*/
+
+    task mkdir {
+        sourceSets*.java.srcDirs*.each { it.mkdirs() }
+        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
     }
 }
