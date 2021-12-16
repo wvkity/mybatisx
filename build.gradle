@@ -7,6 +7,23 @@ ext {
     configuration = [
             JAVA_VERSION = JavaVersion.VERSION_1_8
     ]
+    libraries = [
+            junitV = "5.4.2",
+            fastjsonV = "1.2.72",
+            slf4jV = "1.7.30",
+            log4j2V = "2.13.1",
+            disruptorV = "3.4.2",
+    ]
+    libs = [
+            "junit-jupiter"    : "org.junit.jupiter:junit-jupiter:${junitV}",
+            "slf4j"            : "org.slf4j:slf4j-api:${slf4jV}",
+            "slf4j-simple"     : "org.slf4j:slf4j-simple:${slf4jV}",
+            "log4j2"           : "org.apache.logging.log4j:log4j-api:${log4j2V}",
+            "log4j2-core"      : "org.apache.logging.log4j:log4j-core:${log4j2V}",
+            "log4j2-slf4j-impl": "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
+            "disruptor"        : "com.lmax:disruptor:${disruptorV}",
+            "fastjson"         : "com.alibaba:fastjson:${fastjsonV}",
+    ]
 }
 
 allprojects {
@@ -62,8 +79,23 @@ subprojects {
         }
     }*/
 
+    test {
+        //dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
+        useJUnitPlatform()
+    }
+
     task mkdir {
         sourceSets*.java.srcDirs*.each { it.mkdirs() }
         sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+    }
+
+    dependencies {
+        implementation fileTree(dir: "libs", include: ["*.jar"])
+        runtimeOnly "${libs.slf4j}"
+        compileOnly "${libs.slf4j}"
+        testImplementation "${libs.slf4j}"
+        testImplementation "${libs["slf4j-simple"]}"
+        testImplementation "${libs["junit-jupiter"]}"
+        testAnnotationProcessor "${libs["junit-jupiter"]}"
     }
 }
