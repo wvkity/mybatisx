@@ -217,7 +217,12 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     @Override
     public <T> AbstractMultiResult withMap(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
-            this.withMap(key, this.newMap(k, v));
+            final Map<Object, Object> map = this.getMap(key);
+            if (Objects.nonNull(map)) {
+                map.put(k, v);
+            } else {
+                this.put(key, this.newMap(k, v));
+            }
         }
         return this;
     }
@@ -246,7 +251,12 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     @Override
     public <T> AbstractMultiResult withMapIfAbsent(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
-            this.withMapIfAbsent(key, this.newMap(k, v));
+            final Map<Object, Object> map = this.getMap(key);
+            if (Objects.nonNull(map)) {
+                map.putIfAbsent(k, v);
+            } else {
+                this.putIfAbsent(key, this.newMap(k, v));
+            }
         }
         return this;
     }
