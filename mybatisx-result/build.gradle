@@ -1,4 +1,3 @@
 dependencies {
     api project(':mybatisx-utils')
-    testImplementation "${libs.fastjson}"
 }

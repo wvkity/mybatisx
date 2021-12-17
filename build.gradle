@@ -97,5 +97,6 @@ subprojects {
         testImplementation "${libs["slf4j-simple"]}"
         testImplementation "${libs["junit-jupiter"]}"
         testAnnotationProcessor "${libs["junit-jupiter"]}"
+        testImplementation "${libs.fastjson}"
     }
 }
