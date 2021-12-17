@@ -31,4 +31,24 @@ public final class Regex {
 
     public static final Pattern REGEX_NUMBER_WITH_TRAILING_ZEROS = Pattern.compile("\\.0*$");
     public static final Pattern REGEX_INTEGER = Pattern.compile("^([\\-+])?(0|[1-9]\\d*)$");
+    public static final Pattern REGEX_POSITIVE_INTEGER = Pattern.compile("^\\+?(0|[1-9]\\d*)$");
+
+    /**
+     * 检查是否为整数字符串
+     * @param arg 字符串
+     * @return boolean
+     */
+    public static boolean isInteger(final String arg) {
+        return REGEX_INTEGER.matcher(arg).matches();
+    }
+
+    /**
+     * 检查是否为正整数字符串
+     * @param arg 字符串
+     * @return boolean
+     */
+    public static boolean isPositiveInteger(final String arg) {
+        return REGEX_POSITIVE_INTEGER.matcher(arg).matches();
+    }
+
 }

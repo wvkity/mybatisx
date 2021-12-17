@@ -196,4 +196,52 @@ public final class Strings {
                 || equals(DEFAULT_STR_ZERO, arg);
     }
 
+    /**
+     * 字符串转整数
+     *
+     * @param arg 字符串
+     * @return 整数
+     */
+    public static int parseInt(final String arg) {
+        return parseInt(arg, 0);
+    }
+
+    /**
+     * 字符串转整数
+     *
+     * @param arg          字符串
+     * @param defaultValue 默认值
+     * @return 整数
+     */
+    public static int parseInt(final String arg, final int defaultValue) {
+        if (Regex.isInteger(arg)) {
+            return Integer.parseInt(arg);
+        }
+        return defaultValue;
+    }
+
+    /**
+     * 字符串转正整数
+     *
+     * @param arg 字符串
+     * @return 整数
+     */
+    public static int parsePositiveInt(final String arg) {
+        return parsePositiveInt(arg, 0);
+    }
+
+    /**
+     * 字符串转正整数
+     *
+     * @param arg          字符串
+     * @param defaultValue 默认值
+     * @return 整数
+     */
+    public static int parsePositiveInt(final String arg, final int defaultValue) {
+        if (Regex.isPositiveInteger(arg)) {
+            return Integer.parseInt(arg);
+        }
+        return defaultValue;
+    }
+
 }

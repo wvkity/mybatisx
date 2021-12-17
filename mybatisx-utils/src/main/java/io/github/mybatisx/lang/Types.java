@@ -153,7 +153,7 @@ public final class Types {
             if (Strings.isNull(str)) {
                 return 0L;
             }
-            if (Regex.REGEX_INTEGER.matcher(str).matches()) {
+            if (Regex.isInteger(str)) {
                 return Long.parseLong(str);
             }
         }
@@ -181,7 +181,7 @@ public final class Types {
             if (Strings.isNull(str)) {
                 return 0.f;
             }
-            if (Regex.REGEX_INTEGER.matcher(str).matches()) {
+            if (Regex.isInteger(str)) {
                 return Float.parseFloat(str);
             }
         }
@@ -209,7 +209,7 @@ public final class Types {
             if (Strings.isNull(str)) {
                 return 0.d;
             }
-            if (Regex.REGEX_INTEGER.matcher(str).matches()) {
+            if (Regex.isInteger(str)) {
                 return Double.parseDouble(str);
             }
         }
