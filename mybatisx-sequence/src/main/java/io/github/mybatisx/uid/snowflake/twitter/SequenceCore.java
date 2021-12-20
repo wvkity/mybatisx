@@ -17,7 +17,7 @@ package io.github.mybatisx.uid.snowflake.twitter;
 
 import io.github.mybatisx.lang.Maths;
 import io.github.mybatisx.lang.Objects;
-import io.github.mybatisx.lang.SingletonClock;
+import io.github.mybatisx.lang.SystemClock;
 import io.github.mybatisx.uid.snowflake.SnowflakeException;
 import io.github.mybatisx.uid.snowflake.core.Config;
 import io.github.mybatisx.uid.snowflake.core.Core;
@@ -178,7 +178,7 @@ public class SequenceCore implements Core {
     public long getTimestamp() {
         final long now;
         if (this.isUseClock()) {
-            now = SingletonClock.getTimestamp();
+            now = SystemClock.currentTimestamp();
         } else {
             now = System.currentTimeMillis();
         }
