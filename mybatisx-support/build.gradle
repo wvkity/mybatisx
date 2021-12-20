@@ -1,3 +1,6 @@
 dependencies {
-    
+    api project(":mybatisx-base")
+    api project(":mybatisx-pageable")
+    api project(":mybatisx-auditable")
+    api project(":mybatisx-batch")
 }

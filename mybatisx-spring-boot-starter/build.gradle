@@ -1,3 +1,6 @@
 dependencies {
-    
+    api project(":mybatisx-spring")
+    api project(":mybatisx-extension")
 }
+
+compileJava.dependsOn(processResources)
