@@ -223,4 +223,16 @@ public final class Objects {
         return 0;
     }
 
+    /**
+     * 检查表达式结果是否为真
+     *
+     * @param expression 表达式结果
+     * @param message    异常信息
+     */
+    public static void isTrue(final boolean expression, final String message) {
+        if (!expression) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
 }
