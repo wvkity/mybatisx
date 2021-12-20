@@ -39,9 +39,9 @@ import org.slf4j.LoggerFactory;
  * @created 2021/12/19
  * @since 1.0.0
  */
-public class SnowflakeSequenceAppTest {
+public class DefaultSequenceAppTest {
 
-    static final Logger log = LoggerFactory.getLogger(SnowflakeSequenceAppTest.class);
+    static final Logger log = LoggerFactory.getLogger(DefaultSequenceAppTest.class);
 
     @Test
     public void test1() {

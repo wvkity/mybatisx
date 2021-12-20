@@ -58,9 +58,9 @@ public abstract class AbstractSequence {
     }
 
     protected long tilNextMills(final long lastTimestamp) {
-        long timestamp = this.getTimestamp();
+        long timestamp = this.getTimestampValue();
         while (timestamp <= lastTimestamp) {
-            timestamp = this.getTimestamp();
+            timestamp = this.getTimestampValue();
         }
         return timestamp;
     }
@@ -71,7 +71,7 @@ public abstract class AbstractSequence {
      * @return 唯一ID
      */
     protected long nextValue() {
-        long newTimestamp = this.getTimestamp();
+        long newTimestamp = this.getTimestampValue();
         final long _$lastTimestamp = this.lastTimestamp;
         if (newTimestamp < _$lastTimestamp) {
             throw new SnowflakeException("Clock moved backwards. Refusing for " +
@@ -91,12 +91,16 @@ public abstract class AbstractSequence {
         return this.core.allocate(newTimestamp - this.core.getEpochTimestamp(), _$sequence);
     }
 
+    long getTimestampValue() {
+        return this.core.getTimestamp();
+    }
+
     /**
      * 获取当前时间戳
      *
      * @return 时间戳
      */
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return this.core.getTimestamp();
     }
 

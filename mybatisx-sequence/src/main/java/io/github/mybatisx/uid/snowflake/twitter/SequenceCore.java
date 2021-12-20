@@ -51,15 +51,9 @@ public class SequenceCore implements Core {
      */
     public static final int DEFAULT_MAX_BITS = 1 << 6;
     /**
-     * 默认缓存数
-     */
-    public static final int DEFAULT_CACHE_SIZE = 200;
-
-    /**
      * 分配器
      */
     private final Distributor distributor;
-
     /**
      * 策略
      */
@@ -283,8 +277,8 @@ public class SequenceCore implements Core {
 
     @Override
     public boolean setUseClock(boolean useClock) {
-        final boolean _$reference = this.useClockReference.getReference();
         final int _$timestamp = this.useClockReference.getStamp();
+        final boolean _$reference = this.useClockReference.getReference();
         return this.useClockReference.compareAndSet(_$reference, !_$reference, _$timestamp, _$timestamp + 1);
     }
 

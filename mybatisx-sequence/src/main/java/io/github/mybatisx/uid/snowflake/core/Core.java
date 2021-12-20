@@ -111,7 +111,7 @@ public interface Core extends Distributor {
      * <p>
      * (时间戳部分 | 数据中心部分 | 机器码部分 | 序列部分)
      *
-     * @param deltaTime 时间差
+     * @param deltaTime 偏移时间
      * @param sequence  序列
      * @return 唯一ID
      */
