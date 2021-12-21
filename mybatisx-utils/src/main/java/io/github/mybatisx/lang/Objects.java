@@ -15,10 +15,18 @@
  */
 package io.github.mybatisx.lang;
 
+import org.checkerframework.checker.units.qual.K;
+
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Objects工具
@@ -72,6 +80,16 @@ public final class Objects {
      */
     public static boolean is(final Class<?> source, final Object arg) {
         return Objects.nonNull(arg) && is(source, arg.getClass());
+    }
+
+    /**
+     * 检查目标对象是否为{@link Object}类型
+     *
+     * @param arg 目标对象
+     * @return boolean
+     */
+    public static boolean isObject(final Object arg) {
+        return Objects.nonNull(arg) && Types.isObject(arg.getClass());
     }
 
     /**
@@ -221,6 +239,124 @@ public final class Objects {
             return arg.size();
         }
         return 0;
+    }
+
+    /**
+     * 合并{@link Predicate}
+     *
+     * @param predicates {@link Predicate}数组
+     * @param <T>        泛型
+     * @return {@link Predicate}
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T> Predicate<T> and(final Predicate... predicates) {
+        final int size;
+        if ((size = Objects.size(predicates)) > 0) {
+            if (size == 1) {
+                return predicates[0];
+            }
+            return Arrays.stream(predicates).reduce(__ -> true, Predicate::and);
+        }
+        return null;
+    }
+
+    /**
+     * 过滤
+     *
+     * @param values 待过滤集合
+     * @param filter 过滤器
+     * @param <T>    值类型
+     * @return 过滤后的列表
+     */
+    public static <T> Set<T> filter(final Collection<T> values, final Predicate<? super T> filter) {
+        if (Objects.isEmpty(values)) {
+            return new LinkedHashSet<>(0);
+        }
+        if (Objects.isNull(filter)) {
+            return new LinkedHashSet<>(values);
+        }
+        return values.stream().filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * 过滤
+     *
+     * @param values  待过滤值列表
+     * @param filters 过滤器列表
+     * @param <T>     值类型
+     * @return 过滤后的列表
+     */
+    @SafeVarargs
+    public static <T> Set<T> filters(final T[] values, final Predicate<? super T>... filters) {
+        if (Objects.isEmpty(values)) {
+            return new LinkedHashSet<>(0);
+        }
+        final Predicate<T> filter = and(filters);
+        if (Objects.isNull(filter)) {
+            return new LinkedHashSet<>(Arrays.asList(values));
+        }
+        return Arrays.stream(values).filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * 过滤
+     *
+     * @param values  待过滤集合
+     * @param filters 过滤器列表
+     * @param <T>     值类型
+     * @return 过滤后的列表
+     */
+    @SafeVarargs
+    public static <T> Set<T> filters(final Collection<T> values, final Predicate<? super T>... filters) {
+        if (Objects.isEmpty(values)) {
+            return new LinkedHashSet<>(0);
+        }
+        final Predicate<T> filter = and(filters);
+        if (Objects.isNull(filter)) {
+            return new LinkedHashSet<>(values);
+        }
+        return values.stream().filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
+     *
+     * @param map      {@link Map}
+     * @param k        键
+     * @param supplier {@link Supplier}
+     * @param <K>      键类型
+     * @param <V>      值类型
+     * @return 值
+     */
+    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Supplier<V> supplier) {
+        final V v = map.get(k);
+        if (Objects.nonNull(v)) {
+            return v;
+        }
+        final V newValue = supplier.get();
+        return Objects.ifNull(map.putIfAbsent(k, newValue), newValue);
+    }
+
+    /**
+     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
+     *
+     * @param map             {@link Map}
+     * @param k               键
+     * @param mappingFunction {@link Function}
+     * @param <K>             键类型
+     * @param <V>             值类型
+     * @return 值
+     */
+    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Function<K, V> mappingFunction) {
+        final V v = map.get(k);
+        if (Objects.nonNull(v)) {
+            return v;
+        }
+        return map.computeIfAbsent(k, mappingFunction);
+    }
+
+    public static <V> V ifNull(final V v, final V defaultValue) {
+        return Objects.isNull(v) ? defaultValue : v;
     }
 
     /**

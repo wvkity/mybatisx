@@ -61,8 +61,8 @@ public final class Strings {
      * @param arg 字符串
      * @return boolean
      */
-    public static boolean isEmpty(final String arg) {
-        return Objects.isNull(arg) || arg.isEmpty();
+    public static boolean isEmpty(final CharSequence arg) {
+        return Objects.isNull(arg) || arg.length() == 0;
     }
 
     /**
@@ -71,7 +71,7 @@ public final class Strings {
      * @param arg 字符串
      * @return boolean
      */
-    public static boolean isNotEmpty(final String arg) {
+    public static boolean isNotEmpty(final CharSequence arg) {
         return !isEmpty(arg);
     }
 
@@ -81,11 +81,11 @@ public final class Strings {
      * @param arg 字符串
      * @return boolean
      */
-    public static boolean isWhitespace(final String arg) {
+    public static boolean isWhitespace(final CharSequence arg) {
         if (isNotEmpty(arg)) {
-            final char[] chars = arg.toCharArray();
-            for (char c : chars) {
-                if (!Character.isWhitespace(c)) {
+            final int size = arg.length();
+            for (int i = 0; i < size; i++) {
+                if (!Character.isWhitespace(arg.charAt(i))) {
                     return false;
                 }
             }
@@ -99,7 +99,7 @@ public final class Strings {
      * @param arg 字符串
      * @return boolean
      */
-    public static boolean isNotWhitespace(final String arg) {
+    public static boolean isNotWhitespace(final CharSequence arg) {
         return !isWhitespace(arg);
     }
 
@@ -109,8 +109,8 @@ public final class Strings {
      * @param arg 字符串
      * @return boolean
      */
-    public static boolean isNull(final String arg) {
-        return isEmpty(arg) || DEFAULT_STR_NULL.equalsIgnoreCase(arg);
+    public static boolean isNull(final CharSequence arg) {
+        return isEmpty(arg) || DEFAULT_STR_NULL.equalsIgnoreCase(arg.toString());
     }
 
     /**

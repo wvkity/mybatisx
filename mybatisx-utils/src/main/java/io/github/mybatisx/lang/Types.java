@@ -15,8 +15,25 @@
  */
 package io.github.mybatisx.lang;
 
+import com.google.common.collect.ImmutableSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
  * 类型工具
@@ -27,7 +44,158 @@ import java.util.regex.Matcher;
  */
 public final class Types {
 
+    private static final Logger log = LoggerFactory.getLogger(Types.class);
+
     private Types() {
+    }
+
+    /**
+     * 基本数据类型类名
+     */
+    public static final Set<String> PRI_TYPE_NAMES;
+    /**
+     * 基本数据类型
+     */
+    public static final Set<Class<?>> PRI_TYPES;
+    /**
+     * 基本数据类型描述符
+     */
+    public static final Set<String> PRI_TYPE_DES;
+    /**
+     * 基本数据类型包装类名
+     */
+    public static final Set<String> PRI_WRAPPER_TYPE_NAMES;
+    /**
+     * 基本数据类型包装类
+     */
+    public static final Set<Class<?>> PRI_WRAPPER_TYPES;
+    /**
+     * 新时间API类名
+     */
+    public static final Set<String> NEW_TIME_TYPE_NAMES;
+    /**
+     * 新时间API类
+     */
+    public static final Set<Class<?>> NEW_TIME_TYPES;
+    /**
+     * 简单类型
+     */
+    private static final Set<Class<?>> SIMPLE_TYPES;
+    /**
+     * 元注解
+     */
+    public static final Set<Class<? extends Annotation>> METADATA_ANNOTATION_TYPES;
+
+    static {
+        PRI_TYPE_NAMES = ImmutableSet.of("boolean", "char", "byte", "short", "int",
+                "long", "float", "double", "void");
+        PRI_TYPES = ImmutableSet.of(boolean.class, char.class, byte.class, short.class, int.class,
+                long.class, float.class, double.class, void.class);
+        PRI_TYPE_DES = ImmutableSet.of("Z", "C", "B", "S", "I", "J", "F", "D", "V");
+        PRI_WRAPPER_TYPE_NAMES = ImmutableSet.of("Boolean", "Character", "Byte", "Short", "Integer",
+                "Long", "Float", "Double", "Void");
+        PRI_WRAPPER_TYPES = ImmutableSet.of(Boolean.class, Character.class, Byte.class, Short.class,
+                Integer.class, Long.class, Float.class, Double.class, Void.class);
+        NEW_TIME_TYPE_NAMES = ImmutableSet.of("java.time.Instant", "java.time.LocalDateTime",
+                "java.time.LocalDate", "java.time.LocalTime", "java.time.OffsetDateTime", "java.time.OffsetTime",
+                "java.time.ZonedDateTime", "java.time.Year", "java.time.Month", "java.time.YearMonth");
+        NEW_TIME_TYPES = ImmutableSet.copyOf(NEW_TIME_TYPE_NAMES.stream().map(Types::loadClassIgnoreExp)
+                .filter(Objects::nonNull).collect(Collectors.toSet()));
+        SIMPLE_TYPES = new HashSet<>(64);
+        SIMPLE_TYPES.addAll(Types.PRI_TYPES);
+        SIMPLE_TYPES.addAll(PRI_WRAPPER_TYPES);
+        SIMPLE_TYPES.addAll(Arrays.asList(Date.class, Timestamp.class, Calendar.class, Class.class, BigInteger.class,
+                BigDecimal.class, String.class));
+        SIMPLE_TYPES.addAll(NEW_TIME_TYPES);
+        METADATA_ANNOTATION_TYPES = ImmutableSet.of(Inherited.class, Documented.class, Target.class, Retention.class
+                , SuppressWarnings.class, Override.class, SafeVarargs.class);
+    }
+
+    /**
+     * 加载类(忽略异常)
+     *
+     * @param className 类名
+     * @return 类对象
+     */
+    public static Class<?> loadClassIgnoreExp(final String className) {
+        if (Strings.isNotWhitespace(className)) {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                log.warn("Class loading failed: " + e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 注册简单类
+     *
+     * @param classes 多个全限定类名([,:;]分隔)
+     */
+    public static void registrySimpleTypeLicence(final String classes) {
+        if (Strings.isNotWhitespace(classes)) {
+            Arrays.stream(classes.split("([,:;])(\\s*)?")).forEach(Types::registrySimpleType);
+        }
+    }
+
+    /**
+     * 注册简单类
+     *
+     * @param className 全限定类名
+     */
+    public static void registrySimpleType(final String className) {
+        Types.registrySimpleType(Types.loadClassIgnoreExp(className));
+    }
+
+    /**
+     * 注册简单类
+     *
+     * @param clazz 类
+     */
+    public static void registrySimpleType(final Class<?> clazz) {
+        if (Objects.nonNull(clazz)) {
+            SIMPLE_TYPES.add(clazz);
+        }
+    }
+
+    /**
+     * 获取所有简单类型
+     *
+     * @return 简单类型集合
+     */
+    public static Set<Class<?>> getSimpleTypes() {
+        return new HashSet<>(Types.SIMPLE_TYPES);
+    }
+
+    /**
+     * 检查指定类是否为简单类型
+     *
+     * @param clazz 待检查类
+     * @return boolean
+     */
+    public static boolean isSimpleType(final Class<?> clazz) {
+        return Objects.nonNull(clazz) && !Types.isObject(clazz) && Types.SIMPLE_TYPES.contains(clazz);
+    }
+
+    /**
+     * 检查指定类是否为{@link Object}类型
+     *
+     * @param clazz 待检查类
+     * @return boolean
+     */
+    public static boolean isObject(final Class<?> clazz) {
+        return Objects.nonNull(clazz) && Object.class == clazz;
+    }
+
+    /**
+     * 检查指定类是否为基本数据类型或包装类型
+     *
+     * @param clazz 待检查类
+     * @return boolean
+     */
+    public static boolean isPrimitiveOrWrapType(final Class<?> clazz) {
+        return Objects.nonNull(clazz) && (Types.PRI_TYPES.contains(clazz) || Types.PRI_WRAPPER_TYPES.contains(clazz));
     }
 
     /**
