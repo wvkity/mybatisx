@@ -45,7 +45,7 @@ public interface VAware extends Serializable {
     default <T> T get(final Object key, final Class<T> clazz) {
         if (Objects.nonNull(clazz)) {
             final Object value = this.getObject(key);
-            if (Objects.is(clazz, value)) {
+            if (Objects.isAssignable(clazz, value)) {
                 return (T) value;
             }
         }
