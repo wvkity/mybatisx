@@ -133,7 +133,7 @@ public final class Strings {
      * @return 新字符串
      */
     public static String trim(final Object arg) {
-        if (Objects.is(String.class, arg)) {
+        if (Objects.isAssignable(String.class, arg)) {
             return trim(arg.toString());
         }
         return null;

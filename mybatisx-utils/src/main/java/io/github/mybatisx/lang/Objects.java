@@ -15,8 +15,7 @@
  */
 package io.github.mybatisx.lang;
 
-import org.checkerframework.checker.units.qual.K;
-
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -26,6 +25,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +38,19 @@ import java.util.stream.Collectors;
 public final class Objects {
 
     private Objects() {
+    }
+
+    /**
+     * JAVA8正则表达式
+     */
+    public static final Pattern REGEX_JAVA_VERSION_8 = Pattern.compile("^1\\.8\\.(.*?)$");
+    /**
+     * 是否为JAVA_8
+     */
+    public static final boolean JAVA_VERSION_8;
+
+    static {
+        JAVA_VERSION_8 = REGEX_JAVA_VERSION_8.matcher(System.getProperty("java.version")).matches();
     }
 
     /**
@@ -67,7 +80,7 @@ public final class Objects {
      * @param clazz  目标类
      * @return boolean
      */
-    public static boolean is(final Class<?> source, final Class<?> clazz) {
+    public static boolean isAssignable(final Class<?> source, final Class<?> clazz) {
         return Objects.nonNull(source) && Objects.nonNull(clazz) && source.isAssignableFrom(clazz);
     }
 
@@ -78,8 +91,8 @@ public final class Objects {
      * @param arg    目标对象
      * @return boolean
      */
-    public static boolean is(final Class<?> source, final Object arg) {
-        return Objects.nonNull(arg) && is(source, arg.getClass());
+    public static boolean isAssignable(final Class<?> source, final Object arg) {
+        return Objects.nonNull(arg) && isAssignable(source, arg.getClass());
     }
 
     /**
@@ -89,7 +102,17 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isObject(final Object arg) {
-        return Objects.nonNull(arg) && Types.isObject(arg.getClass());
+        return Types.isObject(arg.getClass());
+    }
+
+    /**
+     * 检查目标对象是否为{@link Annotation}类型
+     *
+     * @param arg 目标对象
+     * @return boolean
+     */
+    public static boolean isAnnotation(final Object arg) {
+        return Objects.isAssignable(Annotation.class, arg);
     }
 
     /**
@@ -109,7 +132,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isCollection(final Object arg) {
-        return is(Collection.class, arg);
+        return isAssignable(Collection.class, arg);
     }
 
     /**
@@ -119,7 +142,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isSet(final Object arg) {
-        return is(Set.class, arg);
+        return isAssignable(Set.class, arg);
     }
 
     /**
@@ -129,7 +152,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isList(final Object arg) {
-        return is(List.class, arg);
+        return isAssignable(List.class, arg);
     }
 
     /**
@@ -139,7 +162,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isMap(final Object arg) {
-        return is(Map.class, arg);
+        return isAssignable(Map.class, arg);
     }
 
     /**
@@ -348,9 +371,11 @@ public final class Objects {
      * @return 值
      */
     public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Function<K, V> mappingFunction) {
-        final V v = map.get(k);
-        if (Objects.nonNull(v)) {
-            return v;
+        if (JAVA_VERSION_8) {
+            final V v = map.get(k);
+            if (Objects.nonNull(v)) {
+                return v;
+            }
         }
         return map.computeIfAbsent(k, mappingFunction);
     }

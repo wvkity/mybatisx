@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -179,13 +180,44 @@ public final class Types {
     }
 
     /**
+     * 检查两个类是否一致
+     *
+     * @param source 源类
+     * @param clazz  目标类
+     * @return boolean
+     */
+    public static boolean is(final Class<?> source, final Class<?> clazz) {
+        return Objects.nonNull(source) && source.equals(clazz);
+    }
+
+    /**
      * 检查指定类是否为{@link Object}类型
      *
      * @param clazz 待检查类
      * @return boolean
      */
     public static boolean isObject(final Class<?> clazz) {
-        return Objects.nonNull(clazz) && Object.class == clazz;
+        return Types.is(Object.class, clazz);
+    }
+
+    /**
+     * 检查指定类是否为{@link Serializable}类型
+     *
+     * @param clazz 待检查类
+     * @return boolean
+     */
+    public static boolean isSerializable(final Class<?> clazz) {
+        return Types.is(Serializable.class, clazz);
+    }
+
+    /**
+     * 检查指定类是否为{@link Annotation}类型
+     *
+     * @param clazz 待检查类
+     * @return boolean
+     */
+    public static boolean isAnnotation(final Class<?> clazz) {
+        return Types.is(Annotation.class, clazz);
     }
 
     /**

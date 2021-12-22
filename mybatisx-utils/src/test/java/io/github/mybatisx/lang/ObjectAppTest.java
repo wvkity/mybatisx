@@ -16,11 +16,16 @@
 package io.github.mybatisx.lang;
 
 import io.github.mybatisx.reflect.Reflections;
+import jdk.internal.dynalink.support.ClassMap;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author wvkity
@@ -32,18 +37,37 @@ public class ObjectAppTest {
     private static final Logger log = LoggerFactory.getLogger(ObjectAppTest.class);
 
     interface F {
-
+        default String m1() {
+            return null;
+        }
     }
 
     static class A {
+
+        String m2() {
+            return "";
+        }
     }
 
     static class B extends A {
+        int m3() {
+            return 1;
+        }
 
+        String f1;
+        int f2;
     }
 
     static class C extends B implements F {
+        @Override
+        public String m1() {
+            return "m1";
+        }
 
+        @Override
+        String m2() {
+            return super.m2();
+        }
     }
 
     @Test
@@ -70,5 +94,16 @@ public class ObjectAppTest {
         final Set<Class<?>> ss4 = Reflections.getAllSuperTypes(c.getClass(), Class::isInterface);
         log.info("{}", ss3);
         log.info("{}", ss4);
+        log.info("{}", Map.class);
+    }
+
+    @Test
+    public void test3() {
+        final C c = new C();
+        final Predicate<Method> filter = it -> !"m3".equals(it.getName());
+        final Set<Method> methods = Reflections.getAllMethods(c.getClass(), filter);
+        final Set<Field> fields = Reflections.getAllFields(c.getClass());
+        log.info("methods: {}", methods);
+        log.info("fields: {}", fields);
     }
 }
