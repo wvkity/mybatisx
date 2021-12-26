@@ -1,4 +1,6 @@
 dependencies {
+    implementation "${libs.mybatis}"
+    api project(":mybatisx-batch")
     api project(":mybatisx-sequence")
     api project(":mybatisx-annotation")
 }
