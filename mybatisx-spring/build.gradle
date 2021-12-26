@@ -2,4 +2,7 @@ dependencies {
     api project(":mybatisx-core")
     api project(":mybatisx-multi-datasource")
     api "${libs["mybatis-spring"]}"
+    implementation "${libs["spring-jdbc"]}"
+    implementation "${libs["spring-context"]}"
+    implementation "${libs["spring-aspects"]}"
 }
