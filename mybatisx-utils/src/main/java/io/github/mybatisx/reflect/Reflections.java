@@ -24,6 +24,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -428,6 +430,39 @@ public final class Reflections {
         } catch (Exception ignore) {
             return false;
         }
+    }
+
+    /**
+     * 获取指定类的泛型类
+     *
+     * @param clazz 类
+     * @param index 索引
+     * @return 泛型类
+     */
+    public static Class<?> getGenericClass(final Class<?> clazz, final int index) {
+        return Reflections.getGenericClass(clazz.getGenericSuperclass(), index);
+    }
+
+    /**
+     * 获取指定类型的泛型类
+     *
+     * @param type  类型
+     * @param index 索引
+     * @return 泛型类
+     */
+    public static Class<?> getGenericClass(final Type type, final int index) {
+        if (!Objects.isAssignable(ParameterizedType.class, type)) {
+            return Object.class;
+        }
+        final Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+        if (Objects.isEmpty(types)) {
+            return Object.class;
+        }
+        final Type it = types[index];
+        if (Objects.isAssignable(Class.class, it)) {
+            return (Class<?>) it;
+        }
+        return Object.class;
     }
 
 }
