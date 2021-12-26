@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.github.mybatisx.spring.boot.autoconfigure.MyBatisLanguageDriverAutoConfiguration, \
+  io.github.mybatisx.spring.boot.autoconfigure.MyBatisAutoConfiguration
