@@ -15,17 +15,23 @@
  */
 package io.github.mybatisx.base.matcher;
 
-import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.reflect.Reflections;
+import org.apache.ibatis.reflection.property.PropertyNamer;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
- * 属性匹配器
+ * get方法匹配器
  *
  * @author wvkity
- * @created 2021/12/28
+ * @created 2021/12/25
  * @since 1.0.0
  */
-public interface FieldMatcher extends Matcher<Field> {
+public class ReadableMatcher extends MethodMatcher implements GetterMatcher {
 
+    @Override
+    public boolean matches(Method method) {
+        return super.matches(method) && Reflections.isGetter(method) 
+                && Reflections.isValidProperty(PropertyNamer.methodToProperty(method.getName()));
+    }
 }

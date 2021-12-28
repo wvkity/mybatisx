@@ -21,14 +21,9 @@ import io.github.mybatisx.matcher.Matcher;
  * 类匹配器
  *
  * @author wvkity
- * @created 2021/12/25
+ * @created 2021/12/28
  * @since 1.0.0
  */
-public class ClassMatcher implements Matcher<Class<?>> {
-
-    @Override
-    public boolean matches(Class<?> aClass) {
-        return false;
-    }
+public interface ClassMatcher extends Matcher<Class<?>> {
 
 }

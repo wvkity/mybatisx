@@ -15,13 +15,17 @@
  */
 package io.github.mybatisx.base.matcher;
 
+import io.github.mybatisx.matcher.Matcher;
+
+import java.lang.reflect.Method;
+
 /**
  * set方法匹配器
  *
  * @author wvkity
- * @created 2021/12/25
+ * @created 2021/12/28
  * @since 1.0.0
  */
-public class SetterMatcher extends MethodMatcher {
+public interface SetterMatcher extends Matcher<Method> {
 
 }

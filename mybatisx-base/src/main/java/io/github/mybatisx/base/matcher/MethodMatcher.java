@@ -30,6 +30,6 @@ public class MethodMatcher implements Matcher<Method> {
 
     @Override
     public boolean matches(Method method) {
-        return false;
+        return method != null && !method.isBridge();
     }
 }
