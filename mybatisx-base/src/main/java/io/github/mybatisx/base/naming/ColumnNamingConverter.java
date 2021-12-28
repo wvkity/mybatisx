@@ -13,15 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.parser;
+package io.github.mybatisx.base.naming;
+
+import io.github.mybatisx.annotation.NamingStrategy;
 
 /**
- * 实体类解析器
+ * 字段命名策略转换器
  *
  * @author wvkity
- * @created 2021/12/25
+ * @created 2021/12/28
  * @since 1.0.0
  */
-public interface EntityParser {
+public class ColumnNamingConverter extends AbstractNamingConverter {
 
+    public ColumnNamingConverter(NamingStrategy targetStrategy) {
+        this(NamingStrategy.LOWER_CAMEL, targetStrategy);
+    }
+
+    public ColumnNamingConverter(NamingStrategy sourceStrategy, NamingStrategy targetStrategy) {
+        super(sourceStrategy, targetStrategy);
+    }
 }
+
