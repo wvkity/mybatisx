@@ -96,13 +96,18 @@ public class MyBatisXMLConfigBuilder extends BaseBuilder {
         this.parser = parser;
     }
 
-    public Configuration parse() {
+    @Override
+    public MyBatisConfiguration getConfiguration() {
+        return (MyBatisConfiguration) super.getConfiguration();
+    }
+
+    public MyBatisConfiguration parse() {
         if (parsed) {
             throw new BuilderException("Each XMLConfigBuilder can only be used once.");
         }
         parsed = true;
         parseConfiguration(parser.evalNode("/configuration"));
-        return configuration;
+        return (MyBatisConfiguration) configuration;
     }
 
     private void parseConfiguration(XNode root) {
