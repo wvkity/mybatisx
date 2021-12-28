@@ -10,6 +10,12 @@
       "name": "mybatisx.configuration",
       "sourceMethod": "getConfiguration()",
       "type": "io.github.mybatisx.session.MyBatisConfiguration"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.global-config",
+      "sourceMethod": "getGlobalConfig()",
+      "type": "io.github.mybatisx.support.config.MyBatisGlobalConfig"
     }
   ],
   "properties": [

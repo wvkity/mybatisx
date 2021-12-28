@@ -16,6 +16,7 @@
 package io.github.mybatisx.spring.boot.autoconfigure;
 
 import io.github.mybatisx.session.MyBatisConfiguration;
+import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -35,6 +36,7 @@ import java.util.stream.Stream;
  * MyBatisX配置
  * <p>
  * see: mybatis-spring-boot-starter
+ *
  * @author wvkity
  * @created 2021/12/25
  * @since 1.0.0
@@ -102,6 +104,12 @@ public class MyBatisProperties {
      */
     @NestedConfigurationProperty
     private MyBatisConfiguration configuration;
+
+    /**
+     * 全局配置
+     */
+    @NestedConfigurationProperty
+    private MyBatisGlobalConfig globalConfig;
 
     public Resource[] resolveMapperLocations() {
         return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))

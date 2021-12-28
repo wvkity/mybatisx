@@ -15,8 +15,23 @@
  */
 package io.github.mybatisx.spring;
 
+import io.github.mybatisx.base.inject.Injector;
+import io.github.mybatisx.base.matcher.ClassMatcher;
+import io.github.mybatisx.base.matcher.DefaultClassMatcher;
+import io.github.mybatisx.base.matcher.DefaultFieldMatcher;
+import io.github.mybatisx.base.matcher.FieldMatcher;
+import io.github.mybatisx.base.matcher.GetterMatcher;
+import io.github.mybatisx.base.matcher.ReadableMatcher;
+import io.github.mybatisx.base.matcher.SetterMatcher;
+import io.github.mybatisx.base.matcher.WritableMatcher;
+import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.builder.xml.MyBatisXMLConfigBuilder;
+import io.github.mybatisx.core.inject.DefaultInjector;
+import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.session.MyBatisSqlSessionFactoryBuilder;
+import io.github.mybatisx.support.config.MyBatisGlobalConfig;
+import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.support.parsing.DefaultEntityParser;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.executor.ErrorContext;
@@ -39,6 +54,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -61,6 +77,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static org.springframework.util.Assert.notNull;
@@ -86,7 +105,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
 
     private Resource configLocation;
 
-    private Configuration configuration;
+    private MyBatisConfiguration configuration;
 
     private Resource[] mapperLocations;
 
@@ -134,6 +153,12 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
     private ObjectFactory objectFactory;
 
     private ObjectWrapperFactory objectWrapperFactory;
+
+    private ApplicationContext context;
+    /**
+     * 全局配置
+     */
+    private MyBatisGlobalConfig globalConfig;
 
     /**
      * Sets the ObjectFactory.
@@ -316,7 +341,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
      * @param configuration MyBatis configuration
      * @since 1.3.0
      */
-    public void setConfiguration(Configuration configuration) {
+    public void setConfiguration(MyBatisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -457,9 +482,13 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
      */
     protected SqlSessionFactory buildSqlSessionFactory() throws Exception {
 
-        final Configuration targetConfiguration;
+        // 注入全局配置
+        this.ifPresent(MyBatisGlobalConfig.class, this.globalConfig, this::setGlobalConfig,
+                MyBatisGlobalConfigCache::newInstance);
 
-        MyBatisXMLConfigBuilder MyBatisXMLConfigBuilder = null;
+        final MyBatisConfiguration targetConfiguration;
+
+        MyBatisXMLConfigBuilder myBatisXMLConfigBuilder = null;
         if (this.configuration != null) {
             targetConfiguration = this.configuration;
             if (targetConfiguration.getVariables() == null) {
@@ -468,12 +497,12 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
                 targetConfiguration.getVariables().putAll(this.configurationProperties);
             }
         } else if (this.configLocation != null) {
-            MyBatisXMLConfigBuilder = new MyBatisXMLConfigBuilder(this.configLocation.getInputStream(), null, this.configurationProperties);
-            targetConfiguration = MyBatisXMLConfigBuilder.getConfiguration();
+            myBatisXMLConfigBuilder = new MyBatisXMLConfigBuilder(this.configLocation.getInputStream(), null, this.configurationProperties);
+            targetConfiguration = myBatisXMLConfigBuilder.getConfiguration();
         } else {
             LOGGER.debug(
                     () -> "Property 'configuration' or 'configLocation' not specified, using default MyBatis Configuration");
-            targetConfiguration = new Configuration();
+            targetConfiguration = new MyBatisConfiguration();
             Optional.ofNullable(this.configurationProperties).ifPresent(targetConfiguration::setVariables);
         }
 
@@ -493,6 +522,27 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
                 LOGGER.debug(() -> "Registered type alias: '" + typeAlias + "'");
             });
         }
+
+        // 注入SQL注入器对象
+        this.ifPresent(MyBatisGlobalConfig::getInjector, Injector.class, this.globalConfig::setInjector, DefaultInjector::new);
+        // 注入实体解析器对象
+        this.ifPresent(MyBatisGlobalConfig::getEntityParser, EntityParser.class, this.globalConfig::setEntityParser,
+                DefaultEntityParser::new);
+        // 注入类匹配器对象
+        this.ifPresent(MyBatisGlobalConfig::getClassMatcher, ClassMatcher.class, this.globalConfig::setClassMatcher,
+                () -> DefaultClassMatcher.of(this.globalConfig.isJpaSupport()));
+        // 注入属性匹配器对象
+        this.ifPresent(MyBatisGlobalConfig::getFieldMatcher, FieldMatcher.class, this.globalConfig::setFieldMatcher,
+                () -> DefaultFieldMatcher.of(this.globalConfig.isUseSimpleType(),
+                        this.globalConfig.isEnumAsSimpleType(), this.globalConfig.isJpaSupport()));
+        // 注入Get方法匹配器对象
+        this.ifPresent(MyBatisGlobalConfig::getGetterMatcher, GetterMatcher.class, this.globalConfig::setGetterMatcher,
+                ReadableMatcher::new);
+        // 注入Set方法匹配器对象
+        this.ifPresent(MyBatisGlobalConfig::getSetterMatcher, SetterMatcher.class, this.globalConfig::setSetterMatcher,
+                WritableMatcher::new);
+        // 缓存全局变量
+        this.globalConfig.cacheSelf(targetConfiguration);
 
         if (!isEmpty(this.plugins)) {
             Stream.of(this.plugins).forEach(plugin -> {
@@ -535,9 +585,9 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
 
         Optional.ofNullable(this.cache).ifPresent(targetConfiguration::addCache);
 
-        if (MyBatisXMLConfigBuilder != null) {
+        if (myBatisXMLConfigBuilder != null) {
             try {
-                MyBatisXMLConfigBuilder.parse();
+                myBatisXMLConfigBuilder.parse();
                 LOGGER.debug(() -> "Parsed configuration file: '" + this.configLocation + "'");
             } catch (Exception ex) {
                 throw new NestedIOException("Failed to parse config resource: " + this.configLocation, ex);
@@ -636,5 +686,43 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
             }
         }
         return classes;
+    }
+
+    private <T> boolean containsBean(final Class<T> clazz) {
+        return this.context != null && this.context.getBeanNamesForType(clazz, false, false).length > 0;
+    }
+
+    private <T> void ifPresent(final Function<MyBatisGlobalConfig, T> action, final Class<T> clazz,
+                               final Consumer<T> consumer, final Supplier<T> supplier) {
+        this.ifPresent(clazz, action.apply(this.globalConfig), consumer, supplier);
+    }
+
+    private <T> void ifPresent(final Class<T> clazz, final T bean, final Consumer<T> consumer,
+                               final Supplier<T> supplier) {
+        if (bean == null) {
+            if (!this.ifPresent(clazz, consumer)) {
+                consumer.accept(supplier.get());
+            }
+        }
+    }
+
+    private <T> boolean ifPresent(final Class<T> clazz, final Consumer<T> consumer) {
+        if (this.containsBean(clazz)) {
+            consumer.accept(this.context.getBean(clazz));
+            return true;
+        }
+        return false;
+    }
+
+    public void setContext(ApplicationContext context) {
+        this.context = context;
+    }
+
+    public MyBatisGlobalConfig getGlobalConfig() {
+        return globalConfig;
+    }
+
+    public void setGlobalConfig(MyBatisGlobalConfig globalConfig) {
+        this.globalConfig = globalConfig;
     }
 }

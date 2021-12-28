@@ -17,6 +17,8 @@ package io.github.mybatisx.spring.boot.autoconfigure;
 
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.spring.MyBatisSqlSessionFactoryBean;
+import io.github.mybatisx.support.config.MyBatisGlobalConfig;
+import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
@@ -46,6 +48,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -61,6 +64,8 @@ import javax.sql.DataSource;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -95,11 +100,14 @@ public class MyBatisAutoConfiguration implements InitializingBean {
     private final DatabaseIdProvider databaseIdProvider;
 
     private final List<ConfigurationCustomizer> configurationCustomizers;
+    private final ApplicationContext context;
 
     public MyBatisAutoConfiguration(MyBatisProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider,
-                                    ObjectProvider<TypeHandler[]> typeHandlersProvider, ObjectProvider<LanguageDriver[]> languageDriversProvider,
+                                    ObjectProvider<TypeHandler[]> typeHandlersProvider,
+                                    ObjectProvider<LanguageDriver[]> languageDriversProvider,
                                     ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider,
-                                    ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider) {
+                                    ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider,
+                                    ApplicationContext context) {
         this.properties = properties;
         this.interceptors = interceptorsProvider.getIfAvailable();
         this.typeHandlers = typeHandlersProvider.getIfAvailable();
@@ -107,6 +115,7 @@ public class MyBatisAutoConfiguration implements InitializingBean {
         this.resourceLoader = resourceLoader;
         this.databaseIdProvider = databaseIdProvider.getIfAvailable();
         this.configurationCustomizers = configurationCustomizersProvider.getIfAvailable();
+        this.context = context;
     }
 
     @Override
@@ -171,7 +180,10 @@ public class MyBatisAutoConfiguration implements InitializingBean {
             // Need to mybatis-spring 2.0.2+
             factory.setDefaultScriptingLanguageDriver(defaultLanguageDriver);
         }
-
+        factory.setContext(this.context);
+        // 注入全局配置对象
+        this.ifPresent(MyBatisGlobalConfig.class, this.properties.getGlobalConfig(), factory::setGlobalConfig,
+                MyBatisGlobalConfigCache::newInstance);
         return factory.getObject();
     }
 
@@ -188,6 +200,29 @@ public class MyBatisAutoConfiguration implements InitializingBean {
             }
         }
         factory.setConfiguration(configuration);
+    }
+
+    private <T> void ifPresent(final Class<T> clazz, final T bean, final Consumer<T> consumer) {
+        if (bean != null) {
+            consumer.accept(bean);
+        } else {
+            if (this.context.getBeanNamesForType(clazz, false, false).length > 0) {
+                consumer.accept(this.context.getBean(clazz));
+            }
+        }
+    }
+
+    private <T> void ifPresent(final Class<T> clazz, final T bean, final Consumer<T> consumer,
+                               final Supplier<T> supplier) {
+        if (bean != null) {
+            consumer.accept(bean);
+        } else {
+            if (this.context.getBeanNamesForType(clazz, false, false).length > 0) {
+                consumer.accept(this.context.getBean(clazz));
+            } else {
+                consumer.accept(supplier.get());
+            }
+        }
     }
 
     @Bean
