@@ -18,9 +18,11 @@ package io.github.mybatisx.lang;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -92,7 +94,13 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isAssignable(final Class<?> source, final Object arg) {
-        return Objects.nonNull(arg) && isAssignable(source, arg.getClass());
+        if (Objects.nonNull(arg)) {
+            if (arg instanceof Class) {
+                return Objects.isAssignable(source, (Class<?>) arg);
+            }
+            return Objects.isAssignable(source, arg.getClass());
+        }
+        return false;
     }
 
     /**
@@ -380,8 +388,33 @@ public final class Objects {
         return map.computeIfAbsent(k, mappingFunction);
     }
 
+    /**
+     * 如果值为null则返回默认值
+     *
+     * @param v            值
+     * @param defaultValue 默认值
+     * @param <V>          值类型
+     * @return 值
+     */
     public static <V> V ifNull(final V v, final V defaultValue) {
         return Objects.isNull(v) ? defaultValue : v;
+    }
+
+    /**
+     * 如果指定值为null则返回默认值
+     *
+     * @param v            指定值
+     * @param defaultValue 默认值
+     * @param action       {@link Function}
+     * @param <V>          值类型
+     * @param <R>          值类型
+     * @return 处理后的值
+     */
+    public static <V, R> R ifNullThen(final V v, final R defaultValue, final Function<V, R> action) {
+        if (Objects.nonNull(v) && Objects.nonNull(action)) {
+            return action.apply(v);
+        }
+        return defaultValue;
     }
 
     /**
@@ -394,6 +427,63 @@ public final class Objects {
         if (!expression) {
             throw new IllegalArgumentException(message);
         }
+    }
+
+    /**
+     * 过滤null值
+     *
+     * @param factory {@link Supplier}
+     * @param values  待过滤值列表
+     * @param <U>     值类型
+     * @param <C>     集合类型
+     * @return 新的列表
+     */
+    @SafeVarargs
+    public static <U, C extends Collection<U>> C filterNull(final Supplier<C> factory, final U... values) {
+        return Objects.filterNull(factory, Arrays.asList(values));
+    }
+
+    /**
+     * 过滤null值
+     *
+     * @param factory {@link Supplier}
+     * @param values  待过滤值列表
+     * @param <U>     值类型
+     * @param <C>     集合类型
+     * @return 新的列表
+     */
+    public static <U, C extends Collection<U>> C filterNull(final Supplier<C> factory, final Collection<U> values) {
+        if (Objects.isNotEmpty(values)) {
+            return values.stream().filter(Objects::nonNull).collect(Collectors.toCollection(factory));
+        }
+        return factory.get();
+    }
+
+    /**
+     * 过滤null值
+     *
+     * @param values 待过滤值列表
+     * @param <U>    值类型
+     * @return 新的列表
+     */
+    @SafeVarargs
+    public static <U> Set<U> filterNull(final U... values) {
+        if (Objects.isNotEmpty(values)) {
+            return Objects.filterNull(Arrays.asList(values));
+        }
+        return new HashSet<>(0);
+    }
+
+    /**
+     * 过滤null值
+     *
+     * @param values 待过滤值列表
+     * @param <U>    值类型
+     * @return 新的列表
+     */
+    public static <U> Set<U> filterNull(final Collection<U> values) {
+        return Optional.ofNullable(values).map(it -> it.stream().filter(Objects::nonNull).collect(Collectors.toSet()))
+                .orElse(new HashSet<>(0));
     }
 
 }

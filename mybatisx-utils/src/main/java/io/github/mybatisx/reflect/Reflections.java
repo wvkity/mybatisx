@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.reflect;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -22,14 +23,18 @@ import io.github.mybatisx.lang.Types;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -89,11 +94,20 @@ public final class Reflections {
      * 默认超类过滤器
      */
     public static final Predicate<? super Class<?>> SUPER_CLASS_FILTER;
+    /**
+     * 注解过滤器
+     */
+    public static final Predicate<? super Method> ANNOTATION_METHOD_FILTER;
+    /**
+     * 注解过滤器
+     */
+    public static final Predicate<Annotation> METADATA_ANNOTATION_FILTER;
 
     static {
-        SUPER_CLASS_FILTER = it ->
-                Objects.nonNull(it) && !(Types.isObject(it) || Types.isSerializable(it) || Types.isAnnotation(it)
-                        || Objects.isCollection(it));
+        SUPER_CLASS_FILTER = it -> Objects.nonNull(it) &&
+                !(Types.isObject(it) || Types.isSerializable(it) || Types.isAnnotation(it) || Objects.isCollection(it));
+        ANNOTATION_METHOD_FILTER = it -> !Types.ANNOTATION_METHOD_NAMES.contains(it.getName());
+        METADATA_ANNOTATION_FILTER = it -> !Types.METADATA_ANNOTATION_TYPES.contains(it.annotationType());
     }
 
     /**
@@ -147,7 +161,6 @@ public final class Reflections {
                                                  final Predicate<? super Class<?>>... filters) {
         final Set<Class<?>> classes = new LinkedHashSet<>();
         if (Objects.nonNull(clazz) && !Types.isObject(clazz)) {
-            classes.add(clazz);
             final Set<Class<?>> superClasses = getSuperTypes(clazz);
             if (Objects.isNotEmpty(superClasses)) {
                 for (Class<?> it : superClasses) {
@@ -157,6 +170,7 @@ public final class Reflections {
                     }
                 }
             }
+            classes.add(clazz);
         }
         return Objects.filters(classes, filters);
     }
@@ -171,11 +185,11 @@ public final class Reflections {
         final Set<Class<?>> classes = new LinkedHashSet<>();
         final Class<?> superClass = clazz.getSuperclass();
         final Class<?>[] interfaces = clazz.getInterfaces();
-        if (!Types.isObject(clazz)) {
-            classes.add(superClass);
-        }
         if (Objects.isNotEmpty(interfaces)) {
             classes.addAll(Arrays.asList(interfaces));
+        }
+        if (!Types.isObject(clazz)) {
+            classes.add(superClass);
         }
         return classes;
     }
@@ -285,7 +299,7 @@ public final class Reflections {
      */
     public static boolean isGetter(final Method method) {
         return Objects.nonNull(method) && Reflections.isGetter(method.getName())
-                && Objects.isAssignable(Void.class, method.getReturnType())
+                && !Objects.isAssignable(Void.class, method.getReturnType())
                 && Objects.isEmpty(method.getParameterTypes());
 
     }
@@ -321,6 +335,17 @@ public final class Reflections {
      */
     public static boolean isSetter(final String name) {
         return Strings.isNotWhitespace(name) && name.startsWith(METHOD_PREFIX_SET) && Strings.size(name) > 3;
+    }
+
+    /**
+     * 检查属性名是否有效
+     *
+     * @param property 属性名
+     * @return boolean
+     */
+    public static boolean isValidProperty(final String property) {
+        return Strings.isNotWhitespace(property) &&
+                !(property.startsWith("$") || "serialVersionUID".equals(property) || "class".equals(property));
     }
 
     /**
@@ -381,6 +406,52 @@ public final class Reflections {
     }
 
     /**
+     * 检查指定类型是否存在指定注解
+     *
+     * @param type       指定类型
+     * @param annotation 指定注解
+     * @return boolean
+     */
+    public static <T extends AnnotatedElement> boolean isMatches(final T type,
+                                                                 final Class<? extends Annotation> annotation) {
+        return Objects.nonNull(type) && Reflections.withAnnotation(annotation).test(type);
+    }
+
+    /**
+     * 检查指定类型是否存在指定注解
+     *
+     * @param type      指定类型
+     * @param className 注解类全限定名
+     * @param filters   过滤器列表
+     * @param <T>       泛型类型
+     * @return boolean
+     */
+    @SafeVarargs
+    public static <T extends AnnotatedElement> boolean isMatches(final T type, final String className,
+                                                                 final Predicate<Annotation>... filters) {
+        if (Objects.nonNull(type) && Strings.isNotWhitespace(className)) {
+            final Set<Annotation> annotations = Reflections.getAllAnnotations(type, filters);
+            return Objects.isNotEmpty(annotations) && annotations.stream().anyMatch(it ->
+                    className.equalsIgnoreCase(it.annotationType().getCanonicalName()));
+        }
+        return false;
+    }
+
+    /**
+     * 检查指定类型是否存在指定注解
+     *
+     * @param type  指定类型
+     * @param clazz 注解类
+     * @return boolean
+     */
+    @SafeVarargs
+    public static <T extends AnnotatedElement> boolean isMatches(final T type, final Class<? extends Annotation> clazz,
+                                                                 final String className,
+                                                                 final Predicate<Annotation>... filters) {
+        return Reflections.isMatches(type, clazz) || Reflections.isMatches(type, className, filters);
+    }
+
+    /**
      * 获取所有注解
      *
      * @param type    注解类
@@ -394,15 +465,65 @@ public final class Reflections {
     }
 
     /**
-     * 检查指定类型是否存在指定注解
+     * 获取指定类型的所有注解
      *
-     * @param type       指定类型
-     * @param annotation 指定注解
-     * @return boolean
+     * @param type    指定类
+     * @param filters 过滤器列表
+     * @param <T>     泛型类型
+     * @return 注解集合
      */
-    public static boolean isAnnotationPresent(final AnnotatedElement type,
-                                              final Class<? extends Annotation> annotation) {
-        return Objects.nonNull(type) && Reflections.withAnnotation(annotation).test(type);
+    @SafeVarargs
+    public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(final T type,
+                                                                                 final Predicate<Annotation>... filters) {
+        return Reflections.getAllAnnotations(type, SUPER_CLASS_FILTER, filters);
+    }
+
+    /**
+     * 获取指定类型的所有注解
+     *
+     * @param type    指定类
+     * @param filters 过滤器列表
+     * @param <T>     泛型类型
+     * @return 注解集合
+     */
+    @SafeVarargs
+    public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(final T type,
+                                                                                 final Predicate<? super Class<?>> classFilter,
+                                                                                 final Predicate<Annotation>... filters) {
+        final List<AnnotatedElement> types;
+        if (type instanceof Class) {
+            types = ImmutableList.copyOf(Reflections.getAllTypes((Class<?>) type, classFilter));
+        } else {
+            types = ImmutableList.of(type);
+        }
+        return Reflections.getAllAnnotations(types, filters);
+    }
+
+    /**
+     * 获取指定类型的所有注解
+     *
+     * @param types   指定多个类型
+     * @param filters 过滤器列表
+     * @param <T>     泛型类型
+     * @return 注解集合
+     */
+    @SafeVarargs
+    public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(final List<T> types,
+                                                                                 final Predicate<Annotation>... filters) {
+        final Set<Annotation> annotations = new LinkedHashSet<>();
+        if (Objects.isNotEmpty(types)) {
+            int size = types.size();
+            final List<AnnotatedElement> keys = new ArrayList<>(types);
+            for (int i = 0; i < size; i++) {
+                for (Annotation it : Reflections.getAnnotations(keys.get(i), filters)) {
+                    if (annotations.add(it)) {
+                        keys.add(i + 1, it.annotationType());
+                        size += 1;
+                    }
+                }
+            }
+        }
+        return annotations;
     }
 
     /**
@@ -413,23 +534,6 @@ public final class Reflections {
      */
     public static Predicate<AnnotatedElement> withAnnotation(final Class<? extends Annotation> annotation) {
         return it -> Objects.nonNull(it) && it.isAnnotationPresent(annotation);
-    }
-
-    /**
-     * 检查是否可控制成员访问权限
-     *
-     * @return boolean
-     */
-    public static boolean canControlMemberAccessible() {
-        try {
-            final SecurityManager sm = System.getSecurityManager();
-            if (Objects.nonNull(sm)) {
-                sm.checkPermission(new RuntimePermission("suppressAccessChecks"));
-            }
-            return true;
-        } catch (Exception ignore) {
-            return false;
-        }
     }
 
     /**
@@ -463,6 +567,101 @@ public final class Reflections {
             return (Class<?>) it;
         }
         return Object.class;
+    }
+
+    /**
+     * 获取参数类型
+     *
+     * @param args 参数列表
+     * @return 类型列表
+     */
+    public static Class<?>[] getArgumentTypes(final Object... args) {
+        if (Objects.isEmpty(args)) {
+            return new Class<?>[0];
+        }
+        return Arrays.stream(args).map(it -> Objects.isNull(it) ? Object.class : it.getClass()).toArray(Class<?>[]::new);
+    }
+
+    /**
+     * 注解转{@link Map}
+     *
+     * @param instance 注解实例
+     * @param <A>      注解类型
+     * @return {@link Map}
+     */
+    public static <A extends Annotation> Map<String, Object> annotationToMap(final A instance) {
+        if (Objects.nonNull(instance)) {
+            final Set<Method> methods = Reflections.getAllMethods(instance.annotationType(), SUPER_CLASS_FILTER,
+                    ANNOTATION_METHOD_FILTER);
+            if (Objects.isNotEmpty(methods)) {
+                final Map<String, Object> result = new HashMap<>(methods.size());
+                for (Method it : methods) {
+                    final String property = it.getName();
+                    try {
+                        final Object value = it.invoke(instance);
+                        result.put(property, value);
+                    } catch (IllegalAccessException e) {
+                        if (Reflections.canControlMemberAccessible()) {
+                            try {
+                                it.setAccessible(true);
+                                final Object value = it.invoke(instance);
+                                result.put(property, value);
+                            } catch (Exception ignore) {
+                                // ignore
+                            }
+                        }
+                    } catch (Exception ignore) {
+                        // ignore
+                    }
+                }
+                return result;
+            }
+        }
+        return new HashMap<>(0);
+    }
+
+    /**
+     * {@link Type}转{@link Class}
+     *
+     * @param src {@link Type}
+     * @return {@link Class}
+     */
+    public static Class<?> typeToClass(Type src) {
+        Class<?> result = null;
+        if (src instanceof Class) {
+            result = (Class<?>) src;
+        } else if (src instanceof ParameterizedType) {
+            result = (Class<?>) ((ParameterizedType) src).getRawType();
+        } else if (src instanceof GenericArrayType) {
+            final Type componentType = ((GenericArrayType) src).getGenericComponentType();
+            if (componentType instanceof Class) {
+                result = Array.newInstance((Class<?>) componentType, 0).getClass();
+            } else {
+                final Class<?> componentClass = typeToClass(componentType);
+                result = Array.newInstance(componentClass, 0).getClass();
+            }
+        }
+        if (result == null) {
+            result = Object.class;
+        }
+        return result;
+    }
+
+    /**
+     * 检查是否可控制成员访问权限
+     *
+     * @return boolean
+     */
+    public static boolean canControlMemberAccessible() {
+        try {
+            final SecurityManager sm = System.getSecurityManager();
+            if (Objects.nonNull(sm)) {
+                sm.checkPermission(new RuntimePermission("suppressAccessChecks"));
+            }
+            return true;
+        } catch (Exception ignore) {
+            return false;
+        }
     }
 
 }

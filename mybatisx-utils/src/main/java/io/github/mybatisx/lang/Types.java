@@ -86,6 +86,10 @@ public final class Types {
      * 元注解
      */
     public static final Set<Class<? extends Annotation>> METADATA_ANNOTATION_TYPES;
+    /**
+     * 注解实例方法名列表
+     */
+    public static final Set<String> ANNOTATION_METHOD_NAMES;
 
     static {
         PRI_TYPE_NAMES = ImmutableSet.of("boolean", "char", "byte", "short", "int",
@@ -110,6 +114,7 @@ public final class Types {
         SIMPLE_TYPES.addAll(NEW_TIME_TYPES);
         METADATA_ANNOTATION_TYPES = ImmutableSet.of(Inherited.class, Documented.class, Target.class, Retention.class
                 , SuppressWarnings.class, Override.class, SafeVarargs.class);
+        ANNOTATION_METHOD_NAMES = ImmutableSet.of("annotationType", "toString", "hashCode", "equals");
     }
 
     /**

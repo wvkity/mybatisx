@@ -38,6 +38,7 @@ public final class Strings {
     public static final String DEFAULT_STR_Y = "Y";
     public static final String DEFAULT_STR_T = "T";
     public static final String DEFAULT_STR_COMMA = ",";
+    public static final char CASE_MASK = 0x20;
 
     /**
      * 对象转字符串
@@ -194,6 +195,137 @@ public final class Strings {
     public static boolean isFalse(final String arg) {
         return equalsIC(DEFAULT_STR_FALSE, arg) || equalsIC(DEFAULT_STR_N, arg) || equalsIC(DEFAULT_STR_F, arg)
                 || equals(DEFAULT_STR_ZERO, arg);
+    }
+
+    /**
+     * 检查字符是否为小写字母
+     *
+     * @param c 字符
+     * @return boolean
+     */
+    public static boolean isLowerCase(final char c) {
+        return Character.isLowerCase(c);
+    }
+
+    /**
+     * 检查字符是否为大写字母
+     *
+     * @param c 字符
+     * @return boolean
+     */
+    public static boolean isUpperCase(final char c) {
+        return Character.isUpperCase(c);
+    }
+
+    /**
+     * 大写字母转小写字母
+     *
+     * @param c 字符
+     * @return 新字符
+     */
+    public static char toLowerCase(final char c) {
+        return Strings.isLowerCase(c) ? c : Character.toLowerCase(c);
+    }
+
+    /**
+     * 小写字母转大写字母
+     *
+     * @param c 字符
+     * @return 新字符
+     */
+    public static char toUpperCase(final char c) {
+        return Strings.isUpperCase(c) ? c : Character.toUpperCase(c);
+    }
+
+    /**
+     * 字符串中的大写字母转小写字母
+     *
+     * @param source 字符串
+     * @return 新的字符串
+     */
+    public static String toLowerCase(final CharSequence source) {
+        if (Strings.isNotWhitespace(source)) {
+            final String str = source.toString();
+            for (int i = 0, size = str.length(); i < size; i++) {
+                if (Strings.isUpperCase(str.charAt(i))) {
+                    final char[] array = str.toCharArray();
+                    for (; i < size; i++) {
+                        final char c = array[i];
+                        if (Strings.isUpperCase(c)) {
+                            array[i] = (char) (c ^ CASE_MASK);
+                        }
+                    }
+                    return String.valueOf(array);
+                }
+            }
+            return str;
+        }
+        return Objects.isNull(source) ? null : source.toString();
+    }
+
+    /**
+     * 字符串中的小写字母转大写字母
+     *
+     * @param source 字符串
+     * @return 新的字符串
+     */
+    public static String toUpperCase(final CharSequence source) {
+        if (Strings.isNotWhitespace(source)) {
+            final String str = source.toString();
+            for (int i = 0, size = str.length(); i < size; i++) {
+                if (Strings.isLowerCase(str.charAt(i))) {
+                    final char[] array = str.toCharArray();
+                    for (; i < size; i++) {
+                        final char c = array[i];
+                        if (Strings.isLowerCase(c)) {
+                            array[i] = (char) (c ^ CASE_MASK);
+                        }
+                    }
+                    return String.valueOf(array);
+                }
+            }
+            return str;
+        }
+        return Objects.isNull(source) ? null : source.toString();
+    }
+
+    /**
+     * 首字母转小写
+     *
+     * @param source 字符串
+     * @return 新字符串
+     */
+    public static String firstToLowerCase(final String source) {
+        if (Strings.isNotWhitespace(source)) {
+            return Strings.toLowerCase(source.charAt(0)) + source.substring(1);
+        }
+        return source;
+    }
+
+    /**
+     * 首字母转大写
+     *
+     * @param source 字符串
+     * @return 新字符串
+     */
+    public static String firstToUpperCase(final String source) {
+        if (Strings.isNotWhitespace(source)) {
+            return Strings.toUpperCase(source.charAt(0)) + source.substring(1);
+        }
+        return source;
+    }
+
+    /**
+     * 仅仅首字母转大写其余转小写
+     *
+     * @param source 字符串
+     * @return 新字符串
+     */
+    public static String firstOnlyToUpperCase(final String source) {
+        if (Strings.isNotWhitespace(source)) {
+            return Strings.toUpperCase(source.charAt(0)) + Strings.toLowerCase(source.substring(1));
+        }
+        return source;
     }
 
     /**
