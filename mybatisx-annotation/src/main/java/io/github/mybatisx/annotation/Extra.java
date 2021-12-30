@@ -36,6 +36,13 @@ import java.lang.annotation.Target;
 public @interface Extra {
 
     /**
+     * 字段名
+     *
+     * @return 字段名
+     */
+    String name() default "";
+
+    /**
      * 是否为BLOB类型
      *
      * @return boolean
@@ -61,20 +68,20 @@ public @interface Extra {
      *
      * @return {@link Necessary}
      */
-    Necessary javaType() default Necessary.UNKNOWN;
+    Necessary spliceJavaType() default Necessary.UNKNOWN;
 
     /**
      * SQL条件中是否非空校验
      *
      * @return {@link Necessary}
      */
-    Necessary notNull() default Necessary.UNKNOWN;
+    Necessary checkNull() default Necessary.UNKNOWN;
 
     /**
      * SQL条件中字符串是否空值校验
      *
      * @return {@link Necessary}
      */
-    Necessary notEmpty() default Necessary.UNKNOWN;
+    Necessary checkEmpty() default Necessary.UNKNOWN;
 
 }
