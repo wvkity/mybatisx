@@ -16,7 +16,11 @@
 package io.github.mybatisx.spring.boot.autoconfigure;
 
 import io.github.mybatisx.session.MyBatisConfiguration;
+import io.github.mybatisx.support.config.LogicDeleteConfig;
+import io.github.mybatisx.support.config.MatcherConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
+import io.github.mybatisx.support.config.OptimisticLockConfig;
+import io.github.mybatisx.support.config.PrimaryKeyConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -110,6 +114,30 @@ public class MyBatisProperties {
      */
     @NestedConfigurationProperty
     private MyBatisGlobalConfig globalConfig;
+
+    /**
+     * 匹配器
+     */
+    @NestedConfigurationProperty
+    private MatcherConfig matchers = MatcherConfig.of();
+
+    /**
+     * 主键配置
+     */
+    @NestedConfigurationProperty
+    private PrimaryKeyConfig primaryKey = PrimaryKeyConfig.of();
+
+    /**
+     * 乐观锁配置
+     */
+    @NestedConfigurationProperty
+    private OptimisticLockConfig optimisticLock = OptimisticLockConfig.of();
+
+    /**
+     * 逻辑删除配置
+     */
+    @NestedConfigurationProperty
+    private LogicDeleteConfig logicDelete = LogicDeleteConfig.of();
 
     public Resource[] resolveMapperLocations() {
         return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))

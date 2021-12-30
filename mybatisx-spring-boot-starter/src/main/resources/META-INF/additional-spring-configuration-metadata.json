@@ -16,6 +16,30 @@
       "name": "mybatisx.global-config",
       "sourceMethod": "getGlobalConfig()",
       "type": "io.github.mybatisx.support.config.MyBatisGlobalConfig"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.matchers",
+      "sourceMethod": "getMatchers()",
+      "type": "io.github.mybatisx.support.config.MatcherConfig"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.primary-key",
+      "sourceMethod": "getPrimaryKey()",
+      "type": "io.github.mybatisx.support.config.PrimaryKeyConfig"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.optimistic-lock",
+      "sourceMethod": "getOptimisticLock()",
+      "type": "io.github.mybatisx.support.config.OptimisticLockConfig"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.logic-delete",
+      "sourceMethod": "getLogicDelete()",
+      "type": "io.github.mybatisx.support.config.LogicDeleteConfig"
     }
   ],
   "properties": [
@@ -27,7 +51,7 @@
       "type": "java.lang.Class<? extends org.apache.ibatis.scripting.LanguageDriver>",
       "deprecation": {
         "reason": "Because when this configuration property is used, there is case that custom language driver cannot be registered correctly.",
-        "replacement": "mybatis.default-scripting-language-driver"
+        "replacement": "mybatisx.default-scripting-language-driver"
       }
     },
     {
@@ -54,7 +78,7 @@
       "deprecation": {
         "level": "error",
         "reason": "The 'userdirective' is deprecated since Velocity 2.x. This property defined for keeping backward compatibility with older velocity version.",
-        "replacement": "mybatis.scripting-language-driver.velocity.velocity-settings.runtime.custom_directives"
+        "replacement": "mybatisx.scripting-language-driver.velocity.velocity-settings.runtime.custom_directives"
       }
     }
   ]

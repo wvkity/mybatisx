@@ -29,6 +29,7 @@ import io.github.mybatisx.builder.xml.MyBatisXMLConfigBuilder;
 import io.github.mybatisx.core.inject.DefaultInjector;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.session.MyBatisSqlSessionFactoryBuilder;
+import io.github.mybatisx.support.config.MatcherConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.support.parsing.DefaultEntityParser;
@@ -524,22 +525,29 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         }
 
         // 注入SQL注入器对象
-        this.ifPresent(MyBatisGlobalConfig::getInjector, Injector.class, this.globalConfig::setInjector, DefaultInjector::new);
+        this.ifPresent(this.globalConfig, MyBatisGlobalConfig::getInjector, Injector.class,
+                this.globalConfig::setInjector, DefaultInjector::new);
         // 注入实体解析器对象
-        this.ifPresent(MyBatisGlobalConfig::getEntityParser, EntityParser.class, this.globalConfig::setEntityParser,
-                DefaultEntityParser::new);
+        this.ifPresent(this.globalConfig, MyBatisGlobalConfig::getEntityParser, EntityParser.class,
+                this.globalConfig::setEntityParser, DefaultEntityParser::new);
+        // 相关匹配器
+        MatcherConfig matchers = this.globalConfig.getMatchers();
+        if (matchers == null) {
+            matchers = MatcherConfig.of();
+            this.globalConfig.setMatchers(matchers);
+        }
         // 注入类匹配器对象
-        this.ifPresent(MyBatisGlobalConfig::getClassMatcher, ClassMatcher.class, this.globalConfig::setClassMatcher,
+        this.ifPresent(matchers, MatcherConfig::getClassMatcher, ClassMatcher.class, matchers::setClassMatcher,
                 () -> DefaultClassMatcher.of(this.globalConfig.isJpaSupport()));
         // 注入属性匹配器对象
-        this.ifPresent(MyBatisGlobalConfig::getFieldMatcher, FieldMatcher.class, this.globalConfig::setFieldMatcher,
+        this.ifPresent(matchers, MatcherConfig::getFieldMatcher, FieldMatcher.class, matchers::setFieldMatcher,
                 () -> DefaultFieldMatcher.of(this.globalConfig.isUseSimpleType(),
                         this.globalConfig.isEnumAsSimpleType(), this.globalConfig.isJpaSupport()));
         // 注入Get方法匹配器对象
-        this.ifPresent(MyBatisGlobalConfig::getGetterMatcher, GetterMatcher.class, this.globalConfig::setGetterMatcher,
+        this.ifPresent(matchers, MatcherConfig::getGetterMatcher, GetterMatcher.class, matchers::setGetterMatcher,
                 ReadableMatcher::new);
         // 注入Set方法匹配器对象
-        this.ifPresent(MyBatisGlobalConfig::getSetterMatcher, SetterMatcher.class, this.globalConfig::setSetterMatcher,
+        this.ifPresent(matchers, MatcherConfig::getSetterMatcher, SetterMatcher.class, matchers::setSetterMatcher,
                 WritableMatcher::new);
         // 缓存全局变量
         this.globalConfig.cacheSelf(targetConfiguration);
@@ -692,9 +700,9 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         return this.context != null && this.context.getBeanNamesForType(clazz, false, false).length > 0;
     }
 
-    private <T> void ifPresent(final Function<MyBatisGlobalConfig, T> action, final Class<T> clazz,
-                               final Consumer<T> consumer, final Supplier<T> supplier) {
-        this.ifPresent(clazz, action.apply(this.globalConfig), consumer, supplier);
+    private <U, T> void ifPresent(final U target, final Function<U, T> action, final Class<T> clazz,
+                                  final Consumer<T> consumer, final Supplier<T> supplier) {
+        this.ifPresent(clazz, action.apply(target), consumer, supplier);
     }
 
     private <T> void ifPresent(final Class<T> clazz, final T bean, final Consumer<T> consumer,

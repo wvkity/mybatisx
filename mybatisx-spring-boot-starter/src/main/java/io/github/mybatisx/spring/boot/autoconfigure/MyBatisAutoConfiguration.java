@@ -17,8 +17,12 @@ package io.github.mybatisx.spring.boot.autoconfigure;
 
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.spring.MyBatisSqlSessionFactoryBean;
+import io.github.mybatisx.support.config.LogicDeleteConfig;
+import io.github.mybatisx.support.config.MatcherConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.support.config.OptimisticLockConfig;
+import io.github.mybatisx.support.config.PrimaryKeyConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
@@ -184,6 +188,17 @@ public class MyBatisAutoConfiguration implements InitializingBean {
         // 注入全局配置对象
         this.ifPresent(MyBatisGlobalConfig.class, this.properties.getGlobalConfig(), factory::setGlobalConfig,
                 MyBatisGlobalConfigCache::newInstance);
+        final MyBatisGlobalConfig mgc = factory.getGlobalConfig();
+        // 注入匹配器配置
+        this.ifPresent(MatcherConfig.class, mgc.getMatchers(), mgc::setMatchers, this.properties::getMatchers);
+        // 注入主键配置
+        this.ifPresent(PrimaryKeyConfig.class, mgc.getPrimaryKey(), mgc::setPrimaryKey, this.properties::getPrimaryKey);
+        // 注入乐观锁配置
+        this.ifPresent(OptimisticLockConfig.class, mgc.getOptimisticLock(), mgc::setOptimisticLock,
+                this.properties::getOptimisticLock);
+        // 注入逻辑删除配置
+        this.ifPresent(LogicDeleteConfig.class, mgc.getLogicDelete(), mgc::setLogicDelete,
+                this.properties::getLogicDelete);
         return factory.getObject();
     }
 
