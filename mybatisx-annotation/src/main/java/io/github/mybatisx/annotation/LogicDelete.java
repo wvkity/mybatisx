@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 public @interface LogicDelete {
 
     /**
-     * 未删除标示值
+     * 未删除标识值
      *
      * @return 标识值
      */
