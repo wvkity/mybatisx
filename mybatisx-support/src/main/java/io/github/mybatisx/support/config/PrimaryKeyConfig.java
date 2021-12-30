@@ -13,15 +13,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.metadata;
+package io.github.mybatisx.support.config;
+
+import io.github.mybatisx.annotation.IdType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
- * 实体属性对象
+ * 主键相关配置
  *
  * @author wvkity
- * @created 2021/12/23
+ * @created 2021/12/30
  * @since 1.0.0
  */
-public class Field {
+@Getter
+@Setter
+@RequiredArgsConstructor
+public class PrimaryKeyConfig {
 
+    /**
+     * 策略
+     */
+    private IdType strategy = IdType.UNKNOWN;
+    /**
+     * 默认属性名
+     */
+    private String property = "id";
+    /**
+     * 自动识别
+     */
+    private boolean autoScan;
+    /**
+     * 保存后生成
+     */
+    private boolean after;
+
+    public static PrimaryKeyConfig of() {
+        return new PrimaryKeyConfig();
+    }
 }

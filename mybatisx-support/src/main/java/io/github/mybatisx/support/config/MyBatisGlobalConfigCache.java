@@ -61,7 +61,7 @@ public class MyBatisGlobalConfigCache {
      */
     public static MyBatisGlobalConfig newInstance() {
         final MyBatisGlobalConfig mgc = new MyBatisGlobalConfig();
-        mgc.setNamingStrategy(NamingStrategy.UPPER_UNDERSCORE);
+        mgc.setNaming(NamingStrategy.UPPER_UNDERSCORE);
         return mgc;
     }
 
