@@ -486,4 +486,65 @@ public final class Objects {
                 .orElse(new HashSet<>(0));
     }
 
+    /**
+     * 将值转换成byte/char/boolean/short/int/long类型值
+     *
+     * @param javaType java类型
+     * @param value    字符串值
+     * @return 值
+     */
+    public static Object convert(final Class<?> javaType, final String value) {
+        if (javaType == null || Strings.isWhitespace(value) || Types.is(String.class, javaType)) {
+            return value;
+        }
+        if (javaType == Long.class || javaType == long.class) {
+            return Long.valueOf(value);
+        }
+        if (javaType == Integer.class || javaType == int.class) {
+            return Integer.valueOf(value);
+        }
+        if (javaType == Short.class || javaType == short.class) {
+            return Short.valueOf(value);
+        }
+        if (javaType == Character.class || javaType == char.class) {
+            return value.charAt(0);
+        }
+        if (javaType == Boolean.class || javaType == boolean.class) {
+            return "1".equals(value) || Boolean.parseBoolean(value);
+        }
+        if (javaType == Byte.class || javaType == byte.class) {
+            return Byte.parseByte(value);
+        }
+        return value;
+    }
+
+    /**
+     * 检查指定对象是否为null
+     *
+     * @param object  待检查对象
+     * @param message 异常信息
+     * @param <T>     泛型类型
+     * @return 指定对象
+     */
+    public static <T> T requireNonNull(final T object, final String message) {
+        if (object == null) {
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
+
+    /**
+     * 检查字符串是否为空值
+     *
+     * @param value   待检查字符串
+     * @param message 异常消息
+     * @return 字符串
+     */
+    public static String requireNonEmpty(final String value, final String message) {
+        if (Strings.isWhitespace(requireNonNull(value, message))) {
+            throw new IllegalArgumentException(message);
+        }
+        return value;
+    }
+
 }
