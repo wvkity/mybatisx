@@ -31,4 +31,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Version {
 
+    /**
+     * 初始化值
+     *
+     * @return 初始化值
+     */
+    int value() default 0;
 }
