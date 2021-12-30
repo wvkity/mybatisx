@@ -33,5 +33,13 @@ public class ColumnNamingConverter extends AbstractNamingConverter {
     public ColumnNamingConverter(NamingStrategy sourceStrategy, NamingStrategy targetStrategy) {
         super(sourceStrategy, targetStrategy);
     }
+
+    public static ColumnNamingConverter of(final NamingStrategy target) {
+        return new ColumnNamingConverter(target);
+    }
+
+    public static ColumnNamingConverter of(final NamingStrategy source, final NamingStrategy target) {
+        return new ColumnNamingConverter(source, target);
+    }
 }
 

@@ -33,4 +33,12 @@ public class TableNamingConverter extends AbstractNamingConverter {
     public TableNamingConverter(NamingStrategy sourceStrategy, NamingStrategy targetStrategy) {
         super(sourceStrategy, targetStrategy);
     }
+
+    public static TableNamingConverter of(final NamingStrategy target) {
+        return new TableNamingConverter(target);
+    }
+
+    public static TableNamingConverter of(final NamingStrategy source, final NamingStrategy target) {
+        return new TableNamingConverter(source, target);
+    }
 }
