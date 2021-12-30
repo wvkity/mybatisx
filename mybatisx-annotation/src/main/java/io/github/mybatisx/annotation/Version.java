@@ -37,4 +37,11 @@ public @interface Version {
      * @return 初始化值
      */
     int value() default 0;
+
+    /**
+     * 是否自动初始化
+     *
+     * @return {@link Necessary}
+     */
+    Necessary initialize() default Necessary.UNKNOWN;
 }
