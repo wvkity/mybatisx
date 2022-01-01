@@ -1,5 +1,6 @@
 plugins {
-    id "com.github.hierynomus.license" version "0.15.0" apply true
+    id "com.github.hierynomus.license" version "0.15.0"
+    id "io.freefair.lombok" version "6.3.0"
     id 'org.springframework.boot' version '2.3.4.RELEASE'
 }
 
@@ -9,27 +10,58 @@ ext {
     ]
     libraries = [
             junitV = "5.4.2",
+            jmockitV = "1.49",
             fastjsonV = "1.2.72",
             slf4jV = "1.7.30",
             log4j2V = "2.13.1",
             disruptorV = "3.4.4",
-            mybatisV = "3.5.7",
-            mybatisSpringV = "2.0.5"
+            mybatisV = "3.5.4",
+            mybatisSpringV = "2.0.5",
+            guavaV = "31.0.1-jre",
+            springV = "5.3.9",
+            springbootV = "2.5.4",
+            lombokV = "1.18.21",
+            mysqlDriverV = "8.0.21",
     ]
     libs = [
-            "junit-jupiter"     : "org.junit.jupiter:junit-jupiter:${junitV}",
-            "slf4j"             : "org.slf4j:slf4j-api:${slf4jV}",
-            "slf4j-simple"      : "org.slf4j:slf4j-simple:${slf4jV}",
-            "log4j2"            : "org.apache.logging.log4j:log4j-api:${log4j2V}",
-            "log4j2-core"       : "org.apache.logging.log4j:log4j-core:${log4j2V}",
-            "log4j2-slf4j-impl" : "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
-            "disruptor"         : "com.lmax:disruptor:${disruptorV}",
-            "fastjson"          : "com.alibaba:fastjson:${fastjsonV}",
-            "mybatis"           : "org.mybatis:mybatis:${mybatisV}",
-            "mybatis-spring"    : "org.mybatis:mybatis-spring:${mybatisSpringV}",
-            "mybatis-thymeleaf" : "org.mybatis.scripting:mybatis-thymeleaf:1.0.2",
-            "mybatis-freemarker": "org.mybatis.scripting:mybatis-freemarker:1.2.2",
-            "mybatis-velocity"  : "org.mybatis.scripting:mybatis-velocity:2.1.0",
+            "junit-jupiter"                     : "org.junit.jupiter:junit-jupiter:${junitV}",
+            "jmockit"                           : "org.jmockit:jmockit:${jmockitV}",
+            "lombok"                            : "org.projectlombok:lombok:${lombokV}",
+            "slf4j"                             : "org.slf4j:slf4j-api:${slf4jV}",
+            "slf4j-simple"                      : "org.slf4j:slf4j-simple:${slf4jV}",
+            "log4j2"                            : "org.apache.logging.log4j:log4j-api:${log4j2V}",
+            "log4j2-core"                       : "org.apache.logging.log4j:log4j-core:${log4j2V}",
+            "log4j2-slf4j-impl"                 : "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
+            "mysql-driver"                      : "mysql:mysql-connector-java:${mysqlDriverV}",
+            "disruptor"                         : "com.lmax:disruptor:${disruptorV}",
+            "fastjson"                          : "com.alibaba:fastjson:${fastjsonV}",
+            "guava"                             : "com.google.guava:guava:${guavaV}",
+            "mybatis"                           : "org.mybatis:mybatis:${mybatisV}",
+            "mybatis-spring"                    : "org.mybatis:mybatis-spring:${mybatisSpringV}",
+            "mybatis-thymeleaf"                 : "org.mybatis.scripting:mybatis-thymeleaf:1.0.2",
+            "mybatis-freemarker"                : "org.mybatis.scripting:mybatis-freemarker:1.2.2",
+            "mybatis-velocity"                  : "org.mybatis.scripting:mybatis-velocity:2.1.0",
+            "spring-jdbc"                       : "org.springframework:spring-jdbc:${springV}",
+            "spring-context"                    : "org.springframework:spring-context:${springV}",
+            "spring-beans"                      : "org.springframework:spring-beans:${springV}",
+            "spring-tx"                         : "org.springframework:spring-tx:${springV}",
+            "spring-aspects"                    : "org.springframework:spring-aspects:${springV}",
+            "spring-web"                        : "org.springframework:spring-web:${springV}",
+            "springboot"                        : "org.springframework.boot:spring-boot:${springbootV}",
+            "springboot-dependencies"           : "org.springframework.boot:spring-boot-dependencies:${springbootV}",
+            "springboot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc",
+            "springboot-atomikos"               : "org.springframework.boot:spring-boot-starter-jta-atomikos",
+            "springboot-aop"                    : "org.springframework.boot:spring-boot-starter-aop",
+            "springboot-autoconfigure"          : "org.springframework.boot:spring-boot-autoconfigure",
+            "springboot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor",
+            "springboot-autoconfigure-processor": "org.springframework.boot:spring-boot-autoconfigure-processor",
+            "springboot-log4j2"                 : "org.springframework.boot:spring-boot-starter-log4j2",
+            "springboot-thymeleaf"              : "org.springframework.boot:spring-boot-starter-thymeleaf",
+            "springboot-web"                    : "org.springframework.boot:spring-boot-starter-web",
+            "springboot-webflux"                : "org.springframework.boot:spring-boot-starter-webflux",
+            "springboot-security"               : "org.springframework.boot:spring-boot-starter-security",
+            "springboot-undertow"               : "org.springframework.boot:spring-boot-starter-undertow",
+            "springboot-test"                   : "org.springframework.boot:spring-boot-starter-test",
     ]
 }
 
@@ -48,6 +80,8 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
+    apply plugin: 'io.freefair.lombok'
+    apply plugin: 'com.github.hierynomus.license'
 
     sourceCompatibility = "${JAVA_VERSION}"
     targetCompatibility = "${JAVA_VERSION}"
@@ -104,6 +138,18 @@ subprojects {
         testImplementation "${libs["slf4j-simple"]}"
         testImplementation "${libs["junit-jupiter"]}"
         testAnnotationProcessor "${libs["junit-jupiter"]}"
+        testImplementation "${libs["jmockit"]}"
         testImplementation "${libs.fastjson}"
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+        all*.exclude module: 'spring-boot-starter-logging'
+        all*.exclude module: 'logback-classic'
+        all*.exclude module: 'log4j-over-slf4j'
+        all*.exclude module: 'org.hibernate.validator'
+        all*.exclude module: 'spring-boot-starter-tomcat'
     }
 }

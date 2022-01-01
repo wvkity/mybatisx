@@ -1,4 +1,5 @@
 dependencies {
+    api "${libs.mybatis}"
     api project(":mybatisx-support")
     api project(":mybatisx-plugin-auditable")
     api project(":mybatisx-plugin-pageable")
