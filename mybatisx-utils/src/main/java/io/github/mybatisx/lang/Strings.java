@@ -115,6 +115,17 @@ public final class Strings {
     }
 
     /**
+     * 如果给定的值是空白值，则返回默认值
+     *
+     * @param value        指定值
+     * @param defaultValue 默认值
+     * @return 字符串
+     */
+    public static String ifNull(final String value, final String defaultValue) {
+        return Strings.isWhitespace(value) ? defaultValue : value;
+    }
+
+    /**
      * 获取字符串长度
      *
      * @param arg 字符串
@@ -235,6 +246,32 @@ public final class Strings {
      */
     public static char toUpperCase(final char c) {
         return Strings.isUpperCase(c) ? c : Character.toUpperCase(c);
+    }
+
+    /**
+     * 检查字符串是否为小写字母开头
+     *
+     * @param source 待检查字符串
+     * @return boolean
+     */
+    public static boolean isLowerStartsWith(final String source) {
+        if (Strings.isNotWhitespace(source)) {
+            return Strings.isLowerCase(source.charAt(0));
+        }
+        return false;
+    }
+
+    /**
+     * 检查字符串是否为大写字母开头
+     *
+     * @param source 待检查字符串
+     * @return boolean
+     */
+    public static boolean isUpperStartsWith(final String source) {
+        if (Strings.isNotWhitespace(source)) {
+            return Strings.isUpperCase(source.charAt(0));
+        }
+        return false;
     }
 
     /**

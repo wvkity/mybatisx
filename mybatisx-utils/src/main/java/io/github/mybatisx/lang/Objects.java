@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -415,6 +416,19 @@ public final class Objects {
             return action.apply(v);
         }
         return defaultValue;
+    }
+
+    /**
+     * 如果给定的值不为null则消费
+     *
+     * @param v        指定值
+     * @param consumer {@link Consumer}
+     * @param <V>      值类型
+     */
+    public static <V> void ifNonNullThen(final V v, final Consumer<V> consumer) {
+        if (Objects.nonNull(v)) {
+            consumer.accept(v);
+        }
     }
 
     /**
