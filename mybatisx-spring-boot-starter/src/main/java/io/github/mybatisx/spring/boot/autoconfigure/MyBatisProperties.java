@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.spring.boot.autoconfigure;
 
+import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.support.config.LogicDeleteConfig;
 import io.github.mybatisx.support.config.MatcherConfig;
@@ -138,6 +139,12 @@ public class MyBatisProperties {
      */
     @NestedConfigurationProperty
     private LogicDeleteConfig logicDelete = LogicDeleteConfig.of();
+
+    /**
+     * 审计配置
+     */
+    @NestedConfigurationProperty
+    private AuditConfig audit = AuditConfig.of();
 
     public Resource[] resolveMapperLocations() {
         return Stream.of(Optional.ofNullable(this.mapperLocations).orElse(new String[0]))

@@ -15,6 +15,11 @@
  */
 package io.github.mybatisx.spring;
 
+import io.github.mybatisx.auditable.config.AuditConfig;
+import io.github.mybatisx.auditable.parsing.AuditAutoScanParser;
+import io.github.mybatisx.auditable.parsing.AuditParser;
+import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyAutoScanParser;
+import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyParser;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.matcher.ClassMatcher;
 import io.github.mybatisx.base.matcher.DefaultClassMatcher;
@@ -549,6 +554,17 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         // 注入Set方法匹配器对象
         this.ifPresent(matchers, MatcherConfig::getSetterMatcher, SetterMatcher.class, matchers::setSetterMatcher,
                 WritableMatcher::new);
+        // 注入审计属性解析器对象
+        AuditConfig ac = this.globalConfig.getAudit();
+        if (ac == null) {
+            ac = AuditConfig.of();
+            this.globalConfig.setAudit(ac);
+        }
+        this.ifPresent(ac, AuditConfig::getAutoScanParser, AuditAutoScanParser.class, ac::setAutoScanParser,
+                DefaultAuditPropertyAutoScanParser::of);
+        this.ifPresent(ac, AuditConfig::getAuditParser, AuditParser.class, ac::setAuditParser, () -> 
+                DefaultAuditPropertyParser.of(this.globalConfig.getAudit().isAutoScan(),
+                        this.globalConfig.getAudit().getAutoScanParser()));
         // 缓存全局变量
         this.globalConfig.cacheSelf(targetConfiguration);
 

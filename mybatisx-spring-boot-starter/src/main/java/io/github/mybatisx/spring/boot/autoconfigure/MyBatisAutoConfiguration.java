@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.spring.boot.autoconfigure;
 
+import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.spring.MyBatisSqlSessionFactoryBean;
 import io.github.mybatisx.support.config.LogicDeleteConfig;
@@ -199,6 +200,8 @@ public class MyBatisAutoConfiguration implements InitializingBean {
         // 注入逻辑删除配置
         this.ifPresent(LogicDeleteConfig.class, mgc.getLogicDelete(), mgc::setLogicDelete,
                 this.properties::getLogicDelete);
+        // 注入审计配置
+        this.ifPresent(AuditConfig.class, mgc.getAudit(), mgc::setAudit, this.properties::getAudit);
         return factory.getObject();
     }
 

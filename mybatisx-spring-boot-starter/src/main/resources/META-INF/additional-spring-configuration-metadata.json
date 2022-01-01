@@ -40,6 +40,12 @@
       "name": "mybatisx.logic-delete",
       "sourceMethod": "getLogicDelete()",
       "type": "io.github.mybatisx.support.config.LogicDeleteConfig"
+    },
+    {
+      "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
+      "name": "mybatisx.audit",
+      "sourceMethod": "getAudit()",
+      "type": "io.github.mybatisx.auditable.config.AuditConfig"
     }
   ],
   "properties": [
