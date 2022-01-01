@@ -16,6 +16,7 @@
 package io.github.mybatisx.support.config;
 
 import io.github.mybatisx.annotation.NamingStrategy;
+import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.mapper.BaseMapper;
 import io.github.mybatisx.base.parsing.EntityParser;
@@ -144,6 +145,10 @@ public class MyBatisGlobalConfig {
      * 逻辑删除配置
      */
     private LogicDeleteConfig logicDelete;
+    /**
+     * 审计配置
+     */
+    private AuditConfig audit;
 
     public Class<?> getInjectMapperClass() {
         return Objects.ifNull(this.injectMapperClass, DEFAULT_INJECT_MAPPER_CLASS);
