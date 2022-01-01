@@ -13,15 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.metadata;
+package io.github.mybatisx.auditable.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * 主键唯一信息
+ * 更新人唯一标识
  *
  * @author wvkity
- * @created 2021/12/23
+ * @created 2021/12/31
  * @since 1.0.0
  */
-public class Unique {
+@Unique
+@Updatable
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface LastModifiedBy {
 
 }
