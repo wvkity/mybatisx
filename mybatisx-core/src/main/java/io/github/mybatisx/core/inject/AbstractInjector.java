@@ -73,7 +73,7 @@ public abstract class AbstractInjector implements Injector {
                 final Class<?> entityClass = genericTypes[0];
                 Optional.ofNullable(entityClass).ifPresent(it -> {
                     if (MyBatisGlobalConfigCache.registryInterfaceIfNotExists(cfg, mapperInterface)) {
-                        final Table table = TableHelper.parse(mba, mapperInterface);
+                        final Table table = TableHelper.parse(mba, entityClass);
                         final Collection<MappedMethod> methods = this.getMappedMethods(table, mapperInterface);
                         if (Objects.isNotEmpty(methods)) {
                             methods.forEach(m -> m.inject(mba, table, mapperInterface,
