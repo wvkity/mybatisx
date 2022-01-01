@@ -15,6 +15,15 @@
  */
 package io.github.mybatisx.base.metadata;
 
+import io.github.mybatisx.auditable.metadata.AuditMode;
+import io.github.mybatisx.auditable.metadata.AuditType;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+import java.util.Set;
+
 /**
  * 审计信息
  *
@@ -22,6 +31,67 @@ package io.github.mybatisx.base.metadata;
  * @created 2021/12/23
  * @since 1.0.0
  */
+@Getter
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 public class AuditMeta {
 
+    /**
+     * 是否为多租户标识
+     */
+    private final boolean multiTenant;
+    /**
+     * 是否为保存操作用户ID自动填充标识
+     */
+    private final boolean createdBy;
+    /**
+     * 是否为保存操作用户名自动填充标识
+     */
+    private final boolean createdByName;
+    /**
+     * 是否为保存操作时间自动填充标识
+     */
+    private final boolean createdDate;
+    /**
+     * 是否为更新操作用户ID自动填充标识
+     */
+    private final boolean lastModifiedBy;
+    /**
+     * 是否为更新操作用户名自动填充标识
+     */
+    private final boolean lastModifiedByName;
+    /**
+     * 是否为更新操作时间自动填充标识
+     */
+    private final boolean lastModifiedDate;
+    /**
+     * 是否为删除操作用户ID自动填充标识
+     */
+    private final boolean deletedBy;
+    /**
+     * 是否为删除操作用户名自动填充标识
+     */
+    private final boolean deletedByName;
+    /**
+     * 是否为删除操作时间自动填充标识
+     */
+    private final boolean deletedDate;
+    /**
+     * 审计类型
+     */
+    private final AuditType auditType;
+    /**
+     * 审计策略列表
+     */
+    private final Set<AuditMode> auditModes;
+
+    /**
+     * 检查是否为{@link AuditMode#DELETABLE DELETABLE}
+     *
+     * @return boolean
+     */
+    public boolean isDeletable() {
+        return this.auditModes.contains(AuditMode.DELETABLE);
+    }
 }
