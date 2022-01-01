@@ -15,11 +15,16 @@
  */
 package io.github.mybatisx.support.mapping.proxy;
 
+import io.github.mybatisx.lang.Types;
+import io.github.mybatisx.reflect.Reflections;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.support.mapping.SqlSupplier;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.reflection.ExceptionUtil;
 
 import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -32,15 +37,24 @@ import java.lang.reflect.Method;
  */
 @RequiredArgsConstructor
 public class SqlSupplierProxy<T extends SqlSupplier> implements InvocationHandler, Serializable {
-    
+
     private static final long serialVersionUID = 4214397104004499409L;
-    
+
     private final MyBatisConfiguration configuration;
     private final Class<T> supplierInterface;
     private final Object[] args;
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        return null;
+        try {
+            if (Types.isObject(method.getDeclaringClass())) {
+                return method.invoke(proxy, args);
+            }
+            return method.invoke(MethodHandles.lookup().findConstructor(this.supplierInterface,
+                            MethodType.methodType(void.class, Reflections.getArgumentTypes(this.args)))
+                    .invokeWithArguments(this.args), args);
+        } catch (Exception e) {
+            throw ExceptionUtil.unwrapThrowable(e);
+        }
     }
 }
