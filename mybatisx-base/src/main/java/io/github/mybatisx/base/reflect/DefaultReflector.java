@@ -22,6 +22,7 @@ import io.github.mybatisx.base.matcher.FieldMatcher;
 import io.github.mybatisx.base.matcher.GetterMatcher;
 import io.github.mybatisx.base.matcher.SetterMatcher;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.reflect.FieldWrapper;
 import io.github.mybatisx.reflect.Reflections;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.reflection.ReflectionException;
@@ -118,7 +119,7 @@ public class DefaultReflector implements Reflector {
         } else {
             this.fields = ImmutableList.copyOf(realFields.stream().map(it -> {
                 final String property = it.getName();
-                return new FieldWrapper(it, property, this.getterTypes.get(property),
+                return new FieldWrapper(this.type, it, property, this.getterTypes.get(property),
                         this.getterMethods.get(property), this.setterMethods.get(property));
             }).collect(Collectors.toList()));
         }
