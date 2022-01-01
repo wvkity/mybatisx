@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.reflect;
+package io.github.mybatisx.reflect;
 
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -65,10 +65,9 @@ public interface Annotated {
      * 检查是否存在指定注解
      *
      * @param clazz 注解类
-     * @param <A>   注解类型
      * @return boolean
      */
-    default <A extends Annotation> boolean isMatches(final Class<A> clazz) {
+    default boolean isMatches(final Class<? extends Annotation> clazz) {
         final Set<? extends Annotation> annotations;
         if (Objects.nonNull(clazz) && Objects.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> clazz.equals(it.annotationType()));
@@ -80,10 +79,9 @@ public interface Annotated {
      * 检查是否存在指定注解
      *
      * @param classes 注解列表
-     * @param <A>     注解类型
      * @return boolean
      */
-    default <A extends Annotation> boolean isMatches(final Class<A>... classes) {
+    default boolean isMatches(final Class<? extends Annotation>... classes) {
         return this.isMatches(Objects.filterNull(classes));
     }
 
@@ -91,12 +89,11 @@ public interface Annotated {
      * 检查是否存在指定注解
      *
      * @param classes 注解列表
-     * @param <A>     注解类型
      * @return boolean
      */
-    default <A extends Annotation> boolean isMatches(final Collection<Class<A>> classes) {
+    default boolean isMatches(final Collection<Class<? extends Annotation>> classes) {
         final Set<? extends Annotation> annotations;
-        final Set<Class<A>> annotationClasses;
+        final Set<Class<? extends Annotation>> annotationClasses;
         if (Objects.isNotEmpty((annotationClasses = Objects.filterNull(classes)))
                 && Objects.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> annotationClasses.contains(it.annotationType()));
@@ -133,6 +130,15 @@ public interface Annotated {
      */
     default Metadata getMetadata(final String className) {
         return ReflectMetadata.of(this.getAnnotation(className));
+    }
+
+    /**
+     * 检查是否存在注解
+     *
+     * @return boolean
+     */
+    default boolean isEmpty() {
+        return Objects.isEmpty(this.getAnnotations());
     }
 
     /**

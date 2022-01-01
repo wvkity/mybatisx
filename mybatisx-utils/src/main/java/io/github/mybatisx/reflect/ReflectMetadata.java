@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.reflect;
+package io.github.mybatisx.reflect;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Types;
-import io.github.mybatisx.reflect.Reflections;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;

@@ -13,14 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.reflect;
+package io.github.mybatisx.reflect;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 字段包装类
@@ -30,8 +36,12 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Getter
-@RequiredArgsConstructor
-public class FieldWrapper {
+@ToString
+public class FieldWrapper implements Annotated {
+    /**
+     * 实体类
+     */
+    private final Class<?> type;
     /**
      * 属性信息
      */
@@ -52,6 +62,32 @@ public class FieldWrapper {
      * set方法
      */
     private final Method setter;
+    /**
+     * 注解集合
+     */
+    private final Set<? extends Annotation> annotations;
+    /**
+     * 注解集合
+     */
+    private final Map<String, ? extends Annotation> annotationMap;
+
+    public FieldWrapper(Class<?> type, Field field, String name, Class<?> javaType, Method getter, Method setter) {
+        this.type = type;
+        this.field = field;
+        this.name = name;
+        this.javaType = javaType;
+        this.getter = getter;
+        this.setter = setter;
+        this.annotations = ImmutableSet.copyOf(Reflections.getAllAnnotations(field,
+                Reflections.METADATA_ANNOTATION_FILTER));
+        if (this.annotations.isEmpty()) {
+            this.annotationMap = ImmutableMap.of();
+        } else {
+            this.annotationMap = ImmutableMap.copyOf(this.annotations.stream()
+                    .collect(Collectors.toMap(it -> it.annotationType().getCanonicalName(), it -> it)));
+        }
+
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,14 +104,4 @@ public class FieldWrapper {
         return Objects.hash(field, name, javaType, getter, setter);
     }
 
-    @Override
-    public String toString() {
-        return "FieldWrapper{" +
-                "field=" + field +
-                ", name='" + name + '\'' +
-                ", javaType=" + javaType +
-                ", getter=" + getter +
-                ", setter=" + setter +
-                '}';
-    }
 }
