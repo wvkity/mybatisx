@@ -293,7 +293,7 @@ public class DefaultEntityParser implements EntityParser {
         if (Objects.nonNull((column = field.getAnnotation(Column.class)))) {
             cb.column(column.name()).insertable(column.insertable()).updatable(column.updatable());
         } else if (mgc.isJpaSupport() && field.isMatches(Jpa.COLUMN)) {
-            final Metadata metadata = reflector.getMetadata(Jpa.COLUMN);
+            final Metadata metadata = field.getMetadata(Jpa.COLUMN);
             cb.column(metadata.stringValue(Jpa.COLUMN_PROP_NAME));
             cb.insertable(metadata.boolValue(Jpa.COLUMN_PROP_INSERTABLE));
             cb.updatable(metadata.boolValue(Jpa.COLUMN_PROP_UPDATABLE));
