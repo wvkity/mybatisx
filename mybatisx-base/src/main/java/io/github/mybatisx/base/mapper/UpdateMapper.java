@@ -15,6 +15,9 @@
  */
 package io.github.mybatisx.base.mapper;
 
+import io.github.mybatisx.base.constant.Constants;
+import org.apache.ibatis.annotations.Param;
+
 /**
  * MyBatisX更新操作接口
  *
@@ -25,4 +28,13 @@ package io.github.mybatisx.base.mapper;
  */
 interface UpdateMapper<T> {
 
+    /**
+     * 根据主键、乐观锁、逻辑删除标识、多租户标识更新记录
+     * <p>
+     * 排除逻辑删除标识、保存审计标识、多租户标识等字段
+     *
+     * @param entity 待更新记录对象
+     * @return 受影响行数
+     */
+    int update(@Param(Constants.PARAM_ENTITY) final T entity);
 }

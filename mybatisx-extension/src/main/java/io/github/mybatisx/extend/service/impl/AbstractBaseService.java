@@ -54,6 +54,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int update(T entity) {
+        return this.mapper.update(entity);
+    }
+
+    @Override
     public M getMapper() {
         return this.mapper;
     }
@@ -63,5 +69,5 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     public void setMapper(M mapper) {
         this.mapper = mapper;
     }
-
+    
 }
