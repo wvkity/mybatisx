@@ -23,5 +23,117 @@ package io.github.mybatisx.base.constant;
  * @since 1.0.0
  */
 public interface SqlSymbol {
-    
+
+    /**
+     * 空字符串
+     */
+    String EMPTY = "";
+    /**
+     * 空格
+     */
+    String SPACE = " ";
+    /**
+     * value
+     */
+    String VALUE = "value";
+    /**
+     * 点
+     */
+    String DOT = ".";
+    /**
+     * 星号
+     */
+    String STAR = "*";
+    /**
+     * 问号
+     */
+    String QUESTION_MARK = "?";
+    /**
+     * 单引号
+     */
+    String SINGLE_QUOTES = "'";
+    /**
+     * 反引号
+     */
+    String BACK_QUOTES = "`";
+    /**
+     * 双引号
+     */
+    String DOUBLE_QUOTES = "\"";
+    /**
+     * 换行符
+     */
+    String NEW_LINE = System.lineSeparator();
+    /**
+     * 大于符号
+     */
+    String GT = ">";
+    /**
+     * 逗号
+     */
+    String COMMA = ",";
+    /**
+     * 逗号 + 空格
+     */
+    String COMMA_SPACE = ", ";
+    /**
+     * (
+     */
+    String START_BRACKET = "(";
+    /**
+     * )
+     */
+    String END_BRACKET = ")";
+    /**
+     * #{
+     */
+    String POUND_START_BRACE = "#{";
+    /**
+     * ${
+     */
+    String DOLLAR_START_BRACE = "${";
+    /**
+     * {
+     */
+    String START_BRACE = "{";
+    /**
+     * }
+     */
+    String END_BRACE = "}";
+    /**
+     * OR
+     */
+    String OR = "OR";
+    /**
+     * OR + 空格
+     */
+    String OR_SPACE = "OR ";
+    /**
+     * 空格 + OR + 空格
+     */
+    String OR_SPACE_BOTH = " OR ";
+    /**
+     * AND
+     */
+    String AND = "AND";
+    /**
+     * AND + 空格
+     */
+    String AND_SPACE = "AND ";
+    /**
+     * 空格 + AND + 空格
+     */
+    String AND_SPACE_BOTH = " AND ";
+    /**
+     * &lt;![CDATA[
+     */
+    String START_CDATA = "<![CDATA[";
+    /**
+     * ]]&gt;
+     */
+    String END_CDATA = "]]>";
+    /**
+     * 实体参数
+     */
+    String PARAMETER_ENTITY = Constants.PARAM_ENTITY;
 }
