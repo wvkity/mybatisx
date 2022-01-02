@@ -76,7 +76,7 @@ public class SqlSupplierRegistry {
     public <T> SqlSupplier getSupplier(final Class<T> type, final Object... args) {
         final SqlSupplierProxyFactory<? extends SqlSupplier> factory = this.supplierCache.get(type);
         if (Objects.isNull(factory)) {
-            throw new MyBatisException("Type" + type + " is not known to the SqlSupplierRegistry");
+            throw new MyBatisException("Type " + type + " is not known to the SqlSupplierRegistry");
         }
         try {
             return factory.newInstance(this.configuration, args);

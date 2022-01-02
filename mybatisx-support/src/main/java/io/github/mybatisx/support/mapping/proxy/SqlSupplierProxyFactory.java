@@ -35,8 +35,8 @@ public class SqlSupplierProxyFactory<T extends SqlSupplier> {
 
     @SuppressWarnings({"unchecked"})
     public T newInstance(final SqlSupplierProxy<T> supplierProxy) {
-        return (T) Proxy.newProxyInstance(this.supplierInterface.getClassLoader(), new Class[]{this.supplierInterface},
-                supplierProxy);
+        return (T) Proxy.newProxyInstance(this.supplierInterface.getClassLoader(),
+                new Class[]{SqlSupplier.class}, supplierProxy);
     }
 
     public T newInstance(final MyBatisConfiguration config, final Object... args) {
