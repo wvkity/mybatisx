@@ -18,7 +18,7 @@ package io.github.mybatisx.base.constant;
 import io.github.mybatisx.base.fragment.Fragment;
 
 /**
- * SQL符号
+ * SQL条件符号
  *
  * @author wvkity
  * @created 2022/1/2
