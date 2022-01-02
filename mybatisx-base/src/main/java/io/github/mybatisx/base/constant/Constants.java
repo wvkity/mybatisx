@@ -44,4 +44,14 @@ public interface Constants {
      */
     String PARAM_CRITERIA = "criteria";
 
+    /**
+     * script标签开始标记
+     */
+    String SCRIPT_OPEN = "<script>";
+    
+    /**
+     * script标签结束标记
+     */
+    String SCRIPT_CLOSE = "</script>";
+
 }
