@@ -237,7 +237,7 @@ public class MyBatisAutoConfiguration implements InitializingBean {
         } else {
             if (this.context.getBeanNamesForType(clazz, false, false).length > 0) {
                 consumer.accept(this.context.getBean(clazz));
-            } else {
+            } else if (supplier != null) {
                 consumer.accept(supplier.get());
             }
         }
