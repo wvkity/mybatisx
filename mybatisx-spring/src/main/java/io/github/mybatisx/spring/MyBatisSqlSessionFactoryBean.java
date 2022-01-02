@@ -21,6 +21,7 @@ import io.github.mybatisx.auditable.parsing.AuditParser;
 import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyAutoScanParser;
 import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyParser;
 import io.github.mybatisx.base.inject.Injector;
+import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.matcher.ClassMatcher;
 import io.github.mybatisx.base.matcher.DefaultClassMatcher;
 import io.github.mybatisx.base.matcher.DefaultFieldMatcher;
@@ -529,6 +530,9 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
             });
         }
 
+        // 序列生成器
+        this.ifPresent(SequenceGenerator.class, this.globalConfig.getSequenceGenerator(), 
+                this.globalConfig::setSequenceGenerator, null);
         // 注入SQL注入器对象
         this.ifPresent(this.globalConfig, MyBatisGlobalConfig::getInjector, Injector.class,
                 this.globalConfig::setInjector, DefaultInjector::new);
@@ -724,7 +728,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
     private <T> void ifPresent(final Class<T> clazz, final T bean, final Consumer<T> consumer,
                                final Supplier<T> supplier) {
         if (bean == null) {
-            if (!this.ifPresent(clazz, consumer)) {
+            if (!this.ifPresent(clazz, consumer) && supplier != null) {
                 consumer.accept(supplier.get());
             }
         }
