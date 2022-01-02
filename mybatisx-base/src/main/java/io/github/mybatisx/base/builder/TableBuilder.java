@@ -134,7 +134,7 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
     public Table build() {
         final String realPrefix = Strings.ifNull(this.prefix, Strings.DEFAULT_STR_EMPTY);
         final String tableName;
-        if (Strings.isWhitespace(this.name)) {
+        if (Strings.isNotWhitespace(this.name)) {
             tableName = realPrefix + this.name;
         } else {
             tableName = realPrefix + this.namingConverter.convert(this.entity.getSimpleName());
