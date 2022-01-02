@@ -24,8 +24,10 @@ import io.github.mybatisx.lang.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -563,7 +565,7 @@ public final class Reflections {
             return Object.class;
         }
         final Type it = types[index];
-        if (Objects.isAssignable(Class.class, it)) {
+        if (it instanceof Class) {
             return (Class<?>) it;
         }
         return Object.class;
@@ -645,6 +647,75 @@ public final class Reflections {
             result = Object.class;
         }
         return result;
+    }
+
+    /**
+     * 创建指定类实例
+     *
+     * @param clazz 对象类
+     * @param args  参数列表
+     * @param <T>   目标类型
+     * @return 目标对象
+     * @throws NoSuchMethodException     if a matching method is not found.
+     * @throws InvocationTargetException if the underlying constructor throws an exception.
+     * @throws InstantiationException    if the class that declares the underlying constructor represents an abstract class.
+     * @throws IllegalAccessException    if this Constructor object is enforcing Java language access control and the underlying constructor is inaccessible
+     */
+    @SuppressWarnings({"unchecked"})
+    public static <T> T newInstance(final Class<T> clazz, final Object... args) throws NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException {
+        final Constructor<T> constructor;
+        if (Objects.isEmpty(args)) {
+            constructor = clazz.getDeclaredConstructor();
+            try {
+                return constructor.newInstance();
+            } catch (IllegalAccessException e) {
+                if (Reflections.canControlMemberAccessible()) {
+                    constructor.setAccessible(true);
+                    return constructor.newInstance();
+                }
+                throw e;
+            }
+        } else {
+            final int size = Objects.size(args);
+            final Constructor<?>[] constructors = Arrays.stream(clazz.getDeclaredConstructors()).filter(it ->
+                    Objects.size(it.getParameterTypes()) == size).toArray(Constructor[]::new);
+            if (Objects.isNotEmpty(constructors)) {
+                for (Constructor<?> it : constructors) {
+                    if (Reflections.compareParameterType(it.getParameterTypes(), args)) {
+                        try {
+                            return (T) it.newInstance(args);
+                        } catch (IllegalAccessException e) {
+                            if (Reflections.canControlMemberAccessible()) {
+                                it.setAccessible(true);
+                                return (T) it.newInstance(args);
+                            }
+                            throw e;
+                        }
+                    }
+                }
+            }
+            throw new IllegalArgumentException("The constructor for the specified argument list could not be found");
+        }
+    }
+
+    /**
+     * 比较参数类型和值是否一致
+     *
+     * @param types 参数类型列表
+     * @param args  参数值列表
+     * @return boolean
+     */
+    public static boolean compareParameterType(final Class<?>[] types, final Object... args) {
+        final int size = Objects.size(types);
+        if (size == Objects.size(args)) {
+            for (Class<?> it : types) {
+                if (Objects.isAssignable(it, args[0])) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
