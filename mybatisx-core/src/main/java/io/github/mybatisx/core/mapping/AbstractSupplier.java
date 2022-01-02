@@ -51,4 +51,14 @@ public abstract class AbstractSupplier implements SqlSupplier, SqlSymbol {
         this.globalConfig = mgc;
     }
 
+    /**
+     * 拼接完整保存SQL语句
+     *
+     * @param columnFragment 字段部分
+     * @param valueFragment  值部分
+     * @return 完整SQL语句
+     */
+    protected String insert(final String columnFragment, final String valueFragment) {
+        return "INSERT INTO " + this.table.getFullName() + SPACE + columnFragment + " VALUES " + valueFragment;
+    }
 }

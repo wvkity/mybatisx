@@ -34,4 +34,14 @@ interface SaveService<T> extends BatchSaveService<T> {
      * @return 受影响行数
      */
     int save(final T entity);
+
+    /**
+     * 保存
+     * <p>排除Null值
+     *
+     * @param entity 待保存对象
+     * @return 受影响行数
+     */
+    int saveWithoutNull(final T entity);
+
 }

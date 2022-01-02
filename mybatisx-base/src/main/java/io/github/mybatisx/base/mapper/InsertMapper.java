@@ -37,4 +37,13 @@ interface InsertMapper<T> extends BatchInsertMapper<T> {
      */
     int insert(@Param(Constants.PARAM_ENTITY) final T entity);
 
+    /**
+     * 保存
+     * <p>排除Null值字段
+     *
+     * @param entity 待保存记录对象
+     * @return 受影响行数
+     */
+    int insertWithoutNull(@Param(Constants.PARAM_ENTITY) final T entity);
+
 }
