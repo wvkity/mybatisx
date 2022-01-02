@@ -18,6 +18,7 @@ package io.github.mybatisx.support.config;
 import io.github.mybatisx.annotation.NamingStrategy;
 import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.base.inject.Injector;
+import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.mapper.BaseMapper;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.base.type.JdbcTypeMappingRegistry;
@@ -133,6 +134,10 @@ public class MyBatisGlobalConfig {
      * 指定对应的{@link JdbcType}即可
      */
     private JdbcType overrideBooleanJdbcType = JdbcType.UNDEFINED;
+    /**
+     * 序列生成器
+     */
+    private SequenceGenerator sequenceGenerator;
     /**
      * 主键配置
      */
