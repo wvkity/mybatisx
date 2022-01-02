@@ -19,6 +19,8 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 默认SQL注入器
@@ -31,6 +33,11 @@ public class DefaultInjector extends AbstractInjector {
 
     @Override
     public Collection<MappedMethod> getMappedMethods(Table table, Class<?> mapperInterface) {
-        return null;
+        final Set<MappedMethod> methods = new HashSet<>(GENERIC_MAPPED_METHOD_CACHE);
+        if (table.isHasPrimaryKey()) {
+            methods.addAll(PRIMARY_KEY_MAPPED_METHOD_CACHE);
+            return methods;
+        }
+        return methods;
     }
 }

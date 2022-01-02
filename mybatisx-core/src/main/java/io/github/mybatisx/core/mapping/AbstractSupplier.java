@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.mapping;
 
+import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.mapping.SqlSupplier;
@@ -27,7 +28,7 @@ import lombok.Getter;
  * @created 2021/12/26
  * @since 1.0.0
  */
-public abstract class AbstractSupplier implements SqlSupplier {
+public abstract class AbstractSupplier implements SqlSupplier, SqlSymbol {
 
     /**
      * {@link Table}
@@ -44,10 +45,10 @@ public abstract class AbstractSupplier implements SqlSupplier {
      */
     protected final MyBatisGlobalConfig globalConfig;
 
-    public AbstractSupplier(Table table, MyBatisGlobalConfig globalConfig) {
+    public AbstractSupplier(MyBatisGlobalConfig mgc, Table table) {
         this.table = table;
         this.entityClass = null;
-        this.globalConfig = globalConfig;
+        this.globalConfig = mgc;
     }
 
 }

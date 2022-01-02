@@ -15,11 +15,13 @@
  */
 package io.github.mybatisx.core.inject;
 
+import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.mapper.EasilyMapper;
 import io.github.mybatisx.base.mapper.IdenticalMapper;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
+import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
@@ -50,19 +52,35 @@ public abstract class AbstractInjector implements Injector {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    public enum InjectType {
+        INSERT, UPDATE, DELETE, SELECT
+    }
+
     /**
      * 映射方法缓存
      */
-    protected static final Map<Class<?>, Set<MappedMethod>> ALL_MAPPED_METHOD_CACHE = new ConcurrentHashMap<>();
+    protected static final Map<InjectType, Set<MappedMethod>> ALL_MAPPED_METHOD_CACHE = new ConcurrentHashMap<>();
     /**
      * 主键相关方法
      */
-    protected static final Map<Class<?>, Set<MappedMethod>> PRIMARY_KEY_MAPPED_METHOD_CACHE = new ConcurrentHashMap<>();
+    protected static final Set<MappedMethod> PRIMARY_KEY_MAPPED_METHOD_CACHE;
     /**
      * 通用方法
      */
-    protected static final Map<Class<?>, Set<MappedMethod>> GENERIC_MAPPED_METHOD_CACHE = new ConcurrentHashMap<>();
-    
+    protected static final Set<MappedMethod> GENERIC_MAPPED_METHOD_CACHE;
+
+    static {
+        // insert方法映射
+        final Insert insert = new Insert();
+        ALL_MAPPED_METHOD_CACHE.put(InjectType.INSERT, ImmutableSet.of(
+                insert
+        ));
+        PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
+        GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
+                insert
+        );
+    }
+
     @Override
     public void inject(MapperBuilderAssistant mba, Class<?> mapperInterface) {
         final Configuration cfg = mba.getConfiguration();
