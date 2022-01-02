@@ -15,9 +15,15 @@
  */
 package io.github.mybatisx.core.mapping.insert;
 
+import io.github.mybatisx.base.constant.Splicing;
+import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.mapping.AbstractSupplier;
+import io.github.mybatisx.core.mapping.Scripts;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * insert sql供应器
@@ -34,6 +40,12 @@ public class InsertSupplier extends AbstractSupplier {
 
     @Override
     public String get() {
-        return "";
+        final List<Column> columns = this.table.getInsertableColumns();
+        final String columnFragment = columns.stream()
+                .map(Column::getColumn).collect(Collectors.joining(COMMA_SPACE, START_BRACKET, END_BRACKET));
+        final String valueFragment = columns.stream()
+                .map(it -> Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.INSERT, it))
+                .collect(Collectors.joining(COMMA_SPACE, START_BRACKET, END_BRACKET));
+        return this.insert(columnFragment, valueFragment);
     }
 }
