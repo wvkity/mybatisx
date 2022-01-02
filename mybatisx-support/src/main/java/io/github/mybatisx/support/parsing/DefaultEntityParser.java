@@ -300,7 +300,7 @@ public class DefaultEntityParser implements EntityParser {
         }
         final Extra extra;
         if (Objects.nonNull((extra = field.getAnnotation(Extra.class)))) {
-            cb.blob(extra.blob());
+            cb.blob(extra.blob()).jdbcType(extra.jdbcType());
             final Necessary spliceJavaType = extra.spliceJavaType();
             final Necessary notNull = extra.checkNull();
             final Necessary notEmpty = extra.checkEmpty();
