@@ -15,26 +15,28 @@
  */
 package io.github.mybatisx.core.mapping.update;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Splicing;
+import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.mapping.AbstractSupplier;
 import io.github.mybatisx.core.mapping.Scripts;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * update sql供应器
+ * updateWithoutNull sql供应器
  *
  * @author wvkity
- * @created 2022/1/2
+ * @created 2022/1/4
  * @since 1.0.0
  */
-public class UpdateSupplier extends AbstractSupplier {
+public class UpdateWithoutNullSupplier extends AbstractSupplier {
 
-    public UpdateSupplier(MyBatisGlobalConfig mgc, Table table) {
+    public UpdateWithoutNullSupplier(MyBatisGlobalConfig mgc, Table table) {
         super(mgc, table);
     }
 
@@ -42,16 +44,10 @@ public class UpdateSupplier extends AbstractSupplier {
     public String get() {
         final List<Column> columns = this.table.getUpdateColumnWithoutSpecial();
         final StringBuilder script = new StringBuilder(120);
-        final Iterator<Column> iterator = columns.iterator();
-        boolean hasNext = iterator.hasNext();
-        while (hasNext) {
-            final Column it = iterator.next();
-            script.append(SPACE).append(Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it)).append(COMMA_SPACE);
-            hasNext = iterator.hasNext();
-            if (hasNext) {
-                script.append(NEW_LINE);
-            }
-        }
+        script.append(columns.stream()
+                .map(it -> Scripts.toIfTag(PARAMETER_ENTITY, Symbol.EQ, Splicing.REPLACE,
+                null, it, true, false, true, LogicSymbol.NONE, COMMA_SPACE))
+                .collect(Collectors.joining(NEW_LINE)));
         //  noinspection DuplicatedCode
         this.optimisticLockWithSetThen(script::append);
         final StringBuilder condition = new StringBuilder(120);
@@ -59,7 +55,9 @@ public class UpdateSupplier extends AbstractSupplier {
         this.optimisticLockWithWhereThen(condition::append);
         this.multiTenantWithWhereThen(condition::append);
         this.logicDeleteWithWhereThen(condition::append);
-        return this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
+        final String sql = this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
                 (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
+        System.out.println(sql);
+        return sql;
     }
 }

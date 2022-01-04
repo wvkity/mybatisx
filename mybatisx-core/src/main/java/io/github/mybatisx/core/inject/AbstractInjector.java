@@ -24,6 +24,7 @@ import io.github.mybatisx.core.inject.method.MappedMethod;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
 import io.github.mybatisx.core.inject.method.invoke.Update;
+import io.github.mybatisx.core.inject.method.invoke.UpdateWithoutNull;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
@@ -77,12 +78,17 @@ public abstract class AbstractInjector implements Injector {
         final InsertWithoutNull iwn = new InsertWithoutNull();
         // update方法映射
         final Update update = new Update();
+        final UpdateWithoutNull uwn = new UpdateWithoutNull();
+        
         ALL_MAPPED_METHOD_CACHE.put(InjectType.INSERT, ImmutableSet.of(
-                insert, iwn, update
+                insert, iwn
+        ));
+        ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
+                update, uwn
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, iwn, update
+                insert, iwn, update, uwn
         );
     }
 
