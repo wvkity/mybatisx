@@ -122,8 +122,16 @@ public class Column {
      * 逻辑删除元数据
      */
     private final LogicDeleteMeta logicDeleteMeta;
+    
+    public boolean isAuditInsertable() {
+        return this.insertable && this.auditMeta != null && this.auditMeta.isInsertable();
+    }
 
-    public boolean isDeletable() {
+    public boolean isAuditUpdatable() {
+        return this.updatable && this.auditMeta != null && this.auditMeta.isUpdatable();
+    }
+
+    public boolean isAuditDeletable() {
         return this.updatable && this.auditMeta != null && this.auditMeta.isDeletable();
     }
 

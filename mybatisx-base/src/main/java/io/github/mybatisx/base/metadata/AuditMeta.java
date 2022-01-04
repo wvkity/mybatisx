@@ -87,7 +87,25 @@ public class AuditMeta {
     private final Set<AuditMode> auditModes;
 
     /**
-     * 检查是否为{@link AuditMode#DELETABLE DELETABLE}
+     * 检查是否为{@link AuditMode#INSERTABLE INSERTABLE}审计类型
+     *
+     * @return boolean
+     */
+    public boolean isInsertable() {
+        return this.auditModes.contains(AuditMode.INSERTABLE);
+    }
+
+    /**
+     * 检查是否为{@link AuditMode#UPDATABLE UPDATABLE}审计类型
+     *
+     * @return boolean
+     */
+    public boolean isUpdatable() {
+        return this.auditModes.contains(AuditMode.UPDATABLE);
+    }
+
+    /**
+     * 检查是否为{@link AuditMode#DELETABLE DELETABLE}审计类型
      *
      * @return boolean
      */

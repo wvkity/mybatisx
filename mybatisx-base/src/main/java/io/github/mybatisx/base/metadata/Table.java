@@ -148,7 +148,7 @@ public class Table {
         this.columns = ImmutableSet.copyOf(columns);
         this.insertableColumns = ImmutableList.copyOf(this.filtrate(Column::isInsertable));
         this.updatableColumns = ImmutableList.copyOf(this.filtrate(Column::isUpdatable));
-        this.logicDeleteAuditColumns = ImmutableList.copyOf(this.filtrate(this.updatableColumns, Column::isDeletable));
+        this.logicDeleteAuditColumns = ImmutableList.copyOf(this.filtrate(this.updatableColumns, Column::isAuditDeletable));
         this.columnMap = ImmutableMap.copyOf(this.columns.stream().collect(Collectors.toMap(Column::getProperty,
                 Function.identity())));
     }
@@ -187,4 +187,20 @@ public class Table {
     public List<Column> filtrate(final Collection<Column> columns, final Predicate<Column> filter) {
         return columns.stream().filter(filter).collect(Collectors.toList());
     }
+
+    /**
+     * 获取非逻辑删除标识、多租户、乐观锁等特殊字段
+     *
+     * @return 字段集合
+     */
+    public List<Column> getUpdateColumnWithoutSpecial() {
+        return this.filtrate(this.updatableColumns, it -> {
+            if (!it.isVersion() && !it.isLogicDelete() && !it.isMultiTenant()) {
+                final AuditMeta audit = it.getAuditMeta();
+                return audit == null || audit.isUpdatable();
+            }
+            return false;
+        });
+    }
+
 }
