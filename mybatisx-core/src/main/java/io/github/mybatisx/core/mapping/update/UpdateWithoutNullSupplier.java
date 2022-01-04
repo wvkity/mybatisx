@@ -55,9 +55,7 @@ public class UpdateWithoutNullSupplier extends AbstractSupplier {
         this.optimisticLockWithWhereThen(condition::append);
         this.multiTenantWithWhereThen(condition::append);
         this.logicDeleteWithWhereThen(condition::append);
-        final String sql = this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
+        return this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
                 (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
-        System.out.println(sql);
-        return sql;
     }
 }
