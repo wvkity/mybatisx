@@ -98,7 +98,7 @@ public enum Symbol implements Fragment {
 
     @Override
     public String getFragment() {
-        return null;
+        return this.symbol;
     }
 
 
