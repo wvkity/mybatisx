@@ -133,7 +133,35 @@ public interface SqlSymbol {
      */
     String END_CDATA = "]]>";
     /**
+     * SELECT
+     */
+    String SELECT = "SELECT";
+    /**
+     * UPDATE
+     */
+    String UPDATE = "UPDATE";
+    /**
+     * DELETE
+     */
+    String DELETE = "DELETE";
+    /**
+     * FROM
+     */
+    String FROM = "FROM";
+    /**
+     * SET
+     */
+    String SET = "SET";
+    /**
+     * WHERE
+     */
+    String WHERE = "WHERE";
+    /**
      * 实体参数
      */
     String PARAMETER_ENTITY = Constants.PARAM_ENTITY;
+    /**
+     * 乐观锁参数名
+     */
+    String PARAMETER_OPTIMISTIC_LOCK = "optimisticLockValue";
 }
