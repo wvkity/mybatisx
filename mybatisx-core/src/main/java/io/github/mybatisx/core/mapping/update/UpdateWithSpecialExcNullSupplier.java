@@ -42,7 +42,8 @@ public class UpdateWithSpecialExcNullSupplier extends AbstractSupplier {
     public String get() {
         final Table _$table = this.table;
         final String script =
-                _$table.filtrate(_$table.getUpdatableColumns(), it -> !it.isMultiTenant() && !it.isLogicDelete())
+                _$table.filtrate(_$table.getUpdatableColumns(), it ->
+                                !it.isMultiTenant() && !it.isLogicDelete() && !it.isAuditDeletable())
                         .stream()
                         .map(it -> Scripts.toIfTag(PARAMETER_ENTITY, Symbol.EQ, Splicing.REPLACE,
                                 null, it, true, false, true, LogicSymbol.NONE, COMMA_SPACE))

@@ -40,7 +40,8 @@ public class UpdateWithSpecialSupplier extends AbstractSupplier {
     public String get() {
         final Table _$table = this.table;
         final String script =
-                _$table.filtrate(_$table.getUpdatableColumns(), it -> !it.isMultiTenant() && !it.isLogicDelete())
+                _$table.filtrate(_$table.getUpdatableColumns(), it -> 
+                                !it.isMultiTenant() && !it.isLogicDelete() && !it.isAuditDeletable())
                         .stream()
                         .map(it -> SPACE + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))
                         .collect(Collectors.joining(COMMA + NEW_LINE));
