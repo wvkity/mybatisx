@@ -15,16 +15,16 @@
  */
 package io.github.mybatisx.uid.snowflake.test;
 
-import io.github.mybatisx.uid.snowflake.SnowflakeSequence;
-import io.github.mybatisx.uid.snowflake.Unique;
-import io.github.mybatisx.uid.snowflake.core.Config;
-import io.github.mybatisx.uid.snowflake.core.Core;
-import io.github.mybatisx.uid.snowflake.core.Policy;
-import io.github.mybatisx.uid.snowflake.distributor.MilliDistributor;
-import io.github.mybatisx.uid.snowflake.twitter.AtomicSequence;
-import io.github.mybatisx.uid.snowflake.twitter.LocalCacheSequence;
-import io.github.mybatisx.uid.snowflake.twitter.SequenceConfig;
-import io.github.mybatisx.uid.snowflake.twitter.SequenceCore;
+import io.github.mybatisx.id.snowflake.SnowflakeSequence;
+import io.github.mybatisx.id.snowflake.Unique;
+import io.github.mybatisx.id.snowflake.core.Config;
+import io.github.mybatisx.id.snowflake.core.Core;
+import io.github.mybatisx.id.snowflake.core.Policy;
+import io.github.mybatisx.id.snowflake.distributor.MilliDistributor;
+import io.github.mybatisx.id.snowflake.twitter.AtomicSequence;
+import io.github.mybatisx.id.snowflake.twitter.LocalCacheSequence;
+import io.github.mybatisx.id.snowflake.twitter.SequenceConfig;
+import io.github.mybatisx.id.snowflake.twitter.SequenceCore;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
