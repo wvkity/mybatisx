@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.support.helper;
+package io.github.mybatisx.base.helper;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.metadata.Table;
+import io.github.mybatisx.base.parsing.DefaultEntityParser;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.reflect.Reflections;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
-import io.github.mybatisx.support.parsing.DefaultEntityParser;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;

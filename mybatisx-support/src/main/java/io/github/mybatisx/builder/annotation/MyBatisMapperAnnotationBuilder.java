@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.builder.annotation;
 
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import org.apache.ibatis.annotations.Arg;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.CacheNamespaceRef;

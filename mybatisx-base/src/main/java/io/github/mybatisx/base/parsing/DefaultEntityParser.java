@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.support.parsing;
+package io.github.mybatisx.base.parsing;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.annotation.Column;
@@ -40,6 +40,12 @@ import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyAutoScanParser;
 import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyParser;
 import io.github.mybatisx.base.builder.ColumnBuilder;
 import io.github.mybatisx.base.builder.TableBuilder;
+import io.github.mybatisx.base.config.LogicDeleteConfig;
+import io.github.mybatisx.base.config.MatcherConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.OptimisticLockConfig;
+import io.github.mybatisx.base.config.PrimaryKeyConfig;
 import io.github.mybatisx.base.constant.Jpa;
 import io.github.mybatisx.base.exception.MyBatisParserException;
 import io.github.mybatisx.base.matcher.ClassMatcher;
@@ -54,7 +60,6 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.base.naming.ColumnNamingConverter;
 import io.github.mybatisx.base.naming.NamingConverter;
 import io.github.mybatisx.base.naming.TableNamingConverter;
-import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.base.reflect.DefaultReflector;
 import io.github.mybatisx.base.reflect.Reflector;
 import io.github.mybatisx.base.type.JdbcTypeMappingRegistry;
@@ -63,12 +68,6 @@ import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
 import io.github.mybatisx.reflect.FieldWrapper;
 import io.github.mybatisx.reflect.Metadata;
-import io.github.mybatisx.support.config.LogicDeleteConfig;
-import io.github.mybatisx.support.config.MatcherConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
-import io.github.mybatisx.support.config.OptimisticLockConfig;
-import io.github.mybatisx.support.config.PrimaryKeyConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;

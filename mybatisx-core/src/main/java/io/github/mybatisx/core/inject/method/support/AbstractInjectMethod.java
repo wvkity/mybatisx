@@ -16,6 +16,8 @@
 package io.github.mybatisx.core.inject.method.support;
 
 import io.github.mybatisx.annotation.ExecuteType;
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Descriptor;
@@ -26,8 +28,6 @@ import io.github.mybatisx.core.mapping.SupplierWeakCache;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.session.MyBatisConfiguration;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.support.mapping.SqlSupplier;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;

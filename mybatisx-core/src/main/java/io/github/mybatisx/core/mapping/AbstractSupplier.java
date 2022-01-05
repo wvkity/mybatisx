@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.mapping;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.constant.Splicing;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.metadata.Column;
@@ -22,7 +23,6 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 import io.github.mybatisx.support.mapping.SqlSupplier;
 import lombok.Getter;
 

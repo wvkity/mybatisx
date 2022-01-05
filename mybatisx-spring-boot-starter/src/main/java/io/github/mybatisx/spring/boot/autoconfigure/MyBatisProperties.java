@@ -16,12 +16,12 @@
 package io.github.mybatisx.spring.boot.autoconfigure;
 
 import io.github.mybatisx.auditable.config.AuditConfig;
+import io.github.mybatisx.base.config.LogicDeleteConfig;
+import io.github.mybatisx.base.config.MatcherConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.OptimisticLockConfig;
+import io.github.mybatisx.base.config.PrimaryKeyConfig;
 import io.github.mybatisx.session.MyBatisConfiguration;
-import io.github.mybatisx.support.config.LogicDeleteConfig;
-import io.github.mybatisx.support.config.MatcherConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.OptimisticLockConfig;
-import io.github.mybatisx.support.config.PrimaryKeyConfig;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.scripting.LanguageDriver;

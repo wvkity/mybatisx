@@ -15,14 +15,14 @@
  */
 package io.github.mybatisx.core.inject.method.support;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.session.MyBatisConfiguration;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.support.mapping.SqlSupplier;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
@@ -59,7 +59,7 @@ public abstract class AbstractMappedMethod implements MappedMethod {
         this.cfg = config;
         this.driver = config.getDefaultScriptingLanguageInstance();
         if (Objects.isAssignable(MyBatisConfiguration.class, config)) {
-            ((MyBatisConfiguration) config).getSupplierRegistry().addSupplier(this.getClass());
+            ((MyBatisConfiguration) config).addSupplier(this.getClass());
         }
         this.injectMappedStatement(table, mapperInterface, returnType);
     }

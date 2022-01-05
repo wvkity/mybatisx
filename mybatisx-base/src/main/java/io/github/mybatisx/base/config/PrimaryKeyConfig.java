@@ -13,25 +13,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.expr;
+package io.github.mybatisx.base.config;
 
-import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.annotation.IdType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
- * 条件表达式
+ * 主键相关配置
  *
- * @param <T> 字段类型
  * @author wvkity
- * @created 2021/12/23
+ * @created 2021/12/30
  * @since 1.0.0
  */
-public interface Expression<T> {
+@Getter
+@Setter
+@RequiredArgsConstructor
+public class PrimaryKeyConfig {
 
     /**
-     * 获取{@link Criteria}
-     *
-     * @return {@link Criteria}
+     * 策略
      */
-    Criteria<?> getCriteria();
+    private IdType strategy = IdType.UNKNOWN;
+    /**
+     * 默认属性名
+     */
+    private String property = "id";
+    /**
+     * 自动识别
+     */
+    private boolean autoScan;
+    /**
+     * 保存后生成
+     */
+    private boolean after;
 
+    public static PrimaryKeyConfig of() {
+        return new PrimaryKeyConfig();
+    }
 }

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.support.config;
+package io.github.mybatisx.base.config;
 
 import io.github.mybatisx.annotation.NamingStrategy;
 import io.github.mybatisx.auditable.config.AuditConfig;
@@ -23,6 +23,7 @@ import io.github.mybatisx.base.mapper.BaseMapper;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.base.type.JdbcTypeMappingRegistry;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.id.Sequence;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -138,6 +139,10 @@ public class MyBatisGlobalConfig {
      * 序列生成器
      */
     private SequenceGenerator sequenceGenerator;
+    /**
+     * 唯一标识生成器
+     */
+    private Sequence sequence;
     /**
      * 主键配置
      */

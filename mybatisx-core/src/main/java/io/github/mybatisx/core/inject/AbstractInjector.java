@@ -16,6 +16,9 @@
 package io.github.mybatisx.core.inject;
 
 import com.google.common.collect.ImmutableSet;
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.mapper.EasilyMapper;
 import io.github.mybatisx.base.mapper.IdenticalMapper;
@@ -26,9 +29,6 @@ import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
 import io.github.mybatisx.core.inject.method.invoke.Update;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithoutNull;
 import io.github.mybatisx.lang.Objects;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
-import io.github.mybatisx.support.config.MyBatisGlobalConfigCache;
-import io.github.mybatisx.support.helper.TableHelper;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;

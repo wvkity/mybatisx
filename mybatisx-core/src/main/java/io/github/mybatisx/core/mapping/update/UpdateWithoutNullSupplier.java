@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.mapping.update;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Splicing;
 import io.github.mybatisx.base.constant.Symbol;
@@ -22,7 +23,6 @@ import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.mapping.AbstractSupplier;
 import io.github.mybatisx.core.mapping.Scripts;
-import io.github.mybatisx.support.config.MyBatisGlobalConfig;
 
 import java.util.List;
 import java.util.stream.Collectors;

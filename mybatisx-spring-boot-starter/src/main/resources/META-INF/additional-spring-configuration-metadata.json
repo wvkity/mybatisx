@@ -15,31 +15,31 @@
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
       "name": "mybatisx.global-config",
       "sourceMethod": "getGlobalConfig()",
-      "type": "io.github.mybatisx.support.config.MyBatisGlobalConfig"
+      "type": "io.github.mybatisx.base.config.MyBatisGlobalConfig"
     },
     {
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
       "name": "mybatisx.matchers",
       "sourceMethod": "getMatchers()",
-      "type": "io.github.mybatisx.support.config.MatcherConfig"
+      "type": "io.github.mybatisx.base.config.MatcherConfig"
     },
     {
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
       "name": "mybatisx.primary-key",
       "sourceMethod": "getPrimaryKey()",
-      "type": "io.github.mybatisx.support.config.PrimaryKeyConfig"
+      "type": "io.github.mybatisx.base.config.PrimaryKeyConfig"
     },
     {
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
       "name": "mybatisx.optimistic-lock",
       "sourceMethod": "getOptimisticLock()",
-      "type": "io.github.mybatisx.support.config.OptimisticLockConfig"
+      "type": "io.github.mybatisx.base.config.OptimisticLockConfig"
     },
     {
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",
       "name": "mybatisx.logic-delete",
       "sourceMethod": "getLogicDelete()",
-      "type": "io.github.mybatisx.support.config.LogicDeleteConfig"
+      "type": "io.github.mybatisx.base.config.LogicDeleteConfig"
     },
     {
       "sourceType": "io.github.mybatisx.spring.boot.autoconfigure.MyBatisProperties",

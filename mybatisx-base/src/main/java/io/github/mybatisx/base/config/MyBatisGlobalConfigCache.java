@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.support.config;
+package io.github.mybatisx.base.config;
 
 import io.github.mybatisx.annotation.NamingStrategy;
 import io.github.mybatisx.base.exception.MyBatisException;
