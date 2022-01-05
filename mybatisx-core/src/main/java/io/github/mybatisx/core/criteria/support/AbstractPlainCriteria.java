@@ -13,45 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.criteria;
+package io.github.mybatisx.core.criteria.support;
+
+import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 
 /**
- * 查询条件接口
+ * 抽象基础条件
  *
  * @param <T> 实体类型
+ * @param <C> 子类型
  * @author wvkity
- * @created 2021/12/23
+ * @created 2022/1/5
  * @since 1.0.0
  */
-public interface Query<T> extends Criteria<T> {
-
-    /**
-     * 设置表别名
-     *
-     * @param alias 表别名
-     * @return {@code this}
-     */
-    Query<T> as(final String alias);
-
-    /**
-     * 获取引用属性
-     *
-     * @return 引用属性
-     */
-    String getReference();
-
-    /**
-     * 获取查询字段片段
-     *
-     * @return 查询字段片段
-     */
-    String getSelectFragment();
-
-    /**
-     * 获取分组片段
-     *
-     * @return 分组片段
-     */
-    String getGroupFragment();
+@SuppressWarnings({"serial"})
+public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T, C>> extends
+        AbstractCriteriaSupport<T, C> implements PlainCriteriaWrapper<T, C> {
 
 }

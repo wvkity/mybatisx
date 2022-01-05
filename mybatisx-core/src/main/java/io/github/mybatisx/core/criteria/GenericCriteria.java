@@ -13,14 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.criteria;
+package io.github.mybatisx.core.criteria;
+
+import io.github.mybatisx.base.criteria.Criteria;
 
 /**
- * 更新条件接口(update/delete)
+ * 通用条件接口
  * @author wvkity
- * @created 2021/12/23
+ * @created 2022/1/5
  * @since 1.0.0
  */
-public interface Update<T> extends Criteria<T> {
+public interface GenericCriteria<T> extends Criteria<T> {
 
 }

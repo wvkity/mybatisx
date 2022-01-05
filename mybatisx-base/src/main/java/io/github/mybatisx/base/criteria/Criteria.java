@@ -32,7 +32,7 @@ public interface Criteria<T> extends Fragment {
      *
      * @return 实体类
      */
-    Class<T> getEntityClass();
+    Class<T> getEntity();
 
     /**
      * 获取表别名
