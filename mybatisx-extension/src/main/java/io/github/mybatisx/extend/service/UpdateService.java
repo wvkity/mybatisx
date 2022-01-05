@@ -45,7 +45,7 @@ interface UpdateService<T> {
     int updateWithoutNull(final T entity);
 
     /**
-     * 根据主键、多租户标识更新记录
+     * 根据主键、多租户标识、逻辑删除标识更新记录
      *
      * @param entity 待更新记录对象
      * @return 受影响行数
@@ -53,7 +53,7 @@ interface UpdateService<T> {
     int updateWithSpecial(final T entity);
 
     /**
-     * 根据主键、多租户标识更新记录
+     * 根据主键、多租户标识、逻辑删除标识更新记录
      * <p>
      * 不包含null值字段
      *
