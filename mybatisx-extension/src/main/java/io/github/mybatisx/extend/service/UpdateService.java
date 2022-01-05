@@ -17,6 +17,7 @@ package io.github.mybatisx.extend.service;
 
 /**
  * MyBatisX更新操作Service接口
+ *
  * @author wvkity
  * @created 2021/12/24
  * @since 1.0.0
@@ -42,4 +43,23 @@ interface UpdateService<T> {
      * @return 受影响行数
      */
     int updateWithoutNull(final T entity);
+
+    /**
+     * 根据主键、多租户标识更新记录
+     *
+     * @param entity 待更新记录对象
+     * @return 受影响行数
+     */
+    int updateWithSpecial(final T entity);
+
+    /**
+     * 根据主键、多租户标识更新记录
+     * <p>
+     * 不包含null值字段
+     *
+     * @param entity 待更新记录对象
+     * @return 受影响行数
+     */
+    int updateWithSpecialExcNull(final T entity);
+
 }

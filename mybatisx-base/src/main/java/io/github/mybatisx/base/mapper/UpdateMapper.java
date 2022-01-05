@@ -47,4 +47,23 @@ interface UpdateMapper<T> {
      * @return 受影响行数
      */
     int updateWithoutNull(@Param(Constants.PARAM_ENTITY) final T entity);
+
+    /**
+     * 根据主键、多租户标识更新记录
+     *
+     * @param entity 待更新记录对象
+     * @return 受影响行数
+     */
+    int updateWithSpecial(@Param(Constants.PARAM_ENTITY) final T entity);
+
+    /**
+     * 根据主键、多租户标识更新记录
+     * <p>
+     * 不包含null值字段
+     *
+     * @param entity 待更新记录对象
+     * @return 受影响行数
+     */
+    int updateWithSpecialExcNull(@Param(Constants.PARAM_ENTITY) final T entity);
+
 }
