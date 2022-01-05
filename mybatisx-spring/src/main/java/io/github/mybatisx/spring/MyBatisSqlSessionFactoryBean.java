@@ -35,8 +35,10 @@ import io.github.mybatisx.base.matcher.SetterMatcher;
 import io.github.mybatisx.base.matcher.WritableMatcher;
 import io.github.mybatisx.base.parsing.DefaultEntityParser;
 import io.github.mybatisx.base.parsing.EntityParser;
+import io.github.mybatisx.base.type.JdbcTypeMappingRegistry;
 import io.github.mybatisx.builder.xml.MyBatisXMLConfigBuilder;
 import io.github.mybatisx.core.inject.DefaultInjector;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.session.MyBatisSqlSessionFactoryBuilder;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
@@ -54,6 +56,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
@@ -531,7 +534,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         }
 
         // 序列生成器
-        this.ifPresent(SequenceGenerator.class, this.globalConfig.getSequenceGenerator(), 
+        this.ifPresent(SequenceGenerator.class, this.globalConfig.getSequenceGenerator(),
                 this.globalConfig::setSequenceGenerator, null);
         // 注入SQL注入器对象
         this.ifPresent(this.globalConfig, MyBatisGlobalConfig::getInjector, Injector.class,
@@ -566,9 +569,19 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         }
         this.ifPresent(ac, AuditConfig::getAutoScanParser, AuditAutoScanParser.class, ac::setAutoScanParser,
                 DefaultAuditPropertyAutoScanParser::of);
-        this.ifPresent(ac, AuditConfig::getAuditParser, AuditParser.class, ac::setAuditParser, () -> 
+        this.ifPresent(ac, AuditConfig::getAuditParser, AuditParser.class, ac::setAuditParser, () ->
                 DefaultAuditPropertyParser.of(this.globalConfig.getAudit().isAutoScan(),
                         this.globalConfig.getAudit().getAutoScanParser()));
+        
+        // JdbcType自动映射
+        final JdbcType jdbcType;
+        if (this.globalConfig.isAutoMappingJdbcType()
+                && Objects.nonNull(jdbcType = this.globalConfig.getOverrideBooleanJdbcType())
+                && jdbcType != JdbcType.UNDEFINED) {
+            JdbcTypeMappingRegistry.registry(boolean.class, jdbcType, true);
+            JdbcTypeMappingRegistry.registry(Boolean.class, jdbcType, true);
+        }
+
         // 缓存全局变量
         this.globalConfig.cacheSelf(targetConfiguration);
 
