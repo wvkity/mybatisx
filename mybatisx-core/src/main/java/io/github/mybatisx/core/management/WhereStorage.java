@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2021-Now, wvkity(wvkity@gmail.com).
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package io.github.mybatisx.core.management;
+
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.base.fragment.AbstractFragmentList;
+import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.lang.Strings;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 条件存储
+ *
+ * @author wvkity
+ * @created 2022/1/7
+ * @since 1.0.0
+ */
+public class WhereStorage extends AbstractFragmentList<Criterion> {
+
+    private static final long serialVersionUID = -4544342979966126485L;
+
+    @Override
+    public String getFragment() {
+        if (!isEmpty()) {
+            final List<String> conditions = new ArrayList<>(this.fragments.size());
+            for (Criterion it : this.fragments) {
+                Strings.ifNotWhitespaceThen(it.getFragment(), conditions::add);
+            }
+            if (Objects.isNotEmpty(conditions)) {
+                return String.join(SqlSymbol.SPACE, conditions).trim();
+            }
+        }
+        return Constants.EMPTY;
+    }
+}
