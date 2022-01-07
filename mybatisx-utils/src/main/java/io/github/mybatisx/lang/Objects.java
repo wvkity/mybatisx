@@ -16,6 +16,7 @@
 package io.github.mybatisx.lang;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -242,6 +243,26 @@ public final class Objects {
      */
     public static boolean isNotEmpty(final Map<?, ?> arg) {
         return !isEmpty(arg);
+    }
+
+    /**
+     * 获取数组类型
+     *
+     * @param arg 数组对象
+     * @return 数组类型
+     */
+    public static Class<?> getArrayType(final Object arg) {
+        return isNull(arg) ? null : getArrayType(arg.getClass());
+    }
+
+    /**
+     * 获取数组类型
+     *
+     * @param clazz 数组类
+     * @return 数组类型
+     */
+    public static Class<?> getArrayType(final Class<?> clazz) {
+        return nonNull(clazz) && clazz.isArray() ? clazz.getComponentType() : null;
     }
 
     /**
@@ -540,6 +561,93 @@ public final class Objects {
             return Byte.parseByte(value);
         }
         return value;
+    }
+
+    /**
+     * 布尔数组转集合
+     *
+     * @param args 参数列表
+     * @return 布尔集合
+     */
+    public static List<Boolean> asList(final boolean... args) {
+        if (args != null && args.length > 0) {
+            final List<Boolean> list = new ArrayList<>(args.length);
+            for (boolean it : args) {
+                list.add(it);
+            }
+            return list;
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 字符数组转集合
+     *
+     * @param args 参数列表
+     * @return 字符集合
+     */
+    public static List<Character> asList(final char... args) {
+        if (args != null && args.length > 0) {
+            final List<Character> list = new ArrayList<>(args.length);
+            for (char it : args) {
+                list.add(it);
+            }
+            return list;
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 整数数组转集合
+     *
+     * @param args 参数列表
+     * @return 整数集合
+     */
+    public static List<Integer> asList(final int... args) {
+        if (args != null && args.length > 0) {
+            return Arrays.stream(args).boxed().collect(Collectors.toList());
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 双精度浮点数数组转集合
+     *
+     * @param args 参数列表
+     * @return 双精度浮点数集合
+     */
+    public static List<Double> asList(final double... args) {
+        if (args != null && args.length > 0) {
+            return Arrays.stream(args).boxed().collect(Collectors.toList());
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 长整数数组转集合
+     *
+     * @param args 参数列表
+     * @return 长整数集合
+     */
+    public static List<Long> asList(final long... args) {
+        if (args != null && args.length > 0) {
+            return Arrays.stream(args).boxed().collect(Collectors.toList());
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 数组转集合
+     *
+     * @param args 参数列表
+     * @param <T>  参数类型
+     * @return 集合
+     */
+    public static <T> List<T> objectAsList(final T... args) {
+        if (isNotEmpty(args)) {
+            return new ArrayList<>(Arrays.asList(args));
+        }
+        return new ArrayList<>(0);
     }
 
     /**
