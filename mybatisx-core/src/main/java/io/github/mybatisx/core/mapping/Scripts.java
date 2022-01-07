@@ -282,6 +282,198 @@ public final class Scripts implements SqlSymbol {
     }
 
     /**
+     * 转成条件参数
+     *
+     * @param column       字段名
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final Column column, final Symbol symbol,
+                                        final LogicSymbol slot, final String... placeholders) {
+        return toConditionArg(null, column, symbol, slot, placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param alias        表别名
+     * @param column       字段名
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final String alias, final Column column, final Symbol symbol,
+                                        final LogicSymbol slot, final String... placeholders) {
+        return toConditionArg(alias, column.getColumn(), symbol, slot, column.getTypeHandler(), column.getJdbcType(),
+                column.isSpliceJavaType(), column.getDescriptor().getJavaType(), placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param column       字段名
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final String column, final Symbol symbol,
+                                        final LogicSymbol slot, final String... placeholders) {
+        return toConditionArg(null, column, symbol, slot, placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param alias        表别名
+     * @param column       字段名
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final String alias, final String column, final Symbol symbol,
+                                        final LogicSymbol slot, final String... placeholders) {
+        return toConditionArg(alias, column, symbol, slot, null, null, false, null, placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param alias          表别名
+     * @param column         字段名
+     * @param symbol         {@link Symbol}
+     * @param slot           {@link LogicSymbol}
+     * @param handler        类型处理器
+     * @param jdbcType       Jdbc类型
+     * @param spliceJavaType 是否拼接Java类型
+     * @param javaType       Java类型
+     * @param placeholders   占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final String alias, final String column, final Symbol symbol,
+                                        final LogicSymbol slot, final Class<? extends TypeHandler<?>> handler,
+                                        final JdbcType jdbcType, final boolean spliceJavaType,
+                                        final Class<?> javaType, final String... placeholders) {
+        final StringBuilder sb = new StringBuilder(120);
+        if (slot != null) {
+            sb.append(slot.getFragment());
+        }
+        if (Strings.isNotWhitespace(alias)) {
+            sb.append(alias).append(DOT);
+        }
+        sb.append(column).append(SPACE);
+        appendPlaceholderArg(sb, symbol, handler, jdbcType, spliceJavaType, javaType, placeholders);
+        return sb.toString();
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param column       {@link Column}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final Symbol symbol, final LogicSymbol slot,
+                                        final Column column, final String... placeholders) {
+        return toConditionArg(symbol, slot, column.getTypeHandler(), column.getJdbcType(), column.isSpliceJavaType(),
+                column.getDescriptor().getJavaType(), placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param symbol       {@link Symbol}
+     * @param slot         {@link LogicSymbol}
+     * @param placeholders 占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final Symbol symbol, final LogicSymbol slot, final String... placeholders) {
+        return toConditionArg(symbol, slot, null, null, false, null, placeholders);
+    }
+
+    /**
+     * 转成条件参数
+     *
+     * @param symbol         {@link Symbol}
+     * @param slot           {@link LogicSymbol}
+     * @param handler        类型处理器
+     * @param jdbcType       Jdbc类型
+     * @param spliceJavaType 是否拼接Java类型
+     * @param javaType       Java类型
+     * @param placeholders   占位符参数列表
+     * @return 条件参数
+     */
+    public static String toConditionArg(final Symbol symbol, final LogicSymbol slot,
+                                        final Class<? extends TypeHandler<?>> handler,
+                                        final JdbcType jdbcType, final boolean spliceJavaType,
+                                        final Class<?> javaType, final String... placeholders) {
+        final StringBuilder sb = new StringBuilder(120);
+        if (slot != null) {
+            sb.append(slot.getFragment());
+        }
+        sb.append(" %s ");
+        appendPlaceholderArg(sb, symbol, handler, jdbcType, spliceJavaType, javaType, placeholders);
+        return sb.toString();
+    }
+
+    /**
+     * 拼接占位符参数
+     *
+     * @param sb             {@link StringBuilder}
+     * @param symbol         {@link Symbol}
+     * @param handler        类型处理器
+     * @param jdbcType       Jdbc类型
+     * @param spliceJavaType 是否拼接Java类型
+     * @param javaType       Java类型
+     * @param placeholders   占位符参数列表
+     */
+    private static void appendPlaceholderArg(final StringBuilder sb, final Symbol symbol,
+                                             final Class<? extends TypeHandler<?>> handler,
+                                             final JdbcType jdbcType, final boolean spliceJavaType,
+                                             final Class<?> javaType, final String... placeholders) {
+        final Symbol realSymbol = Objects.ifNull(symbol, Symbol.EQ);
+        if (Objects.isNotEmpty(placeholders)) {
+            String typeArg;
+            switch (realSymbol) {
+                case EQ:
+                case NE:
+                case LT:
+                case LE:
+                case GT:
+                case GE:
+                case LIKE:
+                case NOT_LIKE:
+                    typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
+                    sb.append(realSymbol.getFragment()).append(safeJoining(placeholders[0], typeArg));
+                    break;
+                case IN:
+                case NOT_IN:
+                    typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
+                    sb.append(realSymbol.getFragment())
+                            .append(Arrays.stream(placeholders).map(it -> safeJoining(it, typeArg))
+                                    .collect(Collectors.joining(AND_SPACE_BOTH)));
+                    break;
+                case BETWEEN:
+                case NOT_BETWEEN:
+                    typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
+                    sb.append(realSymbol.getFragment())
+                            .append(safeJoining(placeholders[0], typeArg))
+                            .append(AND_SPACE_BOTH)
+                            .append(safeJoining(placeholders[1], typeArg));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
      * 拼接完整类型参数
      *
      * @param handler        类型处理器
@@ -302,7 +494,7 @@ public final class Scripts implements SqlSymbol {
         if (spliceJavaType && Objects.nonNull(javaType)) {
             sb.append(", javaType=").append(javaType.getName());
         }
-        return sb.length() > 0 ? sb.toString() : null;
+        return sb.length() > 0 ? sb.toString() : EMPTY;
     }
 
     /**
