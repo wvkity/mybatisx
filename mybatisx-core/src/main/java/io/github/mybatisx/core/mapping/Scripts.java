@@ -450,12 +450,13 @@ public final class Scripts implements SqlSymbol {
                 case LIKE:
                 case NOT_LIKE:
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
-                    sb.append(realSymbol.getFragment()).append(safeJoining(placeholders[0], typeArg));
+                    sb.append(realSymbol.getFragment()).append(SPACE).append(safeJoining(placeholders[0], typeArg));
                     break;
                 case IN:
                 case NOT_IN:
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment())
+                            .append(SPACE)
                             .append(Arrays.stream(placeholders).map(it -> safeJoining(it, typeArg))
                                     .collect(Collectors.joining(AND_SPACE_BOTH)));
                     break;
@@ -463,6 +464,7 @@ public final class Scripts implements SqlSymbol {
                 case NOT_BETWEEN:
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment())
+                            .append(SPACE)
                             .append(safeJoining(placeholders[0], typeArg))
                             .append(AND_SPACE_BOTH)
                             .append(safeJoining(placeholders[1], typeArg));
