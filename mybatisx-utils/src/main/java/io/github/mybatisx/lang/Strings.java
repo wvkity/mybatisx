@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.lang;
 
+import java.util.function.Consumer;
+
 /**
  * 字符串工具
  *
@@ -411,6 +413,30 @@ public final class Strings {
             return Integer.parseInt(arg);
         }
         return defaultValue;
+    }
+
+    /**
+     * 如果给定的值不为null则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Consumer}
+     */
+    public static void ifNonNullThen(final String v, final Consumer<String> consumer) {
+        if (v != null) {
+            consumer.accept(v);
+        }
+    }
+
+    /**
+     * 如果给定的值不为空值则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Consumer}
+     */
+    public static void ifNotWhitespaceThen(final String v, final Consumer<String> consumer) {
+        if (isNotWhitespace(v)) {
+            consumer.accept(v);
+        }
     }
 
 }
