@@ -37,11 +37,6 @@ public abstract class AbstractFragmentList<T> implements Fragments<T> {
     protected final List<T> fragments = new ArrayList<>();
 
     @Override
-    public String getFragment() {
-        return null;
-    }
-
-    @Override
     public void add(T t) {
         if (Objects.nonNull(t)) {
             this.fragments.add(t);

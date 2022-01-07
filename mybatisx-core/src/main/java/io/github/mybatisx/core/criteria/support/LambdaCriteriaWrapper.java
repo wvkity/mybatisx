@@ -26,6 +26,7 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface LambdaCriteriaWrapper<T, C extends LambdaCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C> {
+public interface LambdaCriteriaWrapper<T, C extends LambdaCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C>,
+        LambdaCompare<T, C> {
 
 }

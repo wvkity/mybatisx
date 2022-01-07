@@ -15,6 +15,27 @@
  */
 package io.github.mybatisx.core.criteria;
 
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.helper.TableHelper;
+import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.convert.ConditionConverter;
+import io.github.mybatisx.core.convert.DefaultConditionConverter;
+import io.github.mybatisx.core.convert.DefaultParameterConverter;
+import io.github.mybatisx.core.convert.ParameterConverter;
+import io.github.mybatisx.core.management.DefaultFragmentManager;
+import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.sql.SqlManager;
+import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.matcher.Matcher;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * 抽象条件
  *
@@ -23,7 +44,151 @@ package io.github.mybatisx.core.criteria;
  * @created 2022/1/5
  * @since 1.0.0
  */
+@Slf4j
 @SuppressWarnings({"serial"})
 public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
+
+    // region Base fields
+
+    /**
+     * 实体类
+     */
+    protected Class<T> entity;
+    /**
+     * 别名引用
+     */
+    protected AtomicReference<String> aliasRef = new AtomicReference<>(Constants.EMPTY);
+    /**
+     * 参数序列
+     */
+    protected AtomicInteger parameterSequence;
+    /**
+     * 参数值映射
+     */
+    protected Map<String, Object> paramValueMapping;
+    /**
+     * 参数转换器
+     */
+    protected transient ParameterConverter parameterConverter;
+    /**
+     * 条件转换器
+     */
+    protected transient ConditionConverter conditionConverter;
+    /**
+     * 片段管理器
+     */
+    protected transient FragmentManager fragmentManager;
+    /**
+     * SQL管理器
+     */
+    protected transient SqlManager sqlManager;
+    /**
+     * or/and
+     */
+    protected AtomicReference<LogicSymbol> slotRef = new AtomicReference<>(LogicSymbol.AND);
+
+    // endregion
+
+    // region Protected methods
+
+    protected void newInit(final String alias) {
+        this.parameterSequence = new AtomicInteger(0);
+        this.paramValueMapping = new ConcurrentHashMap<>(16);
+        this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
+        this.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
+        this.fragmentManager = new DefaultFragmentManager();
+        if (Strings.isNotWhitespace(alias)) {
+            aliasRef.set(alias.trim());
+        }
+    }
+
+    /**
+     * 检查是否存在主键，不存在则抛出异常
+     */
+    protected void checkPrimaryKey() {
+        TableHelper.checkPrimaryKey(this.entity);
+    }
+
+    /**
+     * 获取主键
+     *
+     * @return 主键
+     */
+    protected Column getPrimaryKey() {
+        return TableHelper.getPrimaryKey(this.getEntity());
+    }
+
+    /**
+     * 预备处理
+     *
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return boolean
+     */
+    protected <V> boolean early(final V value, final Matcher<V> matcher) {
+        return Objects.isNull(matcher) || matcher.matches(value);
+    }
+
+    /**
+     * 返回当前对象
+     *
+     * @return {@code this}
+     */
+    protected GenericCriteria<T> self() {
+        return this;
+    }
+
+    /**
+     * 获取完整SQL语句
+     *
+     * @return SQL语句
+     */
+    protected String getCompleteString() {
+        return this.sqlManager.getCompleteString();
+    }
+
+    /**
+     * 获取条件SQL语句
+     *
+     * @param self             是否自身
+     * @param appendWhere      是否拼接条件
+     * @param groupReplacement 分组替换语句
+     * @return 条件语句
+     */
+    public String getWhereString(final boolean self, final boolean appendWhere, final String groupReplacement) {
+        return this.sqlManager.getWhereString(self, appendWhere, groupReplacement);
+    }
+
+    // endregion
+
+    // region Override methods
+
+    @Override
+    public Class<T> getEntity() {
+        return this.entity;
+    }
+
+    @Override
+    public boolean isStrict() {
+        return false;
+    }
+
+    @Override
+    public Object getVersionValue() {
+        return null;
+    }
+
+    @Override
+    public String getWhereString() {
+        return this.sqlManager.getWhereString();
+    }
+
+    @Override
+    public String getFragment() {
+        return this.getCompleteString();
+    }
+
+    // endregion
 
 }

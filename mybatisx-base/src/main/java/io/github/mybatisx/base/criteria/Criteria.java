@@ -15,7 +15,11 @@
  */
 package io.github.mybatisx.base.criteria;
 
+import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.fragment.Fragment;
+
+import java.util.Collection;
 
 /**
  * 条件接口
@@ -78,7 +82,31 @@ public interface Criteria<T> extends Fragment {
      *
      * @return 条件片段
      */
-    String getWhereFragment();
+    String getWhereString();
+
+    /**
+     * 添加条件
+     *
+     * @param criterion {@link Criterion}
+     * @return {@code this}
+     */
+    Criteria<T> where(final Criterion criterion);
+
+    /**
+     * 条件条件
+     *
+     * @param expression 条件表达式
+     * @return {@code this}
+     */
+    Criteria<T> where(final Expression<?> expression);
+
+    /**
+     * 添加多个条件
+     *
+     * @param expressions 条件表达式列表
+     * @return {@code this}
+     */
+    Criteria<T> where(final Collection<Expression<?>> expressions);
 
     /**
      * 获取完整SQL语句

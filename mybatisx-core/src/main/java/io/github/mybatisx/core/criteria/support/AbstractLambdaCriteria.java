@@ -15,7 +15,12 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
+import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.matcher.Matcher;
 
 /**
  * 抽象基础条件(支持Lambda表达式)
@@ -29,5 +34,22 @@ import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 @SuppressWarnings({"serial"})
 public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<T, C>> extends
         AbstractCriteriaSupport<T, C> implements LambdaCriteriaWrapper<T, C> {
+
+    @Override
+    public <V> C idEq(LogicSymbol slot, V value, Matcher<V> matcher) {
+        if (this.early(value, matcher)) {
+            this.checkPrimaryKey();
+            final Column id = this.getPrimaryKey();
+            this.conditionConverter.accept(id.getColumn(), SingleParam.builder()
+                    .symbol(Symbol.EQ)
+                    .slot(slot)
+                    .typeHandler(id.getTypeHandler())
+                    .jdbcType(id.getJdbcType())
+                    .javaType(id.getDescriptor().getJavaType())
+                    .value(value)
+                    .build());
+        }
+        return this.self();
+    }
 
 }

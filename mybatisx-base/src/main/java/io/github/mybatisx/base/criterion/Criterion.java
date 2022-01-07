@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.base.criterion;
 
+import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.fragment.Fragment;
 
 /**
@@ -26,4 +27,30 @@ import io.github.mybatisx.base.fragment.Fragment;
  */
 public interface Criterion extends Fragment {
 
+    /**
+     * 获取{@link Symbol}值
+     *
+     * @return {@link Symbol}
+     */
+    default Symbol getSymbol() {
+        return null;
+    }
+
+    /**
+     * 获取字段名
+     *
+     * @return 字段名
+     */
+    default String getColumn() {
+        return null;
+    }
+
+    /**
+     * 获取参数值
+     *
+     * @return 参数值
+     */
+    default Object getOrgValue() {
+        return null;
+    }
 }
