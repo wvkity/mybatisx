@@ -25,6 +25,11 @@ package io.github.mybatisx.base.constant;
 public interface Constants {
 
     /**
+     * 空字符串
+     */
+    String EMPTY = "";
+
+    /**
      * 主键参数名
      */
     String PARAM_ID = "id";
@@ -48,7 +53,7 @@ public interface Constants {
      * script标签开始标记
      */
     String SCRIPT_OPEN = "<script>";
-    
+
     /**
      * script标签结束标记
      */

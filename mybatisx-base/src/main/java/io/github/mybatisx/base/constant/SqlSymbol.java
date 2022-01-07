@@ -157,6 +157,18 @@ public interface SqlSymbol {
      */
     String WHERE = "WHERE";
     /**
+     * WHERE + 空格
+     */
+    String WHERE_SPACE = "WHERE ";
+    /**
+     * 字符串占位符
+     */
+    String STRING_PLACEHOLDER = "%s";
+    /**
+     * 字段名占位符
+     */
+    String COLUMN_PLACEHOLDER = ":@";
+    /**
      * 实体参数
      */
     String PARAMETER_ENTITY = Constants.PARAM_ENTITY;
