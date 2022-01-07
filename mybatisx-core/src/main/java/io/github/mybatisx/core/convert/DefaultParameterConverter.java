@@ -22,10 +22,8 @@ import io.github.mybatisx.lang.Strings;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -102,14 +100,14 @@ public class DefaultParameterConverter implements ParameterConverter {
     }
 
     @Override
-    public List<String> converts(String template, Iterable<?> iterable) {
+    public String[] converts(String template, Iterable<?> iterable) {
         if (Strings.isNotWhitespace(template) && Objects.nonNull(iterable)) {
             return StreamSupport.stream(iterable.spliterator(), false).map(it -> {
                 final String paramName = PARAM_NAME_PREFIX + this.sequence.incrementAndGet();
                 final Object value = it == null ? "null" : it;
                 this.valueMapping.put(paramName, value);
                 return template.replace(PARAM_PLACEHOLDER_ZERO, (PARAM_MAPPING_PREFIX + paramName));
-            }).collect(Collectors.toList());
+            }).toArray(String[]::new);
         }
         return null;
     }

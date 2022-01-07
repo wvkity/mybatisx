@@ -18,7 +18,6 @@ package io.github.mybatisx.core.convert;
 import io.github.mybatisx.base.convert.Converter;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,7 +61,7 @@ public interface ParameterConverter extends Converter<Object, String> {
      * @param args 参数列表
      * @return 占位符参数列表
      */
-    default List<String> converts(final Object... args) {
+    default String[] converts(final Object... args) {
         return this.converts(PARAM_PLACEHOLDER_ZERO, args);
     }
 
@@ -73,7 +72,7 @@ public interface ParameterConverter extends Converter<Object, String> {
      * @param args     参数列表
      * @return 占位符参数列表
      */
-    default List<String> converts(final String template, final Object... args) {
+    default String[] converts(final String template, final Object... args) {
         return this.converts(template, Arrays.asList(args));
     }
 
@@ -84,7 +83,7 @@ public interface ParameterConverter extends Converter<Object, String> {
      * @param iterable 参数列表
      * @return 占位符参数列表
      */
-    List<String> converts(final String template, final Iterable<?> iterable);
+    String[] converts(final String template, final Iterable<?> iterable);
 
     /**
      * 参数值转占位符参数
@@ -104,5 +103,5 @@ public interface ParameterConverter extends Converter<Object, String> {
      * @return 占位符参数集合
      */
     Map<String, String> converts(final String template, final Map<String, ?> args);
-    
+
 }
