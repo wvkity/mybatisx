@@ -186,6 +186,32 @@ public final class Objects {
     }
 
     /**
+     * 检查参数列表是否包含数组、集合类型
+     *
+     * @param iterable 参数列表
+     * @return boolean
+     */
+    public static boolean isPureType(final Iterable<?> iterable) {
+        if (iterable != null) {
+            Class<?> current = null;
+            for (Object it : iterable) {
+                if (it != null) {
+                    final Class<?> clazz = it.getClass();
+                    if (clazz.isArray() || isAssignable(Iterable.class, clazz) || isAssignable(Map.class, clazz)) {
+                        return false;
+                    }
+                    if (current != null && !isAssignable(current, clazz)) {
+                        return false;
+                    }
+                    current = clazz;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 检查数组对象是否为空
      *
      * @param arg 待检查数组对象
