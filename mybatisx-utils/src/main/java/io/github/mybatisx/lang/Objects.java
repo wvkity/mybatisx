@@ -135,6 +135,16 @@ public final class Objects {
     }
 
     /**
+     * 检查对象是否为{@link Iterable}对象
+     *
+     * @param arg 目标对象
+     * @return boolean
+     */
+    public static boolean isIterable(final Object arg) {
+        return nonNull(arg) && isAssignable(Iterable.class, arg);
+    }
+
+    /**
      * 检查对象是否为{@link Collection}类型
      *
      * @param arg 目标对象
