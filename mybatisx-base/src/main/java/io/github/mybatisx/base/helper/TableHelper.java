@@ -17,10 +17,13 @@ package io.github.mybatisx.base.helper;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.exception.MyBatisException;
+import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.base.parsing.DefaultEntityParser;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.reflect.Reflections;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
@@ -79,6 +82,59 @@ public final class TableHelper {
             return oldTable;
         }
         return null;
+    }
+
+    /**
+     * 根据实体类获取其对应的表对象
+     *
+     * @param entity 实体类
+     * @return {@link Table}
+     */
+    public static Table getTable(final Class<?> entity) {
+        if (Objects.nonNull(entity)) {
+            return TableHelper.getTable(Reflections.getRealClass(entity).getName());
+        }
+        return null;
+    }
+
+    /**
+     * 根据实体类全限定名获取其对应的表对象
+     *
+     * @param entityName 实体类名
+     * @return {@link Table}
+     */
+    public static Table getTable(final String entityName) {
+        if (Strings.isNotWhitespace(entityName)) {
+            return TABLE_MAPPED_CACHE.get(entityName);
+        }
+        return null;
+    }
+
+    /**
+     * 验证是否存在主键，不存在则抛出异常
+     *
+     * @param entity 实体类
+     */
+    public static void checkPrimaryKey(final Class<?> entity) {
+        final Table table = TableHelper.getTable(entity);
+        if (table == null) {
+            throw new MyBatisException("The corresponding table mapping object cannot be found according to " +
+                    "the entity class name(" + (entity == null ? "null" : entity.getName()) + ")");
+        }
+        if (!table.isHasPrimaryKey()) {
+            throw new MyBatisException("The table mapping object of entity class(" + entity.getName() + ") does " +
+                    "not have a primary key");
+        }
+    }
+
+    /**
+     * 根据实体类获取表主键
+     *
+     * @param entity 实体类
+     * @return 主键
+     */
+    public static Column getPrimaryKey(final Class<?> entity) {
+        return Optional.ofNullable(TableHelper.getTable(entity)).map(Table::getPrimaryKey).orElse(null);
     }
 
     /**
