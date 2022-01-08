@@ -806,6 +806,34 @@ public final class Reflections {
     }
 
     /**
+     * 加载类
+     *
+     * @param className    类名
+     * @param classLoaders 类加载器列表
+     * @return {@link Class}
+     * @throws ClassNotFoundException if the class cannot be located by the specified class loader
+     */
+    public static Class<?> loadClass(final String className, final ClassLoader... classLoaders)
+            throws ClassNotFoundException {
+        if (Strings.isNotWhitespace(className)) {
+            if (Objects.isNotEmpty(classLoaders)) {
+                for (ClassLoader it : classLoaders) {
+                    if (it != null) {
+                        try {
+                            return Class.forName(className, true, it);
+                        } catch (Exception ignore) {
+                            // ignore
+                        }
+                    }
+                }
+            } else {
+                return Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+            }
+        }
+        throw new ClassNotFoundException("Cannot find class: " + className);
+    }
+
+    /**
      * 检查是否可控制成员访问权限
      *
      * @return boolean
