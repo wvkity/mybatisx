@@ -175,13 +175,13 @@ public final class Reflections {
             try {
                 return getLookupJava9(clazz);
             } catch (Throwable e) {
-                throw new RuntimeException(e.getMessage(), e);
+                throw new IllegalStateException(e.getMessage(), e);
             }
         }
         try {
             return getLookupJava8(clazz);
         } catch (Throwable e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
     }
 
