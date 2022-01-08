@@ -22,6 +22,9 @@ import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
 
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -55,6 +58,23 @@ public final class Reflections {
     private Reflections() {
     }
 
+    /**
+     * JDK9+ MethodHandles.Lookup privateLookupIn方法
+     */
+    private static final String METHOD_PRIVATE_LOOKUP_IN = "privateLookupIn";
+    /**
+     * 所有访问权限
+     */
+    public static final int ALLOWED_MODES = MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PACKAGE
+            | MethodHandles.Lookup.PROTECTED | MethodHandles.Lookup.PUBLIC;
+    /**
+     * privateLookupIn方法对象
+     */
+    private static final Method PRIVATE_LOOKUP_IN_METHOD;
+    /**
+     * {@link MethodHandles.Lookup}构造方法
+     */
+    private static final Constructor<MethodHandles.Lookup> LOOKUP_CONSTRUCTOR;
     /**
      * CGLIB代理类
      */
@@ -110,6 +130,73 @@ public final class Reflections {
                 !(Types.isObject(it) || Types.isSerializable(it) || Types.isAnnotation(it) || Objects.isCollection(it));
         ANNOTATION_METHOD_FILTER = it -> !Types.ANNOTATION_METHOD_NAMES.contains(it.getName());
         METADATA_ANNOTATION_FILTER = it -> !Types.METADATA_ANNOTATION_TYPES.contains(it.annotationType());
+        Method privateLookupIn;
+        try {
+            privateLookupIn = MethodHandles.class.getMethod(METHOD_PRIVATE_LOOKUP_IN,
+                    Class.class, MethodHandles.Lookup.class);
+        } catch (NoSuchMethodException ignore) {
+            privateLookupIn = null;
+        }
+        PRIVATE_LOOKUP_IN_METHOD = privateLookupIn;
+        Constructor<MethodHandles.Lookup> constructor = null;
+        if (privateLookupIn == null) {
+            // JDK 1.8
+            try {
+                constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
+                constructor.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                throw new IllegalStateException("There is neither 'privateLookupIn(Class, Lookup)' nor " +
+                        "'Lookup(Class, int)' method in java.lang.invoke.MethodHandles.", e);
+            } catch (Throwable ignore) {
+                constructor = null;
+            }
+        }
+        LOOKUP_CONSTRUCTOR = constructor;
+    }
+
+    public static MethodHandles.Lookup getLookupJava9(final Class<?> clazz) throws
+            InvocationTargetException, IllegalAccessException {
+        return (MethodHandles.Lookup) PRIVATE_LOOKUP_IN_METHOD.invoke(MethodHandles.class, clazz, MethodHandles.lookup());
+    }
+
+    public static MethodHandles.Lookup getLookupJava8(final Class<?> clazz) throws
+            InvocationTargetException, InstantiationException, IllegalAccessException {
+        return LOOKUP_CONSTRUCTOR.newInstance(clazz, ALLOWED_MODES);
+    }
+
+    /**
+     * 获取{@link MethodHandles.Lookup}对象
+     *
+     * @param clazz 被调用类或接口
+     * @return {@link MethodHandles.Lookup}
+     */
+    public static MethodHandles.Lookup getLookup(final Class<?> clazz) {
+        if (PRIVATE_LOOKUP_IN_METHOD != null) {
+            try {
+                return getLookupJava9(clazz);
+            } catch (Throwable e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        }
+        try {
+            return getLookupJava8(clazz);
+        } catch (Throwable e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    public static MethodHandle getMethodHandleJava9(Method method)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        final Class<?> declaringClass = method.getDeclaringClass();
+        return ((MethodHandles.Lookup) PRIVATE_LOOKUP_IN_METHOD.invoke(null, declaringClass, MethodHandles.lookup()))
+                .findSpecial(declaringClass, method.getName(),
+                        MethodType.methodType(method.getReturnType(), method.getParameterTypes()), declaringClass);
+    }
+
+    public static MethodHandle getMethodHandleJava8(Method method)
+            throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        final Class<?> declaringClass = method.getDeclaringClass();
+        return LOOKUP_CONSTRUCTOR.newInstance(declaringClass, ALLOWED_MODES).unreflectSpecial(method, declaringClass);
     }
 
     /**
