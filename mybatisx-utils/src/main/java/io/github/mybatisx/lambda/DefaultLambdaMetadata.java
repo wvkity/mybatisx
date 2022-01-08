@@ -39,8 +39,7 @@ public class DefaultLambdaMetadata implements LambdaMetadata {
     static {
         Field capturingClassField;
         try {
-            capturingClassField = Reflections.getLookup(java.lang.invoke.SerializedLambda.class)
-                    .lookupClass().getDeclaredField("capturingClass");
+            capturingClassField = java.lang.invoke.SerializedLambda.class.getDeclaredField("capturingClass");
             capturingClassField.setAccessible(true);
         } catch (Throwable ignore) {
             capturingClassField = null;
