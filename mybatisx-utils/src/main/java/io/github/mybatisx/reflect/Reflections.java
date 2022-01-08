@@ -690,14 +690,12 @@ public final class Reflections {
                         final Object value = it.invoke(instance);
                         result.put(property, value);
                     } catch (IllegalAccessException e) {
-                        if (Reflections.canControlMemberAccessible()) {
-                            try {
-                                it.setAccessible(true);
-                                final Object value = it.invoke(instance);
-                                result.put(property, value);
-                            } catch (Exception ignore) {
-                                // ignore
-                            }
+                        try {
+                            it.setAccessible(true);
+                            final Object value = it.invoke(instance);
+                            result.put(property, value);
+                        } catch (Exception ignore) {
+                            // ignore
                         }
                     } catch (Exception ignore) {
                         // ignore
@@ -756,12 +754,9 @@ public final class Reflections {
             constructor = clazz.getDeclaredConstructor();
             try {
                 return constructor.newInstance();
-            } catch (IllegalAccessException e) {
-                if (Reflections.canControlMemberAccessible()) {
-                    constructor.setAccessible(true);
-                    return constructor.newInstance();
-                }
-                throw e;
+            } catch (IllegalAccessException ignore) {
+                constructor.setAccessible(true);
+                return constructor.newInstance();
             }
         } else {
             final int size = Objects.size(args);
@@ -773,11 +768,8 @@ public final class Reflections {
                         try {
                             return (T) it.newInstance(args);
                         } catch (IllegalAccessException e) {
-                            if (Reflections.canControlMemberAccessible()) {
-                                it.setAccessible(true);
-                                return (T) it.newInstance(args);
-                            }
-                            throw e;
+                            it.setAccessible(true);
+                            return (T) it.newInstance(args);
                         }
                     }
                 }
@@ -831,23 +823,6 @@ public final class Reflections {
             }
         }
         throw new ClassNotFoundException("Cannot find class: " + className);
-    }
-
-    /**
-     * 检查是否可控制成员访问权限
-     *
-     * @return boolean
-     */
-    public static boolean canControlMemberAccessible() {
-        try {
-            final SecurityManager sm = System.getSecurityManager();
-            if (Objects.nonNull(sm)) {
-                sm.checkPermission(new RuntimePermission("suppressAccessChecks"));
-            }
-            return true;
-        } catch (Exception ignore) {
-            return false;
-        }
     }
 
 }
