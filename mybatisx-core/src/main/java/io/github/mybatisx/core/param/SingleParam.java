@@ -30,21 +30,21 @@ import lombok.experimental.SuperBuilder;
  * @created 2022/1/7
  * @since 1.0.0
  */
-@Getter
 @SuperBuilder(toBuilder = true)
 @RequiredArgsConstructor
 @ToString(callSuper = true)
 public class SingleParam extends AbstractParam implements Param {
 
     /**
-     * 模式
-     */
-    private final ParamMode paramMode = ParamMode.SINGLE;
-    /**
      * 值
      */
     @Getter
     private final Object value;
+
+    @Override
+    public ParamMode getParamMode() {
+        return ParamMode.SINGLE;
+    }
 
     @Override
     public String parse(ParameterConverter pc, PlaceholderConverter phc) {
