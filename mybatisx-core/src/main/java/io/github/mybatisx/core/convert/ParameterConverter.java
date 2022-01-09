@@ -79,6 +79,16 @@ public interface ParameterConverter extends Converter<Object, String> {
     /**
      * 参数值转占位符参数
      *
+     * @param iterable 参数列表
+     * @return 占位符参数列表
+     */
+    default String[] converts(final Iterable<?> iterable) {
+        return this.converts(PARAM_PLACEHOLDER_ZERO, iterable);
+    }
+
+    /**
+     * 参数值转占位符参数
+     *
      * @param template 模板
      * @param iterable 参数列表
      * @return 占位符参数列表
