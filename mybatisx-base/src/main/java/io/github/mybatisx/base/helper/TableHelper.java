@@ -138,6 +138,34 @@ public final class TableHelper {
     }
 
     /**
+     * 根据实体类、属性名获取{@link Column}对象
+     *
+     * @param entity   实体类
+     * @param property 属性名
+     * @return {@link Column}
+     */
+    public static Column getByProperty(final Class<?> entity, final String property) {
+        if (entity == null || Strings.isWhitespace(property)) {
+            return null;
+        }
+        return Optional.ofNullable(getTable(entity)).map(it -> it.getByProperty(property)).orElse(null);
+    }
+
+    /**
+     * 根据实体类、字段名获取{@link Column}对象
+     *
+     * @param entity 实体类
+     * @param column 字段名(忽略大小写)
+     * @return {@link Column}
+     */
+    public static Column getByColumn(final Class<?> entity, final String column) {
+        if (entity == null || Strings.isWhitespace(column)) {
+            return null;
+        }
+        return Optional.ofNullable(getTable(entity)).map(it -> it.getByColumn(column)).orElse(null);
+    }
+
+    /**
      * 获取{@link EntityParser}
      *
      * @param globalConfig {@link MyBatisGlobalConfig}
