@@ -458,7 +458,7 @@ public final class Scripts implements SqlSymbol {
                     sb.append(realSymbol.getFragment())
                             .append(SPACE)
                             .append(Arrays.stream(placeholders).map(it -> safeJoining(it, typeArg))
-                                    .collect(Collectors.joining(AND_SPACE_BOTH)));
+                                    .collect(Collectors.joining(COMMA_SPACE, START_BRACKET, END_BRACKET)));
                     break;
                 case BETWEEN:
                 case NOT_BETWEEN:
