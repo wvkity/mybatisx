@@ -26,6 +26,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -126,6 +127,10 @@ public class Table {
     /**
      * 属性-字段映射
      */
+    private final Map<String, Column> propertyMap;
+    /**
+     * 字段-字段映射
+     */
     private final Map<String, Column> columnMap;
 
     public Table(Class<?> entity, String name, String namespace, String catalog, String schema, String prefix,
@@ -149,8 +154,11 @@ public class Table {
         this.insertableColumns = ImmutableList.copyOf(this.filtrate(Column::isInsertable));
         this.updatableColumns = ImmutableList.copyOf(this.filtrate(Column::isUpdatable));
         this.logicDeleteAuditColumns = ImmutableList.copyOf(this.filtrate(this.updatableColumns, Column::isAuditDeletable));
-        this.columnMap = ImmutableMap.copyOf(this.columns.stream().collect(Collectors.toMap(Column::getProperty,
+        this.propertyMap = ImmutableMap.copyOf(this.columns.stream().collect(Collectors.toMap(Column::getProperty,
                 Function.identity())));
+        this.columnMap =
+                ImmutableMap.copyOf(this.columns.stream().collect(Collectors.toMap((it) ->
+                        it.getColumn().toUpperCase(Locale.ENGLISH), Function.identity())));
     }
 
     /**
@@ -201,6 +209,32 @@ public class Table {
             }
             return false;
         });
+    }
+
+    /**
+     * 根据属性名获取{@link Column}对象
+     *
+     * @param property 属性名
+     * @return {@link Column}
+     */
+    public Column getByProperty(final String property) {
+        if (Strings.isWhitespace(property)) {
+            return null;
+        }
+        return this.propertyMap.get(property);
+    }
+
+    /**
+     * 根据字段名获取{@link Column}
+     *
+     * @param column 属性名(忽略大小写)
+     * @return {@link Column}
+     */
+    public Column getByColumn(final String column) {
+        if (Strings.isWhitespace(column)) {
+            return null;
+        }
+        return this.columnMap.get(column.toUpperCase(Locale.ENGLISH));
     }
 
 }
