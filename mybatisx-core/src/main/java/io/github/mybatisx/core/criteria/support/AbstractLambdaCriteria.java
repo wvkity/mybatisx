@@ -22,6 +22,7 @@ import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -83,5 +84,24 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     public <V> C le(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.singleConditionAccept(property, value, matcher, Symbol.LE, slot);
     }
-    
+
+    @Override
+    public <V> C between(String property, V begin, V end, LogicSymbol slot) {
+        return this.betweenConditionAccept(property, begin, end, Symbol.BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C notBetween(String property, V begin, V end, LogicSymbol slot) {
+        return this.betweenConditionAccept(property, begin, end, Symbol.NOT_BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C in(String property, Collection<V> values, LogicSymbol slot) {
+        return this.inConditionAccept(property, values, Symbol.IN, slot);
+    }
+
+    @Override
+    public <V> C notIn(String property, Collection<V> values, LogicSymbol slot) {
+        return this.inConditionAccept(property, values, Symbol.NOT_IN, slot);
+    }
 }

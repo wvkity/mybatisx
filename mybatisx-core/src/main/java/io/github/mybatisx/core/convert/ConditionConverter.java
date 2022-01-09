@@ -15,8 +15,6 @@
  */
 package io.github.mybatisx.core.convert;
 
-import io.github.mybatisx.base.constant.LogicSymbol;
-import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.convert.Converter;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
