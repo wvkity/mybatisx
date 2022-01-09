@@ -459,6 +459,18 @@ public final class Objects {
     }
 
     /**
+     * 如果给定值为不为null则返回v，否则返回默认值
+     *
+     * @param v            指定值
+     * @param defaultValue 默认值
+     * @param <V>          值类型
+     * @return 值
+     */
+    public static <V> V ifNonNull(final V v, final V defaultValue) {
+        return Objects.nonNull(v) ? v : defaultValue;
+    }
+
+    /**
      * 如果给定值为不为null则返回v1，否则返回v2
      *
      * @param v   指定值
