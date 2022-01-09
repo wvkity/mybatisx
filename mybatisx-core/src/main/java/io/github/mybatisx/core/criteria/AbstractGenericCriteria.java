@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.convert.ConditionConverter;
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -86,6 +88,10 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      * or/and
      */
     protected AtomicReference<LogicSymbol> slotRef = new AtomicReference<>(LogicSymbol.AND);
+    /**
+     * 属性不匹配则抛出异常
+     */
+    protected AtomicBoolean nonMatchingThenThrows;
 
     // endregion
 
@@ -97,6 +103,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
         this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
         this.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
         this.fragmentManager = new DefaultFragmentManager();
+        this.nonMatchingThenThrows = new AtomicBoolean(true);
         if (Strings.isNotWhitespace(alias)) {
             aliasRef.set(alias.trim());
         }
@@ -163,6 +170,32 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     // endregion
 
     // region Override methods
+
+    /**
+     * 根据属性名获取{@link Column}对象
+     *
+     * @param property 属性名
+     * @return {@link Column}
+     */
+    public Column convert(final String property) {
+        if (Strings.isNotWhitespace(property)) {
+            final Column column = TableHelper.getByProperty(this.entity, property);
+            if (column == null) {
+                if (this.nonMatchingThenThrows.get()) {
+                    throw new MyBatisException("The field mapping information for the entity class(" +
+                            this.entity.getName() + ") cannot be found based on the `" + property + "` " +
+                            "attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                            "annotation.");
+                } else {
+                    log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
+                            "`{}` attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                            "annotation.", this.entity.getName(), property);
+                }
+            }
+            return column;
+        }
+        return null;
+    }
 
     @Override
     public Class<T> getEntity() {

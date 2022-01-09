@@ -19,8 +19,10 @@ import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
-import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
+
+import java.util.Map;
 
 /**
  * 抽象基础条件(支持Lambda表达式)
@@ -36,20 +38,50 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
         AbstractCriteriaSupport<T, C> implements LambdaCriteriaWrapper<T, C> {
 
     @Override
-    public <V> C idEq(LogicSymbol slot, V value, Matcher<V> matcher) {
-        if (this.early(value, matcher)) {
-            this.checkPrimaryKey();
-            final Column id = this.getPrimaryKey();
-            this.conditionConverter.accept(id.getColumn(), SingleParam.builder()
-                    .symbol(Symbol.EQ)
-                    .slot(slot)
-                    .typeHandler(id.getTypeHandler())
-                    .jdbcType(id.getJdbcType())
-                    .javaType(id.getDescriptor().getJavaType())
-                    .value(value)
-                    .build());
+    public <V> C idEq(V value, Matcher<V> matcher, LogicSymbol slot) {
+        this.checkPrimaryKey();
+        final Column id = this.getPrimaryKey();
+        return this.singleConditionAccept(id, value, matcher, Symbol.EQ, slot);
+    }
+
+    @Override
+    public <V> C eq(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.EQ, slot);
+    }
+
+    @Override
+    public C eq(Map<String, Object> properties, LogicSymbol slot) {
+        if (Objects.isNotEmpty(properties)) {
+            for (Map.Entry<String, Object> it : properties.entrySet()) {
+                this.eq(it.getKey(), it.getValue(), slot);
+            }
         }
         return this.self();
     }
 
+    @Override
+    public <V> C ne(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.NE, slot);
+    }
+
+    @Override
+    public <V> C gt(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.GT, slot);
+    }
+
+    @Override
+    public <V> C ge(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.GE, slot);
+    }
+
+    @Override
+    public <V> C lt(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.LT, slot);
+    }
+
+    @Override
+    public <V> C le(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.singleConditionAccept(property, value, matcher, Symbol.LE, slot);
+    }
+    
 }

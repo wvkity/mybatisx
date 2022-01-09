@@ -17,9 +17,12 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
-import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.expression.Expression;
+import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.matcher.Matcher;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -44,6 +47,52 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     @SuppressWarnings("unchecked")
     protected final C ctx = (C) this;
 
+    // region Protected  methods
+
+    /**
+     * 添加单值条件
+     *
+     * @param property 属性名
+     * @param value    值
+     * @param matcher  匹配器
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@code this}
+     */
+    protected <V> C singleConditionAccept(final String property, final V value, final Matcher<V> matcher,
+                                          final Symbol symbol, final LogicSymbol slot) {
+        return this.singleConditionAccept(this.convert(property), value, matcher, symbol, slot);
+    }
+
+    /**
+     * 添加单值条件
+     *
+     * @param column  {@link Column}
+     * @param value   值
+     * @param matcher 匹配器
+     * @param symbol  {@link Symbol}
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    protected <V> C singleConditionAccept(final Column column, final V value, final Matcher<V> matcher,
+                                          final Symbol symbol, final LogicSymbol slot) {
+        if (this.early(value, matcher)) {
+            this.conditionConverter.accept(column.getColumn(), SingleParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .typeHandler(column.getTypeHandler())
+                    .jdbcType(column.getJdbcType())
+                    .javaType(column.getDescriptor().getJavaType())
+                    .value(value)
+                    .build());
+        }
+        return this.ctx;
+    }
+
+    // endregion
+
     // region Override methods
 
     @Override
@@ -53,12 +102,13 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
 
     @Override
     public C strict(boolean strict) {
-        return null;
+        this.nonMatchingThenThrows.set(strict);
+        return this.ctx;
     }
 
     @Override
-    public Criteria<T> setVersion(Object value) {
-        return null;
+    public C setVersion(Object value) {
+        return this.ctx;
     }
 
     @Override
