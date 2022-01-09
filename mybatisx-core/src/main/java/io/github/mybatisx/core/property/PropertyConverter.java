@@ -25,7 +25,7 @@ import io.github.mybatisx.base.metadata.Column;
  * @created 2022/1/9
  * @since 1.0.0
  */
-public interface PropertyConvert<T> extends Converter<Property<T, ?>, String> {
+public interface PropertyConverter<T> extends Converter<Property<T, ?>, String> {
 
     @Override
     default String convert(final Property<T, ?> src) {

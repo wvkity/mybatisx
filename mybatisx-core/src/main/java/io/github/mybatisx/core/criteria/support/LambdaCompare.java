@@ -17,7 +17,7 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.core.property.Property;
-import io.github.mybatisx.core.property.PropertyConvert;
+import io.github.mybatisx.core.property.PropertyConverter;
 import io.github.mybatisx.matcher.Matcher;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T, C>, PropertyConvert<T> {
+public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T, C>, PropertyConverter<T> {
 
     // region Primary key equal methods 
 

@@ -17,7 +17,7 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.core.property.Property;
-import io.github.mybatisx.core.property.PropertyConvert;
+import io.github.mybatisx.core.property.PropertyConverter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +31,7 @@ import java.util.Collection;
  * @created 2022/1/9
  * @since 1.0.0
  */
-public interface LambdaRange<T, C extends LambdaRange<T, C>> extends Slot<T, C>, PropertyConvert<T> {
+public interface LambdaRange<T, C extends LambdaRange<T, C>> extends Slot<T, C>, PropertyConverter<T> {
 
     // region Between methods
 
