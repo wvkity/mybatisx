@@ -433,10 +433,10 @@ public final class Scripts implements SqlSymbol {
      * @param javaType       Java类型
      * @param placeholders   占位符参数列表
      */
-    private static void appendPlaceholderArg(final StringBuilder sb, final Symbol symbol,
-                                             final Class<? extends TypeHandler<?>> handler,
-                                             final JdbcType jdbcType, final boolean spliceJavaType,
-                                             final Class<?> javaType, final String... placeholders) {
+    public static void appendPlaceholderArg(final StringBuilder sb, final Symbol symbol,
+                                            final Class<? extends TypeHandler<?>> handler,
+                                            final JdbcType jdbcType, final boolean spliceJavaType,
+                                            final Class<?> javaType, final String... placeholders) {
         final Symbol realSymbol = Objects.ifNull(symbol, Symbol.EQ);
         if (Objects.isNotEmpty(placeholders)) {
             String typeArg;
@@ -448,7 +448,9 @@ public final class Scripts implements SqlSymbol {
                 case GT:
                 case GE:
                 case LIKE:
+                case ILIKE:
                 case NOT_LIKE:
+                case NOT_ILIKE:
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment()).append(SPACE).append(safeJoining(placeholders[0], typeArg));
                     break;

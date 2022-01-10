@@ -78,9 +78,17 @@ public enum Symbol implements Fragment {
      */
     LIKE("LIKE"),
     /**
+     * ilike
+     */
+    ILIKE("ILIKE"),
+    /**
      * not like
      */
     NOT_LIKE("NOT LIKE"),
+    /**
+     * not ilike
+     */
+    NOT_ILIKE("NOT ILIKE"),
     /**
      * between
      */
@@ -88,7 +96,8 @@ public enum Symbol implements Fragment {
     /**
      * not between
      */
-    NOT_BETWEEN("NOT BETWEEN"),;
+    NOT_BETWEEN("NOT BETWEEN"),
+    ;
 
     final String symbol;
 
