@@ -19,7 +19,7 @@ import io.github.mybatisx.base.convert.Converter;
 import io.github.mybatisx.base.metadata.Column;
 
 /**
- * 属性转换器
+ * 属性转换器(Lambda属性 => 字符串属性)
  *
  * @author wvkity
  * @created 2022/1/9
@@ -39,5 +39,5 @@ public interface PropertyConverter<T> extends Converter<Property<T, ?>, String> 
      * @return {@link Column}
      */
     Column convert(final String property);
-    
+
 }
