@@ -16,6 +16,7 @@
 package io.github.mybatisx.base.criteria;
 
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.fragment.Fragment;
 
@@ -61,6 +62,21 @@ public interface Criteria<T> extends Fragment {
      * @return boolean
      */
     boolean isStrict();
+
+    /**
+     * 设置方言
+     *
+     * @param dialect {@link Dialect}
+     * @return {@code this}
+     */
+    Criteria<T> dialect(final Dialect dialect);
+
+    /**
+     * 获取{@link Dialect}对象
+     *
+     * @return {@link Dialect}
+     */
+    Dialect getDialect();
 
     /**
      * 获取乐观锁条件值
