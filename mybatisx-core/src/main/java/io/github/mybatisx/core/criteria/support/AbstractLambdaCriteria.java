@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.metadata.Column;
@@ -103,5 +104,17 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     @Override
     public <V> C notIn(String property, Collection<V> values, LogicSymbol slot) {
         return this.inConditionAccept(property, values, Symbol.NOT_IN, slot);
+    }
+
+    @Override
+    public C like(String property, String value, LikeMatchMode matches, Character escape,
+                  boolean ignoreCase, LogicSymbol slot) {
+        return this.likeConditionAccept(property, value, matches, escape, ignoreCase, Symbol.LIKE, slot);
+    }
+
+    @Override
+    public C notLike(String property, String value, LikeMatchMode matches, Character escape,
+                     boolean ignoreCase, LogicSymbol slot) {
+        return this.likeConditionAccept(property, value, matches, escape, ignoreCase, Symbol.NOT_LIKE, slot);
     }
 }

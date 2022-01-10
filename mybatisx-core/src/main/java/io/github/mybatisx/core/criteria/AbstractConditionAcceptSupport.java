@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria;
 
+import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
@@ -22,6 +23,7 @@ import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
+import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SingleParam;
 import io.github.mybatisx.matcher.Matcher;
 
@@ -166,6 +168,54 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .jdbcType(column.getJdbcType())
                     .javaType(column.getDescriptor().getJavaType())
                     .values(values)
+                    .build());
+        }
+        return this.ctx;
+    }
+
+    /**
+     * 添加like模糊匹配条件
+     *
+     * @param property   属性
+     * @param value      值
+     * @param escape     转义字符
+     * @param ignoreCase 是否忽略大小写
+     * @param symbol     {@link Symbol}
+     * @param slot       {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C likeConditionAccept(final String property, final String value, final LikeMatchMode matches,
+                                    final Character escape, final boolean ignoreCase,
+                                    final Symbol symbol, final LogicSymbol slot) {
+        return this.likeConditionAccept(this.convert(property), value, matches, escape, ignoreCase, symbol, slot);
+    }
+
+    /**
+     * 添加like模糊匹配条件
+     *
+     * @param column     {@link Column}
+     * @param value      值
+     * @param escape     转义字符
+     * @param ignoreCase 是否忽略大小写
+     * @param symbol     {@link Symbol}
+     * @param slot       {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C likeConditionAccept(final Column column, final String value, final LikeMatchMode matches,
+                                    final Character escape, final boolean ignoreCase,
+                                    final Symbol symbol, final LogicSymbol slot) {
+        if (column != null) {
+            this.conditionConverter.accept(column.getColumn(), LikeParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .typeHandler(column.getTypeHandler())
+                    .jdbcType(column.getJdbcType())
+                    .javaType(column.getDescriptor().getJavaType())
+                    .value(value)
+                    .matches(matches)
+                    .escape(escape)
+                    .ignoreCase(ignoreCase)
+                    .dialect(this.getDialect())
                     .build());
         }
         return this.ctx;
