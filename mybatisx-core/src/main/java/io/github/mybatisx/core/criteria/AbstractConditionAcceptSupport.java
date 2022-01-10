@@ -21,6 +21,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
@@ -216,6 +217,43 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .escape(escape)
                     .ignoreCase(ignoreCase)
                     .dialect(this.getDialect())
+                    .build());
+        }
+        return this.ctx;
+    }
+
+    /**
+     * 添加is null条件
+     *
+     * @param property 属性
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C nullableConditionAccept(final String property, final Symbol symbol, final LogicSymbol slot) {
+        return this.nullableConditionAccept(this.convert(property), symbol, slot);
+    }
+
+    /**
+     * 添加is null条件
+     *
+     * @param column {@link Column}
+     * @param symbol {@link Symbol}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C nullableConditionAccept(final Column column, final Symbol symbol, final LogicSymbol slot) {
+        if (column != null) {
+            final StringBuilder sb = new StringBuilder(30);
+            if (slot != null) {
+                sb.append(slot.getFragment());
+            }
+            sb.append(" %s ").append(symbol.getFragment());
+            this.where(StandardCondition.builder()
+                    .symbol(symbol)
+                    .alias(this.as())
+                    .column(column.getColumn())
+                    .fragment(sb.toString())
                     .build());
         }
         return this.ctx;

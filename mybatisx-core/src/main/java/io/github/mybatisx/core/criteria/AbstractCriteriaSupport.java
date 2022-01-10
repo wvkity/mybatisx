@@ -93,8 +93,4 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
 
     // endregion
 
-    // region Protected methods
-
-    // endregion
-
 }

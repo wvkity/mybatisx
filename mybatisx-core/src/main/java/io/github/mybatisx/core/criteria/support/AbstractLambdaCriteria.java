@@ -117,4 +117,15 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
                      boolean ignoreCase, LogicSymbol slot) {
         return this.likeConditionAccept(property, value, matches, escape, ignoreCase, Symbol.NOT_LIKE, slot);
     }
+
+    @Override
+    public C isNull(String property, LogicSymbol slot) {
+        return this.nullableConditionAccept(property, Symbol.NULL, slot);
+    }
+
+    @Override
+    public C nonNull(String property, LogicSymbol slot) {
+        return this.nullableConditionAccept(property, Symbol.NOT_NULL, slot);
+    }
+    
 }

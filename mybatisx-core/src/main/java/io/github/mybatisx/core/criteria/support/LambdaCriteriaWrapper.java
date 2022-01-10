@@ -15,7 +15,9 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.core.criteria.CriteriaWrapper;
+import io.github.mybatisx.core.property.Property;
 
 /**
  * 基础条件接口(支持Lambda表达式)
@@ -27,6 +29,93 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
  * @since 1.0.0
  */
 public interface LambdaCriteriaWrapper<T, C extends LambdaCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C>,
-        LambdaCompare<T, C>, LambdaRange<T, C>, LambdaFuzzy<T, C> {
+        LambdaCompare<T, C>, LambdaRange<T, C>, LambdaFuzzy<T, C>, LambdaTemplate<T, C> {
 
+    // region Is null methods
+
+    /**
+     * is null
+     *
+     * @param property {@link Property}
+     * @return {@code this}
+     */
+    default C isNull(final Property<T, ?> property) {
+        return this.isNull(property, this.slot());
+    }
+
+    /**
+     * is null
+     *
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C isNull(final Property<T, ?> property, final LogicSymbol slot) {
+        return this.isNull(this.convert(property), slot);
+    }
+
+    /**
+     * is null
+     *
+     * @param property 属性
+     * @return {@code this}
+     */
+    default C isNull(final String property) {
+        return this.isNull(property, this.slot());
+    }
+
+    /**
+     * is null
+     *
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C isNull(final String property, final LogicSymbol slot);
+
+    // endregion
+
+    // region Is not null methods
+
+    /**
+     * is not null
+     *
+     * @param property {@link Property}
+     * @return {@code this}
+     */
+    default C nonNull(final Property<T, ?> property) {
+        return this.nonNull(property, this.slot());
+    }
+
+    /**
+     * is not null
+     *
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C nonNull(final Property<T, ?> property, final LogicSymbol slot) {
+        return this.nonNull(this.convert(property), slot);
+    }
+
+    /**
+     * is not null
+     *
+     * @param property 属性
+     * @return {@code this}
+     */
+    default C nonNull(final String property) {
+        return this.nonNull(property, this.slot());
+    }
+
+    /**
+     * is not null
+     *
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C nonNull(final String property, final LogicSymbol slot);
+
+    // endregion
 }
