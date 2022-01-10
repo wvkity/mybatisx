@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.dialect.Dialect;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,6 +48,12 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     @Override
     public C strict(boolean strict) {
         this.nonMatchingThenThrows.set(strict);
+        return this.ctx;
+    }
+
+    @Override
+    public C dialect(Dialect dialect) {
+        this.dialect = dialect;
         return this.ctx;
     }
 

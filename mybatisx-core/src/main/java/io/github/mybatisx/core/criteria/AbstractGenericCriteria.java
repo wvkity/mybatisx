@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
@@ -30,6 +31,7 @@ import io.github.mybatisx.core.sql.SqlManager;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -55,7 +57,13 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     /**
      * 实体类
      */
+    @Getter
     protected Class<T> entity;
+    /**
+     * 设置方言
+     */
+    @Getter
+    protected Dialect dialect;
     /**
      * 别名引用
      */
@@ -198,13 +206,8 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     }
 
     @Override
-    public Class<T> getEntity() {
-        return this.entity;
-    }
-
-    @Override
     public boolean isStrict() {
-        return false;
+        return this.nonMatchingThenThrows.get();
     }
 
     @Override
