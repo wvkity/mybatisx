@@ -66,8 +66,8 @@ public class DefaultConditionConverter implements ConditionConverter {
                 .criteria(this.criteria)
                 .column(column)
                 .orgValue(param.getValue())
-                .symbol(param.getSymbol())
                 .fragment(param.parse(this.parameterConverter, this.placeholderConverter))
+                .symbol(param.getSymbol())
                 .build();
     }
 }
