@@ -97,7 +97,10 @@ public enum Symbol implements Fragment {
      * not between
      */
     NOT_BETWEEN("NOT BETWEEN"),
-    ;
+    /**
+     * template
+     */
+    TEMPLATE("TEMPLATE");
 
     final String symbol;
 
