@@ -16,7 +16,6 @@
 package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
-import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.dialect.Dialect;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,35 +59,6 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     @Override
     public C setVersion(Object value) {
         return this.ctx;
-    }
-
-    /**
-     * or
-     *
-     * @return {@code this}
-     */
-    public C or() {
-        this.slotRef.set(LogicSymbol.OR);
-        return this.ctx;
-    }
-
-    /**
-     * and
-     *
-     * @return {@code this}
-     */
-    public C and() {
-        this.slotRef.set(LogicSymbol.AND);
-        return this.ctx;
-    }
-
-    /**
-     * 获取{@link LogicSymbol}
-     *
-     * @return {@link LogicSymbol}
-     */
-    public LogicSymbol slot() {
-        return this.slotRef.get();
     }
 
     // endregion

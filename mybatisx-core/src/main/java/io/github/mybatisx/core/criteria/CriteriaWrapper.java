@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.core.criteria;
 
+import java.util.function.Function;
+
 /**
  * 条件包装接口
  *
@@ -26,4 +28,59 @@ package io.github.mybatisx.core.criteria;
  */
 public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends GenericCriteria<T> {
 
+    /**
+     * 嵌套条件
+     *
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    default C nested(final Function<C, C> apply) {
+        return this.nested(false, apply);
+    }
+
+    /**
+     * 嵌套条件
+     *
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    C nested(final boolean not, final Function<C, C> apply);
+
+    /**
+     * and嵌套条件
+     *
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    default C and(final Function<C, C> apply) {
+        return this.and(false, apply);
+    }
+
+    /**
+     * and嵌套条件
+     *
+     * @param not   是否拼接not
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    C and(final boolean not, final Function<C, C> apply);
+
+    /**
+     * or嵌套条件
+     *
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    default C or(final Function<C, C> apply) {
+        return this.or(false, apply);
+    }
+
+    /**
+     * or嵌套条件
+     *
+     * @param not   是否拼接not
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
+    C or(final boolean not, final Function<C, C> apply);
 }

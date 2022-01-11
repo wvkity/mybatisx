@@ -22,17 +22,21 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SingleParam;
 import io.github.mybatisx.core.param.TemplateParam;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 抽象条件处理
@@ -52,6 +56,15 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     protected final C ctx = (C) this;
 
     // region Protected methods
+
+    /**
+     * 创建{@link CriteriaWrapper}实例
+     *
+     * @return {@link CriteriaWrapper}对象
+     */
+    protected C newInstance() {
+        return null;
+    }
 
     /**
      * 添加单值条件
@@ -339,6 +352,22 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
         return this.ctx;
     }
 
+    protected C doIt(final LogicSymbol slot, final boolean not, final Function<C, C> apply) {
+        if (apply != null) {
+            final C context = this.newInstance();
+            if (context != null) {
+                final C c = apply.apply(context);
+                if (c != null) {
+                    final List<Criterion> conditions = ((AbstractGenericCriteria<?>) c).fragmentManager.getConditions();
+                    if (Objects.isNotEmpty(conditions)) {
+                        this.where(NestedCondition.builder().not(not).slot(slot).conditions(conditions).build());
+                    }
+                }
+            }
+        }
+        return this.ctx;
+    }
+
     // endregion
 
     // region Override methods
@@ -346,6 +375,50 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     @Override
     protected C self() {
         return this.ctx;
+    }
+
+    /**
+     * or
+     *
+     * @return {@code this}
+     */
+    public C or() {
+        this.slotRef.set(LogicSymbol.OR);
+        return this.ctx;
+    }
+
+    /**
+     * and
+     *
+     * @return {@code this}
+     */
+    public C and() {
+        this.slotRef.set(LogicSymbol.AND);
+        return this.ctx;
+    }
+
+    /**
+     * 获取{@link LogicSymbol}
+     *
+     * @return {@link LogicSymbol}
+     */
+    public LogicSymbol slot() {
+        return this.slotRef.get();
+    }
+
+    @Override
+    public C nested(boolean not, Function<C, C> apply) {
+        return this.doIt(this.slot(), not, apply);
+    }
+
+    @Override
+    public C and(boolean not, Function<C, C> apply) {
+        return this.doIt(LogicSymbol.AND, not, apply);
+    }
+
+    @Override
+    public C or(boolean not, Function<C, C> apply) {
+        return this.doIt(LogicSymbol.OR, not, apply);
     }
 
     @Override
