@@ -16,7 +16,10 @@
 package io.github.mybatisx.core.management;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.criterion.Criterion;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 /**
  * 抽象片段管理器
@@ -41,6 +44,11 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     @Override
     public boolean hasCondition() {
         return !this.whereStorage.isEmpty();
+    }
+
+    @Override
+    public List<Criterion> getConditions() {
+        return this.whereStorage.getAll();
     }
 
     @Override

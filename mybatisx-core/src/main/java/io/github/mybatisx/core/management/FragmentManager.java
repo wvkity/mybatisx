@@ -19,6 +19,7 @@ import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 片段管理器
@@ -49,6 +50,13 @@ public interface FragmentManager extends Fragment {
      * @return boolean
      */
     boolean hasCondition();
+
+    /**
+     * 获取条件列表
+     *
+     * @return 条件列表
+     */
+    List<Criterion> getConditions();
 
     /**
      * 检查是否存在片段
