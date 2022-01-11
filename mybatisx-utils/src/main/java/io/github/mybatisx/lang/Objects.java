@@ -87,7 +87,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isAssignable(final Class<?> source, final Class<?> clazz) {
-        return Objects.nonNull(source) && Objects.nonNull(clazz) && source.isAssignableFrom(clazz);
+        return source != null && source.isAssignableFrom(clazz);
     }
 
     /**
