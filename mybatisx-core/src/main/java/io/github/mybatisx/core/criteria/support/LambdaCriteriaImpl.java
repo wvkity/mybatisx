@@ -17,6 +17,8 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.core.sql.DefaultSqlManager;
 
+import java.util.function.Consumer;
+
 /**
  * 基础条件(支持Lambda表达式)
  *
@@ -34,8 +36,31 @@ public class LambdaCriteriaImpl<T> extends AbstractLambdaCriteria<T, LambdaCrite
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 
+    /**
+     * 创建{@link LambdaCriteriaImpl}对象
+     *
+     * @param entity 实体类
+     * @param <T>    实体类型
+     * @return {@link LambdaCriteriaImpl}
+     */
     public static <T> LambdaCriteriaImpl<T> from(final Class<T> entity) {
         return new LambdaCriteriaImpl<>(entity);
     }
-    
+
+    /**
+     * 创建{@link LambdaCriteriaImpl}对象
+     *
+     * @param entity 实体类
+     * @param action {@link Consumer}
+     * @param <T>    实体类型
+     * @return {@link LambdaCriteriaImpl}
+     */
+    public static <T> LambdaCriteriaImpl<T> from(final Class<T> entity, final Consumer<LambdaCriteriaImpl<T>> action) {
+        final LambdaCriteriaImpl<T> it = from(entity);
+        if (action != null) {
+            action.accept(it);
+        }
+        return it;
+    }
+
 }
