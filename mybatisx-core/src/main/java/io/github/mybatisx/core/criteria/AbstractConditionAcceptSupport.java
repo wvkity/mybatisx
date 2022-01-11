@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.expression.Expression;
@@ -26,9 +27,11 @@ import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.core.param.TemplateParam;
 import io.github.mybatisx.matcher.Matcher;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 抽象条件处理
@@ -256,6 +259,60 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .fragment(sb.toString())
                     .build());
         }
+        return this.ctx;
+    }
+
+    /**
+     * 添加模板条件
+     *
+     * @param property  属性
+     * @param template  模板
+     * @param value     值
+     * @param values    值列表
+     * @param mapValues map值
+     * @param paramMode 参数模式
+     * @param slot      {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C templateConditionAccept(final String property, final String template, final Object value,
+                                        final Collection<?> values, final Map<String, ?> mapValues,
+                                        final ParamMode paramMode, final LogicSymbol slot) {
+        return this.templateConditionAccept(this.convert(property), template, value, values, mapValues,
+                paramMode, slot);
+    }
+
+    /**
+     * 添加模板条件
+     *
+     * @param column    {@link Column}
+     * @param template  模板
+     * @param value     值
+     * @param values    值列表
+     * @param mapValues map值
+     * @param paramMode 参数模式
+     * @param slot      {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C templateConditionAccept(final Column column, final String template, final Object value,
+                                        final Collection<?> values, final Map<String, ?> mapValues,
+                                        final ParamMode paramMode, final LogicSymbol slot) {
+        String columnName = "";
+        final TemplateParam.TemplateParamBuilder<?, ?> builder = TemplateParam.builder()
+                .template(template)
+                .paramMode(paramMode)
+                .value(value)
+                .listValue(values)
+                .mapValue(mapValues)
+                .slot(slot)
+                .symbol(Symbol.TEMPLATE);
+        if (column != null) {
+            builder.typeHandler(column.getTypeHandler())
+                    .jdbcType(column.getJdbcType())
+                    .javaType(column.getDescriptor().getJavaType())
+                    .spliceJavaType(column.isSpliceJavaType());
+            columnName = column.getColumn();
+        }
+        this.conditionConverter.accept(columnName, builder.build());
         return this.ctx;
     }
 

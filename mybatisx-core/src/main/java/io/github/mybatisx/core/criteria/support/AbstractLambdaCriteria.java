@@ -17,9 +17,11 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
+import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
 
@@ -127,5 +129,41 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     public C nonNull(String property, LogicSymbol slot) {
         return this.nullableConditionAccept(property, Symbol.NOT_NULL, slot);
     }
-    
+
+    @Override
+    public C template(String template, Object value, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, value, null, null,
+                ParamMode.SINGLE, slot);
+    }
+
+    @Override
+    public C template(String template, Collection<Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, null, values, null,
+                ParamMode.MULTIPLE, slot);
+    }
+
+    @Override
+    public C template(String template, Map<String, Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, null, null, values,
+                ParamMode.MAP, slot);
+    }
+
+    @Override
+    public C template(String template, Property<T, ?> property, Object value, LogicSymbol slot) {
+        return this.templateConditionAccept(this.convert(property), template, value, null, null,
+                ParamMode.SINGLE, slot);
+    }
+
+    @Override
+    public C template(String template, String property, Collection<Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept(property, template, null, values, null,
+                ParamMode.MULTIPLE, slot);
+    }
+
+    @Override
+    public C template(String template, String property, Map<String, Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept(property, template, null, null, values,
+                ParamMode.MAP, slot);
+    }
+
 }
