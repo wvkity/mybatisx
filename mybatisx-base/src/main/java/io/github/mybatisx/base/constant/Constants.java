@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.base.constant;
 
+import io.github.mybatisx.lang.Strings;
+
 /**
  * 字符串常量
  *
@@ -28,6 +30,16 @@ public interface Constants {
      * 空字符串
      */
     String EMPTY = "";
+
+    /**
+     * 字符串null
+     */
+    String NULL = Strings.DEFAULT_STR_NULL;
+
+    /**
+     * 双反斜杠
+     */
+    String DOUBLE_BACKSLASH = "\\";
 
     /**
      * 主键参数名
