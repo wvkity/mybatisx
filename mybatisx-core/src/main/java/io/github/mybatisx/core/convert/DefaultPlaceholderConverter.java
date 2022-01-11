@@ -79,7 +79,7 @@ public class DefaultPlaceholderConverter implements PlaceholderConverter {
         if (iterable != null) {
             final Stream<?> stream = StreamSupport.stream(iterable.spliterator(), false);
             if (Objects.isPureType(iterable)) {
-                return stream.map(it -> Scripts.safeJoining(String.valueOf(this.convert(it)),
+                return stream.map(it -> Scripts.safeJoining(this.converter.convert(it),
                                 Scripts.concatTypeArg(typeHandler, jdbcType, spliceJavaType, javaType)))
                         .collect(Collectors.toList());
             }
