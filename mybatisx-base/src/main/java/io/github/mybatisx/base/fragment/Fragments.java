@@ -48,4 +48,10 @@ public interface Fragments<T> extends Fragment {
      */
     boolean isEmpty();
 
+    /**
+     * 获取所有片段
+     *
+     * @return 片段列表
+     */
+    Collection<T> getAll();
 }

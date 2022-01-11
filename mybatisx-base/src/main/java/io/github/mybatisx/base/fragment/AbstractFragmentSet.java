@@ -57,4 +57,8 @@ public abstract class AbstractFragmentSet<T> implements Fragments<T> {
         return this.fragments.isEmpty();
     }
 
+    @Override
+    public Set<T> getAll() {
+        return this.fragments;
+    }
 }

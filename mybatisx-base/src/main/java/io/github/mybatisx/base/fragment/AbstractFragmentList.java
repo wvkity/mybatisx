@@ -56,4 +56,9 @@ public abstract class AbstractFragmentList<T> implements Fragments<T> {
     public boolean isEmpty() {
         return this.fragments.isEmpty();
     }
+
+    @Override
+    public List<T> getAll() {
+        return this.fragments;
+    }
 }
