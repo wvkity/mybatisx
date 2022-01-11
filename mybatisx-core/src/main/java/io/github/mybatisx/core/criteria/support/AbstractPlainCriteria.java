@@ -15,7 +15,16 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.ParamMode;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
+import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.matcher.Matcher;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * 抽象基础条件
@@ -29,5 +38,45 @@ import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 @SuppressWarnings({"serial"})
 public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T, C>> extends
         AbstractCriteriaSupport<T, C> implements PlainCriteriaWrapper<T, C> {
+
+    @Override
+    public <V> C idEq(V value, Matcher<V> matcher, LogicSymbol slot) {
+        this.checkPrimaryKey();
+        final Column id = this.getPrimaryKey();
+        return this.singleConditionAccept(id, value, matcher, Symbol.EQ, slot);
+    }
+
+    @Override
+    public <V> C colEq(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.EQ, slot);
+    }
+
+    @Override
+    public C colEq(Map<String, ?> columns, LogicSymbol slot) {
+        if (Objects.isNotEmpty(columns)) {
+            for (Map.Entry<String, ?> it : columns.entrySet()) {
+                this.colEq(it.getKey(), it.getValue(), slot);
+            }
+        }
+        return this.self();
+    }
+
+    @Override
+    public C template(String template, Object value, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, value, null, null,
+                ParamMode.SINGLE, slot);
+    }
+
+    @Override
+    public C template(String template, Collection<Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, null, values, null,
+                ParamMode.MULTIPLE, slot);
+    }
+
+    @Override
+    public C template(String template, Map<String, Object> values, LogicSymbol slot) {
+        return this.templateConditionAccept((Column) null, template, null, null, values,
+                ParamMode.MAP, slot);
+    }
 
 }

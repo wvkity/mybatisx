@@ -15,6 +15,13 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.matcher.Matcher;
+
+import java.util.Map;
+
 /**
  * 抽象基础条件
  *
@@ -28,4 +35,18 @@ package io.github.mybatisx.core.criteria.support;
 public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C>> extends
         AbstractLambdaCriteria<T, C> implements BaseCriteriaWrapper<T, C> {
 
+    @Override
+    public <V> C colEq(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.EQ, slot);
+    }
+
+    @Override
+    public C colEq(Map<String, ?> columns, LogicSymbol slot) {
+        if (Objects.isNotEmpty(columns)) {
+            for (Map.Entry<String, ?> it : columns.entrySet()) {
+                this.colEq(it.getKey(), it.getValue(), slot);
+            }
+        }
+        return this.self();
+    }
 }

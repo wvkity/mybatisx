@@ -28,6 +28,7 @@ import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SingleParam;
 import io.github.mybatisx.core.param.TemplateParam;
+import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 
 import java.util.Collection;
@@ -313,6 +314,28 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
             columnName = column.getColumn();
         }
         this.conditionConverter.accept(columnName, builder.build());
+        return this.ctx;
+    }
+
+
+    /**
+     * 添加单值条件
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param symbol  {@link Symbol}
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    protected <V> C colSingleConditionAccept(final String column, final V value, final Matcher<V> matcher,
+                                             final Symbol symbol, final LogicSymbol slot) {
+        if (Strings.isNotWhitespace(column) && this.early(value, matcher)) {
+            this.conditionConverter.accept(column, SingleParam.builder().symbol(symbol)
+                    .slot(slot)
+                    .value(value).build());
+        }
         return this.ctx;
     }
 
