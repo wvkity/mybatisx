@@ -54,9 +54,9 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     }
 
     @Override
-    public C eq(Map<String, Object> properties, LogicSymbol slot) {
+    public C eq(Map<String, ?> properties, LogicSymbol slot) {
         if (Objects.isNotEmpty(properties)) {
-            for (Map.Entry<String, Object> it : properties.entrySet()) {
+            for (Map.Entry<String, ?> it : properties.entrySet()) {
                 this.eq(it.getKey(), it.getValue(), slot);
             }
         }

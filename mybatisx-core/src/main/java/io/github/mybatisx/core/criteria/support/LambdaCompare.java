@@ -283,7 +283,7 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      * @param properties 属性-值集合
      * @return {@code this}
      */
-    default C eq(final Map<String, Object> properties) {
+    default C eq(final Map<String, ?> properties) {
         return this.eq(properties, this.slot());
     }
 
@@ -294,7 +294,7 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      * @param properties 属性-值集合
      * @return {@code this}
      */
-    C eq(final Map<String, Object> properties, final LogicSymbol slot);
+    C eq(final Map<String, ?> properties, final LogicSymbol slot);
 
     // endregion
 
