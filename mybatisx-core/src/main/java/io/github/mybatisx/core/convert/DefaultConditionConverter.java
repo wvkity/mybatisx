@@ -20,6 +20,7 @@ import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.param.Param;
+import io.github.mybatisx.lang.Strings;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,12 +63,17 @@ public class DefaultConditionConverter implements ConditionConverter {
 
     @Override
     public Criterion convert(String column, Param param) {
-        return StandardCondition.builder()
-                .criteria(this.criteria)
-                .column(column)
-                .orgValue(param.getValue())
-                .fragment(param.parse(this.parameterConverter, this.placeholderConverter))
-                .symbol(param.getSymbol())
-                .build();
+        final String fragment;
+        if (param != null &&
+                Strings.isNotWhitespace(fragment = param.parse(this.parameterConverter, this.placeholderConverter))) {
+            return StandardCondition.builder()
+                    .criteria(this.criteria)
+                    .column(column)
+                    .orgValue(param.getValue())
+                    .fragment(fragment)
+                    .symbol(param.getSymbol())
+                    .build();
+        }
+        return null;
     }
 }
