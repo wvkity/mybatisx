@@ -87,10 +87,11 @@ public class TemplateParam extends AbstractParam implements Param {
             }
             // 检查是否已替换，没替换则不通过
             if (Strings.isNotWhitespace(result) && !_$template.equals(result)) {
-                if (this.slot == null || this.slot == LogicSymbol.NONE) {
+                final LogicSymbol _$slot = this.slot;
+                if (_$slot == null || _$slot == LogicSymbol.NONE) {
                     return result;
                 }
-                return this.slot.getFragment() + SqlSymbol.SPACE + result;
+                return _$slot.getFragment() + SqlSymbol.SPACE + result;
             }
         }
         return null;
