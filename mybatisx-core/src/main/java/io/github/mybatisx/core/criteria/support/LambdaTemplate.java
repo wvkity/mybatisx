@@ -33,7 +33,7 @@ import java.util.Map;
  * @created 2022/1/10
  * @since 1.0.0
  */
-public interface LambdaTemplate<T, C extends LambdaTemplate<T, C>> extends GenericTemplate<T, C>, PropertyConverter<T> {
+public interface LambdaTemplate<T, C extends LambdaTemplate<T, C>> extends Slot<T, C>, PropertyConverter<T> {
 
     /**
      * 模板条件

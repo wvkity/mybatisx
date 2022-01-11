@@ -24,6 +24,6 @@ package io.github.mybatisx.core.criteria.support;
  * @created 2022/1/11
  * @since 1.0.0
  */
-public interface PlainTemplate<T, C extends PlainTemplate<T, C>> extends Slot<T, C>, GenericTemplate<T, C> {
+public interface PlainTemplate<T, C extends PlainTemplate<T, C>> extends Slot<T, C> {
 
 }

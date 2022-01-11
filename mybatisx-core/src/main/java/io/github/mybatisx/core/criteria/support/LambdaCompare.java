@@ -33,56 +33,6 @@ import java.util.Map;
  */
 public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T, C>, PropertyConverter<T> {
 
-    // region Primary key equal methods 
-
-    /**
-     * 主键等于
-     *
-     * @param value 值
-     * @param <V>   值类型
-     * @return {@code this}
-     */
-    default <V> C idEq(final V value) {
-        return this.idEq(value, null, this.slot());
-    }
-
-    /**
-     * 主键等于
-     *
-     * @param value   值
-     * @param matcher {@link Matcher}
-     * @param <V>     值类型
-     * @return {@code this}
-     */
-    default <V> C idEq(final V value, final Matcher<V> matcher) {
-        return this.idEq(value, matcher, this.slot());
-    }
-
-    /**
-     * 主键等于
-     *
-     * @param value 值
-     * @param slot  {@link LogicSymbol}
-     * @param <V>   值类型
-     * @return {@code this}
-     */
-    default <V> C idEq(final V value, final LogicSymbol slot) {
-        return this.idEq(value, null, slot);
-    }
-
-    /**
-     * 主键等于
-     *
-     * @param value   值
-     * @param matcher {@link Matcher}
-     * @param <V>     值类型
-     * @param slot    {@link LogicSymbol}
-     * @return {@code this}
-     */
-    <V> C idEq(final V value, final Matcher<V> matcher, final LogicSymbol slot);
-
-    // endregion
-
     // region Equal methods 
 
     // region Single property

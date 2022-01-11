@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.util.Maps;
 
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * 通用模板条件
+ * 公共通用条件
  *
  * @param <T> 实体类型
  * @param <C> 子类型
@@ -31,7 +32,60 @@ import java.util.Map;
  * @created 2022/1/10
  * @since 1.0.0
  */
-public interface GenericTemplate<T, C extends GenericTemplate<T, C>> extends Slot<T, C> {
+public interface GenericCondition<T, C extends GenericCondition<T, C>> extends Slot<T, C> {
+
+
+    // region Primary key equal methods 
+
+    /**
+     * 主键等于
+     *
+     * @param value 值
+     * @param <V>   值类型
+     * @return {@code this}
+     */
+    default <V> C idEq(final V value) {
+        return this.idEq(value, null, this.slot());
+    }
+
+    /**
+     * 主键等于
+     *
+     * @param value   值
+     * @param matcher {@link Matcher}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C idEq(final V value, final Matcher<V> matcher) {
+        return this.idEq(value, matcher, this.slot());
+    }
+
+    /**
+     * 主键等于
+     *
+     * @param value 值
+     * @param slot  {@link LogicSymbol}
+     * @param <V>   值类型
+     * @return {@code this}
+     */
+    default <V> C idEq(final V value, final LogicSymbol slot) {
+        return this.idEq(value, null, slot);
+    }
+
+    /**
+     * 主键等于
+     *
+     * @param value   值
+     * @param matcher {@link Matcher}
+     * @param <V>     值类型
+     * @param slot    {@link LogicSymbol}
+     * @return {@code this}
+     */
+    <V> C idEq(final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+    
+    // region Template methods
 
     /**
      * 模板条件
@@ -208,5 +262,7 @@ public interface GenericTemplate<T, C extends GenericTemplate<T, C>> extends Slo
      * @return {@code this}
      */
     C template(final String template, final Map<String, Object> values, final LogicSymbol slot);
+
+    // endregion
 
 }

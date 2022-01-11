@@ -26,6 +26,7 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface PlainCriteriaWrapper<T, C extends PlainCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C> {
+public interface PlainCriteriaWrapper<T, C extends PlainCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C>,
+        GenericCondition<T, C>, PlainCompare<T, C>, PlainRange<T, C>, PlainFuzzy<T, C>, PlainTemplate<T, C> {
 
 }
