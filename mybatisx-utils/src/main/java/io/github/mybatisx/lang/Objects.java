@@ -19,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Objects工具
@@ -697,6 +699,33 @@ public final class Objects {
     public static <T> List<T> objectAsList(final T... args) {
         if (isNotEmpty(args)) {
             return new ArrayList<>(Arrays.asList(args));
+        }
+        return new ArrayList<>(0);
+    }
+
+    /**
+     * 参数转{@link List}
+     *
+     * @param arg 参数
+     * @param <T> 类型
+     * @return {@link List}
+     */
+    @SuppressWarnings({"unchecked"})
+    public static <T> List<T> toList(final Object arg) {
+        if (arg != null) {
+            final Class<?> clazz = arg.getClass();
+            if (Objects.isAssignable(Map.class, clazz)) {
+                return new ArrayList<>((Collection<? extends T>) ((Map<?, ?>) arg).values());
+            } else if (Objects.isAssignable(Iterable.class, clazz)) {
+                if (arg instanceof Collection) {
+                    return new ArrayList<>((Collection<? extends T>) arg);
+                } else {
+                    return StreamSupport.stream(((Iterable<T>) arg).spliterator(), false).collect(Collectors.toList());
+                }
+            } else if (clazz.isArray()) {
+                return Objects.objectAsList((T[]) arg);
+            }
+            return new ArrayList<>(Collections.singletonList((T) arg));
         }
         return new ArrayList<>(0);
     }
