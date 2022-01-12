@@ -132,20 +132,17 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
 
     @Override
     public C template(String template, Object value, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, value, null, null,
-                ParamMode.SINGLE, slot);
+        return this.colTemplateConditionAccept(null, template, value, null, null, ParamMode.SINGLE, slot);
     }
 
     @Override
     public C template(String template, Collection<Object> values, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, null, values, null,
-                ParamMode.MULTIPLE, slot);
+        return this.colTemplateConditionAccept(null, template, null, values, null, ParamMode.MULTIPLE, slot);
     }
 
     @Override
     public C template(String template, Map<String, Object> values, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, null, null, values,
-                ParamMode.MAP, slot);
+        return this.colTemplateConditionAccept(null, template, null, null, values, ParamMode.MAP, slot);
     }
 
     @Override
