@@ -15,6 +15,9 @@
  */
 package io.github.mybatisx.core.criteria;
 
+import io.github.mybatisx.core.expression.Expression;
+
+import java.util.Collection;
 import java.util.function.Function;
 
 /**
@@ -83,4 +86,28 @@ public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends Gen
      * @return {@code this}
      */
     C or(final boolean not, final Function<C, C> apply);
+
+    /**
+     * 条件条件
+     *
+     * @param expression 条件表达式
+     * @return {@code this}
+     */
+    C where(final Expression expression);
+
+    /**
+     * 条件条件
+     *
+     * @param expressions 条件表达式列表
+     * @return {@code this}
+     */
+    C where(final Expression... expressions);
+
+    /**
+     * 添加多个条件
+     *
+     * @param expressions 条件表达式列表
+     * @return {@code this}
+     */
+    C where(final Collection<Expression> expressions);
 }

@@ -20,10 +20,10 @@ import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
-import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.criterion.StandardCondition;
+import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
@@ -428,12 +428,31 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     }
 
     @Override
-    public C where(Expression<?> expression) {
+    public C where(Expression expression) {
+        if (expression != null) {
+            expression.setIfNecessary(this);
+            this.conditionConverter.accept(expression);
+        }
         return this.ctx;
     }
 
     @Override
-    public C where(Collection<Expression<?>> expressions) {
+    public C where(Expression... expressions) {
+        if (Objects.isNotEmpty(expressions)) {
+            for (Expression it : expressions) {
+                this.where(it);
+            }
+        }
+        return this.ctx;
+    }
+
+    @Override
+    public C where(Collection<Expression> expressions) {
+        if (Objects.isNotEmpty(expressions)) {
+            for (Expression it : expressions) {
+                this.where(it);
+            }
+        }
         return this.ctx;
     }
 
