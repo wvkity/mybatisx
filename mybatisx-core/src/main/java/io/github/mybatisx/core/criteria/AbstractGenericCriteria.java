@@ -100,11 +100,20 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      * 属性不匹配则抛出异常
      */
     protected AtomicBoolean nonMatchingThenThrows;
+    /**
+     * 表别名序列
+     */
+    protected AtomicInteger tableAliasSequence;
 
     // endregion
 
     // region Protected methods
 
+    /**
+     * 初始化
+     *
+     * @param alias 表别名
+     */
     protected void newInit(final String alias) {
         this.parameterSequence = new AtomicInteger(0);
         this.paramValueMapping = new ConcurrentHashMap<>(16);
@@ -112,8 +121,53 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
         this.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
         this.fragmentManager = new DefaultFragmentManager();
         this.nonMatchingThenThrows = new AtomicBoolean(true);
+        this.tableAliasSequence = new AtomicInteger(0);
         if (Strings.isNotWhitespace(alias)) {
             aliasRef.set(alias.trim());
+        }
+    }
+
+    /**
+     * 复制
+     *
+     * @param source 源对象
+     */
+    protected void clone(final AbstractGenericCriteria<T> source) {
+        this.clone(source, this, true);
+    }
+
+    /**
+     * 复制
+     *
+     * @param source 源对象
+     * @param deep   是否深度拷贝
+     */
+    protected void clone(final AbstractGenericCriteria<T> source, final boolean deep) {
+        this.clone(source, this, deep);
+    }
+
+    /**
+     * 复制
+     *
+     * @param source 源对象
+     * @param target 目标对象
+     * @param deep   是否深度拷贝
+     */
+    protected void clone(final AbstractGenericCriteria<T> source, final AbstractGenericCriteria<T> target,
+                         final boolean deep) {
+        if (source != null && target != null) {
+            target.parameterSequence = source.parameterSequence;
+            target.paramValueMapping = source.paramValueMapping;
+            target.tableAliasSequence = source.tableAliasSequence;
+            target.nonMatchingThenThrows = source.nonMatchingThenThrows;
+            target.parameterConverter = source.parameterConverter;
+            target.fragmentManager = new DefaultFragmentManager();
+            target.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
+            if (deep) {
+                target.entity = source.entity;
+                target.aliasRef = source.aliasRef;
+                target.sqlManager = source.sqlManager;
+            }
         }
     }
 
