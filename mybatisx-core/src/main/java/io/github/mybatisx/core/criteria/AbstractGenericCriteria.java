@@ -18,7 +18,6 @@ package io.github.mybatisx.core.criteria;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.dialect.Dialect;
-import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.convert.ConditionConverter;
@@ -241,20 +240,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      */
     public Column convert(final String property) {
         if (Strings.isNotWhitespace(property)) {
-            final Column column = TableHelper.getByProperty(this.entity, property);
-            if (column == null) {
-                if (this.nonMatchingThenThrows.get()) {
-                    throw new MyBatisException("The field mapping information for the entity class(" +
-                            this.entity.getName() + ") cannot be found based on the `" + property + "` " +
-                            "attribute. Check to see if the attribute exists or is decorated using the @Transient " +
-                            "annotation.");
-                } else {
-                    log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
-                            "`{}` attribute. Check to see if the attribute exists or is decorated using the @Transient " +
-                            "annotation.", this.entity.getName(), property);
-                }
-            }
-            return column;
+            return TableHelper.getColumnByProperty(this.entity, property, this.nonMatchingThenThrows.get(), true);
         }
         return null;
     }
