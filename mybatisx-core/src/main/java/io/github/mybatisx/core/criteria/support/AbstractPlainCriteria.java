@@ -120,6 +120,16 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public C colIsNull(String column, LogicSymbol slot) {
+        return this.colNullableConditionAccept(column, Symbol.NULL, slot);
+    }
+
+    @Override
+    public C colNonNull(String column, LogicSymbol slot) {
+        return this.colNullableConditionAccept(column, Symbol.NOT_NULL, slot);
+    }
+
+    @Override
     public C template(String template, Object value, LogicSymbol slot) {
         return this.templateConditionAccept((Column) null, template, value, null, null,
                 ParamMode.SINGLE, slot);

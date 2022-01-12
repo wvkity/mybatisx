@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.core.criteria.CriteriaWrapper;
 
 /**
@@ -28,5 +29,51 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
  */
 public interface PlainCriteriaWrapper<T, C extends PlainCriteriaWrapper<T, C>> extends CriteriaWrapper<T, C>,
         GenericCondition<T, C>, PlainCompare<T, C>, PlainRange<T, C>, PlainFuzzy<T, C>, PlainTemplate<T, C> {
+
+    // region Is null methods
+
+    /**
+     * is null
+     *
+     * @param column 字段名
+     * @return {@code this}
+     */
+    default C colIsNull(final String column) {
+        return this.colIsNull(column, this.slot());
+    }
+
+    /**
+     * is null
+     *
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colIsNull(final String column, final LogicSymbol slot);
+
+    // endregion
+
+    // region Is not null methods
+
+    /**
+     * is not null
+     *
+     * @param column 字段名
+     * @return {@code this}
+     */
+    default C colNonNull(final String column) {
+        return this.colNonNull(column, this.slot());
+    }
+
+    /**
+     * is not null
+     *
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colNonNull(final String column, final LogicSymbol slot);
+
+    // endregion
 
 }

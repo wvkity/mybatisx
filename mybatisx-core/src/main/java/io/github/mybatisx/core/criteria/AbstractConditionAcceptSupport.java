@@ -414,8 +414,8 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * @return {@code this}
      */
     protected C colLikeConditionAccept(final String column, final String value, final LikeMatchMode matches,
-                                    final Character escape, final boolean ignoreCase,
-                                    final Symbol symbol, final LogicSymbol slot) {
+                                       final Character escape, final boolean ignoreCase,
+                                       final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column)) {
             this.conditionConverter.accept(column, LikeParam.builder()
                     .symbol(symbol)
@@ -425,6 +425,32 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .escape(escape)
                     .ignoreCase(ignoreCase)
                     .dialect(this.getDialect())
+                    .build());
+        }
+        return this.ctx;
+    }
+
+
+    /**
+     * 添加is null条件
+     *
+     * @param column 字段名
+     * @param symbol {@link Symbol}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C colNullableConditionAccept(final String column, final Symbol symbol, final LogicSymbol slot) {
+        if (Strings.isNotWhitespace(column)) {
+            final StringBuilder sb = new StringBuilder(30);
+            if (slot != null) {
+                sb.append(slot.getFragment());
+            }
+            sb.append(" %s ").append(symbol.getFragment());
+            this.where(StandardCondition.builder()
+                    .symbol(symbol)
+                    .alias(this.as())
+                    .column(column)
+                    .fragment(sb.toString())
                     .build());
         }
         return this.ctx;

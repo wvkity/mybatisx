@@ -108,4 +108,15 @@ public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C
                         boolean ignoreCase, LogicSymbol slot) {
         return this.colLikeConditionAccept(column, value, matches, escape, ignoreCase, Symbol.NOT_LIKE, slot);
     }
+
+    @Override
+    public C colIsNull(String column, LogicSymbol slot) {
+        return this.colNullableConditionAccept(column, Symbol.NULL, slot);
+    }
+
+    @Override
+    public C colNonNull(String column, LogicSymbol slot) {
+        return this.colNullableConditionAccept(column, Symbol.NOT_NULL, slot);
+    }
+    
 }
