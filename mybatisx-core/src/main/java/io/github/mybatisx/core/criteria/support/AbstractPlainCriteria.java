@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
@@ -104,6 +105,18 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     @Override
     public <V> C colNotIn(String column, Collection<V> values, LogicSymbol slot) {
         return this.colInConditionAccept(column, values, Symbol.NOT_IN, slot);
+    }
+
+    @Override
+    public C colLike(String column, String value, LikeMatchMode matches, Character escape,
+                     boolean ignoreCase, LogicSymbol slot) {
+        return this.colLikeConditionAccept(column, value, matches, escape, ignoreCase, Symbol.LIKE, slot);
+    }
+
+    @Override
+    public C colNotLike(String column, String value, LikeMatchMode matches, Character escape,
+                        boolean ignoreCase, LogicSymbol slot) {
+        return this.colLikeConditionAccept(column, value, matches, escape, ignoreCase, Symbol.NOT_LIKE, slot);
     }
 
     @Override
