@@ -16,6 +16,8 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.core.sql.DefaultSqlManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
 
@@ -27,6 +29,7 @@ import java.util.function.Consumer;
  * @created 2022/1/11
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GenericCriteriaImpl<T> extends AbstractBaseCriteria<T, GenericCriteriaImpl<T>> {
 
     private static final long serialVersionUID = -8709011796466994919L;
@@ -35,6 +38,13 @@ public class GenericCriteriaImpl<T> extends AbstractBaseCriteria<T, GenericCrite
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
+    }
+
+    @Override
+    protected GenericCriteriaImpl<T> newInstance() {
+        final GenericCriteriaImpl<T> it = new GenericCriteriaImpl<>();
+        it.clone(this);
+        return it;
     }
 
     /**

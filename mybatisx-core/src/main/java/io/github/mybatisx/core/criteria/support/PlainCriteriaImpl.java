@@ -16,16 +16,20 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.core.sql.DefaultSqlManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
 
 /**
  * 基础条件
  *
+ * @param <T> 实体类型
  * @author wvkity
  * @created 2022/1/11
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlainCriteriaImpl<T> extends AbstractPlainCriteria<T, PlainCriteriaImpl<T>> {
 
     private static final long serialVersionUID = -2467289129956344730L;
@@ -34,6 +38,13 @@ public class PlainCriteriaImpl<T> extends AbstractPlainCriteria<T, PlainCriteria
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
+    }
+
+    @Override
+    protected PlainCriteriaImpl<T> newInstance() {
+        final PlainCriteriaImpl<T> it = new PlainCriteriaImpl<>();
+        it.clone(this);
+        return it;
     }
 
     /**

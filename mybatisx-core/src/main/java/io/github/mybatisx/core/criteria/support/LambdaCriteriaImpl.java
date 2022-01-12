@@ -16,16 +16,20 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.core.sql.DefaultSqlManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
 
 /**
  * 基础条件(支持Lambda表达式)
  *
+ * @param <T> 实体类型
  * @author wvkity
  * @created 2022/1/6
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LambdaCriteriaImpl<T> extends AbstractLambdaCriteria<T, LambdaCriteriaImpl<T>> {
 
     private static final long serialVersionUID = -2981849275689397498L;
@@ -34,6 +38,13 @@ public class LambdaCriteriaImpl<T> extends AbstractLambdaCriteria<T, LambdaCrite
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
+    }
+
+    @Override
+    protected LambdaCriteriaImpl<T> newInstance() {
+        final LambdaCriteriaImpl<T> it = new LambdaCriteriaImpl<>();
+        it.clone(this);
+        return it;
     }
 
     /**
