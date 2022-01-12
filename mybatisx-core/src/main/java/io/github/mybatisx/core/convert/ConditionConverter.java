@@ -18,7 +18,7 @@ package io.github.mybatisx.core.convert;
 import io.github.mybatisx.base.convert.Converter;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
-import io.github.mybatisx.base.expression.Expression;
+import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.param.Param;
 
 import java.util.Optional;
@@ -31,7 +31,7 @@ import java.util.function.Consumer;
  * @created 2022/1/6
  * @since 1.0.0
  */
-public interface ConditionConverter extends Converter<Expression<?>, Criterion>, Consumer<Expression<?>> {
+public interface ConditionConverter extends Converter<Expression, Criterion>, Consumer<Expression> {
 
     /**
      * 获取{@link Criteria}
@@ -41,7 +41,7 @@ public interface ConditionConverter extends Converter<Expression<?>, Criterion>,
     Criteria<?> getCriteria();
 
     @Override
-    default void accept(Expression<?> expression) {
+    default void accept(Expression expression) {
         Optional.ofNullable(this.convert(expression)).ifPresent(this.getCriteria()::where);
     }
 

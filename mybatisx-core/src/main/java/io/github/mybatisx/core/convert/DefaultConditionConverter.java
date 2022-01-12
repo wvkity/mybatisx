@@ -17,8 +17,8 @@ package io.github.mybatisx.core.convert;
 
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
-import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.core.criterion.StandardCondition;
+import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.param.Param;
 import io.github.mybatisx.lang.Strings;
 import lombok.Getter;
@@ -57,17 +57,26 @@ public class DefaultConditionConverter implements ConditionConverter {
     }
 
     @Override
-    public Criterion convert(Expression<?> src) {
+    public Criterion convert(Expression src) {
+        if (src != null) {
+            return convert(src.getCriteria(), src.getColumn(), src.getAlias(), src.getParam());
+        }
         return null;
     }
 
     @Override
     public Criterion convert(String column, Param param) {
+        return this.convert(this.criteria, column, null, param);
+    }
+
+    protected Criterion convert(final Criteria<?> criteria, final String column, final String alias,
+                                final Param param) {
         final String fragment;
         if (param != null &&
                 Strings.isNotWhitespace(fragment = param.parse(this.parameterConverter, this.placeholderConverter))) {
             return StandardCondition.builder()
-                    .criteria(this.criteria)
+                    .criteria(criteria)
+                    .alias(alias)
                     .column(column)
                     .orgValue(param.getValue())
                     .fragment(fragment)
@@ -76,4 +85,5 @@ public class DefaultConditionConverter implements ConditionConverter {
         }
         return null;
     }
+
 }
