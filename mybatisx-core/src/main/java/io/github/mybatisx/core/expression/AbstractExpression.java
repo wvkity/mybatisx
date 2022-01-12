@@ -13,25 +13,44 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.expression;
+package io.github.mybatisx.core.expression;
 
 import io.github.mybatisx.base.criteria.Criteria;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
- * 条件表达式
+ * 抽象表达式
  *
- * @param <T> 字段类型
  * @author wvkity
- * @created 2021/12/23
+ * @created 2022/1/12
  * @since 1.0.0
  */
-public interface Expression<T> {
+@Getter
+@ToString
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
+public abstract class AbstractExpression implements Expression {
 
     /**
-     * 获取{@link Criteria}
-     *
-     * @return {@link Criteria}
+     * {@link Criteria}
      */
-    Criteria<?> getCriteria();
+    protected Criteria<?> criteria;
+    /**
+     * 表别名
+     */
+    protected final String alias;
+    /**
+     * 字段名
+     */
+    protected final String column;
 
+    @Override
+    public void setIfNecessary(Criteria<?> criteria) {
+        if (this.criteria == null) {
+            this.criteria = criteria;
+        }
+    }
 }
