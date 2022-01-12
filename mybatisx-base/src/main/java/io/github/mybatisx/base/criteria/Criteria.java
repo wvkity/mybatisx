@@ -15,12 +15,10 @@
  */
 package io.github.mybatisx.base.criteria;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.dialect.Dialect;
-import io.github.mybatisx.base.expression.Expression;
 import io.github.mybatisx.base.fragment.Fragment;
-
-import java.util.Collection;
 
 /**
  * 条件接口
@@ -93,6 +91,14 @@ public interface Criteria<T> extends Fragment {
      */
     Criteria<T> setVersion(final Object value);
 
+
+    /**
+     * 逻辑符号
+     *
+     * @return {@link LogicSymbol}
+     */
+    LogicSymbol slot();
+
     /**
      * 获取条件片段
      *
@@ -107,22 +113,6 @@ public interface Criteria<T> extends Fragment {
      * @return {@code this}
      */
     Criteria<T> where(final Criterion criterion);
-
-    /**
-     * 条件条件
-     *
-     * @param expression 条件表达式
-     * @return {@code this}
-     */
-    Criteria<T> where(final Expression<?> expression);
-
-    /**
-     * 添加多个条件
-     *
-     * @param expressions 条件表达式列表
-     * @return {@code this}
-     */
-    Criteria<T> where(final Collection<Expression<?>> expressions);
 
     /**
      * 获取完整SQL语句
