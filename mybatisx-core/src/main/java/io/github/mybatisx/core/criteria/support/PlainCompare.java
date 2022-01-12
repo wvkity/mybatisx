@@ -162,4 +162,274 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
 
     // endregion
 
+    // region Not equal methods
+
+    /**
+     * 不等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNe(final String column, final V value) {
+        return this.colNe(column, value, this.slot());
+    }
+
+    /**
+     * 不等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNe(final String column, final V value, final LogicSymbol slot) {
+        return this.colNe(column, value, null, slot);
+    }
+
+    /**
+     * 不等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C colNe(final String column, final V value, final Matcher<V> matcher) {
+        return this.colNe(column, value, matcher, this.slot());
+    }
+
+    /**
+     * 不等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    <V> C colNe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
+    // region Greater than methods
+
+    /**
+     * 大于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colGt(final String column, final V value) {
+        return this.colGt(column, value, this.slot());
+    }
+
+    /**
+     * 大于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colGt(final String column, final V value, final LogicSymbol slot) {
+        return this.colGt(column, value, null, slot);
+    }
+
+    /**
+     * 大于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C colGt(final String column, final V value, final Matcher<V> matcher) {
+        return this.colGt(column, value, matcher, this.slot());
+    }
+
+    /**
+     * 大于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    <V> C colGt(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
+    // region Greater than or equal methods
+
+    /**
+     * 大于或等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colGe(final String column, final V value) {
+        return this.colGe(column, value, this.slot());
+    }
+
+    /**
+     * 大于或等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colGe(final String column, final V value, final LogicSymbol slot) {
+        return this.colGe(column, value, null, slot);
+    }
+
+    /**
+     * 大于或等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C colGe(final String column, final V value, final Matcher<V> matcher) {
+        return this.colGe(column, value, matcher, this.slot());
+    }
+
+    /**
+     * 大于或等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    <V> C colGe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
+    // region Less than methods
+
+    /**
+     * 小于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colLt(final String column, final V value) {
+        return this.colLt(column, value, this.slot());
+    }
+
+    /**
+     * 小于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colLt(final String column, final V value, final LogicSymbol slot) {
+        return this.colLt(column, value, null, slot);
+    }
+
+    /**
+     * 小于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C colLt(final String column, final V value, final Matcher<V> matcher) {
+        return this.colLt(column, value, matcher, this.slot());
+    }
+
+    /**
+     * 小于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    <V> C colLt(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
+    // region Less than or equal methods
+
+    /**
+     * 小于或等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colLe(final String column, final V value) {
+        return this.colLe(column, value, this.slot());
+    }
+
+    /**
+     * 小于或等于
+     *
+     * @param column 字段名
+     * @param value  值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colLe(final String column, final V value, final LogicSymbol slot) {
+        return this.colLe(column, value, null, slot);
+    }
+
+    /**
+     * 小于或等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    default <V> C colLe(final String column, final V value, final Matcher<V> matcher) {
+        return this.colLe(column, value, matcher, this.slot());
+    }
+
+    /**
+     * 小于或等于
+     *
+     * @param column  字段名
+     * @param value   值
+     * @param matcher 匹配器
+     * @param slot    {@link LogicSymbol}
+     * @param <V>     值类型
+     * @return {@code this}
+     */
+    <V> C colLe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
 }

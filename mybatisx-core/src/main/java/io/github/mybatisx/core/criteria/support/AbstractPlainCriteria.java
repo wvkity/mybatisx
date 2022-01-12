@@ -62,6 +62,31 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public <V> C colNe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.NE, slot);
+    }
+
+    @Override
+    public <V> C colGt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.GT, slot);
+    }
+
+    @Override
+    public <V> C colGe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.GE, slot);
+    }
+
+    @Override
+    public <V> C colLt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.LT, slot);
+    }
+
+    @Override
+    public <V> C colLe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
+        return this.colSingleConditionAccept(column, value, matcher, Symbol.LE, slot);
+    }
+
+    @Override
     public C template(String template, Object value, LogicSymbol slot) {
         return this.templateConditionAccept((Column) null, template, value, null, null,
                 ParamMode.SINGLE, slot);
@@ -78,5 +103,5 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
         return this.templateConditionAccept((Column) null, template, null, null, values,
                 ParamMode.MAP, slot);
     }
-
+    
 }
