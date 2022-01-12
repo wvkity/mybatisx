@@ -20,6 +20,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -73,5 +74,25 @@ public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C
     @Override
     public <V> C colLe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.colSingleConditionAccept(column, value, matcher, Symbol.LE, slot);
+    }
+
+    @Override
+    public <V> C colBetween(String column, V begin, V end, LogicSymbol slot) {
+        return this.colBetweenConditionAccept(column, begin, end, Symbol.BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C colNotBetween(String column, V begin, V end, LogicSymbol slot) {
+        return this.colBetweenConditionAccept(column, begin, end, Symbol.NOT_BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C colIn(String column, Collection<V> values, LogicSymbol slot) {
+        return this.colInConditionAccept(column, values, Symbol.IN, slot);
+    }
+
+    @Override
+    public <V> C colNotIn(String column, Collection<V> values, LogicSymbol slot) {
+        return this.colInConditionAccept(column, values, Symbol.NOT_IN, slot);
     }
 }

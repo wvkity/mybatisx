@@ -345,13 +345,99 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     protected <V> C colSingleConditionAccept(final String column, final V value, final Matcher<V> matcher,
                                              final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column) && this.early(value, matcher)) {
-            this.conditionConverter.accept(column, SingleParam.builder().symbol(symbol)
+            this.conditionConverter.accept(column, SingleParam.builder()
+                    .symbol(symbol)
                     .slot(slot)
-                    .value(value).build());
+                    .value(value)
+                    .build());
         }
         return this.ctx;
     }
 
+
+    /**
+     * 添加between范围条件
+     *
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param symbol {@link Symbol}
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    protected <V> C colBetweenConditionAccept(final String column, final V begin, final V end,
+                                              final Symbol symbol, final LogicSymbol slot) {
+        if (Strings.isNotWhitespace(column)) {
+            this.conditionConverter.accept(column, BetweenParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .begin(begin)
+                    .end(end)
+                    .build());
+        }
+        return this.ctx;
+    }
+
+    /**
+     * 添加in范围条件
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param symbol {@link Symbol}
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    protected <V> C colInConditionAccept(final String column, final Collection<V> values, final Symbol symbol,
+                                         final LogicSymbol slot) {
+        if (Strings.isNotWhitespace(column)) {
+            this.conditionConverter.accept(column, InParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .values(values)
+                    .build());
+        }
+        return this.ctx;
+    }
+
+
+    /**
+     * 添加like模糊匹配条件
+     *
+     * @param column     字段名
+     * @param value      值
+     * @param escape     转义字符
+     * @param ignoreCase 是否忽略大小写
+     * @param symbol     {@link Symbol}
+     * @param slot       {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C colLikeConditionAccept(final String column, final String value, final LikeMatchMode matches,
+                                    final Character escape, final boolean ignoreCase,
+                                    final Symbol symbol, final LogicSymbol slot) {
+        if (Strings.isNotWhitespace(column)) {
+            this.conditionConverter.accept(column, LikeParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .value(value)
+                    .matches(matches)
+                    .escape(escape)
+                    .ignoreCase(ignoreCase)
+                    .dialect(this.getDialect())
+                    .build());
+        }
+        return this.ctx;
+    }
+
+    /**
+     * 处理嵌套条件
+     *
+     * @param slot  {@link LogicSymbol}
+     * @param not   是否拼接not
+     * @param apply {@link Function}
+     * @return {@code this}
+     */
     protected C doIt(final LogicSymbol slot, final boolean not, final Function<C, C> apply) {
         if (apply != null) {
             final C context = this.newInstance();

@@ -87,6 +87,26 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public <V> C colBetween(String column, V begin, V end, LogicSymbol slot) {
+        return this.colBetweenConditionAccept(column, begin, end, Symbol.BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C colNotBetween(String column, V begin, V end, LogicSymbol slot) {
+        return this.colBetweenConditionAccept(column, begin, end, Symbol.NOT_BETWEEN, slot);
+    }
+
+    @Override
+    public <V> C colIn(String column, Collection<V> values, LogicSymbol slot) {
+        return this.colInConditionAccept(column, values, Symbol.IN, slot);
+    }
+
+    @Override
+    public <V> C colNotIn(String column, Collection<V> values, LogicSymbol slot) {
+        return this.colInConditionAccept(column, values, Symbol.NOT_IN, slot);
+    }
+
+    @Override
     public C template(String template, Object value, LogicSymbol slot) {
         return this.templateConditionAccept((Column) null, template, value, null, null,
                 ParamMode.SINGLE, slot);
@@ -103,5 +123,5 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
         return this.templateConditionAccept((Column) null, template, null, null, values,
                 ParamMode.MAP, slot);
     }
-    
+
 }

@@ -15,6 +15,11 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
  * 范围条件接口
  *
@@ -26,4 +31,165 @@ package io.github.mybatisx.core.criteria.support;
  */
 public interface PlainRange<T, C extends PlainRange<T, C>> extends Slot<T, C> {
 
+    // region Between methods
+
+    /**
+     * between
+     *
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colBetween(final String column, final V begin, final V end) {
+        return this.colBetween(column, begin, end, this.slot());
+    }
+
+    /**
+     * between
+     *
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    <V> C colBetween(final String column, final V begin, final V end, final LogicSymbol slot);
+
+    // endregion
+
+    // region Not between methods
+
+    /**
+     * not between
+     *
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNotBetween(final String column, final V begin, final V end) {
+        return this.colNotBetween(column, begin, end, this.slot());
+    }
+
+    /**
+     * not between
+     *
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    <V> C colNotBetween(final String column, final V begin, final V end, final LogicSymbol slot);
+
+    // endregion
+
+    // region In methods
+
+    /**
+     * in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colIn(final String column, final V[] values) {
+        return this.colIn(column, values, this.slot());
+    }
+
+    /**
+     * in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colIn(final String column, final V[] values, final LogicSymbol slot) {
+        return this.colIn(column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colIn(final String column, final Collection<V> values) {
+        return this.colIn(column, values, this.slot());
+    }
+
+    /**
+     * in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    <V> C colIn(final String column, final Collection<V> values, final LogicSymbol slot);
+
+    // endregion
+
+    // region Not in methods
+
+    /**
+     * not in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNotIn(final String column, final V[] values) {
+        return this.colNotIn(column, values, this.slot());
+    }
+
+    /**
+     * not in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNotIn(final String column, final V[] values, final LogicSymbol slot) {
+        return this.colNotIn(column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * not in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    default <V> C colNotIn(final String column, final Collection<V> values) {
+        return this.colNotIn(column, values, this.slot());
+    }
+
+    /**
+     * not in
+     *
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@code this}
+     */
+    <V> C colNotIn(final String column, final Collection<V> values, final LogicSymbol slot);
+
+    // endregion
 }
