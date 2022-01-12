@@ -140,15 +140,34 @@ public final class TableHelper {
     /**
      * 根据实体类、属性名获取{@link Column}对象
      *
-     * @param entity   实体类
-     * @param property 属性名
+     * @param entity             实体类
+     * @param property           属性名
+     * @param nonMatchesThrowing 忽略查找失败
+     * @param printWarning       是否打印警告信息
      * @return {@link Column}
      */
-    public static Column getByProperty(final Class<?> entity, final String property) {
+    public static Column getColumnByProperty(final Class<?> entity, final String property,
+                                             final boolean nonMatchesThrowing, final boolean printWarning) {
         if (entity == null || Strings.isWhitespace(property)) {
             return null;
         }
-        return Optional.ofNullable(getTable(entity)).map(it -> it.getByProperty(property)).orElse(null);
+        final Column column = Optional.ofNullable(getTable(entity)).map(it ->
+                it.getByProperty(property)).orElse(null);
+        if (column == null) {
+            if (nonMatchesThrowing) {
+                throw new MyBatisException("The field mapping information for the entity class(" +
+                        entity.getName() + ") cannot be found based on the `" + property + "` " +
+                        "attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                        "annotation.");
+            } else {
+                if (printWarning) {
+                    log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
+                            "`{}` attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                            "annotation.", entity.getName(), property);
+                }
+            }
+        }
+        return column;
     }
 
     /**
@@ -158,7 +177,7 @@ public final class TableHelper {
      * @param column 字段名(忽略大小写)
      * @return {@link Column}
      */
-    public static Column getByColumn(final Class<?> entity, final String column) {
+    public static Column getColumnByName(final Class<?> entity, final String column) {
         if (entity == null || Strings.isWhitespace(column)) {
             return null;
         }
