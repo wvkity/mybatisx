@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
@@ -118,5 +119,14 @@ public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C
     public C colNonNull(String column, LogicSymbol slot) {
         return this.colNullableConditionAccept(column, Symbol.NOT_NULL, slot);
     }
-    
+
+    @Override
+    public C colTemplate(String template, String column, Collection<Object> values, LogicSymbol slot) {
+        return this.colTemplateConditionAccept(column, template, null, values, null, ParamMode.MULTIPLE, slot);
+    }
+
+    @Override
+    public C colTemplate(String template, String column, Map<String, Object> values, LogicSymbol slot) {
+        return this.colTemplateConditionAccept(column, template, null, null, values, ParamMode.MAP, slot);
+    }
 }

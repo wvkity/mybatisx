@@ -456,6 +456,34 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
         return this.ctx;
     }
 
+
+    /**
+     * 添加模板条件
+     *
+     * @param column    字段名
+     * @param template  模板
+     * @param value     值
+     * @param values    值列表
+     * @param mapValues map值
+     * @param paramMode 参数模式
+     * @param slot      {@link LogicSymbol}
+     * @return {@code this}
+     */
+    protected C colTemplateConditionAccept(final String column, final String template, final Object value,
+                                           final Collection<?> values, final Map<String, ?> mapValues,
+                                           final ParamMode paramMode, final LogicSymbol slot) {
+        this.conditionConverter.accept(column, TemplateParam.builder()
+                .template(template)
+                .paramMode(paramMode)
+                .value(value)
+                .listValue(values)
+                .mapValue(mapValues)
+                .slot(slot)
+                .symbol(Symbol.TEMPLATE)
+                .build());
+        return this.ctx;
+    }
+
     /**
      * 处理嵌套条件
      *

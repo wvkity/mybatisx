@@ -131,20 +131,27 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
 
     @Override
     public C template(String template, Object value, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, value, null, null,
-                ParamMode.SINGLE, slot);
+        return this.colTemplateConditionAccept(null, template, value, null, null, ParamMode.SINGLE, slot);
     }
 
     @Override
     public C template(String template, Collection<Object> values, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, null, values, null,
-                ParamMode.MULTIPLE, slot);
+        return this.colTemplateConditionAccept(null, template, null, values, null, ParamMode.MULTIPLE, slot);
     }
 
     @Override
     public C template(String template, Map<String, Object> values, LogicSymbol slot) {
-        return this.templateConditionAccept((Column) null, template, null, null, values,
+        return this.colTemplateConditionAccept(null, template, null, null, values,
                 ParamMode.MAP, slot);
     }
 
+    @Override
+    public C colTemplate(String template, String column, Collection<Object> values, LogicSymbol slot) {
+        return this.colTemplateConditionAccept(column, template, null, values, null, ParamMode.MULTIPLE, slot);
+    }
+
+    @Override
+    public C colTemplate(String template, String column, Map<String, Object> values, LogicSymbol slot) {
+        return this.colTemplateConditionAccept(column, template, null, null, values, ParamMode.MAP, slot);
+    }
 }
