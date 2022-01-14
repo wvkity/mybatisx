@@ -27,7 +27,7 @@ import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
-import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.param.TemplateParam;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -77,9 +77,9 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * @param <V>      值类型
      * @return {@code this}
      */
-    protected <V> C singleConditionAccept(final String property, final V value, final Matcher<V> matcher,
+    protected <V> C simpleConditionAccept(final String property, final V value, final Matcher<V> matcher,
                                           final Symbol symbol, final LogicSymbol slot) {
-        return this.singleConditionAccept(this.convert(property), value, matcher, symbol, slot);
+        return this.simpleConditionAccept(this.convert(property), value, matcher, symbol, slot);
     }
 
     /**
@@ -93,10 +93,10 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * @param <V>     值类型
      * @return {@code this}
      */
-    protected <V> C singleConditionAccept(final Column column, final V value, final Matcher<V> matcher,
+    protected <V> C simpleConditionAccept(final Column column, final V value, final Matcher<V> matcher,
                                           final Symbol symbol, final LogicSymbol slot) {
         if (column != null && this.early(value, matcher)) {
-            this.conditionConverter.accept(column.getColumn(), SingleParam.builder()
+            this.conditionConverter.accept(column.getColumn(), SimpleParam.builder()
                     .symbol(symbol)
                     .slot(slot)
                     .typeHandler(column.getTypeHandler())
@@ -342,10 +342,10 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * @param <V>     值类型
      * @return {@code this}
      */
-    protected <V> C colSingleConditionAccept(final String column, final V value, final Matcher<V> matcher,
+    protected <V> C colSimpleConditionAccept(final String column, final V value, final Matcher<V> matcher,
                                              final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column) && this.early(value, matcher)) {
-            this.conditionConverter.accept(column, SingleParam.builder()
+            this.conditionConverter.accept(column, SimpleParam.builder()
                     .symbol(symbol)
                     .slot(slot)
                     .value(value)
