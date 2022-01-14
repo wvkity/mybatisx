@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.expression;
 
-import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.core.param.SimpleParam;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -30,11 +30,11 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class SingleExpression extends AbstractExpression {
+public class SimpleExpression extends AbstractExpression {
 
     /**
      * 参数
      */
-    private final SingleParam param;
+    private final SimpleParam param;
 
 }

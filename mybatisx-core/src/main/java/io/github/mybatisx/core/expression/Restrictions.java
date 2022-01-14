@@ -20,7 +20,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
-import io.github.mybatisx.core.param.SingleParam;
+import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.lang.Strings;
@@ -97,7 +97,7 @@ public final class Restrictions {
     }
 
     /**
-     * 构建{@link SingleExpression}
+     * 构建{@link SimpleExpression}
      *
      * @param criteria {@link Criteria}
      * @param alias    表别名
@@ -108,9 +108,9 @@ public final class Restrictions {
      * @param symbol   {@link Symbol}
      * @param slot     {@link LogicSymbol}
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    private static <V> SingleExpression singleExpressionBuild(final Criteria<?> criteria, final String alias,
+    private static <V> SimpleExpression simpleExpressionBuild(final Criteria<?> criteria, final String alias,
                                                               final String target, final V value,
                                                               final Matcher<V> matcher, final Mode mode,
                                                               final Symbol symbol, final LogicSymbol slot) {
@@ -118,9 +118,9 @@ public final class Restrictions {
             if (mode == Mode.PROPERTY) {
                 final Column column = getColumn(criteria, target);
                 if (column != null) {
-                    return SingleExpression.builder().column(column.getColumn())
+                    return SimpleExpression.builder().column(column.getColumn())
                             .criteria(criteria)
-                            .param(SingleParam.builder()
+                            .param(SimpleParam.builder()
                                     .symbol(symbol)
                                     .slot(slot)
                                     .value(value)
@@ -132,11 +132,11 @@ public final class Restrictions {
                 }
             } else {
                 if (Strings.isNotWhitespace(target)) {
-                    return SingleExpression.builder()
+                    return SimpleExpression.builder()
                             .column(target)
                             .criteria(criteria)
                             .alias(alias)
-                            .param(SingleParam.builder()
+                            .param(SimpleParam.builder()
                                     .symbol(symbol)
                                     .slot(slot)
                                     .value(value)
@@ -158,9 +158,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return eq(criteria, property, value, slot(criteria));
     }
 
@@ -173,9 +173,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return eq(criteria, property, value, null, slot);
     }
@@ -189,9 +189,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return eq(criteria, property, value, matcher, slot(criteria));
     }
@@ -206,9 +206,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return eq(criteria, convert(property), value, matcher, slot);
     }
@@ -221,9 +221,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value) {
         return eq(criteria, property, value, slot(criteria));
     }
 
@@ -236,9 +236,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return eq(criteria, property, value, null, slot);
     }
@@ -252,9 +252,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return eq(criteria, property, value, matcher, slot(criteria));
     }
@@ -269,11 +269,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression eq(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.EQ, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.EQ, slot);
     }
 
     /**
@@ -283,9 +283,9 @@ public final class Restrictions {
      * @param column   字段名
      * @param value    值
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final Criteria<?> criteria, final String column, final V value) {
+    public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value) {
         return colEq(criteria, column, value, slot(criteria));
     }
 
@@ -297,9 +297,9 @@ public final class Restrictions {
      * @param value    值
      * @param slot     {@link LogicSymbol}
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final Criteria<?> criteria, final String column, final V value,
+    public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value,
                                              final LogicSymbol slot) {
         return colEq(criteria, column, value, null, slot);
     }
@@ -312,9 +312,9 @@ public final class Restrictions {
      * @param value    值
      * @param matcher  {@link Matcher}
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final Criteria<?> criteria, final String column, final V value,
+    public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value,
                                              final Matcher<V> matcher) {
         return colEq(criteria, column, value, matcher, slot(criteria));
     }
@@ -328,11 +328,11 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param slot     {@link LogicSymbol}
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final Criteria<?> criteria, final String column, final V value,
+    public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.EQ, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.EQ, slot);
     }
 
     /**
@@ -342,9 +342,9 @@ public final class Restrictions {
      * @param column 字段名
      * @param value  值
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final String alias, final String column, final V value) {
+    public static <V> SimpleExpression colEq(final String alias, final String column, final V value) {
         return colEq(alias, column, value, null, LogicSymbol.AND);
     }
 
@@ -356,9 +356,9 @@ public final class Restrictions {
      * @param value  值
      * @param slot   {@link LogicSymbol}
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final String alias, final String column, final V value,
+    public static <V> SimpleExpression colEq(final String alias, final String column, final V value,
                                              final LogicSymbol slot) {
         return colEq(alias, column, value, null, slot);
     }
@@ -371,9 +371,9 @@ public final class Restrictions {
      * @param value   值
      * @param matcher {@link Matcher}
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final String alias, final String column, final V value,
+    public static <V> SimpleExpression colEq(final String alias, final String column, final V value,
                                              final Matcher<V> matcher) {
         return colEq(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -387,11 +387,11 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param slot    {@link LogicSymbol}
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <V> SingleExpression colEq(final String alias, final String column, final V value,
+    public static <V> SimpleExpression colEq(final String alias, final String column, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.EQ, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.EQ, slot);
     }
 
     // endregion
@@ -406,9 +406,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return ne(criteria, property, value, slot(criteria));
     }
 
@@ -421,9 +421,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return ne(criteria, property, value, null, slot);
     }
@@ -437,9 +437,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return ne(criteria, property, value, matcher, slot(criteria));
     }
@@ -454,9 +454,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return ne(criteria, convert(property), value, matcher, slot);
     }
@@ -469,9 +469,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value) {
         return ne(criteria, property, value, slot(criteria));
     }
 
@@ -484,9 +484,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return ne(criteria, property, value, null, slot);
     }
@@ -500,9 +500,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return ne(criteria, property, value, matcher, slot(criteria));
     }
@@ -517,11 +517,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ne(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.NE, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.NE, slot);
     }
 
     /**
@@ -532,9 +532,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final Criteria<T> criteria, final String column, final V value) {
+    public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value) {
         return colNe(criteria, column, value, slot(criteria));
     }
 
@@ -547,9 +547,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colNe(criteria, column, value, null, slot);
     }
@@ -563,9 +563,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colNe(criteria, column, value, matcher, slot(criteria));
     }
@@ -580,11 +580,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.NE, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.NE, slot);
     }
 
     /**
@@ -595,9 +595,9 @@ public final class Restrictions {
      * @param value  值
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final String alias, final String column, final V value) {
+    public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value) {
         return colNe(alias, column, value, LogicSymbol.AND);
     }
 
@@ -610,9 +610,9 @@ public final class Restrictions {
      * @param slot   {@link LogicSymbol}
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colNe(alias, column, value, null, slot);
     }
@@ -626,9 +626,9 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colNe(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -643,11 +643,11 @@ public final class Restrictions {
      * @param slot    {@link LogicSymbol}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colNe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.NE, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.NE, slot);
     }
 
     // endregion
@@ -662,9 +662,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return gt(criteria, property, value, slot(criteria));
     }
 
@@ -677,9 +677,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return gt(criteria, property, value, null, slot);
     }
@@ -693,9 +693,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return gt(criteria, property, value, matcher, slot(criteria));
     }
@@ -710,9 +710,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return gt(criteria, convert(property), value, matcher, slot);
     }
@@ -725,9 +725,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value) {
         return gt(criteria, property, value, slot(criteria));
     }
 
@@ -740,9 +740,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return gt(criteria, property, value, null, slot);
     }
@@ -756,9 +756,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return gt(criteria, property, value, matcher, slot(criteria));
     }
@@ -773,11 +773,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression gt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.GT, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.GT, slot);
     }
 
     /**
@@ -788,9 +788,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final Criteria<T> criteria, final String column, final V value) {
+    public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value) {
         return colGt(criteria, column, value, slot(criteria));
     }
 
@@ -803,9 +803,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colGt(criteria, column, value, null, slot);
     }
@@ -819,9 +819,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colGt(criteria, column, value, matcher, slot(criteria));
     }
@@ -836,11 +836,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.GT, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.GT, slot);
     }
 
     /**
@@ -851,9 +851,9 @@ public final class Restrictions {
      * @param value  值
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final String alias, final String column, final V value) {
+    public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value) {
         return colGt(alias, column, value, LogicSymbol.AND);
     }
 
@@ -866,9 +866,9 @@ public final class Restrictions {
      * @param slot   {@link LogicSymbol}
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colGt(alias, column, value, null, slot);
     }
@@ -882,9 +882,9 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colGt(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -899,11 +899,11 @@ public final class Restrictions {
      * @param slot    {@link LogicSymbol}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.GT, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.GT, slot);
     }
 
     // endregion
@@ -918,9 +918,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return ge(criteria, property, value, slot(criteria));
     }
 
@@ -933,9 +933,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return ge(criteria, property, value, null, slot);
     }
@@ -949,9 +949,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return ge(criteria, property, value, matcher, slot(criteria));
     }
@@ -966,9 +966,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return ge(criteria, convert(property), value, matcher, slot);
     }
@@ -981,9 +981,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value) {
         return ge(criteria, property, value, slot(criteria));
     }
 
@@ -996,9 +996,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return ge(criteria, property, value, null, slot);
     }
@@ -1012,9 +1012,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return ge(criteria, property, value, matcher, slot(criteria));
     }
@@ -1029,11 +1029,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression ge(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.GE, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.GE, slot);
     }
 
     /**
@@ -1044,9 +1044,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final Criteria<T> criteria, final String column, final V value) {
+    public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value) {
         return colGe(criteria, column, value, slot(criteria));
     }
 
@@ -1059,9 +1059,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colGe(criteria, column, value, null, slot);
     }
@@ -1075,9 +1075,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colGe(criteria, column, value, matcher, slot(criteria));
     }
@@ -1092,11 +1092,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.GE, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.GE, slot);
     }
 
     /**
@@ -1107,9 +1107,9 @@ public final class Restrictions {
      * @param value  值
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final String alias, final String column, final V value) {
+    public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value) {
         return colGe(alias, column, value, LogicSymbol.AND);
     }
 
@@ -1122,9 +1122,9 @@ public final class Restrictions {
      * @param slot   {@link LogicSymbol}
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colGe(alias, column, value, null, slot);
     }
@@ -1138,9 +1138,9 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colGe(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -1155,11 +1155,11 @@ public final class Restrictions {
      * @param slot    {@link LogicSymbol}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colGe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.GE, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.GE, slot);
     }
 
     // endregion
@@ -1174,9 +1174,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return lt(criteria, property, value, slot(criteria));
     }
 
@@ -1189,9 +1189,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return lt(criteria, property, value, null, slot);
     }
@@ -1205,9 +1205,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return lt(criteria, property, value, matcher, slot(criteria));
     }
@@ -1222,9 +1222,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return lt(criteria, convert(property), value, matcher, slot);
     }
@@ -1237,9 +1237,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value) {
         return lt(criteria, property, value, slot(criteria));
     }
 
@@ -1252,9 +1252,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return lt(criteria, property, value, null, slot);
     }
@@ -1268,9 +1268,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return lt(criteria, property, value, matcher, slot(criteria));
     }
@@ -1285,11 +1285,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression lt(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.LT, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.LT, slot);
     }
 
     /**
@@ -1300,9 +1300,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final Criteria<T> criteria, final String column, final V value) {
+    public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value) {
         return colLt(criteria, column, value, slot(criteria));
     }
 
@@ -1315,9 +1315,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colLt(criteria, column, value, null, slot);
     }
@@ -1331,9 +1331,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colLt(criteria, column, value, matcher, slot(criteria));
     }
@@ -1348,11 +1348,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.LT, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.LT, slot);
     }
 
     /**
@@ -1363,9 +1363,9 @@ public final class Restrictions {
      * @param value  值
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final String alias, final String column, final V value) {
+    public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value) {
         return colLt(alias, column, value, LogicSymbol.AND);
     }
 
@@ -1378,9 +1378,9 @@ public final class Restrictions {
      * @param slot   {@link LogicSymbol}
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colLt(alias, column, value, null, slot);
     }
@@ -1394,9 +1394,9 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colLt(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -1411,11 +1411,11 @@ public final class Restrictions {
      * @param slot    {@link LogicSymbol}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLt(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.LT, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.LT, slot);
     }
 
     // endregion
@@ -1430,9 +1430,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value) {
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value) {
         return le(criteria, property, value, slot(criteria));
     }
 
@@ -1445,9 +1445,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final LogicSymbol slot) {
         return le(criteria, property, value, null, slot);
     }
@@ -1461,9 +1461,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
         return le(criteria, property, value, matcher, slot(criteria));
     }
@@ -1478,9 +1478,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
         return le(criteria, convert(property), value, matcher, slot);
     }
@@ -1493,9 +1493,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final String property, final V value) {
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value) {
         return le(criteria, property, value, slot(criteria));
     }
 
@@ -1508,9 +1508,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value,
                                              final LogicSymbol slot) {
         return le(criteria, property, value, null, slot);
     }
@@ -1524,9 +1524,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
         return le(criteria, property, value, matcher, slot(criteria));
     }
@@ -1541,11 +1541,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression le(final Criteria<T> criteria, final String property, final V value,
+    public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.LE, slot);
+        return simpleExpressionBuild(criteria, null, property, value, matcher, Mode.PROPERTY, Symbol.LE, slot);
     }
 
     /**
@@ -1556,9 +1556,9 @@ public final class Restrictions {
      * @param value    值
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final Criteria<T> criteria, final String column, final V value) {
+    public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value) {
         return colLe(criteria, column, value, slot(criteria));
     }
 
@@ -1571,9 +1571,9 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colLe(criteria, column, value, null, slot);
     }
@@ -1587,9 +1587,9 @@ public final class Restrictions {
      * @param matcher  {@link Matcher}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colLe(criteria, column, value, matcher, slot(criteria));
     }
@@ -1604,11 +1604,11 @@ public final class Restrictions {
      * @param slot     {@link LogicSymbol}
      * @param <T>      实体类型
      * @param <V>      值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final Criteria<T> criteria, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.LE, slot);
+        return simpleExpressionBuild(criteria, null, column, value, matcher, Mode.COLUMN, Symbol.LE, slot);
     }
 
     /**
@@ -1619,9 +1619,9 @@ public final class Restrictions {
      * @param value  值
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final String alias, final String column, final V value) {
+    public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value) {
         return colLe(alias, column, value, LogicSymbol.AND);
     }
 
@@ -1634,9 +1634,9 @@ public final class Restrictions {
      * @param slot   {@link LogicSymbol}
      * @param <T>    实体类型
      * @param <V>    值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value,
                                                 final LogicSymbol slot) {
         return colLe(alias, column, value, null, slot);
     }
@@ -1650,9 +1650,9 @@ public final class Restrictions {
      * @param matcher {@link Matcher}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
         return colLe(alias, column, value, matcher, LogicSymbol.AND);
     }
@@ -1667,11 +1667,11 @@ public final class Restrictions {
      * @param slot    {@link LogicSymbol}
      * @param <T>     实体类型
      * @param <V>     值类型
-     * @return {@link SingleExpression}
+     * @return {@link SimpleExpression}
      */
-    public static <T, V> SingleExpression colLe(final String alias, final String column, final V value,
+    public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
-        return singleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.LE, slot);
+        return simpleExpressionBuild(null, alias, column, value, matcher, Mode.COLUMN, Symbol.LE, slot);
     }
 
     // endregion
