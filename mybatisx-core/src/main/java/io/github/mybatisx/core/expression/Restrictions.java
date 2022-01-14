@@ -22,6 +22,7 @@ import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.param.BetweenParam;
+import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
@@ -30,6 +31,9 @@ import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * 条件表达式工具
@@ -224,7 +228,7 @@ public class Restrictions {
      * @param symbol   {@link Symbol}
      * @param slot     {@link LogicSymbol}
      * @param <V>      值类型
-     * @return {@link SimpleExpression}
+     * @return {@link BetweenExpression}
      */
     protected static <V> BetweenExpression betweenExpression(final Criteria<?> criteria, final String alias,
                                                              final String target, final V begin, final V end,
@@ -257,6 +261,52 @@ public class Restrictions {
                             .slot(slot)
                             .begin(begin)
                             .end(end)
+                            .build())
+                    .build();
+        }
+        return null;
+    }
+
+    /**
+     * 构建{@link InExpression}
+     *
+     * @param criteria {@link Criteria}
+     * @param alias    表别名
+     * @param target   属性名/字段名
+     * @param values   值列表
+     * @param mode     {@link Mode}
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    protected static <V> InExpression inExpression(final Criteria<?> criteria, final String alias,
+                                                   final String target, final Collection<V> values,
+                                                   final Mode mode, final Symbol symbol, final LogicSymbol slot) {
+        if (mode == Mode.PROPERTY) {
+            final Column column = getColumn(criteria, target);
+            if (column != null) {
+                return InExpression.builder().column(column.getColumn())
+                        .criteria(criteria)
+                        .param(InParam.builder()
+                                .symbol(symbol)
+                                .slot(slot)
+                                .values(values)
+                                .typeHandler(column.getTypeHandler())
+                                .jdbcType(column.getJdbcType())
+                                .javaType(column.getDescriptor().getJavaType())
+                                .spliceJavaType(column.isSpliceJavaType()).build())
+                        .build();
+            }
+        } else if (Strings.isNotWhitespace(target)) {
+            return InExpression.builder()
+                    .column(target)
+                    .criteria(criteria)
+                    .alias(alias)
+                    .param(InParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
+                            .values(values)
                             .build())
                     .build();
         }
@@ -2047,6 +2097,494 @@ public class Restrictions {
 
     // endregion
 
+    // region In expression methods
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <T, V> InExpression in(final Criteria<?> criteria, final Property<T, V> property,
+                                         final V... values) {
+        return in(criteria, property, Arrays.asList(values));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <T, V> InExpression in(final Criteria<?> criteria, final Property<T, V> property,
+                                         final LogicSymbol slot, final V... values) {
+        return in(criteria, property, Arrays.asList(values), slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <T, V> InExpression in(final Criteria<?> criteria, final Property<T, V> property,
+                                         final Collection<V> values) {
+        return in(criteria, property, values, slot(criteria));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <T, V> InExpression in(final Criteria<?> criteria, final Property<T, V> property,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return in(criteria, convert(property), values, slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression in(final Criteria<?> criteria, final String property, final V... values) {
+        return in(criteria, property, Arrays.asList(values));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression in(final Criteria<?> criteria, final String property,
+                                      final LogicSymbol slot, final V... values) {
+        return in(criteria, property, values, Arrays.asList(values), slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression in(final Criteria<?> criteria, final String property, final Collection<V> values) {
+        return in(criteria, property, values, slot(criteria));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression in(final Criteria<?> criteria, final String property, final Collection<V> values,
+                                      final LogicSymbol slot) {
+        return inExpression(criteria, null, property, values, Mode.PROPERTY, Symbol.IN, slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colIn(final Criteria<?> criteria, final String column, final V... values) {
+        return colIn(criteria, column, Arrays.asList(values));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colIn(final Criteria<?> criteria, final String column,
+                                         final LogicSymbol slot, final V... values) {
+        return colIn(criteria, column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colIn(final Criteria<?> criteria, final String column, final Collection<V> values) {
+        return colIn(criteria, column, values, slot(criteria));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colIn(final Criteria<?> criteria, final String column,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return inExpression(criteria, null, column, values, Mode.COLUMN, Symbol.IN, slot);
+    }
+
+
+    /**
+     * in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colIn(final String alias, final String column, final V... values) {
+        return colIn(alias, column, Arrays.asList(values));
+    }
+
+    /**
+     * in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colIn(final String alias, final String column,
+                                         final LogicSymbol slot, final V... values) {
+        return colIn(alias, column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colIn(final String alias, final String column, final Collection<V> values) {
+        return colIn(alias, column, values, LogicSymbol.AND);
+    }
+
+    /**
+     * in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colIn(final String alias, final String column,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return inExpression(null, alias, column, values, Mode.COLUMN, Symbol.IN, slot);
+    }
+
+    // endregion
+
+    // region Not in expression methods
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
+                                         final V... values) {
+        return notIn(criteria, property, Arrays.asList(values));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
+                                         final LogicSymbol slot, final V... values) {
+        return notIn(criteria, property, Arrays.asList(values), slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
+                                         final Collection<V> values) {
+        return notIn(criteria, property, values, slot(criteria));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <T>      实体类型
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return notIn(criteria, convert(property), values, slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression notIn(final Criteria<?> criteria, final String property, final V... values) {
+        return notIn(criteria, property, Arrays.asList(values));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression notIn(final Criteria<?> criteria, final String property,
+                                      final LogicSymbol slot, final V... values) {
+        return notIn(criteria, property, values, Arrays.asList(values), slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression notIn(final Criteria<?> criteria, final String property, 
+                                         final Collection<V> values) {
+        return notIn(criteria, property, values, slot(criteria));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression notIn(final Criteria<?> criteria, final String property, final Collection<V> values,
+                                      final LogicSymbol slot) {
+        return inExpression(criteria, null, property, values, Mode.PROPERTY, Symbol.NOT_IN, slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column, final V... values) {
+        return colNotIn(criteria, column, Arrays.asList(values));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param slot     {@link LogicSymbol}
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
+                                         final LogicSymbol slot, final V... values) {
+        return colNotIn(criteria, column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column, 
+                                            final Collection<V> values) {
+        return colNotIn(criteria, column, values, slot(criteria));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param values   值列表
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return inExpression(criteria, null, column, values, Mode.COLUMN, Symbol.NOT_IN, slot);
+    }
+
+
+    /**
+     * not in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colNotIn(final String alias, final String column, final V... values) {
+        return colNotIn(alias, column, Arrays.asList(values));
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    @SafeVarargs
+    public static <V> InExpression colNotIn(final String alias, final String column,
+                                         final LogicSymbol slot, final V... values) {
+        return colNotIn(alias, column, Arrays.asList(values), slot);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colNotIn(final String alias, final String column, final Collection<V> values) {
+        return colNotIn(alias, column, values, LogicSymbol.AND);
+    }
+
+    /**
+     * not in表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param values 值列表
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@link InExpression}
+     */
+    public static <V> InExpression colNotIn(final String alias, final String column,
+                                         final Collection<V> values, final LogicSymbol slot) {
+        return inExpression(null, alias, column, values, Mode.COLUMN, Symbol.NOT_IN, slot);
+    }
+
+    // endregion
+    
     // region Like expression methods
 
     // region Like left expression methods
