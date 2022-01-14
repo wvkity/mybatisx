@@ -87,8 +87,8 @@ public class LikeParam extends AbstractParam implements Param {
                 }
                 sb.append(dialect.getLowercaseFunction()).append(SqlSymbol.START_BRACKET).append("%s")
                         .append(SqlSymbol.END_BRACKET).append(SqlSymbol.SPACE);
-                Scripts.appendPlaceholderArg(sb, this.symbol, this.typeHandler, this.jdbcType, this.spliceJavaType,
-                        this.javaType, placeholders);
+                sb.append(Scripts.toConditionValueArg(this.symbol, this.typeHandler, this.jdbcType, this.spliceJavaType,
+                        this.javaType, placeholders));
             }
         } else {
             sb.append(super.toConditionArg(placeholders));

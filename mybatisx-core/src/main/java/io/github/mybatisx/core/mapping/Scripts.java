@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.mapping;
 
+import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Splicing;
 import io.github.mybatisx.base.constant.SqlSymbol;
@@ -366,7 +367,7 @@ public final class Scripts implements SqlSymbol {
             sb.append(alias).append(DOT);
         }
         sb.append(column).append(SPACE);
-        appendPlaceholderArg(sb, symbol, handler, jdbcType, spliceJavaType, javaType, placeholders);
+        sb.append(toConditionValueArg(symbol, handler, jdbcType, spliceJavaType, javaType, placeholders));
         return sb.toString();
     }
 
@@ -418,28 +419,29 @@ public final class Scripts implements SqlSymbol {
             sb.append(slot.getFragment());
         }
         sb.append(" %s ");
-        appendPlaceholderArg(sb, symbol, handler, jdbcType, spliceJavaType, javaType, placeholders);
+        sb.append(toConditionValueArg(symbol, handler, jdbcType, spliceJavaType, javaType, placeholders));
         return sb.toString();
     }
 
     /**
-     * 拼接占位符参数
+     * 拼接条件值参数
      *
-     * @param sb             {@link StringBuilder}
      * @param symbol         {@link Symbol}
      * @param handler        类型处理器
      * @param jdbcType       Jdbc类型
      * @param spliceJavaType 是否拼接Java类型
      * @param javaType       Java类型
      * @param placeholders   占位符参数列表
+     * @return 字符串
      */
-    public static void appendPlaceholderArg(final StringBuilder sb, final Symbol symbol,
-                                            final Class<? extends TypeHandler<?>> handler,
-                                            final JdbcType jdbcType, final boolean spliceJavaType,
-                                            final Class<?> javaType, final String... placeholders) {
+    public static String toConditionValueArg(final Symbol symbol,
+                                             final Class<? extends TypeHandler<?>> handler,
+                                             final JdbcType jdbcType, final boolean spliceJavaType,
+                                             final Class<?> javaType, final String... placeholders) {
         final Symbol realSymbol = Objects.ifNull(symbol, Symbol.EQ);
         if (Objects.isNotEmpty(placeholders)) {
             String typeArg;
+            StringBuilder sb;
             switch (realSymbol) {
                 case EQ:
                 case NE:
@@ -451,30 +453,34 @@ public final class Scripts implements SqlSymbol {
                 case ILIKE:
                 case NOT_LIKE:
                 case NOT_ILIKE:
+                    sb = new StringBuilder(45);
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment()).append(SPACE).append(safeJoining(placeholders[0], typeArg));
-                    break;
+                    return sb.toString();
                 case IN:
                 case NOT_IN:
+                    sb = new StringBuilder(120);
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment())
                             .append(SPACE)
                             .append(Arrays.stream(placeholders).map(it -> safeJoining(it, typeArg))
                                     .collect(Collectors.joining(COMMA_SPACE, START_BRACKET, END_BRACKET)));
-                    break;
+                    return sb.toString();
                 case BETWEEN:
                 case NOT_BETWEEN:
+                    sb = new StringBuilder(80);
                     typeArg = concatTypeArg(handler, jdbcType, spliceJavaType, javaType);
                     sb.append(realSymbol.getFragment())
                             .append(SPACE)
                             .append(safeJoining(placeholders[0], typeArg))
                             .append(AND_SPACE_BOTH)
                             .append(safeJoining(placeholders[1], typeArg));
-                    break;
+                    return sb.toString();
                 default:
                     break;
             }
         }
+        return Constants.EMPTY;
     }
 
     /**
