@@ -24,7 +24,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * 单值参数
+ * 简单参数
  *
  * @author wvkity
  * @created 2022/1/7
@@ -33,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @RequiredArgsConstructor
 @ToString(callSuper = true)
-public class SingleParam extends AbstractParam implements Param {
+public class SimpleParam extends AbstractParam implements Param {
 
     /**
      * 值
