@@ -21,6 +21,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
@@ -205,6 +206,57 @@ public class Restrictions {
                             .escape(escape)
                             .ignoreCase(ignoreCase)
                             .dialect(criteria == null ? null : criteria.getDialect())
+                            .build())
+                    .build();
+        }
+        return null;
+    }
+
+    /**
+     * 构建{@link BetweenExpression}
+     *
+     * @param criteria {@link Criteria}
+     * @param alias    表别名
+     * @param target   属性名/字段名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param mode     {@link Mode}
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link SimpleExpression}
+     */
+    protected static <V> BetweenExpression betweenExpression(final Criteria<?> criteria, final String alias,
+                                                             final String target, final V begin, final V end,
+                                                             final Mode mode, final Symbol symbol,
+                                                             final LogicSymbol slot) {
+        if (mode == Mode.PROPERTY) {
+            final Column column = getColumn(criteria, target);
+            if (column != null) {
+                return BetweenExpression.builder()
+                        .column(column.getColumn())
+                        .criteria(criteria)
+                        .param(BetweenParam.builder()
+                                .symbol(symbol)
+                                .slot(slot)
+                                .begin(begin)
+                                .end(end)
+                                .typeHandler(column.getTypeHandler())
+                                .jdbcType(column.getJdbcType())
+                                .javaType(column.getDescriptor().getJavaType())
+                                .spliceJavaType(column.isSpliceJavaType()).build())
+                        .build();
+            }
+        } else if (Strings.isNotWhitespace(target)) {
+            return BetweenExpression.builder()
+                    .column(target)
+                    .criteria(criteria)
+                    .alias(alias)
+                    .param(BetweenParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
+                            .begin(begin)
+                            .end(end)
                             .build())
                     .build();
         }
@@ -1735,6 +1787,262 @@ public class Restrictions {
     public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher, final LogicSymbol slot) {
         return simpleExpression(null, alias, column, value, matcher, Mode.COLUMN, Symbol.LE, slot);
+    }
+
+    // endregion
+
+    // region Between expression methods
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <T, V> BetweenExpression between(final Criteria<?> criteria, final Property<T, V> property,
+                                                   final V begin, final V end) {
+        return between(criteria, property, begin, end, slot(criteria));
+    }
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <T, V> BetweenExpression between(final Criteria<?> criteria, final Property<T, V> property,
+                                                   final V begin, final V end, final LogicSymbol slot) {
+        return between(criteria, convert(property), begin, end, slot);
+    }
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression between(final Criteria<?> criteria, final String property,
+                                                final V begin, final V end) {
+        return between(criteria, property, begin, end, slot(criteria));
+    }
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression between(final Criteria<?> criteria, final String property,
+                                                final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(criteria, null, property, begin, end, Mode.PROPERTY, Symbol.BETWEEN, slot);
+    }
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colBetween(final Criteria<?> criteria, final String column,
+                                                   final V begin, final V end) {
+        return colBetween(criteria, column, begin, end, slot(criteria));
+    }
+
+    /**
+     * between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colBetween(final Criteria<?> criteria, final String column,
+                                                   final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(criteria, null, column, begin, end, Mode.COLUMN, Symbol.BETWEEN, slot);
+    }
+
+    /**
+     * between表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param <V>    值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colBetween(final String alias, final String column,
+                                                   final V begin, final V end) {
+        return colBetween(alias, column, begin, end, LogicSymbol.AND);
+    }
+
+    /**
+     * between表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colBetween(final String alias, final String column,
+                                                   final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(null, alias, column, begin, end, Mode.COLUMN, Symbol.BETWEEN, slot);
+    }
+
+    // endregion
+
+    // region Not between expression methods
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <T, V> BetweenExpression notBetween(final Criteria<?> criteria, final Property<T, V> property,
+                                                      final V begin, final V end) {
+        return notBetween(criteria, property, begin, end, slot(criteria));
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <T, V> BetweenExpression notBetween(final Criteria<?> criteria, final Property<T, V> property,
+                                                      final V begin, final V end, final LogicSymbol slot) {
+        return notBetween(criteria, convert(property), begin, end, slot);
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression notBetween(final Criteria<?> criteria, final String property,
+                                                   final V begin, final V end) {
+        return notBetween(criteria, property, begin, end, slot(criteria));
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression notBetween(final Criteria<?> criteria, final String property,
+                                                   final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(criteria, null, property, begin, end, Mode.PROPERTY, Symbol.NOT_BETWEEN, slot);
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colNotBetween(final Criteria<?> criteria, final String column,
+                                                      final V begin, final V end) {
+        return colNotBetween(criteria, column, begin, end, slot(criteria));
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param begin    开始值
+     * @param end      结束值
+     * @param slot     {@link LogicSymbol}
+     * @param <V>      值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colNotBetween(final Criteria<?> criteria, final String column,
+                                                      final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(criteria, null, column, begin, end, Mode.COLUMN, Symbol.NOT_BETWEEN, slot);
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param <V>    值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colNotBetween(final String alias, final String column,
+                                                      final V begin, final V end) {
+        return colNotBetween(alias, column, begin, end, LogicSymbol.AND);
+    }
+
+    /**
+     * not between表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param begin  开始值
+     * @param end    结束值
+     * @param slot   {@link LogicSymbol}
+     * @param <V>    值类型
+     * @return {@link BetweenExpression}
+     */
+    public static <V> BetweenExpression colNotBetween(final String alias, final String column,
+                                                      final V begin, final V end, final LogicSymbol slot) {
+        return betweenExpression(null, alias, column, begin, end, Mode.COLUMN, Symbol.NOT_BETWEEN, slot);
     }
 
     // endregion
