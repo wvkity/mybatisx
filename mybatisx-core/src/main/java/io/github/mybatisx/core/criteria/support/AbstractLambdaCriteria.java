@@ -45,12 +45,12 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     public <V> C idEq(V value, Matcher<V> matcher, LogicSymbol slot) {
         this.checkPrimaryKey();
         final Column id = this.getPrimaryKey();
-        return this.singleConditionAccept(id, value, matcher, Symbol.EQ, slot);
+        return this.simpleConditionAccept(id, value, matcher, Symbol.EQ, slot);
     }
 
     @Override
     public <V> C eq(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.EQ, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.EQ, slot);
     }
 
     @Override
@@ -65,27 +65,27 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
 
     @Override
     public <V> C ne(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.NE, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.NE, slot);
     }
 
     @Override
     public <V> C gt(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.GT, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.GT, slot);
     }
 
     @Override
     public <V> C ge(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.GE, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.GE, slot);
     }
 
     @Override
     public <V> C lt(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.LT, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.LT, slot);
     }
 
     @Override
     public <V> C le(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.singleConditionAccept(property, value, matcher, Symbol.LE, slot);
+        return this.simpleConditionAccept(property, value, matcher, Symbol.LE, slot);
     }
 
     @Override

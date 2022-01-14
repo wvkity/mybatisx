@@ -40,7 +40,7 @@ public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C
 
     @Override
     public <V> C colEq(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.EQ, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.EQ, slot);
     }
 
     @Override
@@ -55,27 +55,27 @@ public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C
 
     @Override
     public <V> C colNe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.NE, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.NE, slot);
     }
 
     @Override
     public <V> C colGt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.GT, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.GT, slot);
     }
 
     @Override
     public <V> C colGe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.GE, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.GE, slot);
     }
 
     @Override
     public <V> C colLt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.LT, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.LT, slot);
     }
 
     @Override
     public <V> C colLe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
-        return this.colSingleConditionAccept(column, value, matcher, Symbol.LE, slot);
+        return this.colSimpleConditionAccept(column, value, matcher, Symbol.LE, slot);
     }
 
     @Override
