@@ -179,7 +179,7 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
     @Override
     public <V> Builder<Table> with(AssignConsumer<Table, V> consumer, V value) {
         // Empty
-        return null;
+        return this;
     }
 
     @Override

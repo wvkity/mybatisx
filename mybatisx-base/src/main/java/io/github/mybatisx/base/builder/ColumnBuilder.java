@@ -295,7 +295,7 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
     @Override
     public <V> Builder<Column> with(AssignConsumer<Column, V> consumer, V value) {
         // Empty
-        return null;
+        return this;
     }
 
     @Override
