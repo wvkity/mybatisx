@@ -37,7 +37,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
-import org.apache.ibatis.type.UnknownTypeHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -84,7 +83,7 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
     /**
      * 类型处理器
      */
-    private Class<? extends TypeHandler<?>> typeHandler = UnknownTypeHandler.class;
+    private Class<? extends TypeHandler<?>> typeHandler;
     /**
      * 主键SQL执行时机
      */
