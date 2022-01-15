@@ -24,6 +24,7 @@ import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
+import io.github.mybatisx.core.param.NullParam;
 import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
 import io.github.mybatisx.core.property.Property;
@@ -307,6 +308,46 @@ public class Restrictions {
                             .symbol(symbol)
                             .slot(slot)
                             .values(values)
+                            .build())
+                    .build();
+        }
+        return null;
+    }
+
+    /**
+     * 构建{@link NullExpression}
+     *
+     * @param criteria {@link Criteria}
+     * @param alias    表别名
+     * @param target   属性名/字段名
+     * @param mode     模式
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    protected static NullExpression nullExpression(final Criteria<?> criteria, final String alias,
+                                                   final String target, final Mode mode, final Symbol symbol,
+                                                   final LogicSymbol slot) {
+        if (mode == Mode.PROPERTY) {
+            final Column column = getColumn(criteria, target);
+            if (column != null) {
+                return NullExpression.builder()
+                        .column(column.getColumn())
+                        .criteria(criteria)
+                        .param(NullParam.builder()
+                                .symbol(symbol)
+                                .slot(slot)
+                                .build())
+                        .build();
+            }
+        } else if (Strings.isNotWhitespace(target)) {
+            return NullExpression.builder()
+                    .column(target)
+                    .criteria(criteria)
+                    .alias(alias)
+                    .param(NullParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
                             .build())
                     .build();
         }
@@ -2354,7 +2395,7 @@ public class Restrictions {
      */
     @SafeVarargs
     public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
-                                         final V... values) {
+                                            final V... values) {
         return notIn(criteria, property, Arrays.asList(values));
     }
 
@@ -2371,7 +2412,7 @@ public class Restrictions {
      */
     @SafeVarargs
     public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
-                                         final LogicSymbol slot, final V... values) {
+                                            final LogicSymbol slot, final V... values) {
         return notIn(criteria, property, Arrays.asList(values), slot);
     }
 
@@ -2386,7 +2427,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
-                                         final Collection<V> values) {
+                                            final Collection<V> values) {
         return notIn(criteria, property, values, slot(criteria));
     }
 
@@ -2402,7 +2443,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
-                                         final Collection<V> values, final LogicSymbol slot) {
+                                            final Collection<V> values, final LogicSymbol slot) {
         return notIn(criteria, convert(property), values, slot);
     }
 
@@ -2432,7 +2473,7 @@ public class Restrictions {
      */
     @SafeVarargs
     public static <V> InExpression notIn(final Criteria<?> criteria, final String property,
-                                      final LogicSymbol slot, final V... values) {
+                                         final LogicSymbol slot, final V... values) {
         return notIn(criteria, property, values, Arrays.asList(values), slot);
     }
 
@@ -2445,7 +2486,7 @@ public class Restrictions {
      * @param <V>      值类型
      * @return {@link InExpression}
      */
-    public static <V> InExpression notIn(final Criteria<?> criteria, final String property, 
+    public static <V> InExpression notIn(final Criteria<?> criteria, final String property,
                                          final Collection<V> values) {
         return notIn(criteria, property, values, slot(criteria));
     }
@@ -2461,7 +2502,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression notIn(final Criteria<?> criteria, final String property, final Collection<V> values,
-                                      final LogicSymbol slot) {
+                                         final LogicSymbol slot) {
         return inExpression(criteria, null, property, values, Mode.PROPERTY, Symbol.NOT_IN, slot);
     }
 
@@ -2491,7 +2532,7 @@ public class Restrictions {
      */
     @SafeVarargs
     public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
-                                         final LogicSymbol slot, final V... values) {
+                                            final LogicSymbol slot, final V... values) {
         return colNotIn(criteria, column, Arrays.asList(values), slot);
     }
 
@@ -2504,7 +2545,7 @@ public class Restrictions {
      * @param <V>      值类型
      * @return {@link InExpression}
      */
-    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column, 
+    public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
                                             final Collection<V> values) {
         return colNotIn(criteria, column, values, slot(criteria));
     }
@@ -2520,10 +2561,9 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
-                                         final Collection<V> values, final LogicSymbol slot) {
+                                            final Collection<V> values, final LogicSymbol slot) {
         return inExpression(criteria, null, column, values, Mode.COLUMN, Symbol.NOT_IN, slot);
     }
-
 
     /**
      * not in表达式
@@ -2551,7 +2591,7 @@ public class Restrictions {
      */
     @SafeVarargs
     public static <V> InExpression colNotIn(final String alias, final String column,
-                                         final LogicSymbol slot, final V... values) {
+                                            final LogicSymbol slot, final V... values) {
         return colNotIn(alias, column, Arrays.asList(values), slot);
     }
 
@@ -2579,12 +2619,12 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression colNotIn(final String alias, final String column,
-                                         final Collection<V> values, final LogicSymbol slot) {
+                                            final Collection<V> values, final LogicSymbol slot) {
         return inExpression(null, alias, column, values, Mode.COLUMN, Symbol.NOT_IN, slot);
     }
 
     // endregion
-    
+
     // region Like expression methods
 
     // region Like left expression methods
@@ -6250,6 +6290,204 @@ public class Restrictions {
     }
 
     // endregion
+
+    // endregion
+
+    // region Is null expression methods
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param <T>      实体类型
+     * @return {@link NullExpression}
+     */
+    public static <T> NullExpression isNull(final Criteria<T> criteria, final Property<T, ?> property) {
+        return isNull(criteria, property, slot(criteria));
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @param <T>      实体类型
+     * @return {@link NullExpression}
+     */
+    public static <T> NullExpression isNull(final Criteria<T> criteria, final Property<T, ?> property,
+                                            final LogicSymbol slot) {
+        return isNull(criteria, convert(property), slot);
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @return {@link NullExpression}
+     */
+    public static NullExpression isNull(final Criteria<?> criteria, final String property) {
+        return isNull(criteria, property, slot(criteria));
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression isNull(final Criteria<?> criteria, final String property, final LogicSymbol slot) {
+        return nullExpression(criteria, property, property, Mode.PROPERTY, Symbol.NULL, slot);
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colIsNull(final Criteria<?> criteria, final String column) {
+        return colIsNull(criteria, column, slot(criteria));
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param slot     {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colIsNull(final Criteria<?> criteria, final String column, final LogicSymbol slot) {
+        return nullExpression(criteria, null, column, Mode.COLUMN, Symbol.NULL, slot);
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colIsNull(final String alias, final String column) {
+        return colIsNull(alias, column, LogicSymbol.AND);
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colIsNull(final String alias, final String column, final LogicSymbol slot) {
+        return nullExpression(null, alias, column, Mode.COLUMN, Symbol.NULL, slot);
+    }
+
+    // endregion
+
+    // region Not null expression methods
+
+    /**
+     * not null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param <T>      实体类型
+     * @return {@link NullExpression}
+     */
+    public static <T> NullExpression nonNull(final Criteria<T> criteria, final Property<T, ?> property) {
+        return nonNull(criteria, property, slot(criteria));
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property {@link Property}
+     * @param slot     {@link LogicSymbol}
+     * @param <T>      实体类型
+     * @return {@link NullExpression}
+     */
+    public static <T> NullExpression nonNull(final Criteria<T> criteria, final Property<T, ?> property,
+                                             final LogicSymbol slot) {
+        return nonNull(criteria, convert(property), slot);
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @return {@link NullExpression}
+     */
+    public static NullExpression nonNull(final Criteria<?> criteria, final String property) {
+        return nonNull(criteria, property, slot(criteria));
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param property 属性
+     * @param slot     {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression nonNull(final Criteria<?> criteria, final String property, final LogicSymbol slot) {
+        return nullExpression(criteria, property, property, Mode.PROPERTY, Symbol.NOT_NULL, slot);
+    }
+
+    /**
+     * is null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colNonNull(final Criteria<?> criteria, final String column) {
+        return colNonNull(criteria, column, slot(criteria));
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param criteria {@link Criteria}
+     * @param column   字段名
+     * @param slot     {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colNonNull(final Criteria<?> criteria, final String column, final LogicSymbol slot) {
+        return nullExpression(criteria, null, column, Mode.COLUMN, Symbol.NOT_NULL, slot);
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colNonNull(final String alias, final String column) {
+        return colNonNull(alias, column, LogicSymbol.AND);
+    }
+
+    /**
+     * not null表达式
+     *
+     * @param alias  表别名
+     * @param column 字段名
+     * @param slot   {@link LogicSymbol}
+     * @return {@link NullExpression}
+     */
+    public static NullExpression colNonNull(final String alias, final String column, final LogicSymbol slot) {
+        return nullExpression(null, alias, column, Mode.COLUMN, Symbol.NOT_NULL, slot);
+    }
 
     // endregion
 }
