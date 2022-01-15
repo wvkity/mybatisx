@@ -163,6 +163,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
             target.fragmentManager = new DefaultFragmentManager();
             target.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
             if (deep) {
+                target.dialect = source.dialect;
                 target.entity = source.entity;
                 target.aliasRef = source.aliasRef;
                 target.sqlManager = source.sqlManager;
