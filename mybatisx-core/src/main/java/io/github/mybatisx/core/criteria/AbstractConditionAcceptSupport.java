@@ -22,11 +22,11 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criterion.NestedCondition;
-import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
+import io.github.mybatisx.core.param.NullParam;
 import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.param.TemplateParam;
 import io.github.mybatisx.lang.Objects;
@@ -261,16 +261,9 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      */
     protected C nullableConditionAccept(final Column column, final Symbol symbol, final LogicSymbol slot) {
         if (column != null) {
-            final StringBuilder sb = new StringBuilder(30);
-            if (slot != null) {
-                sb.append(slot.getFragment());
-            }
-            sb.append(" %s ").append(symbol.getFragment());
-            this.where(StandardCondition.builder()
+            this.conditionConverter.accept(column.getColumn(), NullParam.builder()
                     .symbol(symbol)
-                    .alias(this.as())
-                    .column(column.getColumn())
-                    .fragment(sb.toString())
+                    .slot(slot)
                     .build());
         }
         return this.ctx;
@@ -441,16 +434,9 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      */
     protected C colNullableConditionAccept(final String column, final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column)) {
-            final StringBuilder sb = new StringBuilder(30);
-            if (slot != null) {
-                sb.append(slot.getFragment());
-            }
-            sb.append(" %s ").append(symbol.getFragment());
-            this.where(StandardCondition.builder()
+            this.conditionConverter.accept(column, NullParam.builder()
                     .symbol(symbol)
-                    .alias(this.as())
-                    .column(column)
-                    .fragment(sb.toString())
+                    .slot(slot)
                     .build());
         }
         return this.ctx;
