@@ -40,17 +40,15 @@ public class UpdateWithSpecialSupplier extends AbstractSupplier {
     public String get() {
         final Table _$table = this.table;
         final String script =
-                _$table.filtrate(_$table.getUpdatableColumns(), it -> 
+                _$table.filtrate(_$table.getUpdatableColumns(), it ->
                                 !it.isMultiTenant() && !it.isLogicDelete() && !it.isAuditDeletable())
                         .stream()
                         .map(it -> SPACE + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))
                         .collect(Collectors.joining(COMMA + NEW_LINE));
         //  noinspection DuplicatedCode
-        final StringBuilder condition = new StringBuilder(120);
-        this.primaryKeyWithWhereThen(condition::append);
-        this.multiTenantWithWhereThen(condition::append);
-        this.logicDeleteWithWhereThen(condition::append);
+        final String condition = this.getPrimaryKeyCondition() + this.getMultiTenantCondition() +
+                this.getLogicDeleteCondition();
         return this.update((NEW_LINE + Scripts.toTrimTag(script, SET, null, null, COMMA_SPACE)),
-                (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
+                (NEW_LINE + Scripts.toTrimTag(condition, WHERE, "AND |OR", null, null)));
     }
 }

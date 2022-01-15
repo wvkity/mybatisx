@@ -49,11 +49,9 @@ public class UpdateWithSpecialExcNullSupplier extends AbstractSupplier {
                                 null, it, true, false, true, LogicSymbol.NONE, COMMA_SPACE))
                         .collect(Collectors.joining(NEW_LINE));
         //  noinspection DuplicatedCode
-        final StringBuilder condition = new StringBuilder(120);
-        this.primaryKeyWithWhereThen(condition::append);
-        this.multiTenantWithWhereThen(condition::append);
-        this.logicDeleteWithWhereThen(condition::append);
+        final String condition = this.getPrimaryKeyCondition() + this.getMultiTenantCondition() +
+                this.getLogicDeleteCondition();
         return this.update((NEW_LINE + Scripts.toTrimTag(script, SET, null, null, COMMA_SPACE)),
-                (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
+                (NEW_LINE + Scripts.toTrimTag(condition, WHERE, "AND |OR", null, null)));
     }
 }

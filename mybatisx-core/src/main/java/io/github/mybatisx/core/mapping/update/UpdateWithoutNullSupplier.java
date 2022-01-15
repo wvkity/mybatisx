@@ -42,20 +42,15 @@ public class UpdateWithoutNullSupplier extends AbstractSupplier {
 
     @Override
     public String get() {
-        final List<Column> columns = this.table.getUpdateColumnWithoutSpecial();
-        final StringBuilder script = new StringBuilder(120);
-        script.append(columns.stream()
-                .map(it -> Scripts.toIfTag(PARAMETER_ENTITY, Symbol.EQ, Splicing.REPLACE,
-                null, it, true, false, true, LogicSymbol.NONE, COMMA_SPACE))
-                .collect(Collectors.joining(NEW_LINE)));
         //  noinspection DuplicatedCode
-        this.optimisticLockWithSetThen(script::append);
-        final StringBuilder condition = new StringBuilder(120);
-        this.primaryKeyWithWhereThen(condition::append);
-        this.optimisticLockWithWhereThen(condition::append);
-        this.multiTenantWithWhereThen(condition::append);
-        this.logicDeleteWithWhereThen(condition::append);
-        return this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
-                (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
+        final List<Column> columns = this.table.getUpdateColumnWithoutSpecial();
+        final String script = columns.stream()
+                .map(it -> Scripts.toIfTag(PARAMETER_ENTITY, Symbol.EQ, Splicing.REPLACE,
+                        null, it, true, false, true, LogicSymbol.NONE, COMMA_SPACE))
+                .collect(Collectors.joining(NEW_LINE)) + this.getOptimisticLockSetPart();
+        final String condition = this.getPrimaryKeyCondition() + this.getOptimisticLockCondition() +
+                this.getMultiTenantCondition() + this.getLogicDeleteCondition();
+        return this.update((NEW_LINE + Scripts.toTrimTag(script, SET, null, null, COMMA_SPACE)),
+                (NEW_LINE + Scripts.toTrimTag(condition, WHERE, "AND |OR", null, null)));
     }
 }

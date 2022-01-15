@@ -16,18 +16,16 @@
 package io.github.mybatisx.core.mapping;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
+import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.Splicing;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
 import io.github.mybatisx.support.mapping.SqlSupplier;
 import lombok.Getter;
 
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -84,82 +82,86 @@ public abstract class AbstractSupplier implements SqlSupplier, SqlSymbol {
     }
 
     /**
-     * 拼接乐观锁更新值
+     * 获取乐观锁更新值部分
      *
-     * @param consumer {@link Consumer}
+     * @return SQL字符串
      */
-    protected void optimisticLockWithSetThen(final Consumer<String> consumer) {
-        if (Objects.nonNull(consumer)) {
-            Optional.ofNullable(this.table.getOptimisticLockColumn()).ifPresent(it -> {
-                final StringBuilder condition = new StringBuilder(80);
-                condition.append("_parameter.containsKey('").append(PARAMETER_OPTIMISTIC_LOCK).append("')");
-                final Class<?> javaType = it.getDescriptor().getJavaType();
-                if (!javaType.isPrimitive()) {
-                    condition.append(" and ").append(PARAMETER_OPTIMISTIC_LOCK).append(" != null");
-                }
-                if (Types.is(String.class, javaType)) {
-                    condition.append(" and ").append(PARAMETER_OPTIMISTIC_LOCK).append(" !=''");
-                }
-                final String script = "  " + it.getColumn() + " = " + Scripts.safeJoining(PARAMETER_OPTIMISTIC_LOCK,
-                        Scripts.concatTypeArg(it.getTypeHandler(), it.getJdbcType(), it.isSpliceJavaType(),
-                                javaType)) + COMMA_SPACE;
-                consumer.accept((NEW_LINE + Scripts.toIfTag(script, condition.toString(), true)));
-            });
+    protected String getOptimisticLockSetPart() {
+        final Column it = this.table.getOptimisticLockColumn();
+        if (it != null) {
+            final StringBuilder condition = new StringBuilder(80);
+            condition.append("_parameter.containsKey('").append(PARAMETER_OPTIMISTIC_LOCK).append("')");
+            final Class<?> javaType = it.getDescriptor().getJavaType();
+            if (!javaType.isPrimitive()) {
+                condition.append(" and ").append(PARAMETER_OPTIMISTIC_LOCK).append(" != null");
+            }
+            if (Types.is(String.class, javaType)) {
+                condition.append(" and ").append(PARAMETER_OPTIMISTIC_LOCK).append(" !=''");
+            }
+            final String script = "  " + it.getColumn() + " = " + Scripts.safeJoining(PARAMETER_OPTIMISTIC_LOCK,
+                    Scripts.concatTypeArg(it.getTypeHandler(), it.getJdbcType(), it.isSpliceJavaType(),
+                            javaType)) + COMMA_SPACE;
+            return NEW_LINE + Scripts.toIfTag(script, condition.toString(), true);
         }
+        return Constants.EMPTY;
     }
 
     /**
-     * 拼接主键条件
+     * 获取主键条件
      *
-     * @param consumer {@link Consumer}
+     * @return 主键条件字符串
      */
-    protected void primaryKeyWithWhereThen(final Consumer<String> consumer) {
-        if (Objects.nonNull(consumer) && this.table.isHasPrimaryKey()) {
+    protected String getPrimaryKeyCondition() {
+        if (this.table.isHasPrimaryKey()) {
             if (this.table.isOnlyOnePrimaryKey()) {
                 final Column it = this.table.getPrimaryKey();
-                consumer.accept((AND_SPACE_BOTH + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it)));
+                return AND_SPACE_BOTH + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it);
             } else {
-                consumer.accept((AND_SPACE_BOTH + this.table.getPrimaryKeys().stream()
+                return AND_SPACE_BOTH + this.table.getPrimaryKeys().stream()
                         .map(it -> Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))
-                        .collect(Collectors.joining(AND_SPACE_BOTH))));
+                        .collect(Collectors.joining(AND_SPACE_BOTH));
             }
         }
+        return Constants.EMPTY;
     }
 
     /**
-     * 逻辑删除条件
+     * 获取逻辑删除条件
      *
-     * @param consumer {@link Consumer}
+     * @return 逻辑删除条件
      */
-    protected void logicDeleteWithWhereThen(final Consumer<String> consumer) {
-        if (Objects.nonNull(consumer)) {
-            Optional.ofNullable(this.table.getLogicDeleteColumn()).ifPresent(it -> consumer.accept((AND_SPACE_BOTH +
-                    Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))));
+    protected String getLogicDeleteCondition() {
+        final Column it = this.table.getLogicDeleteColumn();
+        if (it != null) {
+            return AND_SPACE_BOTH + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it);
         }
+        return Constants.EMPTY;
     }
 
     /**
-     * 拼接乐观锁条件
+     * 获取乐观锁条件
      *
-     * @param consumer {@link Consumer}
+     * @return 乐观锁条件
      */
-    protected void optimisticLockWithWhereThen(final Consumer<String> consumer) {
-        if (Objects.nonNull(consumer)) {
-            Optional.ofNullable(this.table.getOptimisticLockColumn()).ifPresent(it -> consumer.accept((AND_SPACE_BOTH +
-                    Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))));
+    protected String getOptimisticLockCondition() {
+        final Column it = this.table.getOptimisticLockColumn();
+        if (it != null) {
+            return AND_SPACE_BOTH + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it);
         }
+        return Constants.EMPTY;
     }
 
     /**
-     * 拼接多租户条件
+     * 获取多租户条件
      *
-     * @param consumer {@link Consumer}
+     * @return 多租户条件
      */
-    protected void multiTenantWithWhereThen(final Consumer<String> consumer) {
-        if (Objects.nonNull(consumer)) {
-            Optional.ofNullable(this.table.getMultiTenantColumn()).ifPresent(it -> consumer.accept((AND_SPACE_BOTH +
-                    Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it))));
+    protected String getMultiTenantCondition() {
+        final Column it = this.table.getMultiTenantColumn();
+        if (it != null) {
+            return AND_SPACE_BOTH + Scripts.toPlaceHolderArg(PARAMETER_ENTITY, Splicing.REPLACE, it);
         }
+        return Constants.EMPTY;
     }
 
 }

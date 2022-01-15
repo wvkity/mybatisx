@@ -53,13 +53,10 @@ public class UpdateSupplier extends AbstractSupplier {
             }
         }
         //  noinspection DuplicatedCode
-        this.optimisticLockWithSetThen(script::append);
-        final StringBuilder condition = new StringBuilder(120);
-        this.primaryKeyWithWhereThen(condition::append);
-        this.optimisticLockWithWhereThen(condition::append);
-        this.multiTenantWithWhereThen(condition::append);
-        this.logicDeleteWithWhereThen(condition::append);
+        script.append(this.getOptimisticLockSetPart());
+        final String condition = this.getPrimaryKeyCondition() + this.getOptimisticLockCondition() +
+                this.getMultiTenantCondition() + this.getLogicDeleteCondition();
         return this.update((NEW_LINE + Scripts.toTrimTag(script.toString(), SET, null, null, COMMA_SPACE)),
-                (NEW_LINE + Scripts.toTrimTag(condition.toString(), WHERE, "AND |OR", null, null)));
+                (NEW_LINE + Scripts.toTrimTag(condition, WHERE, "AND |OR", null, null)));
     }
 }
