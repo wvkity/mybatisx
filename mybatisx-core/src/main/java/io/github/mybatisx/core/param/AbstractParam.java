@@ -27,7 +27,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
-import org.apache.ibatis.type.UnknownTypeHandler;
 
 /**
  * 抽象参数
@@ -59,13 +58,11 @@ public abstract class AbstractParam {
     /**
      * 类型处理器
      */
-    @Builder.Default
-    protected Class<? extends TypeHandler<?>> typeHandler = UnknownTypeHandler.class;
+    protected Class<? extends TypeHandler<?>> typeHandler;
     /**
      * Jdbc类型
      */
-    @Builder.Default
-    protected JdbcType jdbcType = JdbcType.UNDEFINED;
+    protected JdbcType jdbcType;
     /**
      * Java类型
      */
