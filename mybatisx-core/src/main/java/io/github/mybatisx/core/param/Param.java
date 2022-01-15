@@ -54,6 +54,13 @@ public interface Param {
     LogicSymbol getSlot();
 
     /**
+     * 设置{@link LogicSymbol}
+     *
+     * @param slot {@link LogicSymbol}
+     */
+    void setSlot(final LogicSymbol slot);
+
+    /**
      * 获取参数模式
      *
      * @return {@link ParamMode}

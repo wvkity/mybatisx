@@ -48,7 +48,7 @@ public abstract class AbstractExpression implements Expression {
     protected final String column;
 
     @Override
-    public void setIfNecessary(Criteria<?> criteria) {
+    public void ifCriteriaNull(Criteria<?> criteria) {
         if (this.criteria == null) {
             this.criteria = criteria;
         }

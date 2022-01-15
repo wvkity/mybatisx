@@ -556,7 +556,8 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     @Override
     public C where(Expression expression) {
         if (expression != null) {
-            expression.setIfNecessary(this);
+            expression.ifCriteriaNull(this);
+            expression.ifSlotNull(this.slot());
             this.conditionConverter.accept(expression);
         }
         return this.ctx;

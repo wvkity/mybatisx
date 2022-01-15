@@ -73,16 +73,6 @@ public class Restrictions {
     }
 
     /**
-     * 获取{@link LogicSymbol}
-     *
-     * @param criteria {@link Criteria}
-     * @return {@link LogicSymbol}
-     */
-    protected static LogicSymbol slot(final Criteria<?> criteria) {
-        return criteria == null ? LogicSymbol.AND : criteria.slot();
-    }
-
-    /**
      * Lambda属性转字符串属性
      *
      * @param property {@link Property}
@@ -367,7 +357,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return eq(criteria, property, value, slot(criteria));
+        return eq(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -399,7 +389,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return eq(criteria, property, value, matcher, slot(criteria));
+        return eq(criteria, property, value, matcher, null);
     }
 
     /**
@@ -430,7 +420,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value) {
-        return eq(criteria, property, value, slot(criteria));
+        return eq(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -462,7 +452,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression eq(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return eq(criteria, property, value, matcher, slot(criteria));
+        return eq(criteria, property, value, matcher, null);
     }
 
     /**
@@ -492,7 +482,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value) {
-        return colEq(criteria, column, value, slot(criteria));
+        return colEq(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -522,7 +512,7 @@ public class Restrictions {
      */
     public static <V> SimpleExpression colEq(final Criteria<?> criteria, final String column, final V value,
                                              final Matcher<V> matcher) {
-        return colEq(criteria, column, value, matcher, slot(criteria));
+        return colEq(criteria, column, value, matcher, null);
     }
 
     /**
@@ -551,7 +541,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <V> SimpleExpression colEq(final String alias, final String column, final V value) {
-        return colEq(alias, column, value, null, LogicSymbol.AND);
+        return colEq(alias, column, value, null, null);
     }
 
     /**
@@ -581,7 +571,7 @@ public class Restrictions {
      */
     public static <V> SimpleExpression colEq(final String alias, final String column, final V value,
                                              final Matcher<V> matcher) {
-        return colEq(alias, column, value, matcher, LogicSymbol.AND);
+        return colEq(alias, column, value, matcher, null);
     }
 
     /**
@@ -615,7 +605,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return ne(criteria, property, value, slot(criteria));
+        return ne(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -647,7 +637,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return ne(criteria, property, value, matcher, slot(criteria));
+        return ne(criteria, property, value, matcher, null);
     }
 
     /**
@@ -678,7 +668,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value) {
-        return ne(criteria, property, value, slot(criteria));
+        return ne(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -710,7 +700,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression ne(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return ne(criteria, property, value, matcher, slot(criteria));
+        return ne(criteria, property, value, matcher, null);
     }
 
     /**
@@ -741,7 +731,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value) {
-        return colNe(criteria, column, value, slot(criteria));
+        return colNe(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -773,7 +763,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colNe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colNe(criteria, column, value, matcher, slot(criteria));
+        return colNe(criteria, column, value, matcher, null);
     }
 
     /**
@@ -804,7 +794,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value) {
-        return colNe(alias, column, value, LogicSymbol.AND);
+        return colNe(alias, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -836,7 +826,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colNe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colNe(alias, column, value, matcher, LogicSymbol.AND);
+        return colNe(alias, column, value, matcher, null);
     }
 
     /**
@@ -871,7 +861,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return gt(criteria, property, value, slot(criteria));
+        return gt(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -903,7 +893,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return gt(criteria, property, value, matcher, slot(criteria));
+        return gt(criteria, property, value, matcher, null);
     }
 
     /**
@@ -934,7 +924,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value) {
-        return gt(criteria, property, value, slot(criteria));
+        return gt(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -966,7 +956,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression gt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return gt(criteria, property, value, matcher, slot(criteria));
+        return gt(criteria, property, value, matcher, null);
     }
 
     /**
@@ -997,7 +987,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value) {
-        return colGt(criteria, column, value, slot(criteria));
+        return colGt(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1029,7 +1019,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colGt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colGt(criteria, column, value, matcher, slot(criteria));
+        return colGt(criteria, column, value, matcher, null);
     }
 
     /**
@@ -1060,7 +1050,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value) {
-        return colGt(alias, column, value, LogicSymbol.AND);
+        return colGt(alias, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1092,7 +1082,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colGt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colGt(alias, column, value, matcher, LogicSymbol.AND);
+        return colGt(alias, column, value, matcher, null);
     }
 
     /**
@@ -1127,7 +1117,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return ge(criteria, property, value, slot(criteria));
+        return ge(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1159,7 +1149,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return ge(criteria, property, value, matcher, slot(criteria));
+        return ge(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1190,7 +1180,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value) {
-        return ge(criteria, property, value, slot(criteria));
+        return ge(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1222,7 +1212,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression ge(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return ge(criteria, property, value, matcher, slot(criteria));
+        return ge(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1253,7 +1243,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value) {
-        return colGe(criteria, column, value, slot(criteria));
+        return colGe(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1285,7 +1275,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colGe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colGe(criteria, column, value, matcher, slot(criteria));
+        return colGe(criteria, column, value, matcher, null);
     }
 
     /**
@@ -1316,7 +1306,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value) {
-        return colGe(alias, column, value, LogicSymbol.AND);
+        return colGe(alias, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1348,7 +1338,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colGe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colGe(alias, column, value, matcher, LogicSymbol.AND);
+        return colGe(alias, column, value, matcher, null);
     }
 
     /**
@@ -1383,7 +1373,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return lt(criteria, property, value, slot(criteria));
+        return lt(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1415,7 +1405,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return lt(criteria, property, value, matcher, slot(criteria));
+        return lt(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1446,7 +1436,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value) {
-        return lt(criteria, property, value, slot(criteria));
+        return lt(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1478,7 +1468,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression lt(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return lt(criteria, property, value, matcher, slot(criteria));
+        return lt(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1509,7 +1499,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value) {
-        return colLt(criteria, column, value, slot(criteria));
+        return colLt(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1541,7 +1531,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colLt(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colLt(criteria, column, value, matcher, slot(criteria));
+        return colLt(criteria, column, value, matcher, null);
     }
 
     /**
@@ -1572,7 +1562,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value) {
-        return colLt(alias, column, value, LogicSymbol.AND);
+        return colLt(alias, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1604,7 +1594,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colLt(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colLt(alias, column, value, matcher, LogicSymbol.AND);
+        return colLt(alias, column, value, matcher, null);
     }
 
     /**
@@ -1639,7 +1629,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value) {
-        return le(criteria, property, value, slot(criteria));
+        return le(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1671,7 +1661,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression le(final Criteria<T> criteria, final Property<T, V> property, final V value,
                                              final Matcher<V> matcher) {
-        return le(criteria, property, value, matcher, slot(criteria));
+        return le(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1702,7 +1692,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value) {
-        return le(criteria, property, value, slot(criteria));
+        return le(criteria, property, value, (LogicSymbol) null);
     }
 
     /**
@@ -1734,7 +1724,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression le(final Criteria<T> criteria, final String property, final V value,
                                              final Matcher<V> matcher) {
-        return le(criteria, property, value, matcher, slot(criteria));
+        return le(criteria, property, value, matcher, null);
     }
 
     /**
@@ -1765,7 +1755,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value) {
-        return colLe(criteria, column, value, slot(criteria));
+        return colLe(criteria, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1797,7 +1787,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colLe(final Criteria<T> criteria, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colLe(criteria, column, value, matcher, slot(criteria));
+        return colLe(criteria, column, value, matcher, null);
     }
 
     /**
@@ -1828,7 +1818,7 @@ public class Restrictions {
      * @return {@link SimpleExpression}
      */
     public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value) {
-        return colLe(alias, column, value, LogicSymbol.AND);
+        return colLe(alias, column, value, (LogicSymbol) null);
     }
 
     /**
@@ -1860,7 +1850,7 @@ public class Restrictions {
      */
     public static <T, V> SimpleExpression colLe(final String alias, final String column, final V value,
                                                 final Matcher<V> matcher) {
-        return colLe(alias, column, value, matcher, LogicSymbol.AND);
+        return colLe(alias, column, value, matcher, null);
     }
 
     /**
@@ -1896,7 +1886,7 @@ public class Restrictions {
      */
     public static <T, V> BetweenExpression between(final Criteria<?> criteria, final Property<T, V> property,
                                                    final V begin, final V end) {
-        return between(criteria, property, begin, end, slot(criteria));
+        return between(criteria, property, begin, end, null);
     }
 
     /**
@@ -1927,7 +1917,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression between(final Criteria<?> criteria, final String property,
                                                 final V begin, final V end) {
-        return between(criteria, property, begin, end, slot(criteria));
+        return between(criteria, property, begin, end, null);
     }
 
     /**
@@ -1958,7 +1948,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression colBetween(final Criteria<?> criteria, final String column,
                                                    final V begin, final V end) {
-        return colBetween(criteria, column, begin, end, slot(criteria));
+        return colBetween(criteria, column, begin, end, null);
     }
 
     /**
@@ -1989,7 +1979,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression colBetween(final String alias, final String column,
                                                    final V begin, final V end) {
-        return colBetween(alias, column, begin, end, LogicSymbol.AND);
+        return colBetween(alias, column, begin, end, null);
     }
 
     /**
@@ -2024,7 +2014,7 @@ public class Restrictions {
      */
     public static <T, V> BetweenExpression notBetween(final Criteria<?> criteria, final Property<T, V> property,
                                                       final V begin, final V end) {
-        return notBetween(criteria, property, begin, end, slot(criteria));
+        return notBetween(criteria, property, begin, end, null);
     }
 
     /**
@@ -2055,7 +2045,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression notBetween(final Criteria<?> criteria, final String property,
                                                    final V begin, final V end) {
-        return notBetween(criteria, property, begin, end, slot(criteria));
+        return notBetween(criteria, property, begin, end, null);
     }
 
     /**
@@ -2086,7 +2076,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression colNotBetween(final Criteria<?> criteria, final String column,
                                                       final V begin, final V end) {
-        return colNotBetween(criteria, column, begin, end, slot(criteria));
+        return colNotBetween(criteria, column, begin, end, null);
     }
 
     /**
@@ -2117,7 +2107,7 @@ public class Restrictions {
      */
     public static <V> BetweenExpression colNotBetween(final String alias, final String column,
                                                       final V begin, final V end) {
-        return colNotBetween(alias, column, begin, end, LogicSymbol.AND);
+        return colNotBetween(alias, column, begin, end, null);
     }
 
     /**
@@ -2185,7 +2175,7 @@ public class Restrictions {
      */
     public static <T, V> InExpression in(final Criteria<?> criteria, final Property<T, V> property,
                                          final Collection<V> values) {
-        return in(criteria, property, values, slot(criteria));
+        return in(criteria, property, values, null);
     }
 
     /**
@@ -2244,7 +2234,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression in(final Criteria<?> criteria, final String property, final Collection<V> values) {
-        return in(criteria, property, values, slot(criteria));
+        return in(criteria, property, values, null);
     }
 
     /**
@@ -2302,7 +2292,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression colIn(final Criteria<?> criteria, final String column, final Collection<V> values) {
-        return colIn(criteria, column, values, slot(criteria));
+        return colIn(criteria, column, values, null);
     }
 
     /**
@@ -2361,7 +2351,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression colIn(final String alias, final String column, final Collection<V> values) {
-        return colIn(alias, column, values, LogicSymbol.AND);
+        return colIn(alias, column, values, null);
     }
 
     /**
@@ -2428,7 +2418,7 @@ public class Restrictions {
      */
     public static <T, V> InExpression notIn(final Criteria<?> criteria, final Property<T, V> property,
                                             final Collection<V> values) {
-        return notIn(criteria, property, values, slot(criteria));
+        return notIn(criteria, property, values, null);
     }
 
     /**
@@ -2488,7 +2478,7 @@ public class Restrictions {
      */
     public static <V> InExpression notIn(final Criteria<?> criteria, final String property,
                                          final Collection<V> values) {
-        return notIn(criteria, property, values, slot(criteria));
+        return notIn(criteria, property, values, null);
     }
 
     /**
@@ -2547,7 +2537,7 @@ public class Restrictions {
      */
     public static <V> InExpression colNotIn(final Criteria<?> criteria, final String column,
                                             final Collection<V> values) {
-        return colNotIn(criteria, column, values, slot(criteria));
+        return colNotIn(criteria, column, values, null);
     }
 
     /**
@@ -2605,7 +2595,7 @@ public class Restrictions {
      * @return {@link InExpression}
      */
     public static <V> InExpression colNotIn(final String alias, final String column, final Collection<V> values) {
-        return colNotIn(alias, column, values, LogicSymbol.AND);
+        return colNotIn(alias, column, values, null);
     }
 
     /**
@@ -2686,7 +2676,7 @@ public class Restrictions {
      */
     public static <T> LikeExpression likeLeft(final Criteria<T> criteria, final Property<T, String> property,
                                               final String value, final Character escape, final boolean ignoreCase) {
-        return likeLeft(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeLeft(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -2806,7 +2796,7 @@ public class Restrictions {
      */
     public static LikeExpression likeLeft(final Criteria<?> criteria, final String property, final String value,
                                           final Character escape, final boolean ignoreCase) {
-        return likeLeft(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeLeft(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -2921,7 +2911,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeLeft(final Criteria<?> criteria, final String column, final String value,
                                              final Character escape, final boolean ignoreCase) {
-        return colLikeLeft(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colLikeLeft(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3036,7 +3026,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeLeft(final String alias, final String column, final String value,
                                              final Character escape, final boolean ignoreCase) {
-        return colLikeLeft(alias, column, value, escape, ignoreCase, LogicSymbol.AND);
+        return colLikeLeft(alias, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3161,7 +3151,7 @@ public class Restrictions {
      */
     public static <T> LikeExpression likeRight(final Criteria<T> criteria, final Property<T, String> property,
                                                final String value, final Character escape, final boolean ignoreCase) {
-        return likeRight(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeRight(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3281,7 +3271,7 @@ public class Restrictions {
      */
     public static LikeExpression likeRight(final Criteria<?> criteria, final String property, final String value,
                                            final Character escape, final boolean ignoreCase) {
-        return likeRight(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeRight(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3396,7 +3386,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeRight(final Criteria<?> criteria, final String column, final String value,
                                               final Character escape, final boolean ignoreCase) {
-        return colLikeRight(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colLikeRight(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3511,7 +3501,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeRight(final String alias, final String column, final String value,
                                               final Character escape, final boolean ignoreCase) {
-        return colLikeRight(alias, column, value, escape, ignoreCase, LogicSymbol.AND);
+        return colLikeRight(alias, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3636,7 +3626,7 @@ public class Restrictions {
      */
     public static <T> LikeExpression likeAny(final Criteria<T> criteria, final Property<T, String> property,
                                              final String value, final Character escape, final boolean ignoreCase) {
-        return likeAny(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeAny(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3756,7 +3746,7 @@ public class Restrictions {
      */
     public static LikeExpression likeAny(final Criteria<?> criteria, final String property, final String value,
                                          final Character escape, final boolean ignoreCase) {
-        return likeAny(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return likeAny(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3871,7 +3861,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeAny(final Criteria<?> criteria, final String column, final String value,
                                             final Character escape, final boolean ignoreCase) {
-        return colLikeAny(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colLikeAny(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -3986,7 +3976,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeAny(final String alias, final String column, final String value,
                                             final Character escape, final boolean ignoreCase) {
-        return colLikeAny(alias, column, value, escape, ignoreCase, LogicSymbol.AND);
+        return colLikeAny(alias, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -4117,7 +4107,7 @@ public class Restrictions {
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
                                           final String value, final LikeMatchMode matches, final Character escape,
                                           final boolean ignoreCase) {
-        return like(criteria, property, value, matches, escape, ignoreCase, slot(criteria));
+        return like(criteria, property, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -4248,7 +4238,7 @@ public class Restrictions {
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
                                       final LikeMatchMode matches, final Character escape, final boolean ignoreCase) {
-        return like(criteria, property, value, matches, escape, ignoreCase, slot(criteria));
+        return like(criteria, property, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -4376,7 +4366,7 @@ public class Restrictions {
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
                                          final LikeMatchMode matches, final Character escape,
                                          final boolean ignoreCase) {
-        return colLike(criteria, column, value, matches, escape, ignoreCase, slot(criteria));
+        return colLike(criteria, column, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -4504,7 +4494,7 @@ public class Restrictions {
     public static LikeExpression colLike(final String alias, final String column, final String value,
                                          final LikeMatchMode matches, final Character escape,
                                          final boolean ignoreCase) {
-        return colLike(alias, column, value, matches, escape, ignoreCase, LogicSymbol.AND);
+        return colLike(alias, column, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -4639,7 +4629,7 @@ public class Restrictions {
      */
     public static <T> LikeExpression notLikeLeft(final Criteria<T> criteria, final Property<T, String> property,
                                                  final String value, final Character escape, final boolean ignoreCase) {
-        return notLikeLeft(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return notLikeLeft(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -4876,7 +4866,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeLeft(final Criteria<?> criteria, final String column, final String value,
                                                 final Character escape, final boolean ignoreCase) {
-        return colNotLikeLeft(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colNotLikeLeft(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -4963,7 +4953,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeLeft(final String alias, final String column, final String value,
                                                 final Character escape) {
-        return colNotLikeLeft(alias, column, value, escape, LogicSymbol.AND);
+        return colNotLikeLeft(alias, column, value, escape, null);
     }
 
     /**
@@ -5057,7 +5047,7 @@ public class Restrictions {
     public static <T> LikeExpression notLikeRight(final Criteria<T> criteria, final Property<T, String> property,
                                                   final String value, final Character escape,
                                                   final boolean ignoreCase) {
-        return notLikeRight(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return notLikeRight(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -5294,7 +5284,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeRight(final Criteria<?> criteria, final String column, final String value,
                                                  final Character escape, final boolean ignoreCase) {
-        return colNotLikeRight(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colNotLikeRight(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -5381,7 +5371,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeRight(final String alias, final String column, final String value,
                                                  final Character escape) {
-        return colNotLikeRight(alias, column, value, escape, LogicSymbol.AND);
+        return colNotLikeRight(alias, column, value, escape, null);
     }
 
     /**
@@ -5475,7 +5465,7 @@ public class Restrictions {
     public static <T> LikeExpression notLikeAny(final Criteria<T> criteria, final Property<T, String> property,
                                                 final String value, final Character escape,
                                                 final boolean ignoreCase) {
-        return notLikeAny(criteria, property, value, escape, ignoreCase, slot(criteria));
+        return notLikeAny(criteria, property, value, escape, ignoreCase, null);
     }
 
     /**
@@ -5712,7 +5702,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeAny(final Criteria<?> criteria, final String column, final String value,
                                                final Character escape, final boolean ignoreCase) {
-        return colNotLikeAny(criteria, column, value, escape, ignoreCase, slot(criteria));
+        return colNotLikeAny(criteria, column, value, escape, ignoreCase, null);
     }
 
     /**
@@ -5799,7 +5789,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeAny(final String alias, final String column, final String value,
                                                final Character escape) {
-        return colNotLikeAny(alias, column, value, escape, LogicSymbol.AND);
+        return colNotLikeAny(alias, column, value, escape, null);
     }
 
     /**
@@ -5898,7 +5888,7 @@ public class Restrictions {
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
                                              final String value, final LikeMatchMode matches, final Character escape,
                                              final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, escape, ignoreCase, slot(criteria));
+        return notLike(criteria, property, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -6029,7 +6019,7 @@ public class Restrictions {
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
                                          final LikeMatchMode matches, final Character escape, final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, escape, ignoreCase, slot(criteria));
+        return notLike(criteria, property, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -6157,7 +6147,7 @@ public class Restrictions {
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
                                             final LikeMatchMode matches, final Character escape,
                                             final boolean ignoreCase) {
-        return colNotLike(criteria, column, value, matches, escape, ignoreCase, slot(criteria));
+        return colNotLike(criteria, column, value, matches, escape, ignoreCase, null);
     }
 
     /**
@@ -6253,7 +6243,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLike(final String alias, final String column, final String value,
                                             final LikeMatchMode matches, final Character escape) {
-        return colNotLike(alias, column, value, matches, escape, LogicSymbol.AND);
+        return colNotLike(alias, column, value, matches, escape, null);
     }
 
     /**
@@ -6304,7 +6294,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static <T> NullExpression isNull(final Criteria<T> criteria, final Property<T, ?> property) {
-        return isNull(criteria, property, slot(criteria));
+        return isNull(criteria, property, null);
     }
 
     /**
@@ -6329,7 +6319,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression isNull(final Criteria<?> criteria, final String property) {
-        return isNull(criteria, property, slot(criteria));
+        return isNull(criteria, property, null);
     }
 
     /**
@@ -6352,7 +6342,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression colIsNull(final Criteria<?> criteria, final String column) {
-        return colIsNull(criteria, column, slot(criteria));
+        return colIsNull(criteria, column, null);
     }
 
     /**
@@ -6375,7 +6365,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression colIsNull(final String alias, final String column) {
-        return colIsNull(alias, column, LogicSymbol.AND);
+        return colIsNull(alias, column, null);
     }
 
     /**
@@ -6403,7 +6393,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static <T> NullExpression nonNull(final Criteria<T> criteria, final Property<T, ?> property) {
-        return nonNull(criteria, property, slot(criteria));
+        return nonNull(criteria, property, null);
     }
 
     /**
@@ -6428,7 +6418,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression nonNull(final Criteria<?> criteria, final String property) {
-        return nonNull(criteria, property, slot(criteria));
+        return nonNull(criteria, property, null);
     }
 
     /**
@@ -6451,7 +6441,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression colNonNull(final Criteria<?> criteria, final String column) {
-        return colNonNull(criteria, column, slot(criteria));
+        return colNonNull(criteria, column, null);
     }
 
     /**
@@ -6474,7 +6464,7 @@ public class Restrictions {
      * @return {@link NullExpression}
      */
     public static NullExpression colNonNull(final String alias, final String column) {
-        return colNonNull(alias, column, LogicSymbol.AND);
+        return colNonNull(alias, column, null);
     }
 
     /**

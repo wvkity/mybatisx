@@ -53,6 +53,7 @@ public abstract class AbstractParam {
      * 逻辑符号
      */
     @Getter
+    @Setter
     @Builder.Default
     protected LogicSymbol slot = LogicSymbol.NONE;
     /**

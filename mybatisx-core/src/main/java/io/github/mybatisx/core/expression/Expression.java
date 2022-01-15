@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.expression;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.core.param.Param;
 
@@ -60,5 +61,17 @@ public interface Expression {
      *
      * @param criteria {@link Criteria}
      */
-    void setIfNecessary(final Criteria<?> criteria);
+    void ifCriteriaNull(final Criteria<?> criteria);
+
+    /**
+     * 设置{@link LogicSymbol}
+     *
+     * @param slot {@link LogicSymbol}
+     */
+    default void ifSlotNull(final LogicSymbol slot) {
+        final Param param = this.getParam();
+        if (param != null && param.getSlot() == null) {
+            param.setSlot(slot);
+        }
+    }
 }
