@@ -23,6 +23,7 @@ import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.expression.Expression;
+import io.github.mybatisx.core.expression.NestedExpression;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
@@ -494,6 +495,26 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
         return this.ctx;
     }
 
+    /**
+     * 处理嵌套表达式
+     *
+     * @param slot        {@link LogicSymbol}
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    protected C doIt(final LogicSymbol slot, final boolean not, final List<Expression> expressions) {
+        if (Objects.isNotEmpty(expressions)) {
+            final LogicSymbol _$slot = this.slot();
+            expressions.forEach(it -> {
+                it.ifSlotNull(_$slot);
+                it.ifCriteriaNull(this);
+            });
+            this.where(NestedExpression.builder().slot(slot).not(not).expressions(expressions).build());
+        }
+        return this.ctx;
+    }
+
     // endregion
 
     // region Override methods
@@ -545,6 +566,21 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     @Override
     public C or(boolean not, Function<C, C> apply) {
         return this.doIt(LogicSymbol.OR, not, apply);
+    }
+
+    @Override
+    public C nested(boolean not, List<Expression> expressions) {
+        return this.doIt(this.slot(), not, expressions);
+    }
+
+    @Override
+    public C and(boolean not, List<Expression> expressions) {
+        return this.doIt(LogicSymbol.AND, not, expressions);
+    }
+
+    @Override
+    public C or(boolean not, List<Expression> expressions) {
+        return this.doIt(LogicSymbol.OR, not, expressions);
     }
 
     @Override

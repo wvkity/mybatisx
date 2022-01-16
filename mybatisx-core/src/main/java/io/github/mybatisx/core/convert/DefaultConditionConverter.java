@@ -17,13 +17,19 @@ package io.github.mybatisx.core.convert;
 
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.expression.Expression;
+import io.github.mybatisx.core.expression.NestedExpression;
 import io.github.mybatisx.core.param.Param;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 默认条件转换器
@@ -59,7 +65,29 @@ public class DefaultConditionConverter implements ConditionConverter {
     @Override
     public Criterion convert(Expression src) {
         if (src != null) {
-            return convert(src.getCriteria(), src.getColumn(), src.getAlias(), src.getParam());
+            if (src instanceof NestedExpression) {
+                // 嵌套条件表达式
+                final NestedExpression nestedExpr = (NestedExpression) src;
+                final List<Expression> expressions = nestedExpr.getExpressions();
+                if (Objects.isNotEmpty(expressions)) {
+                    final List<Criterion> conditions = new ArrayList<>(expressions.size());
+                    for (Expression it : expressions) {
+                        final Criterion condition = this.convert(it);
+                        if (condition != null) {
+                            conditions.add(condition);
+                        }
+                    }
+                    if (Objects.isNotEmpty(conditions)) {
+                        return NestedCondition.builder()
+                                .not(nestedExpr.isNot())
+                                .slot(nestedExpr.getSlot())
+                                .conditions(conditions)
+                                .build();
+                    }
+                }
+            } else {
+                return convert(src.getCriteria(), src.getColumn(), src.getAlias(), src.getParam());
+            }
         }
         return null;
     }

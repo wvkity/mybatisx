@@ -16,8 +16,11 @@
 package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.core.expression.Expression;
+import javafx.beans.binding.ListExpression;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -86,6 +89,126 @@ public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends Gen
      * @return {@code this}
      */
     C or(final boolean not, final Function<C, C> apply);
+
+    /**
+     * 嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C nested(final Expression... expressions) {
+        return this.nested(Arrays.asList(expressions));
+    }
+
+    /**
+     * 嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C nested(final List<Expression> expressions) {
+        return this.nested(false, expressions);
+    }
+
+    /**
+     * 嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C nested(final boolean not, final Expression... expressions) {
+        return this.nested(not, Arrays.asList(expressions));
+    }
+
+    /**
+     * 嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    C nested(final boolean not, final List<Expression> expressions);
+
+    /**
+     * and嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C and(final Expression... expressions) {
+        return this.and(Arrays.asList(expressions));
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C and(final List<Expression> expressions) {
+        return this.and(false, expressions);
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C and(final boolean not, final Expression... expressions) {
+        return this.and(not, Arrays.asList(expressions));
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    C and(final boolean not, final List<Expression> expressions);
+
+    /**
+     * or嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C or(final Expression... expressions) {
+        return this.or(Arrays.asList(expressions));
+    }
+    
+    /**
+     * or嵌套表达式
+     *
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C or(final List<Expression> expressions) {
+        return this.or(false, expressions);
+    }
+
+    /**
+     * or嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    default C or(final boolean not, final Expression... expressions) {
+        return this.or(not, Arrays.asList(expressions));
+    }
+    
+    /**
+     * or嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions 表达式列表
+     * @return {@code this}
+     */
+    C or(final boolean not, final List<Expression> expressions);
 
     /**
      * 条件条件
