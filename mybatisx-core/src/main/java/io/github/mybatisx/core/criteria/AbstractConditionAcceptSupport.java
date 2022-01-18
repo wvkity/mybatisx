@@ -54,7 +54,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * 当前对象
      */
     @SuppressWarnings("unchecked")
-    protected final C ctx = (C) this;
+    protected final C context = (C) this;
 
     // region Protected methods
 
@@ -106,7 +106,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .value(value)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -149,7 +149,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .end(end)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -189,7 +189,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .values(values)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -237,7 +237,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .dialect(this.getDialect())
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -267,7 +267,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .slot(slot)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -321,7 +321,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
             columnName = column.getColumn();
         }
         this.conditionConverter.accept(columnName, builder.build());
-        return this.ctx;
+        return this.context;
     }
 
 
@@ -345,7 +345,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .value(value)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
 
@@ -370,7 +370,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .end(end)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -392,7 +392,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .values(values)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
 
@@ -421,7 +421,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .dialect(this.getDialect())
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
 
@@ -440,7 +440,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .slot(slot)
                     .build());
         }
-        return this.ctx;
+        return this.context;
     }
 
 
@@ -468,7 +468,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 .slot(slot)
                 .symbol(Symbol.TEMPLATE)
                 .build());
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -492,7 +492,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 }
             }
         }
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -512,7 +512,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
             });
             this.where(NestedExpression.builder().slot(slot).not(not).expressions(expressions).build());
         }
-        return this.ctx;
+        return this.context;
     }
 
     // endregion
@@ -521,7 +521,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
 
     @Override
     protected C self() {
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -531,7 +531,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      */
     public C or() {
         this.slotRef.set(LogicSymbol.OR);
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -541,7 +541,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      */
     public C and() {
         this.slotRef.set(LogicSymbol.AND);
-        return this.ctx;
+        return this.context;
     }
 
     /**
@@ -586,7 +586,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     @Override
     public C where(Criterion criterion) {
         this.fragmentManager.addCondition(criterion);
-        return this.ctx;
+        return this.context;
     }
 
     @Override
@@ -596,7 +596,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
             expression.ifSlotNull(this.slot());
             this.conditionConverter.accept(expression);
         }
-        return this.ctx;
+        return this.context;
     }
 
     @Override
@@ -606,7 +606,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 this.where(it);
             }
         }
-        return this.ctx;
+        return this.context;
     }
 
     @Override
@@ -616,7 +616,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 this.where(it);
             }
         }
-        return this.ctx;
+        return this.context;
     }
 
     // endregion
