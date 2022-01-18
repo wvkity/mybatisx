@@ -35,10 +35,10 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     /**
      * WHERE片段存储器
      */
-    protected final WhereStorage whereStorage;
+    protected final ConditionStorage whereStorage;
 
     public AbstractFragmentManager() {
-        this(new WhereStorage());
+        this(new ConditionStorage());
     }
 
     @Override

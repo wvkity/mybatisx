@@ -32,7 +32,7 @@ import java.util.List;
  * @created 2022/1/7
  * @since 1.0.0
  */
-public class WhereStorage extends AbstractFragmentList<Criterion> {
+public class ConditionStorage extends AbstractFragmentList<Criterion> {
 
     private static final long serialVersionUID = -4544342979966126485L;
 

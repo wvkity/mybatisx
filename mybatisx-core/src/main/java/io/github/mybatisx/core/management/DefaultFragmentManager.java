@@ -34,8 +34,8 @@ public class DefaultFragmentManager extends AbstractFragmentManager {
         super();
     }
 
-    public DefaultFragmentManager(WhereStorage whereStorage) {
-        super(whereStorage);
+    public DefaultFragmentManager(ConditionStorage conditionStorage) {
+        super(conditionStorage);
     }
 
     @Override
