@@ -30,44 +30,44 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlainCriteriaImpl<T> extends AbstractPlainCriteria<T, PlainCriteriaImpl<T>> {
+public class PlainImplementor<T> extends AbstractPlainCriteria<T, PlainImplementor<T>> {
 
     private static final long serialVersionUID = -2467289129956344730L;
 
-    public PlainCriteriaImpl(Class<T> entity) {
+    public PlainImplementor(Class<T> entity) {
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 
     @Override
-    protected PlainCriteriaImpl<T> newInstance() {
-        final PlainCriteriaImpl<T> it = new PlainCriteriaImpl<>();
+    protected PlainImplementor<T> newInstance() {
+        final PlainImplementor<T> it = new PlainImplementor<>();
         it.clone(this);
         return it;
     }
 
     /**
-     * 创建{@link PlainCriteriaImpl}对象
+     * 创建{@link PlainImplementor}对象
      *
      * @param entity 实体类
      * @param <T>    实体类型
-     * @return {@link PlainCriteriaImpl}
+     * @return {@link PlainImplementor}
      */
-    public static <T> PlainCriteriaImpl<T> from(final Class<T> entity) {
-        return new PlainCriteriaImpl<>(entity);
+    public static <T> PlainImplementor<T> from(final Class<T> entity) {
+        return new PlainImplementor<>(entity);
     }
 
     /**
-     * 创建{@link PlainCriteriaImpl}对象
+     * 创建{@link PlainImplementor}对象
      *
      * @param entity 实体类
      * @param action {@link Consumer}
      * @param <T>    实体类型
-     * @return {@link PlainCriteriaImpl}
+     * @return {@link PlainImplementor}
      */
-    public static <T> PlainCriteriaImpl<T> from(final Class<T> entity, final Consumer<PlainCriteriaImpl<T>> action) {
-        final PlainCriteriaImpl<T> it = from(entity);
+    public static <T> PlainImplementor<T> from(final Class<T> entity, final Consumer<PlainImplementor<T>> action) {
+        final PlainImplementor<T> it = from(entity);
         if (action != null) {
             action.accept(it);
         }
