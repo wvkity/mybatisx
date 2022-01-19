@@ -30,44 +30,44 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GenericCriteriaImpl<T> extends AbstractBaseCriteria<T, GenericCriteriaImpl<T>> {
+public class GenericImplementor<T> extends AbstractBaseCriteria<T, GenericImplementor<T>> {
 
     private static final long serialVersionUID = -8709011796466994919L;
 
-    public GenericCriteriaImpl(Class<T> entity) {
+    public GenericImplementor(Class<T> entity) {
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 
     @Override
-    protected GenericCriteriaImpl<T> newInstance() {
-        final GenericCriteriaImpl<T> it = new GenericCriteriaImpl<>();
+    protected GenericImplementor<T> newInstance() {
+        final GenericImplementor<T> it = new GenericImplementor<>();
         it.clone(this);
         return it;
     }
 
     /**
-     * 创建{@link GenericCriteriaImpl}对象
+     * 创建{@link GenericImplementor}对象
      *
      * @param entity 实体类
      * @param <T>    实体类型
-     * @return {@link GenericCriteriaImpl}
+     * @return {@link GenericImplementor}
      */
-    public static <T> GenericCriteriaImpl<T> from(final Class<T> entity) {
-        return new GenericCriteriaImpl<>(entity);
+    public static <T> GenericImplementor<T> from(final Class<T> entity) {
+        return new GenericImplementor<>(entity);
     }
 
     /**
-     * 创建{@link GenericCriteriaImpl}对象
+     * 创建{@link GenericImplementor}对象
      *
      * @param entity 实体类
      * @param action {@link Consumer}
      * @param <T>    实体类型
-     * @return {@link GenericCriteriaImpl}
+     * @return {@link GenericImplementor}
      */
-    public static <T> GenericCriteriaImpl<T> from(final Class<T> entity, final Consumer<GenericCriteriaImpl<T>> action) {
-        final GenericCriteriaImpl<T> it = from(entity);
+    public static <T> GenericImplementor<T> from(final Class<T> entity, final Consumer<GenericImplementor<T>> action) {
+        final GenericImplementor<T> it = from(entity);
         if (action != null) {
             action.accept(it);
         }
