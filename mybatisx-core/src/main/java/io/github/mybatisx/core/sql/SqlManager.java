@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.core.sql;
 
+import io.github.mybatisx.base.exception.MyBatisException;
+
 /**
  * SQL管理器
  *
@@ -51,5 +53,46 @@ public interface SqlManager {
      * @return 条件语句
      */
     String getWhereString(final boolean self, final boolean appendWhere, final String groupReplacement);
+
+    /**
+     * 获取查询列片段
+     *
+     * @return 查询列片段
+     * @throws MyBatisException 查询类型实现，否则抛异常
+     */
+    default String getSelectFragment() throws MyBatisException {
+        return this.getSelectFragment(true);
+    }
+
+    /**
+     * 获取查询列片段
+     *
+     * @param self 是否为自身
+     * @return 查询列片段
+     * @throws MyBatisException 查询类型实现，否则抛异常
+     */
+    default String getSelectFragment(final boolean self) throws MyBatisException {
+        throw new MyBatisException("This method must be implemented by a query type object to be called");
+    }
+
+    /**
+     * 获取分组片段
+     *
+     * @return 分组片段
+     * @throws MyBatisException 更新类型实现，否则抛异常
+     */
+    default String getGroupFragment() throws MyBatisException {
+        throw new MyBatisException("This method must be implemented by a query type object to be called");
+    }
+
+    /**
+     * 获取更新值片段
+     *
+     * @return 更新值片段
+     * @throws MyBatisException 查询类型实现，否则抛异常
+     */
+    default String getUpdateFragment() throws MyBatisException {
+        throw new MyBatisException("This method must be implemented by an update type object to be called");
+    }
 
 }
