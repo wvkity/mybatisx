@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.base.helper;
 
+import com.google.common.collect.ImmutableList;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.exception.MyBatisException;
@@ -24,12 +25,14 @@ import io.github.mybatisx.base.parsing.DefaultEntityParser;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.reflect.Reflections;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -182,6 +185,21 @@ public final class TableHelper {
             return null;
         }
         return Optional.ofNullable(getTable(entity)).map(it -> it.getByColumn(column)).orElse(null);
+    }
+
+    /**
+     * 获取字段列表
+     *
+     * @param clazz   实体类
+     * @param matcher {@link Matcher}
+     * @return 字段列表
+     */
+    public static List<Column> getColumns(final Class<?> clazz, final Matcher<Column> matcher) {
+        final Table table = getTable(clazz);
+        if (table != null) {
+            return ImmutableList.copyOf(table.filtrate(matcher));
+        }
+        return ImmutableList.of();
     }
 
     /**
