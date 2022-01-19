@@ -30,44 +30,44 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LambdaCriteriaImpl<T> extends AbstractLambdaCriteria<T, LambdaCriteriaImpl<T>> {
+public class LambdaImplementor<T> extends AbstractLambdaCriteria<T, LambdaImplementor<T>> {
 
     private static final long serialVersionUID = -2981849275689397498L;
 
-    public LambdaCriteriaImpl(Class<T> entity) {
+    public LambdaImplementor(Class<T> entity) {
         this.entity = entity;
         this.newInit(null);
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 
     @Override
-    protected LambdaCriteriaImpl<T> newInstance() {
-        final LambdaCriteriaImpl<T> it = new LambdaCriteriaImpl<>();
+    protected LambdaImplementor<T> newInstance() {
+        final LambdaImplementor<T> it = new LambdaImplementor<>();
         it.clone(this);
         return it;
     }
 
     /**
-     * 创建{@link LambdaCriteriaImpl}对象
+     * 创建{@link LambdaImplementor}对象
      *
      * @param entity 实体类
      * @param <T>    实体类型
-     * @return {@link LambdaCriteriaImpl}
+     * @return {@link LambdaImplementor}
      */
-    public static <T> LambdaCriteriaImpl<T> from(final Class<T> entity) {
-        return new LambdaCriteriaImpl<>(entity);
+    public static <T> LambdaImplementor<T> from(final Class<T> entity) {
+        return new LambdaImplementor<>(entity);
     }
 
     /**
-     * 创建{@link LambdaCriteriaImpl}对象
+     * 创建{@link LambdaImplementor}对象
      *
      * @param entity 实体类
      * @param action {@link Consumer}
      * @param <T>    实体类型
-     * @return {@link LambdaCriteriaImpl}
+     * @return {@link LambdaImplementor}
      */
-    public static <T> LambdaCriteriaImpl<T> from(final Class<T> entity, final Consumer<LambdaCriteriaImpl<T>> action) {
-        final LambdaCriteriaImpl<T> it = from(entity);
+    public static <T> LambdaImplementor<T> from(final Class<T> entity, final Consumer<LambdaImplementor<T>> action) {
+        final LambdaImplementor<T> it = from(entity);
         if (action != null) {
             action.accept(it);
         }
