@@ -36,7 +36,7 @@ public class LambdaImplementor<T> extends AbstractLambdaCriteria<T, LambdaImplem
 
     public LambdaImplementor(Class<T> entity) {
         this.entity = entity;
-        this.newInit(null);
+        this.newInit();
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 

@@ -36,7 +36,7 @@ public class PlainImplementor<T> extends AbstractPlainCriteria<T, PlainImplement
 
     public PlainImplementor(Class<T> entity) {
         this.entity = entity;
-        this.newInit(null);
+        this.newInit();
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 

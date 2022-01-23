@@ -36,7 +36,7 @@ public class GenericImplementor<T> extends AbstractBaseCriteria<T, GenericImplem
 
     public GenericImplementor(Class<T> entity) {
         this.entity = entity;
-        this.newInit(null);
+        this.newInit();
         this.sqlManager = new DefaultSqlManager(this, this.fragmentManager);
     }
 
