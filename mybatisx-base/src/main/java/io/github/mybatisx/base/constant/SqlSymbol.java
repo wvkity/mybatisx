@@ -161,6 +161,66 @@ public interface SqlSymbol {
      */
     String WHERE_SPACE = "WHERE ";
     /**
+     * 分组
+     */
+    String GROUP_BY = "GROUP BY";
+    /**
+     * 分组+空格
+     */
+    String GROUP_BY_SPACE = "GROUP BY ";
+    /**
+     * 空格 + 分组 + 空格
+     */
+    String GROUP_BY_SPACE_BOTH = " GROUP BY ";
+    /**
+     * 排序
+     */
+    String ORDER_BY = "ORDER BY";
+    /**
+     * 排序 + 空格
+     */
+    String ORDER_BY_SPACE = "ORDER BY ";
+    /**
+     * 空格 + 排序 + 空格
+     */
+    String ORDER_BY_SPACE_BOTH = " ORDER BY ";
+    /**
+     * 升序
+     */
+    String ASC = "ASC";
+    /**
+     * 降序
+     */
+    String DESC = "DESC";
+    /**
+     * 去重
+     */
+    String DISTINCT = "DISTINCT";
+    /**
+     * inner join
+     */
+    String INNER = "INNER JOIN";
+    /**
+     * left join
+     */
+    String LEFT = "LEFT JOIN";
+    /**
+     * right join
+     */
+    String RIGHT = "RIGHT JOIN";
+    /**
+     * full join
+     */
+    String FULL = "FULL JOIN";
+    /**
+     * on
+     */
+    String ON = "ON";
+    /**
+     * as
+     */
+    String AS = "AS";
+    /**
      * 字符串占位符
      */
     String STRING_PLACEHOLDER = "%s";

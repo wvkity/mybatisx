@@ -42,6 +42,15 @@ public interface Constants {
     String DOUBLE_BACKSLASH = "\\";
 
     /**
+     * 下划线
+     */
+    String UNDER_LINE = "_";
+    /**
+     * 保持排序
+     */
+    String KEEP_ORDER_BY = "/*keep orderly*/";
+
+    /**
      * 主键参数名
      */
     String PARAM_ID = "id";
