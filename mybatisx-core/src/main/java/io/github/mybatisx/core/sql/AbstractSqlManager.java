@@ -34,10 +34,6 @@ import lombok.RequiredArgsConstructor;
 public abstract class AbstractSqlManager implements SqlManager {
 
     /**
-     * 条件容器
-     */
-    protected final Criteria<?> criteria;
-    /**
      * 片段管理器
      */
     protected final FragmentManager fragmentManager;
@@ -54,4 +50,11 @@ public abstract class AbstractSqlManager implements SqlManager {
         }
         return Constants.EMPTY;
     }
+
+    /**
+     * 获取{@link Criteria}
+     *
+     * @return {@link Criteria}
+     */
+    protected abstract Criteria<?> getCriteria();
 }

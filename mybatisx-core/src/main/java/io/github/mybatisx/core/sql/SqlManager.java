@@ -55,6 +55,26 @@ public interface SqlManager {
     String getWhereString(final boolean self, final boolean appendWhere, final String groupReplacement);
 
     /**
+     * 是否存在排序
+     *
+     * @return boolean
+     * @throws MyBatisException – 查询类型实现，否则抛异常
+     */
+    default boolean hasSort() throws MyBatisException {
+        throw new MyBatisException("This method must be implemented by a query type object to be called");
+    }
+
+    /**
+     * 获取查询列语句
+     *
+     * @return 查询列片段
+     * @throws MyBatisException 查询类型实现，否则抛异常
+     */
+    default String getSelectString() throws MyBatisException {
+        throw new MyBatisException("This method must be implemented by a query type object to be called");
+    }
+
+    /**
      * 获取查询列片段
      *
      * @return 查询列片段
