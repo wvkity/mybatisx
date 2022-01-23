@@ -17,7 +17,6 @@ package io.github.mybatisx.base.metadata;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.EqualsAndHashCode;
@@ -111,7 +110,7 @@ public class Table {
      * 所有字段列表
      */
     @EqualsAndHashCode.Include
-    private final Set<Column> columns;
+    private final List<Column> columns;
     /**
      * 可保存字段列表
      */
@@ -150,7 +149,7 @@ public class Table {
         this.optimisticLockColumn = optimisticLockColumn;
         this.logicDeleteColumn = logicDeleteColumn;
         this.multiTenantColumn = multiTenantColumn;
-        this.columns = ImmutableSet.copyOf(columns);
+        this.columns = ImmutableList.copyOf(columns);
         this.insertableColumns = ImmutableList.copyOf(this.filtrate(Column::isInsertable));
         this.updatableColumns = ImmutableList.copyOf(this.filtrate(Column::isUpdatable));
         this.logicDeleteAuditColumns = ImmutableList.copyOf(this.filtrate(this.updatableColumns, Column::isAuditDeletable));
