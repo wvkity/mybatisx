@@ -17,6 +17,7 @@ package io.github.mybatisx.core.sql;
 
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.core.management.FragmentManager;
+import lombok.Getter;
 
 /**
  * 默认SQL管理器
@@ -27,7 +28,15 @@ import io.github.mybatisx.core.management.FragmentManager;
  */
 public class DefaultSqlManager extends AbstractSqlManager {
 
+    /**
+     * {@link Criteria}
+     */
+    @Getter
+    private final Criteria<?> criteria;
+
     public DefaultSqlManager(Criteria<?> criteria, FragmentManager fragmentManager) {
-        super(criteria, fragmentManager);
+        super(fragmentManager);
+        this.criteria = criteria;
     }
+
 }
