@@ -508,6 +508,31 @@ public final class Scripts implements SqlSymbol {
     }
 
     /**
+     * 转成查询字段
+     *
+     * @param tableAlias  表别名
+     * @param column      字段名
+     * @param columnAlias 字段别名
+     * @return 完整字段名
+     */
+    public static String toSelectArg(final String tableAlias, final String column, final String columnAlias) {
+        final StringBuilder sb = new StringBuilder(30);
+        if (Strings.isNotWhitespace(tableAlias)) {
+            sb.append(tableAlias).append(SqlSymbol.DOT);
+        }
+        sb.append(column);
+        if (Strings.isNotWhitespace(columnAlias)) {
+            sb.append(SqlSymbol.SPACE).append(SqlSymbol.AS).append(SqlSymbol.SPACE);
+            if (columnAlias.contains(SqlSymbol.DOT)) {
+                sb.append(SqlSymbol.DOUBLE_QUOTES).append(columnAlias).append(SqlSymbol.DOUBLE_QUOTES);
+            } else {
+                sb.append(columnAlias);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * 安全占位符
      *
      * @param args 参数列表
