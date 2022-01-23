@@ -43,6 +43,15 @@ public interface Criteria<T> extends Fragment {
      * @return 表别名
      */
     String as();
+    
+    /**
+     * 获取引用属性
+     *
+     * @return 引用属性
+     */
+    default String getReference() {
+        return null;
+    }
 
     /**
      * 设置是否使用严格模式(默认为严格模式)
@@ -90,7 +99,6 @@ public interface Criteria<T> extends Fragment {
      * @return {@code this}
      */
     Criteria<T> setVersion(final Object value);
-
 
     /**
      * 逻辑符号
