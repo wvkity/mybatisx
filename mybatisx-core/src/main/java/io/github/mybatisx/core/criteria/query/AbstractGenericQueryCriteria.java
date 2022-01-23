@@ -15,7 +15,11 @@
  */
 package io.github.mybatisx.core.criteria.query;
 
+import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.support.AbstractBaseCriteria;
+import io.github.mybatisx.core.property.Property;
+
+import java.util.Map;
 
 /**
  * 抽象查询条件
@@ -30,4 +34,72 @@ import io.github.mybatisx.core.criteria.support.AbstractBaseCriteria;
 public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCriteria<T, C>> extends
         AbstractBaseCriteria<T, C> implements GenericQueryCriteria<T, C> {
 
+    @Override
+    public C propAsAlias(boolean using) {
+        this.propertyAsAlias = using;
+        return this.context;
+    }
+
+    @Override
+    public String getResultMap() {
+        return this.resultMap;
+    }
+
+    @Override
+    public C setResultMap(String resultMap) {
+        this.resultMap = resultMap;
+        return this.context;
+    }
+
+    @Override
+    public Class<?> getResultType() {
+        return this.resultType;
+    }
+
+    @Override
+    public C setResultType(Class<?> resultType) {
+        this.resultType = resultType;
+        return this.context;
+    }
+
+    @Override
+    public String getMapKey() {
+        return this.mapKey;
+    }
+
+    @Override
+    public C setMapKey(Property<T, ?> property) {
+        //  noinspection DuplicatedCode
+        if (property != null) {
+            final String prop = this.convert(property);
+            if (this.propertyAsAlias) {
+                this.setMapKey(prop);
+            } else {
+                final Column column = this.convert(this.convert(property));
+                if (column != null) {
+                    this.setMapKey(column.getColumn());
+                }
+            }
+        }
+        return this.context;
+    }
+
+    @Override
+    public C setMapKey(String mapKey) {
+        this.mapKey = mapKey;
+        return this.context;
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Class<? extends Map> getMapType() {
+        return this.mapType;
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public C setMapType(Class<? extends Map> mapType) {
+        this.mapType = mapType;
+        return this.context;
+    }
 }

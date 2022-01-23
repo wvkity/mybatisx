@@ -15,12 +15,17 @@
  */
 package io.github.mybatisx.core.support.select;
 
-import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.mapping.Scripts;
+import io.github.mybatisx.lang.Strings;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
+import java.util.Optional;
 
 /**
  * 查询字段
@@ -36,9 +41,9 @@ public class StandardSelectable implements Selectable {
 
     private static final long serialVersionUID = 4484144385876976203L;
     /**
-     * {@link Criteria}
+     * {@link Query}
      */
-    private final Query<?> criteria;
+    private final Query<?> query;
     /**
      * 表别名
      */
@@ -67,8 +72,54 @@ public class StandardSelectable implements Selectable {
     @Getter
     private final SelectType type;
 
+    /**
+     * 获取表别名
+     *
+     * @return 表别名
+     */
+    protected String getTableAlias() {
+        return Strings.isNotWhitespace(this.tableAlias) ? this.tableAlias :
+                this.query == null ? Constants.EMPTY : this.query.as();
+    }
+
+    @Override
+    public String getReference() {
+        return Strings.isNotWhitespace(this.reference) ? this.reference :
+                this.query == null ? Constants.EMPTY : Optional.ofNullable(query.getReference())
+                        .filter(Strings::isNotWhitespace).orElse(Constants.EMPTY);
+    }
+
+    /**
+     * 获取别名
+     *
+     * @return 别名
+     */
+    protected String as() {
+        final String _$ref = this.getReference();
+        final boolean hasRef = Strings.isNotWhitespace(_$ref);
+        final boolean hasAlias = Strings.isNotWhitespace(this.alias);
+        final boolean hasProp = Strings.isNotWhitespace(this.property);
+        final boolean propAsAlias = this.query != null && this.query.isPropAsAlias();
+        if (hasRef) {
+            final String realAlias;
+            if (hasAlias) {
+                realAlias = this.alias;
+            } else {
+                if (hasProp && propAsAlias) {
+                    realAlias = this.property;
+                } else {
+                    realAlias = this.column;
+                }
+            }
+            return _$ref + SqlSymbol.DOT + realAlias;
+        }
+        return hasAlias ? this.alias : (hasProp && propAsAlias ? this.property : Constants.EMPTY);
+    }
+
     @Override
     public String getFragment(boolean isQuery) {
-        return null;
+        final String tableAlias = this.getTableAlias();
+        return Scripts.toSelectArg(this.column.startsWith(SqlSymbol.START_BRACKET) ? null : tableAlias,
+                this.column, this.as());
     }
 }

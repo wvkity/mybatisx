@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.support.LambdaCriteriaWrapper;
+import io.github.mybatisx.core.property.Property;
 
 /**
  * 查询条件接口(支持Lambda表达式)
@@ -28,5 +29,12 @@ import io.github.mybatisx.core.criteria.support.LambdaCriteriaWrapper;
  */
 public interface LambdaQueryWrapper<T, C extends LambdaQueryWrapper<T, C>> extends LambdaQueryCriteria<T, C>,
         LambdaCriteriaWrapper<T, C> {
-    
+
+    /**
+     * 设置Map类型返回值的键
+     *
+     * @param property {@link Property}
+     * @return {@code this}
+     */
+    C setMapKey(final Property<T, ?> property);
 }

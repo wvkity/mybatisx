@@ -17,6 +17,8 @@ package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
 
+import java.util.Map;
+
 /**
  * 抽象查询条件
  *
@@ -29,5 +31,56 @@ import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
 @SuppressWarnings({"serial"})
 public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<T, C>> extends
         AbstractPlainCriteria<T, C> implements PlainQueryWrapper<T, C> {
+    
+    @Override
+    public C propAsAlias(boolean using) {
+        this.propertyAsAlias = using;
+        return this.context;
+    }
 
+    @Override
+    public String getResultMap() {
+        return this.resultMap;
+    }
+
+    @Override
+    public C setResultMap(String resultMap) {
+        this.resultMap = resultMap;
+        return this.context;
+    }
+
+    @Override
+    public Class<?> getResultType() {
+        return this.resultType;
+    }
+
+    @Override
+    public C setResultType(Class<?> resultType) {
+        this.resultType = resultType;
+        return this.context;
+    }
+
+    @Override
+    public String getMapKey() {
+        return this.mapKey;
+    }
+
+    @Override
+    public C setMapKey(String mapKey) {
+        this.mapKey = mapKey;
+        return this.context;
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Class<? extends Map> getMapType() {
+        return this.mapType;
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public C setMapType(Class<? extends Map> mapType) {
+        this.mapType = mapType;
+        return this.context;
+    }
 }
