@@ -15,9 +15,7 @@
  */
 package io.github.mybatisx.core.management;
 
-import io.github.mybatisx.base.criterion.Criterion;
-
-import java.util.Collection;
+import io.github.mybatisx.base.criteria.Criteria;
 
 /**
  * 默认片段管理器
@@ -29,27 +27,14 @@ import java.util.Collection;
 public class DefaultFragmentManager extends AbstractFragmentManager {
 
     private static final long serialVersionUID = 2257490025235571458L;
+
+    public DefaultFragmentManager(Criteria<?> criteria) {
+        super(criteria);
+    }
+
+    public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage,
+                                  SelectableStorage selectableStorage) {
+        super(criteria, conditionStorage, selectableStorage);
+    }
     
-    public DefaultFragmentManager() {
-        super();
-    }
-
-    public DefaultFragmentManager(ConditionStorage conditionStorage) {
-        super(conditionStorage);
-    }
-
-    @Override
-    public void addCondition(Criterion condition) {
-        this.whereStorage.add(condition);
-    }
-
-    @Override
-    public void addCondition(Collection<Criterion> conditions) {
-        this.whereStorage.addAll(conditions);
-    }
-
-    @Override
-    public String getFragment() {
-        return null;
-    }
 }

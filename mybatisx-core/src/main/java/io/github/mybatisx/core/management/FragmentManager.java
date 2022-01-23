@@ -17,6 +17,7 @@ package io.github.mybatisx.core.management;
 
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.support.select.Selectable;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,6 +46,48 @@ public interface FragmentManager extends Fragment {
     void addCondition(final Collection<Criterion> conditions);
 
     /**
+     * 添加查询列
+     *
+     * @param selectable {@link Selectable}
+     */
+    void addSelect(final Selectable selectable);
+
+    /**
+     * 添加多个查询列
+     *
+     * @param selectables {@link Selectable}列表
+     */
+    void addSelect(final Collection<Selectable> selectables);
+
+    /**
+     * 添加排除查询属性
+     *
+     * @param property 属性名
+     */
+    void addExcludeProperty(final String property);
+
+    /**
+     * 添加排除查询属性
+     *
+     * @param properties 属性名列表
+     */
+    void addExcludeProperty(final Collection<String> properties);
+
+    /**
+     * 添加排除查询字段
+     *
+     * @param column 字段名
+     */
+    void addExcludeColumn(final String column);
+
+    /**
+     * 添加排除查询字段
+     *
+     * @param columns 字段名列表
+     */
+    void addExcludeColumn(final Collection<String> columns);
+
+    /**
      * 检查是否存在条件
      *
      * @return boolean
@@ -52,11 +95,39 @@ public interface FragmentManager extends Fragment {
     boolean hasCondition();
 
     /**
+     * 检查是否存在排序
+     *
+     * @return boolean
+     */
+    boolean hasSort();
+
+    /**
+     * 是否存在查询列
+     *
+     * @return boolean
+     */
+    boolean hasSelect();
+
+    /**
+     * 是否已缓存
+     *
+     * @return boolean
+     */
+    boolean isCached();
+
+    /**
      * 获取条件列表
      *
      * @return 条件列表
      */
     List<Criterion> getConditions();
+
+    /**
+     * 获取所有查询列
+     *
+     * @return {@link Selectable}列表
+     */
+    List<Selectable> getSelects();
 
     /**
      * 检查是否存在片段
@@ -73,6 +144,49 @@ public interface FragmentManager extends Fragment {
      * @return 条件语句
      */
     String getWhereString();
+
+    /**
+     * 获取查询列语句
+     *
+     * @return 查询列语句
+     */
+    default String getSelectString() {
+        return this.getSelectString(true);
+    }
+
+    /**
+     * 获取查询列语句
+     *
+     * @param isQuery 是否为查询
+     * @return 查询列语句
+     */
+    String getSelectString(final boolean isQuery);
+
+    /**
+     * 获取分组语句
+     *
+     * @return 分组语句
+     */
+    String getGroupString();
+
+    /**
+     * 获取分组筛选语句
+     *
+     * @return 分组筛选语句
+     */
+    String getHavingString();
+
+    /**
+     * 获取排序语句
+     *
+     * @return 排序语句
+     */
+    String getOrderString();
+
+    @Override
+    default String getFragment() {
+        return this.getCompleteString(null);
+    }
 
     /**
      * 获取完整SQL语句
