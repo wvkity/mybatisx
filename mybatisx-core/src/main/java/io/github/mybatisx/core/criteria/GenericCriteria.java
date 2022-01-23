@@ -19,10 +19,27 @@ import io.github.mybatisx.base.criteria.Criteria;
 
 /**
  * 通用条件接口
+ *
  * @author wvkity
  * @created 2022/1/5
  * @since 1.0.0
  */
 public interface GenericCriteria<T> extends Criteria<T> {
+    
+    /**
+     * 获取表名
+     *
+     * @return 表名
+     */
+    default String getTableName() {
+        return this.getTableName(true);
+    }
 
+    /**
+     * 获取表名
+     *
+     * @param jointAs 是否拼接'AS'
+     * @return 表名
+     */
+    String getTableName(final boolean jointAs);
 }
