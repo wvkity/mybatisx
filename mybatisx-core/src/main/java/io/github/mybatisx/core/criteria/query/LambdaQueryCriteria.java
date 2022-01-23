@@ -27,6 +27,6 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
  * @since 1.0.0
  */
 public interface LambdaQueryCriteria<T, C extends LambdaQueryCriteria<T, C>> extends CriteriaWrapper<T, C>, Query<T>,
-        LambdaSelectable<T, C> {
+        LambdaSelect<T, C> {
     
 }

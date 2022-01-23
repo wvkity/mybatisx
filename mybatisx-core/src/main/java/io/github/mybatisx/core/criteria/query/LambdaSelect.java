@@ -33,7 +33,7 @@ import java.util.Map;
  * @created 2022/1/18
  * @since 1.0.0
  */
-public interface LambdaSelectable<T, C extends LambdaSelectable<T, C>> extends PropertyConverter<T> {
+public interface LambdaSelect<T, C extends LambdaSelect<T, C>> extends PropertyConverter<T> {
 
     /**
      * 添加查询列
