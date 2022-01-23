@@ -17,13 +17,16 @@ package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.convert.ConditionConverter;
 import io.github.mybatisx.core.convert.DefaultConditionConverter;
 import io.github.mybatisx.core.convert.DefaultParameterConverter;
 import io.github.mybatisx.core.convert.ParameterConverter;
+import io.github.mybatisx.core.management.ConditionStorage;
 import io.github.mybatisx.core.management.DefaultFragmentManager;
 import io.github.mybatisx.core.management.FragmentManager;
 import io.github.mybatisx.core.sql.SqlManager;
@@ -54,6 +57,10 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     // region Base fields
 
     /**
+     * 默认表别名前缀
+     */
+    protected static final String TABLE_ALIAS_PREFIX = "_it_";
+    /**
      * 实体类
      */
     @Getter
@@ -64,9 +71,17 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     @Getter
     protected Dialect dialect;
     /**
+     * 默认表别名
+     */
+    protected String defaultAlias;
+    /**
      * 别名引用
      */
     protected AtomicReference<String> aliasRef = new AtomicReference<>(Constants.EMPTY);
+    /**
+     * 是否启用别名
+     */
+    protected AtomicBoolean useAlias;
     /**
      * 参数序列
      */
@@ -110,18 +125,41 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
 
     /**
      * 初始化
+     */
+    protected void newInit() {
+        this.newInit(null, false);
+    }
+
+    /**
+     * 初始化
      *
      * @param alias 表别名
      */
     protected void newInit(final String alias) {
+        this.newInit(alias, true);
+    }
+
+    /**
+     * 初始化
+     *
+     * @param alias 表别名
+     */
+    protected void newInit(final String alias, final boolean isQuery) {
+        final boolean hasAlias = Strings.isNotWhitespace(alias);
         this.parameterSequence = new AtomicInteger(0);
         this.paramValueMapping = new ConcurrentHashMap<>(16);
         this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
         this.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
-        this.fragmentManager = new DefaultFragmentManager();
+        if (isQuery) {
+            this.fragmentManager = new DefaultFragmentManager(this);
+        } else {
+            this.fragmentManager = new DefaultFragmentManager(this, new ConditionStorage(), null);
+        }
         this.nonMatchingThenThrows = new AtomicBoolean(true);
         this.tableAliasSequence = new AtomicInteger(0);
-        if (Strings.isNotWhitespace(alias)) {
+        this.useAlias = new AtomicBoolean(hasAlias);
+        this.defaultAlias = this.genDefaultAlias();
+        if (hasAlias) {
             aliasRef.set(alias.trim());
         }
     }
@@ -160,12 +198,13 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
             target.tableAliasSequence = source.tableAliasSequence;
             target.nonMatchingThenThrows = source.nonMatchingThenThrows;
             target.parameterConverter = source.parameterConverter;
-            target.fragmentManager = new DefaultFragmentManager();
+            target.fragmentManager = new DefaultFragmentManager(this);
             target.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
             if (deep) {
                 target.dialect = source.dialect;
                 target.entity = source.entity;
                 target.aliasRef = source.aliasRef;
+                target.defaultAlias = source.defaultAlias;
                 target.sqlManager = source.sqlManager;
             }
         }
@@ -209,6 +248,15 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     }
 
     /**
+     * 生成默认表别名
+     *
+     * @return 默认表别名
+     */
+    protected String genDefaultAlias() {
+        return TABLE_ALIAS_PREFIX + this.tableAliasSequence.incrementAndGet() + Constants.UNDER_LINE;
+    }
+
+    /**
      * 获取完整SQL语句
      *
      * @return SQL语句
@@ -249,6 +297,47 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
     @Override
     public boolean isStrict() {
         return this.nonMatchingThenThrows.get();
+    }
+
+    @Override
+    public String getTableName(boolean jointAs) {
+        final String as = this.as();
+        final boolean hasAs = Strings.isNotWhitespace(as);
+        if (this.entity != null) {
+            final Table table = TableHelper.getTable(this.entity);
+            if (table != null) {
+                final String tableName = table.getFullName();
+                if (hasAs) {
+                    if (jointAs) {
+                        return tableName + SqlSymbol.SPACE + SqlSymbol.AS + SqlSymbol.SPACE + as;
+                    }
+                    return tableName + SqlSymbol.SPACE + as;
+                }
+                return tableName;
+            }
+        }
+        return hasAs ? as : Constants.EMPTY;
+    }
+
+    /**
+     * 获取表名
+     *
+     * @param fragment sql片段
+     * @param jointAs  是否拼接'AS'
+     * @return 表名
+     */
+    protected String getTableName(final String fragment, final boolean jointAs) {
+        final StringBuilder sb = new StringBuilder(120);
+        sb.append(SqlSymbol.START_BRACKET).append(fragment).append(SqlSymbol.END_BRACKET);
+        final String as = this.as();
+        if (Strings.isNotWhitespace(as)) {
+            sb.append(SqlSymbol.SPACE);
+            if (jointAs) {
+                sb.append(SqlSymbol.AS).append(SqlSymbol.SPACE);
+            }
+            sb.append(as);
+        }
+        return sb.toString();
     }
 
     @Override
