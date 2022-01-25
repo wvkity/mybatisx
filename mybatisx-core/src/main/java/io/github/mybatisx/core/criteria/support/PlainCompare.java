@@ -53,7 +53,7 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @return {@code this}
      */
     default C colEq(final String column, final Object value, final LogicSymbol slot) {
-        return this.colEq(column, value, null, slot);
+        return this.colEq(column, value, (Matcher<? super Object>) null, slot);
     }
 
     /**
@@ -90,7 +90,7 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @param v2 字段2对应值
      * @return {@code this}
      */
-    default C colEq(final String c1, final Object v1, final String c2, final String v2) {
+    default C colEq(final String c1, final Object v1, final String c2, final Object v2) {
         return this.colEq(c1, v1, c2, v2, this.slot());
     }
 
@@ -104,7 +104,7 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @param slot {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colEq(final String c1, final Object v1, final String c2, final String v2, final LogicSymbol slot) {
+    default C colEq(final String c1, final Object v1, final String c2, final Object v2, final LogicSymbol slot) {
         return this.colEq(c1, v1, slot).colEq(c2, v2, slot);
     }
 
@@ -119,8 +119,8 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @param v3 字段3对应值
      * @return {@code this}
      */
-    default C colEq(final String c1, final Object v1, final String c2, final String v2,
-                    final String c3, final String v3) {
+    default C colEq(final String c1, final Object v1, final String c2, final Object v2,
+                    final String c3, final Object v3) {
         return this.colEq(c1, v1, c2, v2, c3, v3, this.slot());
     }
 
@@ -136,8 +136,8 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @param slot {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colEq(final String c1, final Object v1, final String c2, final String v2,
-                    final String c3, final String v3, final LogicSymbol slot) {
+    default C colEq(final String c1, final Object v1, final String c2, final Object v2,
+                    final String c3, final Object v3, final LogicSymbol slot) {
         return this.colEq(c1, v1, slot).colEq(c2, v2, slot).colEq(c3, v3, slot);
     }
 
