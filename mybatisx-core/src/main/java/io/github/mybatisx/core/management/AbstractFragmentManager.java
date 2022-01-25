@@ -49,9 +49,13 @@ public abstract class AbstractFragmentManager implements FragmentManager {
      * 查询列片段存储器
      */
     protected final SelectableStorage selectableStorage;
+    /**
+     * 排序存储器
+     */
+    protected final OrderStorage orderStorage;
 
     public AbstractFragmentManager(Criteria<?> criteria) {
-        this(criteria, new ConditionStorage(), new SelectableStorage(criteria));
+        this(criteria, new ConditionStorage(), new SelectableStorage(criteria), new OrderStorage());
     }
 
     @Override
@@ -100,13 +104,13 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public boolean hasSort() {
-        return false;
+    public boolean hasSelect() {
+        return !this.selectableStorage.isEmpty();
     }
 
     @Override
-    public boolean hasSelect() {
-        return !this.selectableStorage.isEmpty();
+    public boolean hasSort() {
+        return this.orderStorage != null && !this.orderStorage.isEmpty();
     }
 
     @Override

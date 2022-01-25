@@ -95,18 +95,18 @@ public interface FragmentManager extends Fragment {
     boolean hasCondition();
 
     /**
-     * 检查是否存在排序
-     *
-     * @return boolean
-     */
-    boolean hasSort();
-
-    /**
      * 是否存在查询列
      *
      * @return boolean
      */
     boolean hasSelect();
+
+    /**
+     * 检查是否存在排序
+     *
+     * @return boolean
+     */
+    boolean hasSort();
 
     /**
      * 是否已缓存

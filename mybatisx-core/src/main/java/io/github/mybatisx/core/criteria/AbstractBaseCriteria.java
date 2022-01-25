@@ -153,7 +153,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         if (isQuery) {
             this.fragmentManager = new DefaultFragmentManager(this);
         } else {
-            this.fragmentManager = new DefaultFragmentManager(this, new ConditionStorage(), null);
+            this.fragmentManager = new DefaultFragmentManager(this, new ConditionStorage());
         }
         this.nonMatchingThenThrows = new AtomicBoolean(true);
         this.tableAliasSequence = new AtomicInteger(0);
