@@ -31,7 +31,7 @@ public class PostgreSQL81Dialect implements Dialect {
 
     @Override
     public String getCaseInsensitiveLike() {
-        return "ilike";
+        return "ILIKE";
     }
 
     private static class PGDialectInstanceHolder {

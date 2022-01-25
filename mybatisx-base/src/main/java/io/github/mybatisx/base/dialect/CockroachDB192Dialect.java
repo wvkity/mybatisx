@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.base.dialect;
 
+import io.github.mybatisx.base.constant.NullPrecedence;
+
 /**
  * CockroachDB V19.2+方言
  *
@@ -31,7 +33,24 @@ public class CockroachDB192Dialect implements Dialect {
 
     @Override
     public String getCaseInsensitiveLike() {
-        return "ilike";
+        return "ILIKE";
+    }
+
+    @Override
+    public String renderOrderByElement(String expression, String collation, String order, NullPrecedence precedence) {
+        // noinspection DuplicatedCode
+        final StringBuilder it = new StringBuilder(45);
+        if (precedence != NullPrecedence.NONE) {
+            it.append("CASE WHEN ").append(expression).append(" IS NULL THEN ");
+            if (precedence == NullPrecedence.FIRST) {
+                it.append("0 ELSE 1 ");
+            } else {
+                it.append("1 ELSE 0 ");
+            }
+            it.append("END, ");
+        }
+        it.append(Dialect.super.renderOrderByElement(expression, collation, order, NullPrecedence.NONE));
+        return it.toString();
     }
 
     private static class CockroachDialectInstanceHolder {
