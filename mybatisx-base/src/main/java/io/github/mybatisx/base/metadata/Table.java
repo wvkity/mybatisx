@@ -23,7 +23,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -191,7 +190,10 @@ public class Table {
      * @param filter  {@link Predicate}
      * @return 字段集合
      */
-    public List<Column> filtrate(final Collection<Column> columns, final Predicate<Column> filter) {
+    public List<Column> filtrate(final List<Column> columns, final Predicate<Column> filter) {
+        if (filter == null) {
+            return columns;
+        }
         return columns.stream().filter(filter).collect(Collectors.toList());
     }
 
