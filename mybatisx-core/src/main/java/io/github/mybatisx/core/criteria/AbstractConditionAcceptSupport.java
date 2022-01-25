@@ -48,7 +48,7 @@ import java.util.function.Function;
  */
 @SuppressWarnings({"serial"})
 public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrapper<T, C>> extends
-        AbstractGenericCriteria<T> implements CriteriaWrapper<T, C> {
+        AbstractBaseCriteria<T> implements CriteriaWrapper<T, C> {
 
     /**
      * 当前对象
@@ -485,7 +485,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
             if (context != null) {
                 final C c = apply.apply(context);
                 if (c != null) {
-                    final List<Criterion> conditions = ((AbstractGenericCriteria<?>) c).fragmentManager.getConditions();
+                    final List<Criterion> conditions = ((AbstractBaseCriteria<?>) c).fragmentManager.getConditions();
                     if (Objects.isNotEmpty(conditions)) {
                         this.where(NestedCondition.builder().not(not).slot(slot).conditions(conditions).build());
                     }

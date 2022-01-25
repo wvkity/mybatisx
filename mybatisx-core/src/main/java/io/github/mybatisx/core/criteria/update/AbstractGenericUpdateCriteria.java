@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.update;
 
-import io.github.mybatisx.core.criteria.support.AbstractBaseCriteria;
+import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 
 /**
  * 抽象通用更新条件
@@ -28,6 +28,6 @@ import io.github.mybatisx.core.criteria.support.AbstractBaseCriteria;
  */
 @SuppressWarnings({"serial"})
 public abstract class AbstractGenericUpdateCriteria<T, C extends GenericUpdateCriteria<T, C>> extends
-        AbstractBaseCriteria<T, C> implements GenericUpdateCriteria<T, C> {
+        AbstractGenericCriteria<T, C> implements GenericUpdateCriteria<T, C> {
 
 }

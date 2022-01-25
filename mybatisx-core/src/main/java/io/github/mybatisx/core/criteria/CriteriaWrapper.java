@@ -16,7 +16,6 @@
 package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.core.expression.Expression;
-import javafx.beans.binding.ListExpression;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +31,7 @@ import java.util.function.Function;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends GenericCriteria<T> {
+public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends BaseCriteria<T> {
 
     /**
      * 嵌套条件

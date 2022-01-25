@@ -16,7 +16,7 @@
 package io.github.mybatisx.core.criteria.support;
 
 /**
- * 基础条件接口
+ * 通用条件接口
  *
  * @param <T> 实体类型
  * @param <C> 子类型
@@ -24,7 +24,7 @@ package io.github.mybatisx.core.criteria.support;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface BaseCriteriaWrapper<T, C extends BaseCriteriaWrapper<T, C>> extends PlainCriteriaWrapper<T, C>,
+public interface GenericCriteriaWrapper<T, C extends GenericCriteriaWrapper<T, C>> extends PlainCriteriaWrapper<T, C>,
         LambdaCriteriaWrapper<T, C> {
 
 }

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * 抽象基础条件
+ * 抽象通用基础条件
  *
  * @param <T> 实体类型
  * @param <C> 子类型
@@ -35,8 +35,8 @@ import java.util.Map;
  * @since 1.0.0
  */
 @SuppressWarnings({"serial"})
-public abstract class AbstractBaseCriteria<T, C extends BaseCriteriaWrapper<T, C>> extends
-        AbstractLambdaCriteria<T, C> implements BaseCriteriaWrapper<T, C> {
+public abstract class AbstractGenericCriteria<T, C extends GenericCriteriaWrapper<T, C>> extends
+        AbstractLambdaCriteria<T, C> implements GenericCriteriaWrapper<T, C> {
 
     @Override
     public <V> C colEq(String column, V value, Matcher<V> matcher, LogicSymbol slot) {

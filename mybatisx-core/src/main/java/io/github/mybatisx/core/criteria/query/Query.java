@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.query;
 
-import io.github.mybatisx.core.criteria.GenericCriteria;
+import io.github.mybatisx.core.criteria.BaseCriteria;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.embedded.EmbeddableResult;
 
@@ -29,7 +29,7 @@ import java.util.List;
  * @created 2021/12/23
  * @since 1.0.0
  */
-public interface Query<T> extends GenericCriteria<T>, EmbeddableResult {
+public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
 
     /**
      * 设置表别名

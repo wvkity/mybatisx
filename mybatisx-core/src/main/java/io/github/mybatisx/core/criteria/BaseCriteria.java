@@ -18,14 +18,14 @@ package io.github.mybatisx.core.criteria;
 import io.github.mybatisx.base.criteria.Criteria;
 
 /**
- * 通用条件接口
+ * 基础条件接口
  *
  * @author wvkity
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface GenericCriteria<T> extends Criteria<T> {
-    
+public interface BaseCriteria<T> extends Criteria<T> {
+
     /**
      * 获取表名
      *

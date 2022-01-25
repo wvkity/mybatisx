@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.update;
 
-import io.github.mybatisx.core.criteria.support.BaseCriteriaWrapper;
+import io.github.mybatisx.core.criteria.support.GenericCriteriaWrapper;
 
 /**
  * 通用更新条件接口
@@ -27,6 +27,6 @@ import io.github.mybatisx.core.criteria.support.BaseCriteriaWrapper;
  * @since 1.0.0
  */
 public interface GenericUpdateCriteria<T, C extends GenericUpdateCriteria<T, C>> extends PlainUpdateCriteria<T, C>,
-        LambdaUpdateCriteria<T, C>, BaseCriteriaWrapper<T, C> {
+        LambdaUpdateCriteria<T, C>, GenericCriteriaWrapper<T, C> {
 
 }

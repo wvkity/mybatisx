@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GenericImplementor<T> extends AbstractBaseCriteria<T, GenericImplementor<T>> {
+public class GenericImplementor<T> extends AbstractGenericCriteria<T, GenericImplementor<T>> {
 
     private static final long serialVersionUID = -8709011796466994919L;
 

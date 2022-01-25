@@ -18,7 +18,7 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
-import io.github.mybatisx.core.criteria.support.AbstractBaseCriteria;
+import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
@@ -42,7 +42,7 @@ import java.util.Map;
  */
 @SuppressWarnings({"serial"})
 public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCriteria<T, C>> extends
-        AbstractBaseCriteria<T, C> implements GenericQueryCriteria<T, C> {
+        AbstractGenericCriteria<T, C> implements GenericQueryCriteria<T, C> {
 
     // region Basic methods
 

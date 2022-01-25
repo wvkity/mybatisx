@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * 抽象条件
+ * 抽象基础条件
  *
  * @param <T> 实体类型
  * @author wvkity
@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 @SuppressWarnings({"serial"})
-public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
+public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
 
     // region Base fields
 
@@ -169,7 +169,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      *
      * @param source 源对象
      */
-    protected void clone(final AbstractGenericCriteria<T> source) {
+    protected void clone(final AbstractBaseCriteria<T> source) {
         this.clone(source, this, true);
     }
 
@@ -179,7 +179,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      * @param source 源对象
      * @param deep   是否深度拷贝
      */
-    protected void clone(final AbstractGenericCriteria<T> source, final boolean deep) {
+    protected void clone(final AbstractBaseCriteria<T> source, final boolean deep) {
         this.clone(source, this, deep);
     }
 
@@ -190,7 +190,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      * @param target 目标对象
      * @param deep   是否深度拷贝
      */
-    protected void clone(final AbstractGenericCriteria<T> source, final AbstractGenericCriteria<T> target,
+    protected void clone(final AbstractBaseCriteria<T> source, final AbstractBaseCriteria<T> target,
                          final boolean deep) {
         if (source != null && target != null) {
             target.parameterSequence = source.parameterSequence;
@@ -243,7 +243,7 @@ public abstract class AbstractGenericCriteria<T> implements GenericCriteria<T> {
      *
      * @return {@code this}
      */
-    protected GenericCriteria<T> self() {
+    protected BaseCriteria<T> self() {
         return this;
     }
 

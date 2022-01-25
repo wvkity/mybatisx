@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.query;
 
-import io.github.mybatisx.core.criteria.support.BaseCriteriaWrapper;
+import io.github.mybatisx.core.criteria.support.GenericCriteriaWrapper;
 
 /**
  * 通用查询条件
@@ -26,7 +26,7 @@ import io.github.mybatisx.core.criteria.support.BaseCriteriaWrapper;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface GenericQueryCriteria<T, C extends GenericQueryCriteria<T, C>> extends BaseCriteriaWrapper<T, C>,
+public interface GenericQueryCriteria<T, C extends GenericQueryCriteria<T, C>> extends GenericCriteriaWrapper<T, C>,
         PlainQueryWrapper<T, C>, LambdaQueryWrapper<T, C> {
 
 }

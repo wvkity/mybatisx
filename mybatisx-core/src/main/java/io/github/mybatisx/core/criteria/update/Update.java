@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.update;
 
-import io.github.mybatisx.core.criteria.GenericCriteria;
+import io.github.mybatisx.core.criteria.BaseCriteria;
 
 /**
  * 更新条件接口(update/delete)
@@ -23,6 +23,6 @@ import io.github.mybatisx.core.criteria.GenericCriteria;
  * @created 2021/12/23
  * @since 1.0.0
  */
-public interface Update<T> extends GenericCriteria<T> {
+public interface Update<T> extends BaseCriteria<T> {
 
 }

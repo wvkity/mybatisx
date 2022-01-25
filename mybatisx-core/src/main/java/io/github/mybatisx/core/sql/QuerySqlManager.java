@@ -20,7 +20,7 @@ import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.helper.SqlHelper;
-import io.github.mybatisx.core.criteria.AbstractGenericCriteria;
+import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
 import io.github.mybatisx.core.criteria.query.JointQuery;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.management.FragmentManager;
@@ -130,8 +130,8 @@ public class QuerySqlManager extends AbstractSqlManager {
         if (Objects.isNotEmpty(_$associations)) {
             final List<String> conditions = new ArrayList<>(_$associations.size() + 1);
             for (JointQuery<?> it : _$associations) {
-                if (it instanceof AbstractGenericCriteria) {
-                    final AbstractGenericCriteria<?> genericCriteria = (AbstractGenericCriteria<?>) it;
+                if (it instanceof AbstractBaseCriteria) {
+                    final AbstractBaseCriteria<?> genericCriteria = (AbstractBaseCriteria<?>) it;
                     final String fws = genericCriteria.getWhereString(false, false, null);
                     if (Strings.isNotWhitespace(fws)) {
                         final String onCondition = it.getJoin().getFragment() +
