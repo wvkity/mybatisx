@@ -29,6 +29,8 @@ import io.github.mybatisx.core.convert.ParameterConverter;
 import io.github.mybatisx.core.management.ConditionStorage;
 import io.github.mybatisx.core.management.DefaultFragmentManager;
 import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
+import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.sql.SqlManager;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -36,6 +38,8 @@ import io.github.mybatisx.matcher.Matcher;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -66,7 +70,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     @Getter
     protected Class<T> entity;
     /**
-     * 设置方言
+     * 数据库方言
      */
     @Getter
     protected Dialect dialect;
@@ -254,6 +258,66 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      */
     protected String genDefaultAlias() {
         return TABLE_ALIAS_PREFIX + this.tableAliasSequence.incrementAndGet() + Constants.UNDER_LINE;
+    }
+
+    /**
+     * 字符串属性列表转字段列表
+     *
+     * @param properties 属性列表
+     * @return 字段列表
+     */
+    protected List<String> stringConvert(final List<String> properties) {
+        if (Objects.isNotEmpty(properties)) {
+            final Table table = TableHelper.getTable(this.entity);
+            if (table != null) {
+                final List<String> columns = new ArrayList<>(properties.size());
+                for (String property : properties) {
+                    if (Strings.isNotWhitespace(property)) {
+                        final Column column = table.getByProperty(property);
+                        if (column == null) {
+                            log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
+                                    "`{}` attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                                    "annotation.", this.entity.getName(), property);
+                        } else {
+                            columns.add(column.getColumn());
+                        }
+                    }
+                }
+                return columns;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Lambda属性列表转字段列表
+     *
+     * @param properties 属性列表
+     * @return 字段列表
+     */
+    public List<String> lambdaConvert(final List<Property<T, ?>> properties) {
+        if (Objects.isNotEmpty(properties)) {
+            final Table table = TableHelper.getTable(this.entity);
+            if (table != null) {
+                final List<String> columns = new ArrayList<>(properties.size());
+                for (Property<T, ?> it : properties) {
+                    final String property = LambdaMetadataWeakCache.getProperty(it);
+                    if (Strings.isNotWhitespace(property)) {
+                        final Column column = table.getByProperty(property);
+                        if (column == null) {
+                            log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
+                                    "`{}` attribute. Check to see if the attribute exists or is decorated using the @Transient " +
+                                    "annotation.", this.entity.getName(), property);
+                        } else {
+                            columns.add(column.getColumn());
+                        }
+                    }
+                }
+                return columns;
+            }
+
+        }
+        return null;
     }
 
     /**

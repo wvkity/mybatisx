@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
+import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -303,6 +304,18 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     @Override
     public List<Selectable> fetchSelects() {
         return this.getSelects();
+    }
+
+    // endregion
+
+    // region Order by methods
+
+    @Override
+    public C order(Order order) {
+        if (order != null) {
+            this.fragmentManager.addOrder(order);
+        }
+        return this.context;
     }
 
     // endregion

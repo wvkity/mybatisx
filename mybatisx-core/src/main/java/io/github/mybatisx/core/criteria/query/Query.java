@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.BaseCriteria;
+import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.embedded.EmbeddableResult;
 
@@ -239,6 +240,14 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @return {@code this}
      */
     Query<T> select(final Selectable selectable);
+
+    /**
+     * 添加排序
+     *
+     * @param order {@link Order}
+     * @return {@code this}
+     */
+    Query<T> order(final Order order);
 
     /**
      * 获取查询列

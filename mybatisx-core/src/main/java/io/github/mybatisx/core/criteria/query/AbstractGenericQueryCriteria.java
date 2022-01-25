@@ -16,10 +16,14 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.constant.NullPrecedence;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 import io.github.mybatisx.core.property.Property;
+import io.github.mybatisx.core.support.order.MultiOrder;
+import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.order.SingleOrder;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -390,6 +394,70 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     @Override
     public List<Selectable> fetchSelects() {
         return this.getSelects();
+    }
+
+    // endregion
+
+    // region Order by methods 
+
+    @Override
+    public C asc(String property, boolean ignoreCase, NullPrecedence precedence) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.order(SingleOrder.asc(this, column.getColumn(),
+                    ignoreCase && Objects.isAssignable(String.class, column.getDescriptor().getJavaType()), precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C asc(List<String> properties, boolean ignoreCase, NullPrecedence precedence) {
+        if (Objects.isNotEmpty(properties)) {
+            this.order(MultiOrder.asc(this, this.stringConvert(properties), ignoreCase, precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C asc(boolean ignoreCase, NullPrecedence precedence, List<Property<T, ?>> properties) {
+        if (Objects.isNotEmpty(properties)) {
+            this.order(MultiOrder.asc(this, this.lambdaConvert(properties), ignoreCase, precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C desc(String property, boolean ignoreCase, NullPrecedence precedence) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.order(SingleOrder.desc(this, column.getColumn(),
+                    ignoreCase && Objects.isAssignable(String.class, column.getDescriptor().getJavaType()), precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C desc(List<String> properties, boolean ignoreCase, NullPrecedence precedence) {
+        if (Objects.isNotEmpty(properties)) {
+            this.order(MultiOrder.desc(this, this.stringConvert(properties), ignoreCase, precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C desc(boolean ignoreCase, NullPrecedence precedence, List<Property<T, ?>> properties) {
+        if (Objects.isNotEmpty(properties)) {
+            this.order(MultiOrder.desc(this, this.lambdaConvert(properties), ignoreCase, precedence));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C order(Order order) {
+        if (order != null) {
+            this.fragmentManager.addOrder(order);
+        }
+        return this.context;
     }
 
     // endregion
