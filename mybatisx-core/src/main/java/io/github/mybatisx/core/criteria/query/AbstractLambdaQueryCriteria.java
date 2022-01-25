@@ -44,9 +44,12 @@ import java.util.Map;
 public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrapper<T, C>> extends
         AbstractLambdaCriteria<T, C> implements LambdaQueryWrapper<T, C> {
 
+    // region Basic methods
+
     @Override
     public C as(String alias) {
-        this.aliasRef.set(alias);
+        final String oldValue = this.aliasRef.get();
+        this.aliasRef.compareAndSet(oldValue, Strings.isWhitespace(alias) ? Constants.EMPTY : alias);
         return this.context;
     }
 
@@ -67,8 +70,19 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public String getReference() {
-        return this.propRef.get();
+    public C propAsAlias() {
+        return this.propAsAlias(true);
+    }
+
+    @Override
+    public C propAsAlias(boolean using) {
+        this.propertyAsAlias = using;
+        return this.context;
+    }
+
+    @Override
+    public boolean isPropAsAlias() {
+        return this.propertyAsAlias;
     }
 
     @Override
@@ -79,14 +93,14 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public boolean isExtra() {
-        return this.extra;
-    }
-
-    @Override
     public C extra(boolean extra) {
         this.extra = extra;
         return this.context;
+    }
+
+    @Override
+    public boolean isExtra() {
+        return this.extra;
     }
 
     @Override
@@ -106,14 +120,14 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public boolean isDistinct() {
-        return this.distinct;
-    }
-
-    @Override
     public C distinct(boolean distinct) {
         this.distinct = distinct;
         return this.context;
+    }
+
+    @Override
+    public boolean isDistinct() {
+        return this.distinct;
     }
 
     @Override
@@ -180,21 +194,9 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
         return this.keepOrderly;
     }
 
-    @Override
-    public C propAsAlias() {
-        return this.propAsAlias(true);
-    }
+    // endregion
 
-    @Override
-    public C propAsAlias(boolean using) {
-        this.propertyAsAlias = using;
-        return this.context;
-    }
-
-    @Override
-    public boolean isPropAsAlias() {
-        return this.propertyAsAlias;
-    }
+    // region Embeddable result methods
 
     @Override
     public String getResultMap() {
@@ -258,6 +260,8 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
         this.mapType = mapType;
         return this.context;
     }
+
+    // endregion
 
     // region Selectable methods 
 
@@ -327,8 +331,8 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C excludeProperty(Collection<String> properties) {
-        this.fragmentManager.addExcludeProperty(properties);
+    public C excludeProperties(Collection<String> properties) {
+        this.fragmentManager.addExcludeProperties(properties);
         return this.context;
     }
 
@@ -339,7 +343,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public List<Selectable> fetchSelects() {
-        return null;
+        return this.getSelects();
     }
 
     // endregion

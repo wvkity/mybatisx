@@ -191,8 +191,8 @@ public interface LambdaSelect<T, C extends LambdaSelect<T, C>> extends PropertyC
      * @param properties 属性列表
      * @return {@code this}
      */
-    default C excludeProperty(final String... properties) {
-        return this.excludeProperty(Arrays.asList(properties));
+    default C excludeProperties(final String... properties) {
+        return this.excludeProperties(Arrays.asList(properties));
     }
 
     /**
@@ -201,5 +201,5 @@ public interface LambdaSelect<T, C extends LambdaSelect<T, C>> extends PropertyC
      * @param properties 属性列表
      * @return {@code this}
      */
-    C excludeProperty(final Collection<String> properties);
+    C excludeProperties(final Collection<String> properties);
 }

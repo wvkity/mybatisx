@@ -43,7 +43,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param conditions 条件列表
      */
-    void addCondition(final Collection<Criterion> conditions);
+    void addConditions(final Collection<Criterion> conditions);
 
     /**
      * 添加查询列
@@ -57,7 +57,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param selectables {@link Selectable}列表
      */
-    void addSelect(final Collection<Selectable> selectables);
+    void addSelects(final Collection<Selectable> selectables);
 
     /**
      * 添加排除查询属性
@@ -71,7 +71,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param properties 属性名列表
      */
-    void addExcludeProperty(final Collection<String> properties);
+    void addExcludeProperties(final Collection<String> properties);
 
     /**
      * 添加排除查询字段
@@ -85,7 +85,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param columns 字段名列表
      */
-    void addExcludeColumn(final Collection<String> columns);
+    void addExcludeColumns(final Collection<String> columns);
 
     /**
      * 检查是否存在条件

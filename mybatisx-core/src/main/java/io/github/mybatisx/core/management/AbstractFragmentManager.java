@@ -60,7 +60,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addCondition(Collection<Criterion> conditions) {
+    public void addConditions(Collection<Criterion> conditions) {
         this.conditionStorage.addAll(conditions);
     }
 
@@ -70,8 +70,8 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addSelect(Collection<Selectable> selectables) {
-        this.selectableStorage.addSelect(selectables);
+    public void addSelects(Collection<Selectable> selectables) {
+        this.selectableStorage.addSelects(selectables);
     }
 
     @Override
@@ -80,8 +80,8 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addExcludeProperty(Collection<String> properties) {
-        this.selectableStorage.addExcludeProperty(properties);
+    public void addExcludeProperties(Collection<String> properties) {
+        this.selectableStorage.addExcludeProperties(properties);
     }
 
     @Override
@@ -90,8 +90,8 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addExcludeColumn(Collection<String> columns) {
-        this.selectableStorage.addExcludeColumn(columns);
+    public void addExcludeColumns(Collection<String> columns) {
+        this.selectableStorage.addExcludeColumns(columns);
     }
 
     @Override
@@ -160,23 +160,23 @@ public abstract class AbstractFragmentManager implements FragmentManager {
             final StringBuilder sb = new StringBuilder(128);
             final String condition = this.getWhereString();
             if (Strings.isNotWhitespace(condition)) {
-                sb.append(condition.trim());
+                sb.append(condition);
             }
             if (Strings.isNotWhitespace(groupReplacement)) {
-                sb.append(SqlSymbol.GROUP_BY_SPACE_BOTH).append(groupReplacement.trim());
+                sb.append(SqlSymbol.GROUP_BY_SPACE_BOTH).append(groupReplacement);
             } else {
                 final String group = this.getGroupString();
                 if (Strings.isNotWhitespace(group)) {
-                    sb.append(SqlSymbol.SPACE).append(group.trim());
+                    sb.append(SqlSymbol.SPACE).append(group);
                 }
             }
             final String having = this.getHavingString();
             if (Strings.isNotWhitespace(having)) {
-                sb.append(SqlSymbol.SPACE).append(having.trim());
+                sb.append(SqlSymbol.SPACE).append(having);
             }
             final String order = this.getOrderString();
             if (Strings.isNotWhitespace(order)) {
-                sb.append(SqlSymbol.SPACE).append(order.trim());
+                sb.append(SqlSymbol.SPACE).append(order);
             }
             return sb.toString();
         }

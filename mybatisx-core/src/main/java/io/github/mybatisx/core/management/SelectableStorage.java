@@ -124,7 +124,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      *
      * @param selectables {@link Selectable}列表
      */
-    public void addSelect(final Collection<Selectable> selectables) {
+    public void addSelects(final Collection<Selectable> selectables) {
         if (Objects.isNotEmpty(selectables)) {
             for (Selectable it : selectables) {
                 this.addSelect(it);
@@ -139,7 +139,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
 
     @Override
     public void addAll(Collection<Selectable> c) {
-        this.addSelect(c);
+        this.addSelects(c);
     }
 
     /**
@@ -168,7 +168,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      *
      * @param properties 属性名列表
      */
-    public void addExcludeProperty(final Collection<String> properties) {
+    public void addExcludeProperties(final Collection<String> properties) {
         if (Objects.isNotEmpty(properties)) {
             this.excludeProperties.addAll(properties);
             this.cached.set(false);
@@ -191,7 +191,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      *
      * @param columns 字段名列表
      */
-    public void addExcludeColumn(final Collection<String> columns) {
+    public void addExcludeColumns(final Collection<String> columns) {
         if (Objects.isNotEmpty(columns)) {
             this.excludeColumns.addAll(columns);
             this.cached.set(false);
