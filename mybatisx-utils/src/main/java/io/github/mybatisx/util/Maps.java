@@ -37,7 +37,7 @@ import java.util.Set;
 public final class Maps {
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -52,7 +52,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -67,7 +67,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -84,7 +84,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -104,7 +104,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -126,7 +126,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -150,7 +150,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -177,7 +177,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
@@ -206,7 +206,7 @@ public final class Maps {
     }
 
     /**
-     * 创建
+     * 创建有序{@link Map}
      *
      * @param k1  键1
      * @param v1  值1
