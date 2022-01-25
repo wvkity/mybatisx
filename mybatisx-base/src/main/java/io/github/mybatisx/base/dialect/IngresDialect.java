@@ -26,7 +26,7 @@ public class IngresDialect implements Dialect {
 
     @Override
     public String getLowercaseFunction() {
-        return "lowercase";
+        return "LOWERCASE";
     }
 
     private static class IngresDialectInstanceHolder {
