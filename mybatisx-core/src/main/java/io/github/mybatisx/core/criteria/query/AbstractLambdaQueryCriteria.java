@@ -282,6 +282,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C select(Matcher<Column> matcher) {
+        //  noinspection DuplicatedCode
         if (matcher != null) {
             final List<Column> columns;
             if (Objects.isNotEmpty((columns = TableHelper.getColumns(this.getEntity(), matcher)))) {
