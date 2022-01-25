@@ -93,19 +93,19 @@ public interface Query<T> extends GenericCriteria<T>, EmbeddableResult {
     Query<T> reference(final String reference);
 
     /**
-     * 查询列是否为额外添加
-     *
-     * @return boolean
-     */
-    boolean isExtra();
-
-    /**
      * 设置查询列是否为额外添加
      *
      * @param extra 是否为额外添加
      * @return {@code this}
      */
     Query<T> extra(final boolean extra);
+
+    /**
+     * 查询列是否为额外添加
+     *
+     * @return boolean
+     */
+    boolean isExtra();
 
     /**
      * 设置继承属性
@@ -130,19 +130,19 @@ public interface Query<T> extends GenericCriteria<T>, EmbeddableResult {
     boolean isInherit();
 
     /**
-     * 是否去重
-     *
-     * @return boolean
-     */
-    boolean isDistinct();
-
-    /**
      * 设置是否去重
      *
      * @param distinct 是否去重
      * @return {@code this}
      */
     Query<T> distinct(final boolean distinct);
+
+    /**
+     * 是否去重
+     *
+     * @return boolean
+     */
+    boolean isDistinct();
 
     /**
      * 设置只查询聚合函数
