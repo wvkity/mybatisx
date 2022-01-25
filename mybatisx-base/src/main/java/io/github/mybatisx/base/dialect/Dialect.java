@@ -15,8 +15,12 @@
  */
 package io.github.mybatisx.base.dialect;
 
+import io.github.mybatisx.base.constant.NullPrecedence;
+import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.lang.Strings;
+
 /**
- * Like方言
+ * 数据库方言
  *
  * @author wvkity
  * @created 2022/1/10
@@ -39,7 +43,7 @@ public interface Dialect {
      * @return 函数名称
      */
     default String getCaseInsensitiveLike() {
-        return "like";
+        return "LIKE";
     }
 
     /**
@@ -48,7 +52,30 @@ public interface Dialect {
      * @return 小写字符串函数名称
      */
     default String getLowercaseFunction() {
-        return "lower";
+        return "LOWER";
     }
 
+    /**
+     * 渲染排序片段
+     *
+     * @param expression 排序表达式
+     * @param collation  排序规则
+     * @param order      排序方式
+     * @param precedence 空值优先级
+     * @return 排序片段
+     */
+    default String renderOrderByElement(final String expression, final String collation, final String order,
+                                        final NullPrecedence precedence) {
+        final StringBuilder it = new StringBuilder(expression);
+        if (Strings.isNotWhitespace(collation)) {
+            it.append(SqlSymbol.SPACE).append(collation);
+        }
+        if (Strings.isNotWhitespace(order)) {
+            it.append(SqlSymbol.SPACE).append(order);
+        }
+        if (precedence != null && precedence != NullPrecedence.NONE) {
+            it.append(" NULLS ").append(precedence.name());
+        }
+        return it.toString();
+    }
 }
