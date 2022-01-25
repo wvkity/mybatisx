@@ -15,7 +15,9 @@
  */
 package io.github.mybatisx.core.support.order;
 
+import io.github.mybatisx.base.constant.NullPrecedence;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.criteria.query.Query;
 
 /**
  * 排序接口
@@ -25,5 +27,40 @@ import io.github.mybatisx.base.fragment.Fragment;
  * @since 1.0.0
  */
 public interface Order extends Fragment {
+
+    /**
+     * 获取{@link Query}
+     *
+     * @return {@link Query}
+     */
+    Query<?> getQuery();
+
+    /**
+     * 获取表别名
+     *
+     * @return 表别名
+     */
+    String getAlias();
+
+    /**
+     * 是否为升序
+     *
+     * @return boolean
+     */
+    boolean isAscending();
+
+    /**
+     * 是否忽略大小写排序
+     *
+     * @return boolean
+     */
+    boolean isIgnoreCase();
+
+    /**
+     * 空值排序优先级
+     *
+     * @return {@link NullPrecedence}
+     */
+    NullPrecedence getPrecedence();
 
 }
