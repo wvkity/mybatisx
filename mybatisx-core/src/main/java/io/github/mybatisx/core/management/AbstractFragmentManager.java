@@ -19,6 +19,7 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.lang.Strings;
 import lombok.AllArgsConstructor;
@@ -99,6 +100,16 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public void addOrder(Order order) {
+        this.orderStorage.add(order);
+    }
+
+    @Override
+    public void addOrders(List<Order> orders) {
+        this.orderStorage.addAll(orders);
+    }
+
+    @Override
     public boolean hasCondition() {
         return !this.conditionStorage.isEmpty();
     }
@@ -155,7 +166,10 @@ public abstract class AbstractFragmentManager implements FragmentManager {
 
     @Override
     public String getOrderString() {
-        return null;
+        if (this.orderStorage != null) {
+            return this.orderStorage.getFragment();
+        }
+        return Constants.EMPTY;
     }
 
     @Override

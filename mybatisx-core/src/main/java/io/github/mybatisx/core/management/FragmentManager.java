@@ -17,6 +17,7 @@ package io.github.mybatisx.core.management;
 
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 
 import java.util.Collection;
@@ -86,6 +87,20 @@ public interface FragmentManager extends Fragment {
      * @param columns 字段名列表
      */
     void addExcludeColumns(final Collection<String> columns);
+
+    /**
+     * 添加排序
+     *
+     * @param order {@link Order}
+     */
+    void addOrder(final Order order);
+
+    /**
+     * 添加多个排序
+     *
+     * @param orders 排序列表
+     */
+    void addOrders(final List<Order> orders);
 
     /**
      * 检查是否存在条件
