@@ -17,6 +17,7 @@ package io.github.mybatisx.core.management;
 
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 
@@ -89,6 +90,20 @@ public interface FragmentManager extends Fragment {
     void addExcludeColumns(final Collection<String> columns);
 
     /**
+     * 添加分组字段
+     *
+     * @param group {@link Group}
+     */
+    void addGroup(final Group group);
+
+    /**
+     * 添加多个分组字段
+     *
+     * @param groups {@link Group}列表
+     */
+    void addGroups(final List<Group> groups);
+
+    /**
      * 添加排序
      *
      * @param order {@link Order}
@@ -98,7 +113,7 @@ public interface FragmentManager extends Fragment {
     /**
      * 添加多个排序
      *
-     * @param orders 排序列表
+     * @param orders {@link Order}列表
      */
     void addOrders(final List<Order> orders);
 

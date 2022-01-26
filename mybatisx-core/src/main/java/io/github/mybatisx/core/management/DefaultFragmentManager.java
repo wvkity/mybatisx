@@ -33,11 +33,12 @@ public class DefaultFragmentManager extends AbstractFragmentManager {
     }
 
     public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage) {
-        super(criteria, conditionStorage, null, null);
+        super(criteria, conditionStorage, null, null, null);
     }
 
-    public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage, 
-                                  SelectableStorage selectableStorage, OrderStorage orderStorage) {
-        super(criteria, conditionStorage, selectableStorage, orderStorage);
+    public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage,
+                                  SelectableStorage selectableStorage, GroupStorage groupStorage,
+                                  OrderStorage orderStorage) {
+        super(criteria, conditionStorage, selectableStorage, groupStorage, orderStorage);
     }
 }

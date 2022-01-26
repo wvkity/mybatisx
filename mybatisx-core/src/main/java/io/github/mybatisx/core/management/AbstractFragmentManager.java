@@ -19,6 +19,7 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.lang.Strings;
@@ -51,12 +52,17 @@ public abstract class AbstractFragmentManager implements FragmentManager {
      */
     protected final SelectableStorage selectableStorage;
     /**
+     * 分组片段存储器
+     */
+    protected final GroupStorage groupStorage;
+    /**
      * 排序存储器
      */
     protected final OrderStorage orderStorage;
 
     public AbstractFragmentManager(Criteria<?> criteria) {
-        this(criteria, new ConditionStorage(), new SelectableStorage(criteria), new OrderStorage());
+        this(criteria, new ConditionStorage(), new SelectableStorage(criteria), new GroupStorage(),
+                new OrderStorage());
     }
 
     @Override
@@ -100,6 +106,16 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public void addGroup(Group group) {
+        this.groupStorage.add(group);
+    }
+
+    @Override
+    public void addGroups(List<Group> groups) {
+        this.groupStorage.addAll(groups);
+    }
+
+    @Override
     public void addOrder(Order order) {
         this.orderStorage.add(order);
     }
@@ -131,7 +147,8 @@ public abstract class AbstractFragmentManager implements FragmentManager {
 
     @Override
     public boolean hasFragment() {
-        return this.hasCondition() || this.hasSelect();
+        return this.hasCondition() || this.hasSelect() || (this.groupStorage != null && !this.groupStorage.isEmpty())
+                || this.hasSort();
     }
 
     @Override
@@ -141,7 +158,10 @@ public abstract class AbstractFragmentManager implements FragmentManager {
 
     @Override
     public List<Selectable> getSelects() {
-        return this.selectableStorage.getSelects();
+        if (this.selectableStorage != null) {
+            return this.selectableStorage.getSelects();
+        }
+        return null;
     }
 
     @Override
@@ -151,12 +171,18 @@ public abstract class AbstractFragmentManager implements FragmentManager {
 
     @Override
     public String getSelectString(boolean isQuery) {
-        return this.selectableStorage.getFragment(isQuery);
+        if (this.selectableStorage != null) {
+            return this.selectableStorage.getFragment(isQuery);
+        }
+        return Constants.EMPTY;
     }
 
     @Override
     public String getGroupString() {
-        return null;
+        if (this.groupStorage != null) {
+            return this.groupStorage.getFragment();
+        }
+        return Constants.EMPTY;
     }
 
     @Override
