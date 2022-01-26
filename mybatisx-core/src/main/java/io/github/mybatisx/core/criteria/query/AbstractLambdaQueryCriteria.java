@@ -31,6 +31,7 @@ import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -304,12 +305,6 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C select(Selectable selectable) {
-        this.fragmentManager.addSelect(selectable);
-        return this.context;
-    }
-
-    @Override
     public C select(Map<String, String> properties) {
         if (Objects.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
@@ -326,6 +321,23 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
                 this.select(property);
             }
         }
+        return this.context;
+    }
+
+    @Override
+    public C select(Selectable selectable) {
+        this.fragmentManager.addSelect(selectable);
+        return this.context;
+    }
+
+    @Override
+    public C selects(Selectable... selectables) {
+        return this.selects(Arrays.asList(selectables));
+    }
+
+    @Override
+    public C selects(List<Selectable> selectables) {
+        this.fragmentManager.addSelects(selectables);
         return this.context;
     }
 
@@ -410,6 +422,17 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     @Override
     public C order(Order order) {
         this.fragmentManager.addOrder(order);
+        return this.context;
+    }
+
+    @Override
+    public C orders(Order... orders) {
+        return this.orders(Arrays.asList(orders));
+    }
+
+    @Override
+    public C orders(List<Order> orders) {
+        this.fragmentManager.addOrders(orders);
         return this.context;
     }
 

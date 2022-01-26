@@ -242,12 +242,44 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     Query<T> select(final Selectable selectable);
 
     /**
+     * 添加查询列
+     *
+     * @param selectables {@link Selectable}列表
+     * @return {@code this}
+     */
+    Query<T> selects(final Selectable... selectables);
+
+    /**
+     * 添加查询列
+     *
+     * @param selectables {@link Selectable}列表
+     * @return {@code this}
+     */
+    Query<T> selects(final List<Selectable> selectables);
+
+    /**
      * 添加排序
      *
      * @param order {@link Order}
      * @return {@code this}
      */
     Query<T> order(final Order order);
+
+    /**
+     * 添加多个排序
+     *
+     * @param orders {@link Order}列表
+     * @return {@code this}
+     */
+    Query<T> orders(final Order... orders);
+
+    /**
+     * 添加多个排序
+     *
+     * @param orders {@link Order}列表
+     * @return {@code this}
+     */
+    Query<T> orders(final List<Order> orders);
 
     /**
      * 获取查询列

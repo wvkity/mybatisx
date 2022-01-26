@@ -31,6 +31,7 @@ import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -304,12 +305,6 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
-    public C select(Selectable selectable) {
-        this.fragmentManager.addSelect(selectable);
-        return this.context;
-    }
-
-    @Override
     public C select(Map<String, String> properties) {
         if (Objects.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
@@ -359,6 +354,23 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
                 this.colSelect(it, null);
             }
         }
+        return this.context;
+    }
+
+    @Override
+    public C select(Selectable selectable) {
+        this.fragmentManager.addSelect(selectable);
+        return this.context;
+    }
+
+    @Override
+    public C selects(Selectable... selectables) {
+        return this.selects(Arrays.asList(selectables));
+    }
+
+    @Override
+    public C selects(List<Selectable> selectables) {
+        this.fragmentManager.addSelects(selectables);
         return this.context;
     }
 
@@ -453,8 +465,39 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
+    public C colAsc(String column, boolean ignoreCase, NullPrecedence precedence) {
+        return this.order(SingleOrder.asc(this, column, ignoreCase, precedence));
+    }
+
+    @Override
+    public C colAsc(List<String> columns, boolean ignoreCase, NullPrecedence precedence) {
+        return this.order(MultiOrder.asc(this, columns, ignoreCase, precedence));
+    }
+
+    @Override
+    public C colDesc(String column, boolean ignoreCase, NullPrecedence precedence) {
+        return this.order(SingleOrder.desc(this, column, ignoreCase, precedence));
+    }
+
+    @Override
+    public C colDesc(List<String> columns, boolean ignoreCase, NullPrecedence precedence) {
+        return this.order(MultiOrder.desc(this, columns, ignoreCase, precedence));
+    }
+
+    @Override
     public C order(Order order) {
         this.fragmentManager.addOrder(order);
+        return this.context;
+    }
+
+    @Override
+    public C orders(Order... orders) {
+        return this.orders(Arrays.asList(orders));
+    }
+
+    @Override
+    public C orders(List<Order> orders) {
+        this.fragmentManager.addOrders(orders);
         return this.context;
     }
 
