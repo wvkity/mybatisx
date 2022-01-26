@@ -24,7 +24,7 @@ import io.github.mybatisx.base.convert.Converter;
  * @created 2022/1/10
  * @since 1.0.0
  */
-public enum LikeMatchMode implements Converter<String, String> {
+public enum MatchMode implements Converter<String, String> {
 
     /**
      * Match the entire string to the pattern
