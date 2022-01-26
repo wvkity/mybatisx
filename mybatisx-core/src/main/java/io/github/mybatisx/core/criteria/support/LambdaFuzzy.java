@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
-import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.property.PropertyConverter;
 
@@ -237,7 +237,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C likeLeft(final String property, final String value, final Character escape,
                        final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(property, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return this.like(property, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -446,7 +446,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C likeRight(final String property, final String value, final Character escape,
                         final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(property, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return this.like(property, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -655,7 +655,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C likeAny(final String property, final String value, final Character escape,
                       final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(property, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return this.like(property, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -665,27 +665,27 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
     /**
      * like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches) {
-        return this.like(property, value, matches, this.slot());
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode) {
+        return this.like(property, value, matchMode, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final LogicSymbol slot) {
-        return this.like(property, value, matches, false, slot);
+        return this.like(property, value, matchMode, false, slot);
     }
 
     /**
@@ -693,13 +693,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final boolean ignoreCase) {
-        return this.like(property, value, matches, ignoreCase, this.slot());
+        return this.like(property, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -707,43 +707,43 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(property, value, matches, null, ignoreCase, slot);
+        return this.like(property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final Character escape) {
-        return this.like(property, value, matches, escape, this.slot());
+        return this.like(property, value, matchMode, escape, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final Character escape, final LogicSymbol slot) {
-        return this.like(property, value, matches, escape, false, slot);
+        return this.like(property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -751,14 +751,14 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final Character escape, final boolean ignoreCase) {
-        return this.like(property, value, matches, escape, ignoreCase, this.slot());
+        return this.like(property, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -766,40 +766,40 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C like(final Property<T, String> property, final String value, final MatchMode matchMode,
                    final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(this.convert(property), value, matches, escape, ignoreCase, slot);
+        return this.like(this.convert(property), value, matchMode, escape, ignoreCase, slot);
     }
 
     /**
      * like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches) {
-        return this.like(property, value, matches, this.slot());
+    default C like(final String property, final String value, final MatchMode matchMode) {
+        return this.like(property, value, matchMode, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches, final LogicSymbol slot) {
-        return this.like(property, value, matches, false, slot);
+    default C like(final String property, final String value, final MatchMode matchMode, final LogicSymbol slot) {
+        return this.like(property, value, matchMode, false, slot);
     }
 
     /**
@@ -807,13 +807,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches,
+    default C like(final String property, final String value, final MatchMode matchMode,
                    final boolean ignoreCase) {
-        return this.like(property, value, matches, ignoreCase, this.slot());
+        return this.like(property, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -821,42 +821,42 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches,
+    default C like(final String property, final String value, final MatchMode matchMode,
                    final boolean ignoreCase, final LogicSymbol slot) {
-        return this.like(property, value, matches, null, ignoreCase, slot);
+        return this.like(property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches, final Character escape) {
-        return this.like(property, value, matches, escape, this.slot());
+    default C like(final String property, final String value, final MatchMode matchMode, final Character escape) {
+        return this.like(property, value, matchMode, escape, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches,
+    default C like(final String property, final String value, final MatchMode matchMode,
                    final Character escape, final LogicSymbol slot) {
-        return this.like(property, value, matches, escape, false, slot);
+        return this.like(property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -864,14 +864,14 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C like(final String property, final String value, final LikeMatchMode matches,
+    default C like(final String property, final String value, final MatchMode matchMode,
                    final Character escape, final boolean ignoreCase) {
-        return this.like(property, value, matches, escape, ignoreCase, this.slot());
+        return this.like(property, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -879,13 +879,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    C like(final String property, final String value, final LikeMatchMode matches, final Character escape,
+    C like(final String property, final String value, final MatchMode matchMode, final Character escape,
            final boolean ignoreCase, final LogicSymbol slot);
 
     // endregion
@@ -1099,7 +1099,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C notLikeLeft(final String property, final String value, final Character escape,
                           final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(property, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return this.notLike(property, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -1309,7 +1309,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C notLikeRight(final String property, final String value, final Character escape,
                            final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(property, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return this.notLike(property, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -1519,7 +1519,7 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      */
     default C notLikeAny(final String property, final String value, final Character escape,
                          final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(property, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return this.notLike(property, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -1529,27 +1529,27 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
     /**
      * not like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches) {
-        return this.notLike(property, value, matches, this.slot());
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode) {
+        return this.notLike(property, value, matchMode, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final LogicSymbol slot) {
-        return this.notLike(property, value, matches, false, slot);
+        return this.notLike(property, value, matchMode, false, slot);
     }
 
     /**
@@ -1557,13 +1557,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final boolean ignoreCase) {
-        return this.notLike(property, value, matches, ignoreCase, this.slot());
+        return this.notLike(property, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -1571,43 +1571,43 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(property, value, matches, null, ignoreCase, slot);
+        return this.notLike(property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final Character escape) {
-        return this.notLike(property, value, matches, escape, this.slot());
+        return this.notLike(property, value, matchMode, escape, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final Character escape, final LogicSymbol slot) {
-        return this.notLike(property, value, matches, escape, false, slot);
+        return this.notLike(property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -1615,14 +1615,14 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final Character escape, final boolean ignoreCase) {
-        return this.notLike(property, value, matches, escape, ignoreCase, this.slot());
+        return this.notLike(property, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -1630,40 +1630,40 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final Property<T, String> property, final String value, final LikeMatchMode matches,
+    default C notLike(final Property<T, String> property, final String value, final MatchMode matchMode,
                       final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(this.convert(property), value, matches, escape, ignoreCase, slot);
+        return this.notLike(this.convert(property), value, matchMode, escape, ignoreCase, slot);
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches) {
-        return this.notLike(property, value, matches, this.slot());
+    default C notLike(final String property, final String value, final MatchMode matchMode) {
+        return this.notLike(property, value, matchMode, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches, final LogicSymbol slot) {
-        return this.notLike(property, value, matches, false, slot);
+    default C notLike(final String property, final String value, final MatchMode matchMode, final LogicSymbol slot) {
+        return this.notLike(property, value, matchMode, false, slot);
     }
 
     /**
@@ -1671,13 +1671,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches,
+    default C notLike(final String property, final String value, final MatchMode matchMode,
                       final boolean ignoreCase) {
-        return this.notLike(property, value, matches, ignoreCase, this.slot());
+        return this.notLike(property, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -1685,42 +1685,42 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches,
+    default C notLike(final String property, final String value, final MatchMode matchMode,
                       final boolean ignoreCase, final LogicSymbol slot) {
-        return this.notLike(property, value, matches, null, ignoreCase, slot);
+        return this.notLike(property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches, final Character escape) {
-        return this.notLike(property, value, matches, escape, this.slot());
+    default C notLike(final String property, final String value, final MatchMode matchMode, final Character escape) {
+        return this.notLike(property, value, matchMode, escape, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param property 属性
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param property  属性
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches,
+    default C notLike(final String property, final String value, final MatchMode matchMode,
                       final Character escape, final LogicSymbol slot) {
-        return this.notLike(property, value, matches, escape, false, slot);
+        return this.notLike(property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -1728,14 +1728,14 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C notLike(final String property, final String value, final LikeMatchMode matches,
+    default C notLike(final String property, final String value, final MatchMode matchMode,
                       final Character escape, final boolean ignoreCase) {
-        return this.notLike(property, value, matches, escape, ignoreCase, this.slot());
+        return this.notLike(property, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -1743,13 +1743,13 @@ public interface LambdaFuzzy<T, C extends LambdaFuzzy<T, C>> extends Slot<T, C>,
      *
      * @param property   属性
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    C notLike(final String property, final String value, final LikeMatchMode matches, final Character escape,
+    C notLike(final String property, final String value, final MatchMode matchMode, final Character escape,
               final boolean ignoreCase, final LogicSymbol slot);
 
     // endregion

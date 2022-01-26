@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.core.criteria;
 
-import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
@@ -197,16 +197,17 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      *
      * @param property   属性
      * @param value      值
+     * @param matchMode  {@link MatchMode}
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param symbol     {@link Symbol}
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    protected C likeConditionAccept(final String property, final String value, final LikeMatchMode matches,
+    protected C likeConditionAccept(final String property, final String value, final MatchMode matchMode,
                                     final Character escape, final boolean ignoreCase,
                                     final Symbol symbol, final LogicSymbol slot) {
-        return this.likeConditionAccept(this.convert(property), value, matches, escape, ignoreCase, symbol, slot);
+        return this.likeConditionAccept(this.convert(property), value, matchMode, escape, ignoreCase, symbol, slot);
     }
 
     /**
@@ -214,13 +215,14 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      *
      * @param column     {@link Column}
      * @param value      值
+     * @param matchMode  {@link MatchMode}
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param symbol     {@link Symbol}
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    protected C likeConditionAccept(final Column column, final String value, final LikeMatchMode matches,
+    protected C likeConditionAccept(final Column column, final String value, final MatchMode matchMode,
                                     final Character escape, final boolean ignoreCase,
                                     final Symbol symbol, final LogicSymbol slot) {
         if (column != null) {
@@ -231,7 +233,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .jdbcType(column.getJdbcType())
                     .javaType(column.getDescriptor().getJavaType())
                     .value(value)
-                    .matches(matches)
+                    .matchMode(matchMode)
                     .escape(escape)
                     .ignoreCase(ignoreCase)
                     .dialect(this.getDialect())
@@ -401,13 +403,14 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      *
      * @param column     字段名
      * @param value      值
+     * @param matchMode  {@link MatchMode}
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param symbol     {@link Symbol}
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    protected C colLikeConditionAccept(final String column, final String value, final LikeMatchMode matches,
+    protected C colLikeConditionAccept(final String column, final String value, final MatchMode matchMode,
                                        final Character escape, final boolean ignoreCase,
                                        final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column)) {
@@ -415,7 +418,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .symbol(symbol)
                     .slot(slot)
                     .value(value)
-                    .matches(matches)
+                    .matchMode(matchMode)
                     .escape(escape)
                     .ignoreCase(ignoreCase)
                     .dialect(this.getDialect())

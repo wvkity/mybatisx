@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.core.param;
 
-import io.github.mybatisx.base.constant.LikeMatchMode;
+import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
@@ -48,7 +48,7 @@ public class LikeParam extends AbstractParam implements Param {
     /**
      * 匹配模式
      */
-    private LikeMatchMode matches;
+    private MatchMode matchMode;
     /**
      * 转义字符
      */
@@ -69,7 +69,7 @@ public class LikeParam extends AbstractParam implements Param {
 
     @Override
     public String parse(ParameterConverter pc, PlaceholderConverter phc) {
-        return this.toConditionArg(pc.convert((matches == null ? LikeMatchMode.EXACT : matches).convert(this.value)));
+        return this.toConditionArg(pc.convert((matchMode == null ? MatchMode.EXACT : matchMode).convert(this.value)));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class LikeParam extends AbstractParam implements Param {
                 if (this.slot != null) {
                     sb.append(this.slot.getFragment()).append(SqlSymbol.SPACE);
                 }
-                sb.append(dialect.getLowercaseFunction()).append(SqlSymbol.START_BRACKET).append("%s")
+                sb.append(_$dialect.getLowercaseFunction()).append(SqlSymbol.START_BRACKET).append("%s")
                         .append(SqlSymbol.END_BRACKET).append(SqlSymbol.SPACE);
                 sb.append(Scripts.toConditionValueArg(this.symbol, this.typeHandler, this.jdbcType, this.spliceJavaType,
                         this.javaType, placeholders));

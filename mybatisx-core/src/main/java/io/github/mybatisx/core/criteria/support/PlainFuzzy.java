@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
-import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.MatchMode;
 
 /**
  * 模糊匹配条件接口
@@ -133,7 +133,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colLikeLeft(final String column, final String value, final Character escape,
                           final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colLike(column, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return this.colLike(column, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -240,7 +240,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colLikeRight(final String column, final String value, final Character escape,
                            final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colLike(column, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return this.colLike(column, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -345,7 +345,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colLikeAny(final String column, final String value, final Character escape,
                          final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colLike(column, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return this.colLike(column, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -355,26 +355,26 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
     /**
      * like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches) {
-        return this.colLike(column, value, matches, this.slot());
+    default C colLike(final String column, final String value, final MatchMode matchMode) {
+        return this.colLike(column, value, matchMode, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param slot    {@link LogicSymbol}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches, final LogicSymbol slot) {
-        return this.colLike(column, value, matches, false, slot);
+    default C colLike(final String column, final String value, final MatchMode matchMode, final LogicSymbol slot) {
+        return this.colLike(column, value, matchMode, false, slot);
     }
 
     /**
@@ -382,13 +382,13 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches,
+    default C colLike(final String column, final String value, final MatchMode matchMode,
                       final boolean ignoreCase) {
-        return this.colLike(column, value, matches, ignoreCase, this.slot());
+        return this.colLike(column, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -396,42 +396,42 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches,
+    default C colLike(final String column, final String value, final MatchMode matchMode,
                       final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colLike(column, value, matches, null, ignoreCase, slot);
+        return this.colLike(column, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches, final Character escape) {
-        return this.colLike(column, value, matches, escape, this.slot());
+    default C colLike(final String column, final String value, final MatchMode matchMode, final Character escape) {
+        return this.colLike(column, value, matchMode, escape, this.slot());
     }
 
     /**
      * like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
-     * @param slot    {@link LogicSymbol}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches,
+    default C colLike(final String column, final String value, final MatchMode matchMode,
                       final Character escape, final LogicSymbol slot) {
-        return this.colLike(column, value, matches, escape, false, slot);
+        return this.colLike(column, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -439,14 +439,14 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C colLike(final String column, final String value, final LikeMatchMode matches,
+    default C colLike(final String column, final String value, final MatchMode matchMode,
                       final Character escape, final boolean ignoreCase) {
-        return this.colLike(column, value, matches, escape, ignoreCase, this.slot());
+        return this.colLike(column, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -454,13 +454,13 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    C colLike(final String column, final String value, final LikeMatchMode matches, final Character escape,
+    C colLike(final String column, final String value, final MatchMode matchMode, final Character escape,
               final boolean ignoreCase, final LogicSymbol slot);
 
     // endregion
@@ -572,7 +572,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colNotLikeLeft(final String column, final String value, final Character escape,
                              final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colNotLike(column, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return this.colNotLike(column, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -680,7 +680,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colNotLikeRight(final String column, final String value, final Character escape,
                               final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colNotLike(column, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return this.colNotLike(column, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -787,7 +787,7 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      */
     default C colNotLikeAny(final String column, final String value, final Character escape,
                             final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colNotLike(column, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return this.colNotLike(column, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -797,27 +797,27 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
     /**
      * not like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches) {
-        return this.colNotLike(column, value, matches, this.slot());
+    default C colNotLike(final String column, final String value, final MatchMode matchMode) {
+        return this.colNotLike(column, value, matchMode, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param slot    {@link LogicSymbol}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final LogicSymbol slot) {
-        return this.colNotLike(column, value, matches, false, slot);
+        return this.colNotLike(column, value, matchMode, false, slot);
     }
 
     /**
@@ -825,13 +825,13 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final boolean ignoreCase) {
-        return this.colNotLike(column, value, matches, ignoreCase, this.slot());
+        return this.colNotLike(column, value, matchMode, ignoreCase, this.slot());
     }
 
     /**
@@ -839,43 +839,43 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final boolean ignoreCase, final LogicSymbol slot) {
-        return this.colNotLike(column, value, matches, null, ignoreCase, slot);
+        return this.colNotLike(column, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final Character escape) {
-        return this.colNotLike(column, value, matches, escape, this.slot());
+        return this.colNotLike(column, value, matchMode, escape, this.slot());
     }
 
     /**
      * not like模糊匹配
      *
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
-     * @param slot    {@link LogicSymbol}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final Character escape, final LogicSymbol slot) {
-        return this.colNotLike(column, value, matches, escape, false, slot);
+        return this.colNotLike(column, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -883,14 +883,14 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@code this}
      */
-    default C colNotLike(final String column, final String value, final LikeMatchMode matches,
+    default C colNotLike(final String column, final String value, final MatchMode matchMode,
                          final Character escape, final boolean ignoreCase) {
-        return this.colNotLike(column, value, matches, escape, ignoreCase, this.slot());
+        return this.colNotLike(column, value, matchMode, escape, ignoreCase, this.slot());
     }
 
     /**
@@ -898,13 +898,13 @@ public interface PlainFuzzy<T, C extends PlainFuzzy<T, C>> extends Slot<T, C> {
      *
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@code this}
      */
-    C colNotLike(final String column, final String value, final LikeMatchMode matches, final Character escape,
+    C colNotLike(final String column, final String value, final MatchMode matchMode, final Character escape,
                  final boolean ignoreCase, final LogicSymbol slot);
 
     // endregion

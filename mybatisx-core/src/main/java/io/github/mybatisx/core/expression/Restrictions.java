@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.core.expression;
 
-import io.github.mybatisx.base.constant.LikeMatchMode;
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.helper.TableHelper;
@@ -156,7 +156,7 @@ public class Restrictions {
      * @param alias      表别名
      * @param target     属性名/字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param mode       模式
@@ -165,7 +165,7 @@ public class Restrictions {
      * @return {@link LikeExpression}
      */
     protected static LikeExpression likeExpression(final Criteria<?> criteria, final String alias,
-                                                   final String target, final String value, final LikeMatchMode matches,
+                                                   final String target, final String value, final MatchMode matchMode,
                                                    final Character escape, final boolean ignoreCase,
                                                    final Mode mode, final Symbol symbol, final LogicSymbol slot) {
         if (mode == Mode.PROPERTY) {
@@ -178,7 +178,7 @@ public class Restrictions {
                                 .symbol(symbol)
                                 .slot(slot)
                                 .value(value)
-                                .matches(matches)
+                                .matchMode(matchMode)
                                 .escape(escape)
                                 .ignoreCase(ignoreCase)
                                 .dialect(criteria.getDialect())
@@ -197,7 +197,7 @@ public class Restrictions {
                             .symbol(symbol)
                             .slot(slot)
                             .value(value)
-                            .matches(matches)
+                            .matchMode(matchMode)
                             .escape(escape)
                             .ignoreCase(ignoreCase)
                             .dialect(criteria == null ? null : criteria.getDialect())
@@ -2856,7 +2856,7 @@ public class Restrictions {
      */
     public static LikeExpression likeLeft(final Criteria<?> criteria, final String property, final String value,
                                           final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return like(criteria, property, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return like(criteria, property, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     /**
@@ -2971,7 +2971,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeLeft(final Criteria<?> criteria, final String column, final String value,
                                              final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return colLike(criteria, column, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return colLike(criteria, column, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     /**
@@ -3087,7 +3087,7 @@ public class Restrictions {
     public static LikeExpression colLikeLeft(final String alias, final String column, final String value,
                                              final Character escape, final boolean ignoreCase,
                                              final LogicSymbol slot) {
-        return colLike(alias, column, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return colLike(alias, column, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -3331,7 +3331,7 @@ public class Restrictions {
      */
     public static LikeExpression likeRight(final Criteria<?> criteria, final String property, final String value,
                                            final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return like(criteria, property, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return like(criteria, property, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     /**
@@ -3446,7 +3446,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeRight(final Criteria<?> criteria, final String column, final String value,
                                               final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return colLike(criteria, column, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return colLike(criteria, column, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     /**
@@ -3562,7 +3562,7 @@ public class Restrictions {
     public static LikeExpression colLikeRight(final String alias, final String column, final String value,
                                               final Character escape, final boolean ignoreCase,
                                               final LogicSymbol slot) {
-        return colLike(alias, column, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return colLike(alias, column, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -3806,7 +3806,7 @@ public class Restrictions {
      */
     public static LikeExpression likeAny(final Criteria<?> criteria, final String property, final String value,
                                          final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return like(criteria, property, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return like(criteria, property, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     /**
@@ -3921,7 +3921,7 @@ public class Restrictions {
      */
     public static LikeExpression colLikeAny(final Criteria<?> criteria, final String column, final String value,
                                             final Character escape, final boolean ignoreCase, final LogicSymbol slot) {
-        return colLike(criteria, column, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return colLike(criteria, column, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     /**
@@ -4037,7 +4037,7 @@ public class Restrictions {
     public static LikeExpression colLikeAny(final String alias, final String column, final String value,
                                             final Character escape, final boolean ignoreCase,
                                             final LogicSymbol slot) {
-        return colLike(alias, column, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return colLike(alias, column, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     // endregion
@@ -4047,16 +4047,16 @@ public class Restrictions {
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches) {
-        return like(criteria, property, value, matches, false);
+                                          final String value, final MatchMode matchMode) {
+        return like(criteria, property, value, matchMode, false);
     }
 
     /**
@@ -4065,31 +4065,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches,
+                                          final String value, final MatchMode matchMode,
                                           final boolean ignoreCase) {
-        return like(criteria, property, value, matches, null, ignoreCase);
+        return like(criteria, property, value, matchMode, null, ignoreCase);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches, final Character escape) {
-        return like(criteria, property, value, matches, escape, false);
+                                          final String value, final MatchMode matchMode, final Character escape) {
+        return like(criteria, property, value, matchMode, escape, false);
     }
 
     /**
@@ -4098,32 +4098,32 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches, final Character escape,
+                                          final String value, final MatchMode matchMode, final Character escape,
                                           final boolean ignoreCase) {
-        return like(criteria, property, value, matches, escape, ignoreCase, null);
+        return like(criteria, property, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches, final LogicSymbol slot) {
-        return like(criteria, property, value, matches, false, slot);
+                                          final String value, final MatchMode matchMode, final LogicSymbol slot) {
+        return like(criteria, property, value, matchMode, false, slot);
     }
 
     /**
@@ -4132,34 +4132,34 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches,
+                                          final String value, final MatchMode matchMode,
                                           final boolean ignoreCase, final LogicSymbol slot) {
-        return like(criteria, property, value, matches, null, ignoreCase, slot);
+        return like(criteria, property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches, final Character escape,
+                                          final String value, final MatchMode matchMode, final Character escape,
                                           final LogicSymbol slot) {
-        return like(criteria, property, value, matches, escape, false, slot);
+        return like(criteria, property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -4168,7 +4168,7 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
@@ -4176,23 +4176,23 @@ public class Restrictions {
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression like(final Criteria<T> criteria, final Property<T, String> property,
-                                          final String value, final LikeMatchMode matches, final Character escape,
+                                          final String value, final MatchMode matchMode, final Character escape,
                                           final boolean ignoreCase, final LogicSymbol slot) {
-        return like(criteria, convert(property), value, matches, escape, ignoreCase, slot);
+        return like(criteria, convert(property), value, matchMode, escape, ignoreCase, slot);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches) {
-        return like(criteria, property, value, matches, false);
+                                      final MatchMode matchMode) {
+        return like(criteria, property, value, matchMode, false);
     }
 
     /**
@@ -4201,28 +4201,28 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final boolean ignoreCase) {
-        return like(criteria, property, value, matches, null, ignoreCase);
+                                      final MatchMode matchMode, final boolean ignoreCase) {
+        return like(criteria, property, value, matchMode, null, ignoreCase);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final Character escape) {
-        return like(criteria, property, value, matches, escape, false);
+                                      final MatchMode matchMode, final Character escape) {
+        return like(criteria, property, value, matchMode, escape, false);
     }
 
     /**
@@ -4231,29 +4231,29 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final Character escape, final boolean ignoreCase) {
-        return like(criteria, property, value, matches, escape, ignoreCase, null);
+                                      final MatchMode matchMode, final Character escape, final boolean ignoreCase) {
+        return like(criteria, property, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final LogicSymbol slot) {
-        return like(criteria, property, value, matches, false, slot);
+                                      final MatchMode matchMode, final LogicSymbol slot) {
+        return like(criteria, property, value, matchMode, false, slot);
     }
 
     /**
@@ -4262,31 +4262,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final boolean ignoreCase,
+                                      final MatchMode matchMode, final boolean ignoreCase,
                                       final LogicSymbol slot) {
-        return like(criteria, property, value, matches, null, ignoreCase, slot);
+        return like(criteria, property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final Character escape, final LogicSymbol slot) {
-        return like(criteria, property, value, matches, escape, false, slot);
+                                      final MatchMode matchMode, final Character escape, final LogicSymbol slot) {
+        return like(criteria, property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -4295,31 +4295,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression like(final Criteria<?> criteria, final String property, final String value,
-                                      final LikeMatchMode matches, final Character escape, final boolean ignoreCase,
+                                      final MatchMode matchMode, final Character escape, final boolean ignoreCase,
                                       final LogicSymbol slot) {
-        return likeExpression(criteria, null, property, value, matches, escape, ignoreCase, Mode.PROPERTY,
+        return likeExpression(criteria, null, property, value, matchMode, escape, ignoreCase, Mode.PROPERTY,
                 Symbol.LIKE, slot);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches) {
-        return colLike(criteria, column, value, matches, false);
+                                         final MatchMode matchMode) {
+        return colLike(criteria, column, value, matchMode, false);
     }
 
     /**
@@ -4328,28 +4328,28 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase) {
-        return colLike(criteria, column, value, matches, null, ignoreCase);
+                                         final MatchMode matchMode, final boolean ignoreCase) {
+        return colLike(criteria, column, value, matchMode, null, ignoreCase);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape) {
-        return colLike(criteria, column, value, matches, escape, false);
+                                         final MatchMode matchMode, final Character escape) {
+        return colLike(criteria, column, value, matchMode, escape, false);
     }
 
     /**
@@ -4358,30 +4358,30 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape,
+                                         final MatchMode matchMode, final Character escape,
                                          final boolean ignoreCase) {
-        return colLike(criteria, column, value, matches, escape, ignoreCase, null);
+        return colLike(criteria, column, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final LogicSymbol slot) {
-        return colLike(criteria, column, value, matches, false, slot);
+                                         final MatchMode matchMode, final LogicSymbol slot) {
+        return colLike(criteria, column, value, matchMode, false, slot);
     }
 
     /**
@@ -4390,31 +4390,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase,
+                                         final MatchMode matchMode, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return colLike(criteria, column, value, matches, null, ignoreCase, slot);
+        return colLike(criteria, column, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape, final LogicSymbol slot) {
-        return colLike(criteria, column, value, matches, escape, false, slot);
+                                         final MatchMode matchMode, final Character escape, final LogicSymbol slot) {
+        return colLike(criteria, column, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -4423,31 +4423,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final Criteria<?> criteria, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape, final boolean ignoreCase,
+                                         final MatchMode matchMode, final Character escape, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return likeExpression(criteria, null, column, value, matches, escape, ignoreCase, Mode.COLUMN,
+        return likeExpression(criteria, null, column, value, matchMode, escape, ignoreCase, Mode.COLUMN,
                 Symbol.LIKE, slot);
     }
 
     /**
      * like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches) {
-        return colLike(alias, column, value, matches, false);
+                                         final MatchMode matchMode) {
+        return colLike(alias, column, value, matchMode, false);
     }
 
     /**
@@ -4456,28 +4456,28 @@ public class Restrictions {
      * @param alias      表别名
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase) {
-        return colLike(alias, column, value, matches, null, ignoreCase);
+                                         final MatchMode matchMode, final boolean ignoreCase) {
+        return colLike(alias, column, value, matchMode, null, ignoreCase);
     }
 
     /**
      * like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape) {
-        return colLike(alias, column, value, matches, escape, false);
+                                         final MatchMode matchMode, final Character escape) {
+        return colLike(alias, column, value, matchMode, escape, false);
     }
 
     /**
@@ -4486,30 +4486,30 @@ public class Restrictions {
      * @param alias      表别名
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape,
+                                         final MatchMode matchMode, final Character escape,
                                          final boolean ignoreCase) {
-        return colLike(alias, column, value, matches, escape, ignoreCase, null);
+        return colLike(alias, column, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param slot    {@link LogicSymbol}
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final LogicSymbol slot) {
-        return colLike(alias, column, value, matches, false, slot);
+                                         final MatchMode matchMode, final LogicSymbol slot) {
+        return colLike(alias, column, value, matchMode, false, slot);
     }
 
     /**
@@ -4518,31 +4518,31 @@ public class Restrictions {
      * @param alias      表别名
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase,
+                                         final MatchMode matchMode, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return colLike(alias, column, value, matches, null, ignoreCase, slot);
+        return colLike(alias, column, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
-     * @param slot    {@link LogicSymbol}
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape, final LogicSymbol slot) {
-        return colLike(alias, column, value, matches, escape, false, slot);
+                                         final MatchMode matchMode, final Character escape, final LogicSymbol slot) {
+        return colLike(alias, column, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -4551,16 +4551,16 @@ public class Restrictions {
      * @param alias      表别名
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colLike(final String alias, final String column, final String value,
-                                         final LikeMatchMode matches, final Character escape, final boolean ignoreCase,
+                                         final MatchMode matchMode, final Character escape, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return likeExpression(null, alias, column, value, matches, escape, ignoreCase, Mode.COLUMN,
+        return likeExpression(null, alias, column, value, matchMode, escape, ignoreCase, Mode.COLUMN,
                 Symbol.LIKE, slot);
     }
 
@@ -4750,7 +4750,7 @@ public class Restrictions {
      */
     public static LikeExpression notLikeLeft(final Criteria<?> criteria, final String property, final String value,
                                              final Character escape, final boolean ignoreCase) {
-        return notLike(criteria, property, value, LikeMatchMode.END, escape, ignoreCase);
+        return notLike(criteria, property, value, MatchMode.END, escape, ignoreCase);
     }
 
     /**
@@ -4811,7 +4811,7 @@ public class Restrictions {
     public static LikeExpression notLikeLeft(final Criteria<?> criteria, final String property, final String value,
                                              final Character escape, final boolean ignoreCase,
                                              final LogicSymbol slot) {
-        return notLike(criteria, property, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return notLike(criteria, property, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     /**
@@ -4927,7 +4927,7 @@ public class Restrictions {
     public static LikeExpression colNotLikeLeft(final Criteria<?> criteria, final String column, final String value,
                                                 final Character escape, final boolean ignoreCase,
                                                 final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, LikeMatchMode.END, escape, ignoreCase, slot);
+        return colNotLike(criteria, column, value, MatchMode.END, escape, ignoreCase, slot);
     }
 
     /**
@@ -4982,7 +4982,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeLeft(final String alias, final String column, final String value,
                                                 final Character escape, final LogicSymbol slot) {
-        return colNotLike(alias, column, value, LikeMatchMode.END, escape, slot);
+        return colNotLike(alias, column, value, MatchMode.END, escape, slot);
     }
 
     // endregion
@@ -5168,7 +5168,7 @@ public class Restrictions {
      */
     public static LikeExpression notLikeRight(final Criteria<?> criteria, final String property, final String value,
                                               final Character escape, final boolean ignoreCase) {
-        return notLike(criteria, property, value, LikeMatchMode.START, escape, ignoreCase);
+        return notLike(criteria, property, value, MatchMode.START, escape, ignoreCase);
     }
 
     /**
@@ -5229,7 +5229,7 @@ public class Restrictions {
     public static LikeExpression notLikeRight(final Criteria<?> criteria, final String property, final String value,
                                               final Character escape, final boolean ignoreCase,
                                               final LogicSymbol slot) {
-        return notLike(criteria, property, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return notLike(criteria, property, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     /**
@@ -5345,7 +5345,7 @@ public class Restrictions {
     public static LikeExpression colNotLikeRight(final Criteria<?> criteria, final String column, final String value,
                                                  final Character escape, final boolean ignoreCase,
                                                  final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, LikeMatchMode.START, escape, ignoreCase, slot);
+        return colNotLike(criteria, column, value, MatchMode.START, escape, ignoreCase, slot);
     }
 
     /**
@@ -5400,7 +5400,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeRight(final String alias, final String column, final String value,
                                                  final Character escape, final LogicSymbol slot) {
-        return colNotLike(alias, column, value, LikeMatchMode.START, escape, slot);
+        return colNotLike(alias, column, value, MatchMode.START, escape, slot);
     }
 
     // endregion
@@ -5586,7 +5586,7 @@ public class Restrictions {
      */
     public static LikeExpression notLikeAny(final Criteria<?> criteria, final String property, final String value,
                                             final Character escape, final boolean ignoreCase) {
-        return notLike(criteria, property, value, LikeMatchMode.START, escape, ignoreCase);
+        return notLike(criteria, property, value, MatchMode.START, escape, ignoreCase);
     }
 
     /**
@@ -5647,7 +5647,7 @@ public class Restrictions {
     public static LikeExpression notLikeAny(final Criteria<?> criteria, final String property, final String value,
                                             final Character escape, final boolean ignoreCase,
                                             final LogicSymbol slot) {
-        return notLike(criteria, property, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return notLike(criteria, property, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     /**
@@ -5763,7 +5763,7 @@ public class Restrictions {
     public static LikeExpression colNotLikeAny(final Criteria<?> criteria, final String column, final String value,
                                                final Character escape, final boolean ignoreCase,
                                                final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, LikeMatchMode.ANYWHERE, escape, ignoreCase, slot);
+        return colNotLike(criteria, column, value, MatchMode.ANYWHERE, escape, ignoreCase, slot);
     }
 
     /**
@@ -5818,7 +5818,7 @@ public class Restrictions {
      */
     public static LikeExpression colNotLikeAny(final String alias, final String column, final String value,
                                                final Character escape, final LogicSymbol slot) {
-        return colNotLike(alias, column, value, LikeMatchMode.ANYWHERE, escape, slot);
+        return colNotLike(alias, column, value, MatchMode.ANYWHERE, escape, slot);
     }
 
     // endregion
@@ -5828,16 +5828,16 @@ public class Restrictions {
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches) {
-        return notLike(criteria, property, value, matches, false);
+                                             final String value, final MatchMode matchMode) {
+        return notLike(criteria, property, value, matchMode, false);
     }
 
     /**
@@ -5846,31 +5846,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches,
+                                             final String value, final MatchMode matchMode,
                                              final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, null, ignoreCase);
+        return notLike(criteria, property, value, matchMode, null, ignoreCase);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches, final Character escape) {
-        return notLike(criteria, property, value, matches, escape, false);
+                                             final String value, final MatchMode matchMode, final Character escape) {
+        return notLike(criteria, property, value, matchMode, escape, false);
     }
 
     /**
@@ -5879,32 +5879,32 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches, final Character escape,
+                                             final String value, final MatchMode matchMode, final Character escape,
                                              final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, escape, ignoreCase, null);
+        return notLike(criteria, property, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches, final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, false, slot);
+                                             final String value, final MatchMode matchMode, final LogicSymbol slot) {
+        return notLike(criteria, property, value, matchMode, false, slot);
     }
 
     /**
@@ -5913,34 +5913,34 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @param <T>        实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches,
+                                             final String value, final MatchMode matchMode,
                                              final boolean ignoreCase, final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, null, ignoreCase, slot);
+        return notLike(criteria, property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property {@link Property}
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
-     * @param <T>      实体类型
+     * @param criteria  {@link Criteria}
+     * @param property  {@link Property}
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
+     * @param <T>       实体类型
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches, final Character escape,
+                                             final String value, final MatchMode matchMode, final Character escape,
                                              final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, escape, false, slot);
+        return notLike(criteria, property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -5949,7 +5949,7 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   {@link Property}
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
@@ -5957,23 +5957,23 @@ public class Restrictions {
      * @return {@link LikeExpression}
      */
     public static <T> LikeExpression notLike(final Criteria<T> criteria, final Property<T, String> property,
-                                             final String value, final LikeMatchMode matches, final Character escape,
+                                             final String value, final MatchMode matchMode, final Character escape,
                                              final boolean ignoreCase, final LogicSymbol slot) {
-        return notLike(criteria, convert(property), value, matches, escape, ignoreCase, slot);
+        return notLike(criteria, convert(property), value, matchMode, escape, ignoreCase, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches) {
-        return notLike(criteria, property, value, matches, false);
+                                         final MatchMode matchMode) {
+        return notLike(criteria, property, value, matchMode, false);
     }
 
     /**
@@ -5982,28 +5982,28 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, null, ignoreCase);
+                                         final MatchMode matchMode, final boolean ignoreCase) {
+        return notLike(criteria, property, value, matchMode, null, ignoreCase);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final Character escape) {
-        return notLike(criteria, property, value, matches, escape, false);
+                                         final MatchMode matchMode, final Character escape) {
+        return notLike(criteria, property, value, matchMode, escape, false);
     }
 
     /**
@@ -6012,29 +6012,29 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final Character escape, final boolean ignoreCase) {
-        return notLike(criteria, property, value, matches, escape, ignoreCase, null);
+                                         final MatchMode matchMode, final Character escape, final boolean ignoreCase) {
+        return notLike(criteria, property, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, false, slot);
+                                         final MatchMode matchMode, final LogicSymbol slot) {
+        return notLike(criteria, property, value, matchMode, false, slot);
     }
 
     /**
@@ -6043,31 +6043,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final boolean ignoreCase,
+                                         final MatchMode matchMode, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, null, ignoreCase, slot);
+        return notLike(criteria, property, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param property 属性名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param property  属性名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final Character escape, final LogicSymbol slot) {
-        return notLike(criteria, property, value, matches, escape, false, slot);
+                                         final MatchMode matchMode, final Character escape, final LogicSymbol slot) {
+        return notLike(criteria, property, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -6076,31 +6076,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param property   属性名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression notLike(final Criteria<?> criteria, final String property, final String value,
-                                         final LikeMatchMode matches, final Character escape, final boolean ignoreCase,
+                                         final MatchMode matchMode, final Character escape, final boolean ignoreCase,
                                          final LogicSymbol slot) {
-        return likeExpression(criteria, null, property, value, matches, escape, ignoreCase, Mode.PROPERTY,
+        return likeExpression(criteria, null, property, value, matchMode, escape, ignoreCase, Mode.PROPERTY,
                 Symbol.NOT_LIKE, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches) {
-        return colNotLike(criteria, column, value, matches, false);
+                                            final MatchMode matchMode) {
+        return colNotLike(criteria, column, value, matchMode, false);
     }
 
     /**
@@ -6109,28 +6109,28 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final boolean ignoreCase) {
-        return colNotLike(criteria, column, value, matches, null, ignoreCase);
+                                            final MatchMode matchMode, final boolean ignoreCase) {
+        return colNotLike(criteria, column, value, matchMode, null, ignoreCase);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape) {
-        return colNotLike(criteria, column, value, matches, escape, false);
+                                            final MatchMode matchMode, final Character escape) {
+        return colNotLike(criteria, column, value, matchMode, escape, false);
     }
 
     /**
@@ -6139,30 +6139,30 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape,
+                                            final MatchMode matchMode, final Character escape,
                                             final boolean ignoreCase) {
-        return colNotLike(criteria, column, value, matches, escape, ignoreCase, null);
+        return colNotLike(criteria, column, value, matchMode, escape, ignoreCase, null);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, matches, false, slot);
+                                            final MatchMode matchMode, final LogicSymbol slot) {
+        return colNotLike(criteria, column, value, matchMode, false, slot);
     }
 
     /**
@@ -6171,31 +6171,31 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final boolean ignoreCase,
+                                            final MatchMode matchMode, final boolean ignoreCase,
                                             final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, matches, null, ignoreCase, slot);
+        return colNotLike(criteria, column, value, matchMode, null, ignoreCase, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param criteria {@link Criteria}
-     * @param column   字段名
-     * @param value    值
-     * @param matches  匹配模式
-     * @param escape   转义字符
-     * @param slot     {@link LogicSymbol}
+     * @param criteria  {@link Criteria}
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape, final LogicSymbol slot) {
-        return colNotLike(criteria, column, value, matches, escape, false, slot);
+                                            final MatchMode matchMode, final Character escape, final LogicSymbol slot) {
+        return colNotLike(criteria, column, value, matchMode, escape, false, slot);
     }
 
     /**
@@ -6204,78 +6204,78 @@ public class Restrictions {
      * @param criteria   {@link Criteria}
      * @param column     字段名
      * @param value      值
-     * @param matches    匹配模式
+     * @param matchMode  匹配模式
      * @param escape     转义字符
      * @param ignoreCase 是否忽略大小写
      * @param slot       {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final Criteria<?> criteria, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape, final boolean ignoreCase,
+                                            final MatchMode matchMode, final Character escape, final boolean ignoreCase,
                                             final LogicSymbol slot) {
-        return likeExpression(criteria, null, column, value, matches, escape, ignoreCase, Mode.COLUMN,
+        return likeExpression(criteria, null, column, value, matchMode, escape, ignoreCase, Mode.COLUMN,
                 Symbol.NOT_LIKE, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final String alias, final String column, final String value,
-                                            final LikeMatchMode matches) {
-        return colNotLike(alias, column, value, matches, (Character) null);
+                                            final MatchMode matchMode) {
+        return colNotLike(alias, column, value, matchMode, (Character) null);
     }
 
     /**
      * not like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final String alias, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape) {
-        return colNotLike(alias, column, value, matches, escape, null);
+                                            final MatchMode matchMode, final Character escape) {
+        return colNotLike(alias, column, value, matchMode, escape, null);
     }
 
     /**
      * not like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param slot    {@link LogicSymbol}
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final String alias, final String column, final String value,
-                                            final LikeMatchMode matches, final LogicSymbol slot) {
-        return colNotLike(alias, column, value, matches, null, slot);
+                                            final MatchMode matchMode, final LogicSymbol slot) {
+        return colNotLike(alias, column, value, matchMode, null, slot);
     }
 
     /**
      * not like表达式
      *
-     * @param alias   表别名
-     * @param column  字段名
-     * @param value   值
-     * @param matches 匹配模式
-     * @param escape  转义字符
-     * @param slot    {@link LogicSymbol}
+     * @param alias     表别名
+     * @param column    字段名
+     * @param value     值
+     * @param matchMode 匹配模式
+     * @param escape    转义字符
+     * @param slot      {@link LogicSymbol}
      * @return {@link LikeExpression}
      */
     public static LikeExpression colNotLike(final String alias, final String column, final String value,
-                                            final LikeMatchMode matches, final Character escape,
+                                            final MatchMode matchMode, final Character escape,
                                             final LogicSymbol slot) {
-        return likeExpression(null, alias, column, value, matches, escape, false, Mode.COLUMN,
+        return likeExpression(null, alias, column, value, matchMode, escape, false, Mode.COLUMN,
                 Symbol.NOT_LIKE, slot);
     }
 
