@@ -24,7 +24,7 @@ import io.github.mybatisx.lang.Strings;
 import java.util.stream.Collectors;
 
 /**
- * 排序片段管存储
+ * 排序片段存储
  *
  * @author wvkity
  * @created 2022/1/25
