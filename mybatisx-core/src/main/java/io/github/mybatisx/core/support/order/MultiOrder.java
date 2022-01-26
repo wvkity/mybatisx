@@ -89,8 +89,11 @@ public class MultiOrder extends AbstractOrder {
 
     @Override
     public String toString() {
-        return this.columns.stream().map(it -> it + ' ' + super.toString())
-                .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+        if (Objects.isNotEmpty(this.columns)) {
+            return this.columns.stream().filter(Strings::isNotWhitespace).map(it -> it + ' ' + super.toString())
+                    .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+        }
+        return Constants.EMPTY;
     }
 
     ///// static methods /////

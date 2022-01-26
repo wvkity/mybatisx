@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.support.order;
 
+import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.NullPrecedence;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.lang.Strings;
@@ -52,7 +53,10 @@ public class SingleOrder extends AbstractOrder {
 
     @Override
     public String toString() {
-        return this.column + ' ' + super.toString();
+        if (Strings.isNotWhitespace(this.column)) {
+            return this.column + ' ' + super.toString();
+        }
+        return Constants.EMPTY;
     }
 
     ///// static methods /////
