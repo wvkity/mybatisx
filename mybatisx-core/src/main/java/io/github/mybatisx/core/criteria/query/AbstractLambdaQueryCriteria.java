@@ -409,9 +409,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C order(Order order) {
-        if (order != null) {
-            this.fragmentManager.addOrder(order);
-        }
+        this.fragmentManager.addOrder(order);
         return this.context;
     }
 

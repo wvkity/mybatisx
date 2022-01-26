@@ -454,9 +454,7 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
 
     @Override
     public C order(Order order) {
-        if (order != null) {
-            this.fragmentManager.addOrder(order);
-        }
+        this.fragmentManager.addOrder(order);
         return this.context;
     }
 
