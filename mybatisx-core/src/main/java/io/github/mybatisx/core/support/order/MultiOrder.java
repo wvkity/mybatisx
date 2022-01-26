@@ -28,6 +28,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -47,11 +48,25 @@ public class MultiOrder extends AbstractOrder {
      */
     @Getter
     protected final List<String> columns;
+    /**
+     * 别名
+     */
+    protected final AtomicReference<String> asRef = new AtomicReference<>(null);
 
     public MultiOrder(Query<?> query, String alias, List<String> columns, boolean ascending,
                       boolean ignoreCase, NullPrecedence precedence) {
         super(query, alias, ascending, ignoreCase, precedence);
         this.columns = ImmutableList.copyOf(columns);
+    }
+
+    @Override
+    protected String as() {
+        String oldValue = this.asRef.get();
+        if (oldValue == null) {
+            oldValue = super.as();
+            this.asRef.compareAndSet(null, oldValue);
+        }
+        return oldValue;
     }
 
     @Override

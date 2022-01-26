@@ -27,8 +27,6 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * 抽象排序
  *
@@ -63,10 +61,6 @@ public abstract class AbstractOrder implements Order {
      * 空值优先级
      */
     protected final NullPrecedence precedence;
-    /**
-     * 别名
-     */
-    protected final AtomicReference<String> asRef = new AtomicReference<>(null);
 
     /**
      * 获取表别名
@@ -74,21 +68,17 @@ public abstract class AbstractOrder implements Order {
      * @return 表别名
      */
     protected String as() {
-        String oldValue = this.asRef.get();
-        if (oldValue == null) {
-            if (Strings.isNotWhitespace(this.alias)) {
-                oldValue = this.alias + SqlSymbol.DOT;
-            } else if (this.query != null) {
-                final String _$as = this.query.as();
-                if (Strings.isNotWhitespace(_$as)) {
-                    oldValue = _$as + SqlSymbol.DOT;
-                } else {
-                    oldValue = Constants.EMPTY;
-                }
+        // noinspection DuplicatedCode
+        String oldValue = "";
+        if (Strings.isNotWhitespace(this.alias)) {
+            oldValue = this.alias + SqlSymbol.DOT;
+        } else if (this.query != null) {
+            final String _$as = this.query.as();
+            if (Strings.isNotWhitespace(_$as)) {
+                oldValue = _$as + SqlSymbol.DOT;
             } else {
                 oldValue = Constants.EMPTY;
             }
-            this.asRef.compareAndSet(null, oldValue);
         }
         return oldValue;
     }
