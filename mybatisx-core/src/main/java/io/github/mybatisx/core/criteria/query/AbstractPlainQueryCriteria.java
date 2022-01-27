@@ -97,6 +97,11 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     }
 
     @Override
+    public C extra() {
+        return this.extra(true);
+    }
+
+    @Override
     public C extra(boolean extra) {
         this.extra = extra;
         return this.context;
@@ -327,7 +332,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     // endregion
 
     // region Group by methods
-    
+
     @Override
     public C colGroup(String column) {
         return this.group(SingleGroup.group(this, column));
@@ -354,9 +359,9 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
         this.fragmentManager.addGroups(groups);
         return this.context;
     }
-    
+
     // endregion
-    
+
     // region Order by methods
 
     @Override

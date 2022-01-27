@@ -101,6 +101,11 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
+    public C extra() {
+        return this.extra(true);
+    }
+
+    @Override
     public C extra(boolean extra) {
         this.extra = extra;
         return this.context;

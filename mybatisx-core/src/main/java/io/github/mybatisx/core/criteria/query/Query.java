@@ -95,6 +95,13 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     Query<T> reference(final String reference);
 
     /**
+     * 设置查询列为额外添加
+     *
+     * @return {@code this}
+     */
+    Query<T> extra();
+
+    /**
      * 设置查询列是否为额外添加
      *
      * @param extra 是否为额外添加
