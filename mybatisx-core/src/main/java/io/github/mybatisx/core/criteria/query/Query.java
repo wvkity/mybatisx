@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.BaseCriteria;
+import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.embedded.EmbeddableResult;
@@ -256,6 +257,30 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @return {@code this}
      */
     Query<T> selects(final List<Selectable> selectables);
+
+    /**
+     * 添加分组
+     *
+     * @param group {@link Group}
+     * @return {@code this}
+     */
+    Query<T> group(final Group group);
+
+    /**
+     * 添加多个分组
+     *
+     * @param groups 分组列表
+     * @return {@code this}
+     */
+    Query<T> groups(final Group... groups);
+
+    /**
+     * 添加多个分组
+     *
+     * @param groups 分组列表
+     * @return {@code this}
+     */
+    Query<T> groups(final List<Group> groups);
 
     /**
      * 添加排序
