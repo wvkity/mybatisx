@@ -120,6 +120,6 @@ public class StandardSelectable implements Selectable {
     public String getFragment(boolean isQuery) {
         final String tableAlias = this.getTableAlias();
         return Scripts.toSelectArg(this.column.startsWith(SqlSymbol.START_BRACKET) ? null : tableAlias,
-                this.column, this.as());
+                this.column, isQuery ? this.as() : null);
     }
 }
