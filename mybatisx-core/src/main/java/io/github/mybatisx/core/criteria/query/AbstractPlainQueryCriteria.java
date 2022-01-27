@@ -18,6 +18,9 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.NullPrecedence;
 import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
+import io.github.mybatisx.core.support.group.Group;
+import io.github.mybatisx.core.support.group.MultiGroup;
+import io.github.mybatisx.core.support.group.SingleGroup;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.SingleOrder;
@@ -323,6 +326,37 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     // endregion
 
+    // region Group by methods
+    
+    @Override
+    public C colGroup(String column) {
+        return this.group(SingleGroup.group(this, column));
+    }
+
+    @Override
+    public C colGroups(List<String> columns) {
+        return this.group(MultiGroup.group(this, columns));
+    }
+
+    @Override
+    public C group(Group group) {
+        this.fragmentManager.addGroup(group);
+        return this.context;
+    }
+
+    @Override
+    public C groups(Group... groups) {
+        return this.groups(Arrays.asList(groups));
+    }
+
+    @Override
+    public C groups(List<Group> groups) {
+        this.fragmentManager.addGroups(groups);
+        return this.context;
+    }
+    
+    // endregion
+    
     // region Order by methods
 
     @Override

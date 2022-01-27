@@ -21,6 +21,9 @@ import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 import io.github.mybatisx.core.property.Property;
+import io.github.mybatisx.core.support.group.Group;
+import io.github.mybatisx.core.support.group.MultiGroup;
+import io.github.mybatisx.core.support.group.SingleGroup;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.SingleOrder;
@@ -406,6 +409,54 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     @Override
     public List<Selectable> fetchSelects() {
         return this.getSelects();
+    }
+
+    // endregion
+
+    // region Group by methods
+
+    @Override
+    public C group(String property) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.group(SingleGroup.group(this, column.getColumn()));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C group(List<String> properties) {
+        if (Objects.isNotEmpty(properties)) {
+            this.group(MultiGroup.group(this, this.stringConvert(properties)));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colGroup(String column) {
+        return this.group(SingleGroup.group(this, column));
+    }
+
+    @Override
+    public C colGroups(List<String> columns) {
+        return this.group(MultiGroup.group(this, columns));
+    }
+
+    @Override
+    public C group(Group group) {
+        this.fragmentManager.addGroup(group);
+        return this.context;
+    }
+
+    @Override
+    public C groups(Group... groups) {
+        return this.groups(Arrays.asList(groups));
+    }
+
+    @Override
+    public C groups(List<Group> groups) {
+        this.fragmentManager.addGroups(groups);
+        return this.context;
     }
 
     // endregion

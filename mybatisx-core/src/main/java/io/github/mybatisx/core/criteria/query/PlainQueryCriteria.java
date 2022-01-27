@@ -17,6 +17,9 @@ package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.CriteriaWrapper;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 查询条件接口
  *
@@ -29,4 +32,30 @@ import io.github.mybatisx.core.criteria.CriteriaWrapper;
 public interface PlainQueryCriteria<T, C extends PlainQueryCriteria<T, C>> extends CriteriaWrapper<T, C>, Query<T>,
         PlainSelect<T, C>, PlainSort<T, C> {
 
+    /**
+     * 分组
+     *
+     * @param column 字段名
+     * @return {@code this}
+     */
+    C colGroup(final String column);
+
+    /**
+     * 分组
+     *
+     * @param columns 字段列表
+     * @return {@code this}
+     */
+    default C colGroups(final String... columns) {
+        return this.colGroups(Arrays.asList(columns));
+    }
+
+    /**
+     * 分组
+     *
+     * @param columns 字段列表
+     * @return {@code this}
+     */
+    C colGroups(final List<String> columns);
+    
 }

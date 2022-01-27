@@ -18,6 +18,9 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.core.criteria.CriteriaWrapper;
 import io.github.mybatisx.core.property.Property;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 查询条件接口(支持Lambda表达式)
  *
@@ -30,7 +33,6 @@ import io.github.mybatisx.core.property.Property;
 public interface LambdaQueryCriteria<T, C extends LambdaQueryCriteria<T, C>> extends CriteriaWrapper<T, C>, Query<T>,
         LambdaSelect<T, C>, LambdaSort<T, C> {
 
-
     /**
      * 设置Map类型返回值的键
      *
@@ -38,5 +40,40 @@ public interface LambdaQueryCriteria<T, C extends LambdaQueryCriteria<T, C>> ext
      * @return {@code this}
      */
     C setMapKey(final Property<T, ?> property);
+    
+    /**
+     * 分组
+     *
+     * @param property 属性名
+     * @return {@code this}
+     */
+    default C group(final Property<T, ?> property) {
+        return this.group(this.convert(property));
+    }
 
+    /**
+     * 分组
+     *
+     * @param property 属性名
+     * @return {@code this}
+     */
+    C group(final String property);
+
+    /**
+     * 多个分组
+     *
+     * @param properties 属性列表
+     * @return {@code this}
+     */
+    default C group(final String... properties) {
+        return this.group(Arrays.asList(properties));
+    }
+
+    /**
+     * 多个分组
+     *
+     * @param properties 属性列表
+     * @return {@code this}
+     */
+    C group(final List<String> properties);
 }

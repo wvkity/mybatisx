@@ -109,6 +109,31 @@ public class QuerySqlManager extends AbstractSqlManager {
     }
 
     @Override
+    public String getGroupFragment() throws MyBatisException {
+        final Set<? extends JointQuery<?>> _$associations = this.associations;
+        if (Objects.isNotEmpty(_$associations)) {
+            final List<String> it = new ArrayList<>(_$associations.size() + 1);
+            final String _$ss = this.fragmentManager.getSelectString(false);
+            int i = 0;
+            if (Strings.isNotEmpty(_$ss)) {
+                it.add(_$ss);
+                i += 1;
+            }
+            for (JointQuery<?> jq : _$associations) {
+                if (jq.hasSelect() || jq.isFetch()) {
+                    final String fss = jq.getGroupFragment();
+                    if (Strings.isNotWhitespace(fss)) {
+                        it.add(fss);
+                        i += 1;
+                    }
+                }
+            }
+            return i == 1 ? it.get(0) : String.join(SqlSymbol.COMMA_SPACE, it);
+        }
+        return this.fragmentManager.getSelectString(false);
+    }
+
+    @Override
     public String getWhereString() {
         return this.getWhereString(true, true,
                 this.rootQuery.isGroupAll() ? this.getGroupFragment() : null);
@@ -145,7 +170,7 @@ public class QuerySqlManager extends AbstractSqlManager {
                     }
                 }
             }
-            if (Objects.isNotEmpty(conditions)) {
+            if (!conditions.isEmpty()) {
                 conditions.add(condition);
                 return String.join(SqlSymbol.SPACE, conditions);
             }
