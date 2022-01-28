@@ -30,7 +30,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface PlainQueryCriteria<T, C extends PlainQueryCriteria<T, C>> extends CriteriaWrapper<T, C>, Query<T>,
-        PlainSelect<T, C>, PlainSort<T, C> {
+        PlainSelect<T, C>, PlainFunctionSelect<T, C>, PlainSort<T, C> {
 
     /**
      * 分组
@@ -57,5 +57,5 @@ public interface PlainQueryCriteria<T, C extends PlainQueryCriteria<T, C>> exten
      * @return {@code this}
      */
     C colGroups(final List<String> columns);
-    
+
 }

@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.core.criteria.BaseCriteria;
+import io.github.mybatisx.core.support.function.AggFunction;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
@@ -178,13 +179,6 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     /**
      * 设置查询是否包含聚合函数
      *
-     * @return {@code this}
-     */
-    Query<T> containsFunction();
-
-    /**
-     * 设置查询是否包含聚合函数
-     *
      * @param contains 是否包含聚合函数
      * @return {@code this}
      */
@@ -264,6 +258,30 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @return {@code this}
      */
     Query<T> selects(final List<Selectable> selectables);
+
+    /**
+     * 添加聚合函数
+     *
+     * @param function {@link AggFunction}
+     * @return {@code this}
+     */
+    Query<T> function(final AggFunction function);
+
+    /**
+     * 添加多个聚合函数
+     *
+     * @param functions {@link AggFunction}列表
+     * @return {@code this}
+     */
+    Query<T> functions(final AggFunction... functions);
+
+    /**
+     * 添加多个聚合函数
+     *
+     * @param functions {@link AggFunction}列表
+     * @return {@code this}
+     */
+    Query<T> functions(final List<AggFunction> functions);
 
     /**
      * 添加分组

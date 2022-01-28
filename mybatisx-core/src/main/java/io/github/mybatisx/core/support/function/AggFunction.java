@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.support.function;
 
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.criteria.query.Query;
 
 /**
  * 聚合函数
@@ -27,9 +28,60 @@ import io.github.mybatisx.base.fragment.Fragment;
 public interface AggFunction extends Fragment {
 
     /**
+     * 获取{@link Query}
+     *
+     * @return {@link Query}
+     */
+    Query<?> getQuery();
+
+    /**
+     * 获取聚合函数名称
+     *
+     * @return 聚合函数名称
+     */
+    String getName();
+
+    /**
+     * 获取字段名
+     *
+     * @return 字段名
+     */
+    String getColumn();
+
+    /**
      * 获取别名
      *
      * @return 别名
      */
     String getAlias();
+
+    /**
+     * 是否去重
+     *
+     * @return boolean
+     */
+    boolean isDistinct();
+
+    /**
+     * 获取保留小数位数
+     *
+     * @return 小数位数
+     */
+    Integer getScale();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getFragment() {
+        return this.getFragment(true);
+    }
+
+    /**
+     * 获取SQL片段
+     *
+     * @param isQuery 是否为查询
+     * @return SQL片段
+     */
+    String getFragment(final boolean isQuery);
 }

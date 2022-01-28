@@ -21,12 +21,19 @@ import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 import io.github.mybatisx.core.property.Property;
+import io.github.mybatisx.core.support.function.AggFunction;
+import io.github.mybatisx.core.support.function.Avg;
+import io.github.mybatisx.core.support.function.Count;
+import io.github.mybatisx.core.support.function.Max;
+import io.github.mybatisx.core.support.function.Min;
+import io.github.mybatisx.core.support.function.Sum;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.group.MultiGroup;
 import io.github.mybatisx.core.support.group.SingleGroup;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.SingleOrder;
+import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -157,11 +164,6 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     @Override
     public boolean isOnlyQueryFunction() {
         return this.onlyQueryFunction;
-    }
-
-    @Override
-    public C containsFunction() {
-        return this.containsFunction(true);
     }
 
     @Override
@@ -414,6 +416,118 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     @Override
     public List<Selectable> fetchSelects() {
         return this.getSelects();
+    }
+
+    // endregion
+
+    // region Aggregate function methods
+
+    @Override
+    public C count(String property, String alias, boolean distinct) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.function(new Count(this, column.getColumn(), alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C sum(String property, String alias, Integer scale, boolean distinct) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.function(new Sum(this, column.getColumn(), alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C avg(String property, String alias, Integer scale, boolean distinct) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.function(new Avg(this, column.getColumn(), alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C min(String property, String alias, Integer scale) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.function(new Min(this, column.getColumn(), alias, false));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C max(String property, String alias, Integer scale) {
+        final Column column;
+        if ((column = this.convert(property)) != null) {
+            this.function(new Max(this, column.getColumn(), alias, false));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colCount(String column, String alias, boolean distinct) {
+        if (Strings.isNotWhitespace(column)) {
+            this.function(new Count(this, column, alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colSum(String column, String alias, Integer scale, boolean distinct) {
+        if (Strings.isNotWhitespace(column)) {
+            this.function(new Sum(this, column, alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colAvg(String column, String alias, Integer scale, boolean distinct) {
+        if (Strings.isNotWhitespace(column)) {
+            this.function(new Avg(this, column, alias, distinct));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colMin(String column, String alias, Integer scale) {
+        if (Strings.isNotWhitespace(column)) {
+            this.function(new Min(this, column, alias, false));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colMax(String column, String alias, Integer scale) {
+        if (Strings.isNotWhitespace(column)) {
+            this.function(new Max(this, column, alias, false));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C function(AggFunction function) {
+        if (function != null) {
+            this.select(new FunctionSelectable(SelectType.FUNCTION, function));
+        }
+        return this.context;
+    }
+
+    @Override
+    public C functions(AggFunction... functions) {
+        return this.functions(Arrays.asList(functions));
+    }
+
+    @Override
+    public C functions(List<AggFunction> functions) {
+        if (Objects.isNotEmpty(functions)) {
+            for (AggFunction it : functions) {
+                this.function(it);
+            }
+        }
+        return this.context;
     }
 
     // endregion
