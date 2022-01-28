@@ -423,6 +423,16 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     // region Aggregate function methods
 
     @Override
+    public C count() {
+        return this.countWithAlias(null);
+    }
+
+    @Override
+    public C countWithAlias(String alias) {
+        return this.function(new Count(this, "*", alias));
+    }
+    
+    @Override
     public C count(String property, String alias, boolean distinct) {
         final Column column;
         if ((column = this.convert(property)) != null) {

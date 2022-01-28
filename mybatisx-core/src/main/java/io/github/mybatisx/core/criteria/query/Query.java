@@ -260,6 +260,21 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     Query<T> selects(final List<Selectable> selectables);
 
     /**
+     * count聚合函数
+     *
+     * @return {@code this}
+     */
+    Query<T> count();
+
+    /**
+     * count聚合函数
+     *
+     * @param alias 别名
+     * @return {@code this}
+     */
+    Query<T> countWithAlias(final String alias);
+
+    /**
      * 添加聚合函数
      *
      * @param function {@link AggFunction}

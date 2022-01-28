@@ -334,7 +334,17 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     // endregion
 
     // region Aggregate function methods
-    
+
+    @Override
+    public C count() {
+        return this.countWithAlias(null);
+    }
+
+    @Override
+    public C countWithAlias(String alias) {
+        return this.function(new Count(this, "*", alias));
+    }
+
     @Override
     public C colCount(String column, String alias, boolean distinct) {
         if (Strings.isNotWhitespace(column)) {
