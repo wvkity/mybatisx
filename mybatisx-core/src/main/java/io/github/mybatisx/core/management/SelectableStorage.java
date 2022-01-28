@@ -61,6 +61,10 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      */
     private final List<Selectable> functionList = new ArrayList<>(6);
     /**
+     * 普通查询列
+     */
+    private final List<Selectable> plainList = new ArrayList<>(6);
+    /**
      * 聚合函数(Map<alias, AggFunction>)
      */
     private final Map<String, FunctionSelectable> aliasFunctionMap = new HashMap<>(8);
@@ -104,6 +108,8 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
                     this.aliasFunctionMap.putIfAbsent(funcAlias, it);
                 }
                 this.functionList.add(it);
+            } else {
+                this.plainList.add(selectable);
             }
             this.fragments.add(selectable);
             this.cached.set(false);
@@ -213,13 +219,15 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
             if (_$query.isOnlyQueryFunction()) {
                 selects = new ArrayList<>(this.functionList);
             } else {
-                selects = this.query.isExtra() ? this.filtrate() : new ArrayList<>();
-                final List<Selectable> temp = this.fragments;
-                if (_$query.isContainsFunction()) {
-                    selects.addAll(temp);
+                if (_$query.isExtra()) {
+                    selects = this.filtrate();
                 } else {
-                    selects.addAll(temp.stream().filter(it ->
-                            it.getType() != SelectType.FUNCTION).collect(Collectors.toList()));
+                    selects = new ArrayList<>();
+                }
+                if (_$query.isContainsFunction()) {
+                    selects.addAll(this.fragments);
+                } else {
+                    selects.addAll(this.plainList);
                 }
             }
         } else {
@@ -307,7 +315,9 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
     public String getFragment(final boolean isQuery) {
         final List<Selectable> selects = this.getSelects();
         if (!selects.isEmpty()) {
-            return selects.stream().map(it -> it.getFragment(isQuery)).filter(Strings::isNotWhitespace)
+            return selects.stream()
+                    .map(it -> it.getFragment(isQuery))
+                    .filter(Strings::isNotWhitespace)
                     .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
         }
         return Constants.EMPTY;
