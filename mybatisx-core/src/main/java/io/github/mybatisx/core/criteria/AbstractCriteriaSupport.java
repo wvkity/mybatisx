@@ -76,7 +76,7 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     /**
      * 是否包含聚合函数
      */
-    protected boolean containsFunction;
+    protected boolean containsFunction = true;
     /**
      * 所有列是否分组
      */
