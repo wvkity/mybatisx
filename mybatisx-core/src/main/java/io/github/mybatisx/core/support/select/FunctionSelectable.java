@@ -46,7 +46,7 @@ public class FunctionSelectable implements Selectable {
 
     @Override
     public String getColumn() {
-        return null;
+        return this.function.getColumn();
     }
 
     @Override
@@ -56,6 +56,6 @@ public class FunctionSelectable implements Selectable {
 
     @Override
     public String getFragment(boolean isQuery) {
-        return null;
+        return this.function.getFragment(isQuery);
     }
 }
