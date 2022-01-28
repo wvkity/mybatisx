@@ -69,18 +69,18 @@ public abstract class AbstractOrder implements Order {
      */
     protected String as() {
         // noinspection DuplicatedCode
-        String oldValue = "";
+        String ias = "";
         if (Strings.isNotWhitespace(this.alias)) {
-            oldValue = this.alias + SqlSymbol.DOT;
+            ias = this.alias + SqlSymbol.DOT;
         } else if (this.query != null) {
             final String _$as = this.query.as();
             if (Strings.isNotWhitespace(_$as)) {
-                oldValue = _$as + SqlSymbol.DOT;
+                ias = _$as + SqlSymbol.DOT;
             } else {
-                oldValue = Constants.EMPTY;
+                ias = Constants.EMPTY;
             }
         }
-        return oldValue;
+        return ias;
     }
 
     /**
