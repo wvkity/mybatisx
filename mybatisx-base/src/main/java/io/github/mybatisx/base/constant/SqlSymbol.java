@@ -221,6 +221,26 @@ public interface SqlSymbol {
      */
     String AS = "AS";
     /**
+     * count聚合函数名
+     */
+    String AGG_COUNT = "COUNT";
+    /**
+     * sum聚合函数名
+     */
+    String AGG_SUM = "SUM";
+    /**
+     * avg聚合函数名
+     */
+    String AGG_AVG = "AVG";
+    /**
+     * min聚合函数名
+     */
+    String AGG_MIN = "MIN";
+    /**
+     * max聚合函数名
+     */
+    String AGG_MAX = "MAX";
+    /**
      * 字符串占位符
      */
     String STRING_PLACEHOLDER = "%s";
