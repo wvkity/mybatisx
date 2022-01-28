@@ -196,8 +196,7 @@ public class QuerySqlManager extends AbstractSqlManager {
             sb.append(SqlSymbol.SPACE).append(condition.trim());
             if (_$root.isKeepOrderly() && this.fragmentManager.hasSort()) {
                 sb.append(SqlSymbol.SPACE)
-                        .append(Constants.KEEP_ORDER_BY)
-                        .append(SqlSymbol.SPACE);
+                        .append(Constants.KEEP_ORDER_BY);
             }
         }
         return sb.toString();
