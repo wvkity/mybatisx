@@ -18,6 +18,7 @@ package io.github.mybatisx.core.management;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
 import io.github.mybatisx.core.support.group.Group;
+import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 
@@ -102,6 +103,20 @@ public interface FragmentManager extends Fragment {
      * @param groups {@link Group}列表
      */
     void addGroups(final List<Group> groups);
+
+    /**
+     * 添加分组筛选条件
+     *
+     * @param having {@link Having}
+     */
+    void addHaving(final Having having);
+
+    /**
+     * 添加多个分组筛选条件
+     *
+     * @param havingList {@link Having}列表
+     */
+    void addHaving(final List<Having> havingList);
 
     /**
      * 添加排序

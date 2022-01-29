@@ -20,6 +20,7 @@ import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.core.support.group.Group;
+import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.lang.Strings;
@@ -56,13 +57,17 @@ public abstract class AbstractFragmentManager implements FragmentManager {
      */
     protected final GroupStorage groupStorage;
     /**
+     * 分组筛选片段存储器
+     */
+    protected final HavingStorage havingStorage;
+    /**
      * 排序存储器
      */
     protected final OrderStorage orderStorage;
 
     public AbstractFragmentManager(Criteria<?> criteria) {
         this(criteria, new ConditionStorage(), new SelectableStorage(criteria), new GroupStorage(),
-                new OrderStorage());
+                new HavingStorage(), new OrderStorage());
     }
 
     @Override
@@ -116,6 +121,16 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public void addHaving(Having having) {
+        this.havingStorage.add(having);
+    }
+
+    @Override
+    public void addHaving(List<Having> havingList) {
+        this.havingStorage.addAll(havingList);
+    }
+
+    @Override
     public void addOrder(Order order) {
         this.orderStorage.add(order);
     }
@@ -148,7 +163,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     @Override
     public boolean hasFragment() {
         return this.hasCondition() || this.hasSelect() || (this.groupStorage != null && !this.groupStorage.isEmpty())
-                || this.hasSort();
+                || (this.havingStorage != null && !this.havingStorage.isEmpty()) || this.hasSort();
     }
 
     @Override
@@ -187,7 +202,10 @@ public abstract class AbstractFragmentManager implements FragmentManager {
 
     @Override
     public String getHavingString() {
-        return null;
+        if (this.havingStorage != null) {
+            return this.havingStorage.getFragment();
+        }
+        return Constants.EMPTY;
     }
 
     @Override
