@@ -173,6 +173,10 @@ public interface SqlSymbol {
      */
     String GROUP_BY_SPACE_BOTH = " GROUP BY ";
     /**
+     * having
+     */
+    String HAVING = "HAVING";
+    /**
      * 排序
      */
     String ORDER_BY = "ORDER BY";
