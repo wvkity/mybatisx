@@ -18,6 +18,7 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.core.criteria.BaseCriteria;
 import io.github.mybatisx.core.support.function.AggFunction;
 import io.github.mybatisx.core.support.group.Group;
+import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.embedded.EmbeddableResult;
@@ -321,6 +322,30 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @return {@code this}
      */
     Query<T> groups(final List<Group> groups);
+
+    /**
+     * 添加分组筛选条件
+     *
+     * @param having {@link Having}
+     * @return {@code this}
+     */
+    Query<T> having(final Having having);
+
+    /**
+     * 添加多个分组筛选条件
+     *
+     * @param havingArray {@link Having}列表
+     * @return {@code this}
+     */
+    Query<T> having(final Having... havingArray);
+
+    /**
+     * 添加多个分组筛选条件
+     *
+     * @param havingList {@link Having}列表
+     * @return {@code this}
+     */
+    Query<T> having(final List<Having> havingList);
 
     /**
      * 添加排序

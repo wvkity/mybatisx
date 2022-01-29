@@ -30,6 +30,7 @@ import io.github.mybatisx.core.support.function.Sum;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.group.MultiGroup;
 import io.github.mybatisx.core.support.group.SingleGroup;
+import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.SingleOrder;
@@ -165,7 +166,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     public boolean isOnlyQueryFunction() {
         return this.onlyQueryFunction;
     }
-    
+
     @Override
     public C containsFunction(boolean contains) {
         this.containsFunction = contains;
@@ -386,7 +387,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     public C countWithAlias(String alias) {
         return this.function(new Count(this, "*", alias));
     }
-    
+
     @Override
     public C count(String property, String alias, boolean distinct) {
         final Column column;
@@ -490,6 +491,27 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     @Override
     public C groups(List<Group> groups) {
         this.fragmentManager.addGroups(groups);
+        return this.context;
+    }
+
+    // endregion
+
+    // region Having methods
+
+    @Override
+    public C having(Having having) {
+        this.fragmentManager.addHaving(having);
+        return this.context;
+    }
+
+    @Override
+    public C having(Having... havingArray) {
+        return this.having(Arrays.asList(havingArray));
+    }
+
+    @Override
+    public C having(List<Having> havingList) {
+        this.fragmentManager.addHaving(havingList);
         return this.context;
     }
 
