@@ -20,6 +20,7 @@ import io.github.mybatisx.base.fragment.Fragment;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.Selectable;
 
 import java.util.Collection;
@@ -89,6 +90,14 @@ public interface FragmentManager extends Fragment {
      * @param columns 字段名列表
      */
     void addExcludeColumns(final Collection<String> columns);
+
+    /**
+     * 根据聚合函数别名获取{@link FunctionSelectable}对象
+     *
+     * @param alias 聚合函数别名
+     * @return {@link FunctionSelectable}
+     */
+    FunctionSelectable getFunction(final String alias);
 
     /**
      * 添加分组字段
