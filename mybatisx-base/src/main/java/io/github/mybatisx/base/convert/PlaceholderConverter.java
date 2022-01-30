@@ -13,9 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.core.convert;
+package io.github.mybatisx.base.convert;
 
-import io.github.mybatisx.base.convert.Converter;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 

@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.core.management;
 
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criteria.Criteria;
 
 /**
@@ -28,16 +30,17 @@ public class DefaultFragmentManager extends AbstractFragmentManager {
 
     private static final long serialVersionUID = 2257490025235571458L;
 
-    public DefaultFragmentManager(Criteria<?> criteria) {
-        super(criteria);
+    public DefaultFragmentManager(Criteria<?> criteria, ParameterConverter parameterConverter,
+                                  PlaceholderConverter placeholderConverter) {
+        super(criteria, parameterConverter, placeholderConverter);
     }
 
     public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage) {
         super(criteria, conditionStorage, null, null, null, null);
     }
 
-    public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage, 
-                                  SelectableStorage selectableStorage, GroupStorage groupStorage, 
+    public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage,
+                                  SelectableStorage selectableStorage, GroupStorage groupStorage,
                                   HavingStorage havingStorage, OrderStorage orderStorage) {
         super(criteria, conditionStorage, selectableStorage, groupStorage, havingStorage, orderStorage);
     }

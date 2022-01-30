@@ -18,6 +18,8 @@ package io.github.mybatisx.core.criteria;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.metadata.Column;
@@ -25,7 +27,7 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.convert.ConditionConverter;
 import io.github.mybatisx.core.convert.DefaultConditionConverter;
 import io.github.mybatisx.core.convert.DefaultParameterConverter;
-import io.github.mybatisx.core.convert.ParameterConverter;
+import io.github.mybatisx.core.convert.DefaultPlaceholderConverter;
 import io.github.mybatisx.core.management.ConditionStorage;
 import io.github.mybatisx.core.management.DefaultFragmentManager;
 import io.github.mybatisx.core.management.FragmentManager;
@@ -103,6 +105,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      */
     protected transient ConditionConverter conditionConverter;
     /**
+     * 占位符参数转换器
+     */
+    protected transient PlaceholderConverter placeholderConverter;
+    /**
      * 片段管理器
      */
     protected transient FragmentManager fragmentManager;
@@ -153,11 +159,13 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         this.parameterSequence = new AtomicInteger(0);
         this.paramValueMapping = new ConcurrentHashMap<>(16);
         this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
-        this.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
+        this.placeholderConverter = new DefaultPlaceholderConverter(this.parameterConverter);
+        this.conditionConverter = new DefaultConditionConverter(this);
         if (isQuery) {
-            this.fragmentManager = new DefaultFragmentManager(this);
+            this.fragmentManager = new DefaultFragmentManager(this, this.parameterConverter, this.placeholderConverter);
         } else {
-            this.fragmentManager = new DefaultFragmentManager(this, new ConditionStorage());
+            this.fragmentManager = new DefaultFragmentManager(this,
+                    new ConditionStorage(this.parameterConverter, this.placeholderConverter));
         }
         this.nonMatchingThenThrows = new AtomicBoolean(true);
         this.tableAliasSequence = new AtomicInteger(0);
@@ -199,11 +207,12 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         if (source != null && target != null) {
             target.parameterSequence = source.parameterSequence;
             target.paramValueMapping = source.paramValueMapping;
+            target.placeholderConverter = source.placeholderConverter;
             target.tableAliasSequence = source.tableAliasSequence;
             target.nonMatchingThenThrows = source.nonMatchingThenThrows;
             target.parameterConverter = source.parameterConverter;
-            target.fragmentManager = new DefaultFragmentManager(this);
-            target.conditionConverter = new DefaultConditionConverter(this, this.parameterConverter);
+            target.fragmentManager = new DefaultFragmentManager(this, this.parameterConverter, this.placeholderConverter);
+            target.conditionConverter = new DefaultConditionConverter(this);
             if (deep) {
                 target.dialect = source.dialect;
                 target.entity = source.entity;

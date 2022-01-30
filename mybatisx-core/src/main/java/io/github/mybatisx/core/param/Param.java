@@ -18,8 +18,9 @@ package io.github.mybatisx.core.param;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
-import io.github.mybatisx.core.convert.ParameterConverter;
-import io.github.mybatisx.core.convert.PlaceholderConverter;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
+import io.github.mybatisx.base.dialect.Dialect;
 
 /**
  * 参数接口
@@ -70,10 +71,11 @@ public interface Param {
     /**
      * 解析参数成占位符参数
      *
-     * @param pc  {@link ParameterConverter}
-     * @param phc {@link PlaceholderConverter}
+     * @param pc      {@link ParameterConverter}
+     * @param phc     {@link PlaceholderConverter}
+     * @param dialect {@link Dialect}
      * @return 占位符参数
      */
-    String parse(final ParameterConverter pc, final PlaceholderConverter phc);
+    String parse(final ParameterConverter pc, final PlaceholderConverter phc, final Dialect dialect);
 
 }

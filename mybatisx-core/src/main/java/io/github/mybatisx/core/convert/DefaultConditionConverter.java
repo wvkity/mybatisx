@@ -25,7 +25,6 @@ import io.github.mybatisx.core.param.Param;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ import java.util.List;
  * @since 1.0.0
  */
 @Slf4j
-@RequiredArgsConstructor
 public class DefaultConditionConverter implements ConditionConverter {
 
     /**
@@ -47,19 +45,9 @@ public class DefaultConditionConverter implements ConditionConverter {
      */
     @Getter
     private final Criteria<?> criteria;
-    /**
-     * 参数转换器
-     */
-    private final ParameterConverter parameterConverter;
-    /**
-     * 占位符转换器
-     */
-    private final PlaceholderConverter placeholderConverter;
 
-    public DefaultConditionConverter(Criteria<?> criteria, ParameterConverter parameterConverter) {
+    public DefaultConditionConverter(Criteria<?> criteria) {
         this.criteria = criteria;
-        this.parameterConverter = parameterConverter;
-        this.placeholderConverter = new DefaultPlaceholderConverter(parameterConverter);
     }
 
     @Override
@@ -99,16 +87,14 @@ public class DefaultConditionConverter implements ConditionConverter {
 
     protected Criterion convert(final Criteria<?> criteria, final String column, final String alias,
                                 final Param param) {
-        final String fragment;
-        if (param != null &&
-                Strings.isNotWhitespace(fragment = param.parse(this.parameterConverter, this.placeholderConverter))) {
+        if (Strings.isNotWhitespace(column) && param != null) {
             return StandardCondition.builder()
                     .criteria(criteria)
                     .alias(alias)
                     .column(column)
-                    .orgValue(param.getValue())
-                    .fragment(fragment)
+                    .param(param)
                     .symbol(param.getSymbol())
+                    .orgValue(param.getValue())
                     .build();
         }
         return null;

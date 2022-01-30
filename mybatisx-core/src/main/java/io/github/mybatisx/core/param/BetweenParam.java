@@ -15,13 +15,17 @@
  */
 package io.github.mybatisx.core.param;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
-import io.github.mybatisx.core.convert.ParameterConverter;
-import io.github.mybatisx.core.convert.PlaceholderConverter;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
+import io.github.mybatisx.base.dialect.Dialect;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
 
 /**
  * Between范围参数
@@ -32,18 +36,24 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @SuperBuilder(toBuilder = true)
-@RequiredArgsConstructor
 @ToString(callSuper = true)
 public class BetweenParam extends AbstractParam implements Param {
-    
+
     /**
      * 开始值
      */
-    private Object begin;
+    private final Object begin;
     /**
      * 结束值
      */
-    private Object end;
+    private final Object end;
+
+    public BetweenParam(Symbol symbol, LogicSymbol slot, Class<? extends TypeHandler<?>> typeHandler, 
+                        JdbcType jdbcType, Class<?> javaType, boolean spliceJavaType, Object begin, Object end) {
+        super(symbol, slot, typeHandler, jdbcType, javaType, spliceJavaType);
+        this.begin = begin;
+        this.end = end;
+    }
 
     @Override
     public ParamMode getParamMode() {
@@ -51,8 +61,8 @@ public class BetweenParam extends AbstractParam implements Param {
     }
 
     @Override
-    public String parse(ParameterConverter pc, PlaceholderConverter phc) {
-        return this.toConditionArg(pc.converts(this.begin, this.end));
+    public String parse(ParameterConverter pc, PlaceholderConverter phc, Dialect dialect) {
+        return this.toConditionArg(dialect, pc.converts(this.begin, this.end));
     }
 
 }

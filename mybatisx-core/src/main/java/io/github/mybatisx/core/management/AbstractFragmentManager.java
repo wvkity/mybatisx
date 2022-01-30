@@ -17,6 +17,8 @@ package io.github.mybatisx.core.management;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.core.support.group.Group;
@@ -65,9 +67,10 @@ public abstract class AbstractFragmentManager implements FragmentManager {
      */
     protected final OrderStorage orderStorage;
 
-    public AbstractFragmentManager(Criteria<?> criteria) {
-        this(criteria, new ConditionStorage(), new SelectableStorage(criteria), new GroupStorage(),
-                new HavingStorage(), new OrderStorage());
+    public AbstractFragmentManager(Criteria<?> criteria, ParameterConverter parameterConverter,
+                                   PlaceholderConverter placeholderConverter) {
+        this(criteria, new ConditionStorage(parameterConverter, placeholderConverter), new SelectableStorage(criteria),
+                new GroupStorage(), new HavingStorage(), new OrderStorage());
     }
 
     @Override

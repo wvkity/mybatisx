@@ -15,13 +15,17 @@
  */
 package io.github.mybatisx.core.param;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
-import io.github.mybatisx.core.convert.ParameterConverter;
-import io.github.mybatisx.core.convert.PlaceholderConverter;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
+import io.github.mybatisx.base.dialect.Dialect;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
 
 /**
  * 简单参数
@@ -31,7 +35,6 @@ import lombok.experimental.SuperBuilder;
  * @since 1.0.0
  */
 @SuperBuilder(toBuilder = true)
-@RequiredArgsConstructor
 @ToString(callSuper = true)
 public class SimpleParam extends AbstractParam implements Param {
 
@@ -41,14 +44,20 @@ public class SimpleParam extends AbstractParam implements Param {
     @Getter
     private final Object value;
 
+    public SimpleParam(Symbol symbol, LogicSymbol slot, Class<? extends TypeHandler<?>> typeHandler,
+                       JdbcType jdbcType, Class<?> javaType, boolean spliceJavaType, Object value) {
+        super(symbol, slot, typeHandler, jdbcType, javaType, spliceJavaType);
+        this.value = value;
+    }
+
     @Override
     public ParamMode getParamMode() {
         return ParamMode.SINGLE;
     }
 
     @Override
-    public String parse(ParameterConverter pc, PlaceholderConverter phc) {
-        return this.toConditionArg(pc.convert(this.value));
+    public String parse(ParameterConverter pc, PlaceholderConverter phc, Dialect dialect) {
+        return this.toConditionArg(dialect, pc.convert(this.value));
     }
 
 }

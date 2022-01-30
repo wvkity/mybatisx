@@ -181,7 +181,6 @@ public class Restrictions {
                                 .matchMode(matchMode)
                                 .escape(escape)
                                 .ignoreCase(ignoreCase)
-                                .dialect(criteria.getDialect())
                                 .typeHandler(column.getTypeHandler())
                                 .jdbcType(column.getJdbcType())
                                 .javaType(column.getDescriptor().getJavaType())
@@ -200,7 +199,6 @@ public class Restrictions {
                             .matchMode(matchMode)
                             .escape(escape)
                             .ignoreCase(ignoreCase)
-                            .dialect(criteria == null ? null : criteria.getDialect())
                             .build())
                     .build();
         }

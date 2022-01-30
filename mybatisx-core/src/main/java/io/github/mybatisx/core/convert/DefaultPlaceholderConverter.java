@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.core.convert;
 
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.core.mapping.Scripts;
 import io.github.mybatisx.lang.Objects;
 import lombok.RequiredArgsConstructor;

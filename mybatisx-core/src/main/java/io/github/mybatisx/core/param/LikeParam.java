@@ -15,18 +15,20 @@
  */
 package io.github.mybatisx.core.param;
 
+import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.dialect.Dialect;
-import io.github.mybatisx.core.convert.ParameterConverter;
-import io.github.mybatisx.core.convert.PlaceholderConverter;
 import io.github.mybatisx.core.mapping.Scripts;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
 
 /**
  * Like参数
@@ -37,30 +39,35 @@ import lombok.experimental.SuperBuilder;
  */
 @Getter
 @SuperBuilder(toBuilder = true)
-@RequiredArgsConstructor
 @ToString(callSuper = true)
 public class LikeParam extends AbstractParam implements Param {
 
     /**
      * 值
      */
-    private String value;
+    private final String value;
     /**
      * 匹配模式
      */
-    private MatchMode matchMode;
+    private final MatchMode matchMode;
     /**
      * 转义字符
      */
-    private Character escape;
+    private final Character escape;
     /**
      * 是否忽略大小写
      */
-    private boolean ignoreCase;
-    /**
-     * 方言
-     */
-    private Dialect dialect;
+    private final boolean ignoreCase;
+
+    public LikeParam(Symbol symbol, LogicSymbol slot, Class<? extends TypeHandler<?>> typeHandler, 
+                     JdbcType jdbcType, Class<?> javaType, boolean spliceJavaType, String value, 
+                     MatchMode matchMode, Character escape, boolean ignoreCase) {
+        super(symbol, slot, typeHandler, jdbcType, javaType, spliceJavaType);
+        this.value = value;
+        this.matchMode = matchMode;
+        this.escape = escape;
+        this.ignoreCase = ignoreCase;
+    }
 
     @Override
     public ParamMode getParamMode() {
@@ -68,30 +75,30 @@ public class LikeParam extends AbstractParam implements Param {
     }
 
     @Override
-    public String parse(ParameterConverter pc, PlaceholderConverter phc) {
-        return this.toConditionArg(pc.convert((matchMode == null ? MatchMode.EXACT : matchMode).convert(this.value)));
+    public String parse(ParameterConverter pc, PlaceholderConverter phc, Dialect dialect) {
+        return this.toConditionArg(dialect,
+                pc.convert((matchMode == null ? MatchMode.EXACT : matchMode).convert(this.value)));
     }
 
     @Override
-    protected String toConditionArg(String... placeholders) {
-        final Dialect _$dialect;
+    protected String toConditionArg(Dialect dialect, String... placeholders) {
         final StringBuilder sb = new StringBuilder(120);
-        if (this.ignoreCase && (_$dialect = this.dialect) != null) {
-            if (_$dialect.supportsCaseInsensitiveLike()) {
+        if (this.ignoreCase && (dialect) != null) {
+            if (dialect.supportsCaseInsensitiveLike()) {
                 this.symbol = this.symbol == Symbol.LIKE ? Symbol.ILIKE : Symbol.NOT_ILIKE;
-                sb.append(super.toConditionArg(placeholders));
+                sb.append(super.toConditionArg(dialect, placeholders));
             } else {
                 // 使用小写函数忽略大小写比较
                 if (this.slot != null) {
                     sb.append(this.slot.getFragment()).append(SqlSymbol.SPACE);
                 }
-                sb.append(_$dialect.getLowercaseFunction()).append(SqlSymbol.START_BRACKET).append("%s")
+                sb.append(dialect.getLowercaseFunction()).append(SqlSymbol.START_BRACKET).append("%s")
                         .append(SqlSymbol.END_BRACKET).append(SqlSymbol.SPACE);
                 sb.append(Scripts.toConditionValueArg(this.symbol, this.typeHandler, this.jdbcType, this.spliceJavaType,
                         this.javaType, placeholders));
             }
         } else {
-            sb.append(super.toConditionArg(placeholders));
+            sb.append(super.toConditionArg(dialect, placeholders));
         }
         if (this.escape != null && !Character.isWhitespace(this.escape)) {
             sb.append(" ESCAPE ").append(SqlSymbol.SINGLE_QUOTES).append(this.escape).append(SqlSymbol.SINGLE_QUOTES);

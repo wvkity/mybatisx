@@ -18,8 +18,9 @@ package io.github.mybatisx.core.criterion;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criterion.Criterion;
-import io.github.mybatisx.base.fragment.Fragment;
 import io.github.mybatisx.base.helper.SqlHelper;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -57,8 +58,13 @@ public class NestedCondition implements Criterion {
 
     @Override
     public String getFragment() {
+        return Constants.EMPTY;
+    }
+
+    @Override
+    public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
         if (Objects.isNotEmpty(this.conditions)) {
-            final String fragment = this.conditions.stream().map(Fragment::getFragment)
+            final String fragment = this.conditions.stream().map(it -> it.getFragment(pc, phc))
                     .filter(Strings::isNotWhitespace).collect(Collectors.joining(SqlSymbol.SPACE));
             if (Strings.isNotWhitespace(fragment)) {
                 final StringBuilder sb = new StringBuilder(120);
@@ -75,5 +81,4 @@ public class NestedCondition implements Criterion {
         }
         return Constants.EMPTY;
     }
-
 }

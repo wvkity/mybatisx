@@ -17,11 +17,11 @@ package io.github.mybatisx.core.param;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.core.mapping.Scripts;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -39,7 +39,6 @@ import org.apache.ibatis.type.TypeHandler;
 @Setter
 @SuperBuilder(toBuilder = true)
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
 public abstract class AbstractParam {
 
@@ -58,15 +57,15 @@ public abstract class AbstractParam {
     /**
      * 类型处理器
      */
-    protected Class<? extends TypeHandler<?>> typeHandler;
+    protected final Class<? extends TypeHandler<?>> typeHandler;
     /**
      * Jdbc类型
      */
-    protected JdbcType jdbcType;
+    protected final JdbcType jdbcType;
     /**
      * Java类型
      */
-    protected Class<?> javaType;
+    protected final Class<?> javaType;
     /**
      * 是否拼接Java类型
      */
@@ -79,7 +78,7 @@ public abstract class AbstractParam {
      * @param placeholders 占位符参数列表
      * @return 条件参数字符串
      */
-    protected String toConditionArg(final String... placeholders) {
+    protected String toConditionArg(final Dialect dialect, final String... placeholders) {
         return Scripts.toConditionArg(this.symbol, this.slot, this.typeHandler, this.jdbcType, this.spliceJavaType,
                 this.javaType, placeholders);
     }

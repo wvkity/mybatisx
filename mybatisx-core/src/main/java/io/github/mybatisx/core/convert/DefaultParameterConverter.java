@@ -17,6 +17,7 @@ package io.github.mybatisx.core.convert;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.RequiredArgsConstructor;

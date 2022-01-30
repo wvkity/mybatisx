@@ -18,8 +18,11 @@ package io.github.mybatisx.core.criterion;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.core.param.Param;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.Builder;
@@ -67,6 +70,10 @@ public class StandardCondition implements Criterion {
      * 条件片段
      */
     private final String fragment;
+    /**
+     * 参数
+     */
+    private final Param param;
 
     /**
      * 获取表别名
@@ -80,11 +87,16 @@ public class StandardCondition implements Criterion {
 
     @Override
     public String getFragment() {
+        return Constants.EMPTY;
+    }
+
+    @Override
+    public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
         final StringBuilder sb = new StringBuilder(30);
         Strings.ifNotWhitespaceThen(this.getAlias(), it -> sb.append(it).append(SqlSymbol.DOT));
         Strings.ifNotWhitespaceThen(this.column, sb::append);
         final String replacement = sb.toString();
-        final String template = this.fragment;
+        final String template = this.param.parse(pc, phc, this.criteria == null ? null : this.criteria.getDialect());
         if (template.contains(SqlSymbol.COLUMN_PLACEHOLDER)) {
             return template.replaceAll(SqlSymbol.COLUMN_PLACEHOLDER, replacement);
         } else if (template.contains(SqlSymbol.STRING_PLACEHOLDER)) {

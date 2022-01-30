@@ -16,6 +16,8 @@
 package io.github.mybatisx.base.criterion;
 
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.fragment.Fragment;
 
 /**
@@ -53,4 +55,13 @@ public interface Criterion extends Fragment {
     default Object getOrgValue() {
         return null;
     }
+    
+    /**
+     * 解析成参数
+     *
+     * @param pc  {@link ParameterConverter}
+     * @param phc {@link PlaceholderConverter}
+     * @return 占位符参数
+     */
+    String getFragment(final ParameterConverter pc, final PlaceholderConverter phc);
 }

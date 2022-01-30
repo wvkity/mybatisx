@@ -18,14 +18,17 @@ package io.github.mybatisx.core.param;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.SqlSymbol;
+import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
+import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.helper.PlaceholderHelper;
-import io.github.mybatisx.core.convert.ParameterConverter;
-import io.github.mybatisx.core.convert.PlaceholderConverter;
 import io.github.mybatisx.lang.Strings;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
 
 import java.util.Collection;
 import java.util.Map;
@@ -39,33 +42,43 @@ import java.util.Map;
  */
 @Getter
 @SuperBuilder(toBuilder = true)
-@RequiredArgsConstructor
 @ToString(callSuper = true)
 public class TemplateParam extends AbstractParam implements Param {
 
     /**
      * 参数模式
      */
-    private ParamMode paramMode;
+    private final ParamMode paramMode;
     /**
      * 模板
      */
-    private String template;
+    private final String template;
     /**
      * 单个值
      */
-    private Object value;
+    private final Object value;
     /**
      * 多个值
      */
-    private Collection<?> listValue;
+    private final Collection<?> listValue;
     /**
      * 键值
      */
-    private Map<String, ?> mapValue;
+    private final Map<String, ?> mapValue;
+
+    public TemplateParam(Symbol symbol, LogicSymbol slot, Class<? extends TypeHandler<?>> typeHandler, 
+                         JdbcType jdbcType, Class<?> javaType, boolean spliceJavaType, ParamMode paramMode, 
+                         String template, Object value, Collection<?> listValue, Map<String, ?> mapValue) {
+        super(symbol, slot, typeHandler, jdbcType, javaType, spliceJavaType);
+        this.paramMode = paramMode;
+        this.template = template;
+        this.value = value;
+        this.listValue = listValue;
+        this.mapValue = mapValue;
+    }
 
     @Override
-    public String parse(ParameterConverter pc, PlaceholderConverter phc) {
+    public String parse(ParameterConverter pc, PlaceholderConverter phc, Dialect dialect) {
         if (Strings.isNotWhitespace(this.template)) {
             final PlaceholderHelper helper = new PlaceholderHelper();
             final String _$template = this.template;
@@ -83,7 +96,7 @@ public class TemplateParam extends AbstractParam implements Param {
                     }
                     break;
                 default:
-                    result = helper.replace(_$template, super.toConditionArg(pc.convert(this.value)));
+                    result = helper.replace(_$template, super.toConditionArg(dialect, pc.convert(this.value)));
             }
             // 检查是否已替换，没替换则不通过
             if (Strings.isNotWhitespace(result) && !_$template.equals(result)) {

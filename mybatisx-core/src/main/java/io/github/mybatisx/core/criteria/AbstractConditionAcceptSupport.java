@@ -236,7 +236,6 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .matchMode(matchMode)
                     .escape(escape)
                     .ignoreCase(ignoreCase)
-                    .dialect(this.getDialect())
                     .build());
         }
         return this.context;
@@ -421,7 +420,6 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                     .matchMode(matchMode)
                     .escape(escape)
                     .ignoreCase(ignoreCase)
-                    .dialect(this.getDialect())
                     .build());
         }
         return this.context;
