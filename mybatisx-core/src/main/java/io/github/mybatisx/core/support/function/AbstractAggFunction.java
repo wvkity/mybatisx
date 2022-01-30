@@ -143,8 +143,7 @@ public abstract class AbstractAggFunction implements AggFunction {
                 }
                 return fragment.toString();
             }
-            return this.render();
         }
-        return Constants.EMPTY;
+        return this.render();
     }
 }
