@@ -315,10 +315,18 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
     public String getFragment(final boolean isQuery) {
         final List<Selectable> selects = this.getSelects();
         if (!selects.isEmpty()) {
-            return selects.stream()
-                    .map(it -> it.getFragment(isQuery))
-                    .filter(Strings::isNotWhitespace)
-                    .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+            if (isQuery) {
+                return selects.stream()
+                        .map(Selectable::getFragment)
+                        .filter(Strings::isNotWhitespace)
+                        .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+            } else {
+                return selects.stream()
+                        .filter(it -> it.getType() != SelectType.FUNCTION)
+                        .map(it -> it.getFragment(false))
+                        .filter(Strings::isNotWhitespace)
+                        .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+            }
         }
         return Constants.EMPTY;
     }
