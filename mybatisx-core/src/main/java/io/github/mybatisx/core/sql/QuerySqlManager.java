@@ -68,7 +68,7 @@ public class QuerySqlManager extends AbstractSqlManager {
 
     @Override
     public boolean hasSort() throws MyBatisException {
-        return super.hasSort();
+        return this.fragmentManager.hasSort();
     }
 
     @Override
