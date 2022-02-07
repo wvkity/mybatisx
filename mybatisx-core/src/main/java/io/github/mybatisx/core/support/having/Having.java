@@ -15,10 +15,13 @@
  */
 package io.github.mybatisx.core.support.having;
 
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.fragment.Fragment;
 
 /**
- * 分组筛选
+ * 分组筛选条件
  *
  * @author wvkity
  * @created 2022/1/29
@@ -26,4 +29,17 @@ import io.github.mybatisx.base.fragment.Fragment;
  */
 public interface Having extends Fragment {
 
+    @Override
+    default String getFragment() {
+        return Constants.EMPTY;
+    }
+
+    /**
+     * 解析成条件片段
+     *
+     * @param pc  {@link ParameterConverter}
+     * @param phc {@link PlaceholderConverter}
+     * @return 占位符参数
+     */
+    String getFragment(final ParameterConverter pc, final PlaceholderConverter phc);
 }

@@ -13,49 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.core.support.select;
+package io.github.mybatisx.core.support.having;
 
-import io.github.mybatisx.core.support.function.AggFunction;
+import io.github.mybatisx.base.convert.ParameterConverter;
+import io.github.mybatisx.base.convert.PlaceholderConverter;
+import io.github.mybatisx.base.criterion.Criterion;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 /**
- * 聚合函数查询列
- *
  * @author wvkity
- * @created 2022/1/18
+ * @created 2022/1/30
  * @since 1.0.0
  */
-@Getter
 @Builder
-@ToString
 @RequiredArgsConstructor
-public class FunctionSelectable implements Selectable {
+public class CriterionHaving implements Having {
 
-    private static final long serialVersionUID = -6859021427874169676L;
+    private static final long serialVersionUID = 1476067640780885692L;
+
     /**
-     * 查询类型
+     * {@link Criterion}
      */
-    private final SelectType type;
-    /**
-     * 聚合函数
-     */
-    private final AggFunction function;
+    private final Criterion criterion;
 
     @Override
-    public String getColumn() {
-        return this.function.getColumn();
-    }
-
-    @Override
-    public String getAlias() {
-        return this.function.getAlias();
-    }
-
-    @Override
-    public String getFragment(boolean isQuery) {
-        return this.function.getFragment(isQuery);
+    public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
+        return this.criterion.getFragment(pc, phc);
     }
 }

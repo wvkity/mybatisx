@@ -13,52 +13,50 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.core.management;
+package io.github.mybatisx.core.support.having;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
-import io.github.mybatisx.base.fragment.AbstractFragmentList;
-import io.github.mybatisx.base.helper.SqlHelper;
-import io.github.mybatisx.core.support.having.Having;
+import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.param.Param;
+import io.github.mybatisx.core.support.function.AggFunction;
 import io.github.mybatisx.lang.Strings;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
-import java.util.stream.Collectors;
-
 /**
- * 分组筛选片段存储
- *
  * @author wvkity
- * @created 2022/1/29
+ * @created 2022/1/30
  * @since 1.0.0
  */
+@Builder
 @RequiredArgsConstructor
-public class HavingStorage extends AbstractFragmentList<Having> {
+public class FunctionHaving implements Having {
 
-    private static final long serialVersionUID = 8337702498350803152L;
+    private static final long serialVersionUID = 9041372708644691626L;
 
     /**
-     * 参数转换器
+     * 聚合函数
      */
-    private final ParameterConverter parameterConverter;
+    private final AggFunction function;
     /**
-     * 占位符参数转换器
+     * 参数
      */
-    private final PlaceholderConverter placeholderConverter;
+    private final Param param;
 
     @Override
-    public String getFragment() {
-        if (!this.isEmpty()) {
-            final String fragment = this.fragments.stream()
-                    .map(it -> it.getFragment(parameterConverter, placeholderConverter))
-                    .filter(Strings::isNotWhitespace)
-                    .collect(Collectors.joining(SqlSymbol.SPACE));
-            if (Strings.isNotWhitespace(fragment)) {
-                return SqlSymbol.HAVING + SqlSymbol.SPACE + SqlHelper.startWithsAndOrRemove(fragment);
+    public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
+        final Query<?> query = function.getQuery();
+        final String template = this.param.parse(pc, phc, query == null ? null : query.getDialect());
+        if (Strings.isNotWhitespace(template)) {
+            if (template.contains(SqlSymbol.STRING_PLACEHOLDER)) {
+                return String.format(template, function.getFragment(false));
             }
+            return template;
         }
         return Constants.EMPTY;
     }
+
 }

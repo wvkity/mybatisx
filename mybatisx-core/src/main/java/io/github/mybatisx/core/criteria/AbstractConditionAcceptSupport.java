@@ -18,21 +18,35 @@ package io.github.mybatisx.core.criteria;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
+import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.core.criteria.query.AggType;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.expression.NestedExpression;
+import io.github.mybatisx.core.expression.Restrictions;
 import io.github.mybatisx.core.param.BetweenParam;
 import io.github.mybatisx.core.param.InParam;
 import io.github.mybatisx.core.param.LikeParam;
 import io.github.mybatisx.core.param.NullParam;
+import io.github.mybatisx.core.param.Param;
 import io.github.mybatisx.core.param.SimpleParam;
 import io.github.mybatisx.core.param.TemplateParam;
+import io.github.mybatisx.core.support.function.AggFunction;
+import io.github.mybatisx.core.support.function.Avg;
+import io.github.mybatisx.core.support.function.Count;
+import io.github.mybatisx.core.support.function.Max;
+import io.github.mybatisx.core.support.function.Min;
+import io.github.mybatisx.core.support.function.Sum;
+import io.github.mybatisx.core.support.having.CriterionHaving;
+import io.github.mybatisx.core.support.having.FunctionHaving;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
@@ -42,10 +56,13 @@ import java.util.function.Function;
 /**
  * 抽象条件处理
  *
+ * @param <T> 实体类型
+ * @param <C> 子类型
  * @author wvkity
  * @created 2022/1/9
  * @since 1.0.0
  */
+@Slf4j
 @SuppressWarnings({"serial"})
 public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrapper<T, C>> extends
         AbstractBaseCriteria<T> implements CriteriaWrapper<T, C> {
@@ -65,6 +82,17 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      */
     protected C newInstance() {
         return null;
+    }
+
+    /**
+     * 切换条件类型
+     *
+     * @return {@code this}
+     */
+    protected C conditionToggling() {
+        final boolean oldValue = this.conditionToggle.get();
+        this.conditionToggle.set(!oldValue);
+        return this.context;
     }
 
     /**
@@ -516,6 +544,83 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
         return this.context;
     }
 
+    /**
+     * 简单分组筛选条件
+     *
+     * @param query    {@link Query}
+     * @param target   属性/字段
+     * @param distinct 是否去重
+     * @param value    值
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @param aggType  {@link AggType}
+     * @param mode     {@link Restrictions.Mode}
+     * @return {@code this}
+     */
+    protected C havingAccept(final Query<?> query, final String target, final boolean distinct,
+                             final Object value, final Symbol symbol, final LogicSymbol slot,
+                             final AggType aggType, final Restrictions.Mode mode) {
+        if (Strings.isNotWhitespace(target)) {
+            String columnName = null;
+            if (aggType == AggType.COUNT && (SqlSymbol.STAR.equals(target) || SqlSymbol.ZERO.equals(target)
+                    || SqlSymbol.ONE.equals(target)) || mode == Restrictions.Mode.COLUMN) {
+                columnName = target;
+            } else {
+                final Column column = this.convert(target);
+                if (column != null) {
+                    columnName = column.getColumn();
+                }
+            }
+            if (columnName != null) {
+                final AggFunction function;
+                final Param param;
+                if (symbol == Symbol.BETWEEN || symbol == Symbol.NOT_BETWEEN) {
+                    final Object[] array = (Object[]) value;
+                    param = BetweenParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
+                            .begin(array[0])
+                            .end(array[1])
+                            .build();
+                } else if (symbol == Symbol.IN || symbol == Symbol.NOT_IN) {
+                    param = InParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
+                            .values((Collection<?>) value)
+                            .build();
+                } else {
+                    param = SimpleParam.builder()
+                            .symbol(symbol)
+                            .slot(slot)
+                            .value(value)
+                            .build();
+                }
+                switch (aggType) {
+                    case COUNT:
+                        function = new Count(query, columnName, null, distinct);
+                        break;
+                    case SUM:
+                        function = new Sum(query, columnName, distinct);
+                        break;
+                    case AVG:
+                        function = new Avg(query, columnName, distinct);
+                        break;
+                    case MIN:
+                        function = new Min(query, columnName, distinct);
+                        break;
+                    default:
+                        function = new Max(query, columnName, distinct);
+                        break;
+                }
+                this.fragmentManager.addHaving(new FunctionHaving(function, param));
+            }
+        } else {
+            log.warn("If the field or entity attribute name of the grouping filter table is empty, " +
+                    "it will be ignored automatically");
+        }
+        return this.context;
+    }
+
     // endregion
 
     // region Override methods
@@ -586,7 +691,11 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
 
     @Override
     public C where(Criterion criterion) {
-        this.fragmentManager.addCondition(criterion);
+        if (this.conditionToggle.get()) {
+            this.fragmentManager.addCondition(criterion);
+        } else {
+            this.fragmentManager.addHaving(new CriterionHaving(criterion));
+        }
         return this.context;
     }
 

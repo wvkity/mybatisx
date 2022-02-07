@@ -31,7 +31,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface LambdaQueryCriteria<T, C extends LambdaQueryCriteria<T, C>> extends CriteriaWrapper<T, C>, Query<T>,
-        LambdaSelect<T, C>, LambdaFunctionSelect<T, C>, LambdaSort<T, C> {
+        LambdaSelect<T, C>, LambdaFunctionSelect<T, C>, LambdaSort<T, C>, LambdaHaving<T, C> {
 
     /**
      * 设置Map类型返回值的键

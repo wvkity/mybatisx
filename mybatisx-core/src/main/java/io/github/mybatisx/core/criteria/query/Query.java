@@ -324,6 +324,20 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     Query<T> groups(final List<Group> groups);
 
     /**
+     * 普通条件切换到having筛选条件
+     *
+     * @return {@code this}
+     */
+    Query<T> having();
+
+    /**
+     * having筛选条件切换到普通条件
+     *
+     * @return {@code this}
+     */
+    Query<T> condition();
+
+    /**
      * 添加分组筛选条件
      *
      * @param having {@link Having}

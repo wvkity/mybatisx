@@ -128,6 +128,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * 表别名序列
      */
     protected AtomicInteger tableAliasSequence;
+    /**
+     * 普通条件/having筛选条件切换
+     */
+    protected AtomicBoolean conditionToggle = new AtomicBoolean(true);
 
     // endregion
 
@@ -304,7 +308,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @param properties 属性列表
      * @return 字段列表
      */
-    public List<String> lambdaConvert(final List<Property<T, ?>> properties) {
+    protected List<String> lambdaConvert(final List<Property<T, ?>> properties) {
         if (Objects.isNotEmpty(properties)) {
             final Table table = TableHelper.getTable(this.entity);
             if (table != null) {

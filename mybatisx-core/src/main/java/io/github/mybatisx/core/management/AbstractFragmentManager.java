@@ -24,6 +24,7 @@ import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.lang.Strings;
 import lombok.AllArgsConstructor;
@@ -70,7 +71,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     public AbstractFragmentManager(Criteria<?> criteria, ParameterConverter parameterConverter,
                                    PlaceholderConverter placeholderConverter) {
         this(criteria, new ConditionStorage(parameterConverter, placeholderConverter), new SelectableStorage(criteria),
-                new GroupStorage(), new HavingStorage(), new OrderStorage());
+                new GroupStorage(), new HavingStorage(parameterConverter, placeholderConverter), new OrderStorage());
     }
 
     @Override
@@ -111,6 +112,14 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     @Override
     public void addExcludeColumns(Collection<String> columns) {
         this.selectableStorage.addExcludeColumns(columns);
+    }
+
+    @Override
+    public FunctionSelectable getFunction(String alias) {
+        if (this.selectableStorage != null) {
+            return this.selectableStorage.getFunction(alias);
+        }
+        return null;
     }
 
     @Override
