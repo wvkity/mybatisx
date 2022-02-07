@@ -18,7 +18,7 @@ package io.github.mybatisx.result.test;
 import com.alibaba.fastjson.JSON;
 import io.github.mybatisx.result.Status;
 import io.github.mybatisx.result.core.MultiResult;
-import io.github.mybatisx.result.core.StdResult;
+import io.github.mybatisx.result.core.PlainResult;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +34,15 @@ public class ResultAppTest {
 
     @Test
     public void stdResultTest() {
-        final StdResult<Object> sr1 = StdResult.create().with(StdResult::setData, 1L).build();
-        final StdResult<String> sr2 = StdResult.ok("success");
-        final StdResult<String> sr3 = StdResult.failure(Status.FAILURE);
-        final StdResult<Object> sr4 = StdResult.failure(Status.SERVER_ERROR.getCode(), "系统繁忙，请稍后再试");
-        final StdResult<Object> sr5 = StdResult.create()
-                .with(StdResult::setData, 1L)
-                .with(StdResult::setCode, -500)
-                .with(StdResult::setCode, 400500)
-                .with(StdResult::setMsg, "任务失败")
+        final PlainResult<Object> sr1 = PlainResult.create().with(PlainResult::setData, 1L).build();
+        final PlainResult<String> sr2 = PlainResult.ok("success");
+        final PlainResult<String> sr3 = PlainResult.failure(Status.FAILURE);
+        final PlainResult<Object> sr4 = PlainResult.failure(Status.SERVER_ERROR.getCode(), "系统繁忙，请稍后再试");
+        final PlainResult<Object> sr5 = PlainResult.create()
+                .with(PlainResult::setData, 1L)
+                .with(PlainResult::setCode, -500)
+                .with(PlainResult::setCode, 400500)
+                .with(PlainResult::setMsg, "任务失败")
                 .build();
         log.info("sr1结果: {}", JSON.toJSONString(sr1));
         log.info("sr2结果: {}", JSON.toJSONString(sr2));

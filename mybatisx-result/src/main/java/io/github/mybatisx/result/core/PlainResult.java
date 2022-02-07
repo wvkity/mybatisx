@@ -28,44 +28,44 @@ import io.github.mybatisx.result.Status;
  * @created 2021/12/16
  * @since 1.0.0
  */
-public class StdResult<T> extends AbstractResult<T> implements DataResult<T> {
+public class PlainResult<T> extends AbstractResult<T> implements DataResult<T> {
 
     private static final long serialVersionUID = -2018086332932859068L;
 
-    public StdResult() {
+    public PlainResult() {
     }
 
-    public StdResult(T data) {
+    public PlainResult(T data) {
         this.data = data;
     }
 
-    public StdResult(Status status) {
+    public PlainResult(Status status) {
         this.error(status);
     }
 
-    public StdResult(Throwable e) {
+    public PlainResult(Throwable e) {
         this.error(e);
     }
 
-    public StdResult(Status status, Throwable e) {
+    public PlainResult(Status status, Throwable e) {
         this.error(status, e);
     }
 
-    public StdResult(int code, Throwable e) {
+    public PlainResult(int code, Throwable e) {
         this.error(code, e);
     }
 
-    public StdResult(int code, String msg) {
+    public PlainResult(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public StdResult(T data, String msg) {
+    public PlainResult(T data, String msg) {
         this.data = data;
         this.msg = msg;
     }
 
-    public StdResult(T data, int code, String msg) {
+    public PlainResult(T data, int code, String msg) {
         this.data = data;
         this.code = code;
         this.msg = msg;
@@ -73,7 +73,7 @@ public class StdResult<T> extends AbstractResult<T> implements DataResult<T> {
 
     @Override
     public String toString() {
-        return "StdResult{" +
+        return "PlainResult{" +
                 "data=" + data +
                 ", code=" + code +
                 ", msg='" + msg + '\'' +
@@ -82,48 +82,48 @@ public class StdResult<T> extends AbstractResult<T> implements DataResult<T> {
 
     ///// static methods /////
 
-    public static <T> Builder<StdResult<T>> create() {
-        return new ObjectBuilder<>(StdResult::new);
+    public static <T> Builder<PlainResult<T>> create() {
+        return new ObjectBuilder<>(PlainResult::new);
     }
 
-    public static <T> StdResult<T> of() {
-        return new StdResult<>();
+    public static <T> PlainResult<T> of() {
+        return new PlainResult<>();
     }
 
-    public static <T> StdResult<T> ok() {
+    public static <T> PlainResult<T> ok() {
         return of();
     }
 
-    public static <T> StdResult<T> ok(final T data) {
-        return new StdResult<>(data);
+    public static <T> PlainResult<T> ok(final T data) {
+        return new PlainResult<>(data);
     }
 
-    public static <T> StdResult<T> ok(final T data, final String msg) {
-        return new StdResult<>(data, msg);
+    public static <T> PlainResult<T> ok(final T data, final String msg) {
+        return new PlainResult<>(data, msg);
     }
 
-    public static <T> StdResult<T> failure(final Status status) {
-        return new StdResult<>(status);
+    public static <T> PlainResult<T> failure(final Status status) {
+        return new PlainResult<>(status);
     }
 
-    public static <T> StdResult<T> failure(final Throwable e) {
-        return new StdResult<>(e);
+    public static <T> PlainResult<T> failure(final Throwable e) {
+        return new PlainResult<>(e);
     }
 
-    public static <T> StdResult<T> failure(final Status status, final String msg) {
-        return new StdResult<>(status.getCode(), msg);
+    public static <T> PlainResult<T> failure(final Status status, final String msg) {
+        return new PlainResult<>(status.getCode(), msg);
     }
 
-    public static <T> StdResult<T> failure(final Status status, final Throwable e) {
-        return new StdResult<>(status, e);
+    public static <T> PlainResult<T> failure(final Status status, final Throwable e) {
+        return new PlainResult<>(status, e);
     }
 
-    public static <T> StdResult<T> failure(final int code, final Throwable e) {
-        return new StdResult<>(code, e);
+    public static <T> PlainResult<T> failure(final int code, final Throwable e) {
+        return new PlainResult<>(code, e);
     }
 
-    public static <T> StdResult<T> failure(final int code, final String msg) {
-        return new StdResult<>(code, msg);
+    public static <T> PlainResult<T> failure(final int code, final String msg) {
+        return new PlainResult<>(code, msg);
     }
 
 }
