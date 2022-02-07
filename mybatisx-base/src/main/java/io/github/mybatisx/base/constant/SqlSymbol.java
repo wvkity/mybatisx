@@ -45,6 +45,14 @@ public interface SqlSymbol {
      */
     String STAR = "*";
     /**
+     * 0
+     */
+    String ZERO = "0";
+    /**
+     * 1
+     */
+    String ONE = "1";
+    /**
      * 问号
      */
     String QUESTION_MARK = "?";
