@@ -18,11 +18,38 @@ package io.github.mybatisx.pageable;
 /**
  * 分页
  *
- * @param <T> 数据类型
  * @author wvkity
  * @created 2021/12/17
  * @since 1.0.0
  */
-public interface AdvDataPageable<T> extends AdvPageable, DataPageable<T> {
+public interface ProPageable extends Pageable {
+
+    /**
+     * 显示页码数
+     *
+     * @return 页码数
+     */
+    int getDisplay();
+
+    /**
+     * 设置显示页码数
+     *
+     * @param display 页码数
+     */
+    void setDisplay(final int display);
+
+    /**
+     * 起始页码
+     *
+     * @return 起始页码
+     */
+    int getStart();
+
+    /**
+     * 结束页码
+     *
+     * @return 结束页码
+     */
+    int getEnd();
 
 }

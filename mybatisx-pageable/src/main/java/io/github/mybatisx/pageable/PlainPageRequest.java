@@ -22,41 +22,41 @@ package io.github.mybatisx.pageable;
  * @created 2021/12/17
  * @since 1.0.0
  */
-public class AdvPageRequest extends AbstractAdvPageable {
+public class PlainPageRequest extends AbstractPageable {
 
-    private static final long serialVersionUID = -3108391406432060982L;
+    private static final long serialVersionUID = -5346699731040020087L;
 
-    public AdvPageRequest(String page) {
+    public PlainPageRequest(String page) {
         super(page);
     }
 
-    public AdvPageRequest(int page) {
+    public PlainPageRequest(int page) {
         super(page);
     }
 
-    public AdvPageRequest(String page, String size) {
+    public PlainPageRequest(String page, String size) {
         super(page, size);
     }
 
-    public AdvPageRequest(int page, int size) {
+    public PlainPageRequest(int page, int size) {
         super(page, size);
     }
 
     ///// static methods /////
 
-    public static AdvPageRequest of(final String page) {
-        return new AdvPageRequest(page);
+    public static PlainPageRequest of(final String page) {
+        return new PlainPageRequest(page);
     }
 
-    public static AdvPageRequest of(final int page) {
-        return new AdvPageRequest(page);
+    public static PlainPageRequest of(final int page) {
+        return new PlainPageRequest(page);
     }
 
-    public static AdvPageRequest of(final String page, final String size) {
-        return new AdvPageRequest(page, size);
+    public static PlainPageRequest of(final String page, final String size) {
+        return new PlainPageRequest(page, size);
     }
 
-    public static AdvPageRequest of(final int page, final int size) {
-        return new AdvPageRequest(page, size);
+    public static PlainPageRequest of(final int page, final int size) {
+        return new PlainPageRequest(page, size);
     }
 }

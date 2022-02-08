@@ -23,7 +23,7 @@ package io.github.mybatisx.pageable;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
-public abstract class AbstractAdvPageable extends AbstractPageable implements AdvPageable {
+public abstract class AbstractProPageable extends AbstractPageable implements ProPageable {
 
     /**
      * 默认显示页码数
@@ -50,19 +50,19 @@ public abstract class AbstractAdvPageable extends AbstractPageable implements Ad
      */
     protected int end;
 
-    public AbstractAdvPageable(String page) {
+    public AbstractProPageable(String page) {
         super(page);
     }
 
-    public AbstractAdvPageable(int page) {
+    public AbstractProPageable(int page) {
         super(page);
     }
 
-    public AbstractAdvPageable(String page, String size) {
+    public AbstractProPageable(String page, String size) {
         super(page, size);
     }
 
-    public AbstractAdvPageable(int page, int size) {
+    public AbstractProPageable(int page, int size) {
         super(page, size);
     }
 

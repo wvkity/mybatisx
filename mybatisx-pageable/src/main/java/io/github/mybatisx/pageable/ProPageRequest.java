@@ -18,46 +18,45 @@ package io.github.mybatisx.pageable;
 /**
  * 分页
  *
- * @param <T> 数据类型
  * @author wvkity
  * @created 2021/12/17
  * @since 1.0.0
  */
-public class AdvDataPageRequest<T> extends AbstractAdvDataPageable<T> {
+public class ProPageRequest extends AbstractProPageable {
 
-    private static final long serialVersionUID = -1157327912707500401L;
+    private static final long serialVersionUID = -3108391406432060982L;
 
-    public AdvDataPageRequest(String page) {
+    public ProPageRequest(String page) {
         super(page);
     }
 
-    public AdvDataPageRequest(int page) {
+    public ProPageRequest(int page) {
         super(page);
     }
 
-    public AdvDataPageRequest(String page, String size) {
+    public ProPageRequest(String page, String size) {
         super(page, size);
     }
 
-    public AdvDataPageRequest(int page, int size) {
+    public ProPageRequest(int page, int size) {
         super(page, size);
     }
 
     ///// static methods /////
 
-    public static <T> AdvDataPageRequest<T> of(final String page) {
-        return new AdvDataPageRequest<>(page);
+    public static ProPageRequest of(final String page) {
+        return new ProPageRequest(page);
     }
 
-    public static <T> AdvDataPageRequest<T> of(final int page) {
-        return new AdvDataPageRequest<>(page);
+    public static ProPageRequest of(final int page) {
+        return new ProPageRequest(page);
     }
 
-    public static <T> AdvDataPageRequest<T> of(final String page, final String size) {
-        return new AdvDataPageRequest<>(page, size);
+    public static ProPageRequest of(final String page, final String size) {
+        return new ProPageRequest(page, size);
     }
 
-    public static <T> AdvDataPageRequest<T> of(final int page, final int size) {
-        return new AdvDataPageRequest<>(page, size);
+    public static ProPageRequest of(final int page, final int size) {
+        return new ProPageRequest(page, size);
     }
 }

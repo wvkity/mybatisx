@@ -30,26 +30,26 @@ import java.util.List;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
-public abstract class AbstractAdvDataPageable<T> extends AbstractAdvPageable implements AdvDataPageable<T> {
+public abstract class AbstractProDataPageable<T> extends AbstractProPageable implements ProDataPageable<T> {
 
     /**
      * 数据列表
      */
     protected List<T> data;
 
-    public AbstractAdvDataPageable(String page) {
+    public AbstractProDataPageable(String page) {
         super(page);
     }
 
-    public AbstractAdvDataPageable(int page) {
+    public AbstractProDataPageable(int page) {
         super(page);
     }
 
-    public AbstractAdvDataPageable(String page, String size) {
+    public AbstractProDataPageable(String page, String size) {
         super(page, size);
     }
 
-    public AbstractAdvDataPageable(int page, int size) {
+    public AbstractProDataPageable(int page, int size) {
         super(page, size);
     }
 

@@ -16,10 +16,10 @@
 package io.github.mybatisx.pageable.test;
 
 import com.alibaba.fastjson.JSON;
-import io.github.mybatisx.pageable.AdvDataPageRequest;
-import io.github.mybatisx.pageable.AdvPageRequest;
+import io.github.mybatisx.pageable.ProDataPageRequest;
+import io.github.mybatisx.pageable.ProPageRequest;
 import io.github.mybatisx.pageable.DataPageRequest;
-import io.github.mybatisx.pageable.PageRequest;
+import io.github.mybatisx.pageable.PlainPageRequest;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +39,14 @@ public class PageableAppTest {
     public void test() {
         final int records = 303;
         final int page = 8;
-        final PageRequest pr1 = PageRequest.of(page);
+        final PlainPageRequest pr1 = PlainPageRequest.of(page);
         pr1.setRecords(records);
-        final AdvPageRequest apr1 = AdvPageRequest.of(page);
+        final ProPageRequest apr1 = ProPageRequest.of(page);
         apr1.setRecords(records);
         final DataPageRequest<String> dpr1 = DataPageRequest.of(page);
         dpr1.setRecords(records);
         dpr1.addAll(Arrays.asList("a", "b", "c", "d", "e", "f"));
-        final AdvDataPageRequest<String> adpr1 = AdvDataPageRequest.of(page);
+        final ProDataPageRequest<String> adpr1 = ProDataPageRequest.of(page);
         adpr1.setRecords(records);
         adpr1.setDisplay(10);
         adpr1.addAll(Arrays.asList("a", "b", "c", "d", "e", "f"));
