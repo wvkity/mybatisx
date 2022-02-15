@@ -117,8 +117,8 @@ public abstract class AbstractAggFunction implements AggFunction {
 
     @Override
     public String getFragment(boolean isQuery) {
-        final String _$alias = this.alias;
         if (isQuery) {
+            final String _$alias = this.alias;
             if (Strings.isNotWhitespace(_$alias)) {
                 final StringBuilder fragment = new StringBuilder(this.render())
                         .append(SqlSymbol.SPACE)
