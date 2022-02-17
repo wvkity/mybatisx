@@ -20,10 +20,12 @@ import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.query.AggType;
 import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.criterion.JoinableCondition;
 import io.github.mybatisx.core.criterion.NestedCondition;
 import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.expression.NestedExpression;
@@ -617,6 +619,139 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
         } else {
             log.warn("If the field or entity attribute name of the grouping filter table is empty, " +
                     "it will be ignored automatically");
+        }
+        return this.context;
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param lc            {@link AbstractBaseCriteria}
+     * @param leftProperty  左表关联属性
+     * @param rc            {@link Query}
+     * @param rightProperty 右表关联属性
+     * @return {@code this}
+     */
+    protected C joinableConditionAccept(final AbstractBaseCriteria<?> lc, final String leftProperty,
+                                        final Query<?> rc, final String rightProperty) {
+        final Column leftColumn = lc.convert(leftProperty);
+        final Column rightColumn = ((AbstractBaseCriteria<?>) rc).convert(rightProperty);
+        if (leftColumn != null && rightColumn != null) {
+            this.where(JoinableCondition.builder()
+                    .leftCriteria(this)
+                    .leftColumn(leftColumn.getColumn())
+                    .rightCriteria(rc)
+                    .rightColumn(rightColumn.getColumn())
+                    .build());
+        }
+        return this.context;
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param lc         {@link AbstractBaseCriteria}
+     * @param leftTarget 左表关联属性/字段名
+     * @param leftIsProp 是否为属性
+     * @param rc         {@link Criteria}
+     * @return {@code this}
+     */
+    protected C joinableConditionAccept(final AbstractBaseCriteria<?> lc, final String leftTarget,
+                                        final boolean leftIsProp, final Criteria<?> rc) {
+        String leftColumn = null;
+        if (leftIsProp) {
+            final Column column = lc.convert(leftTarget);
+            if (column != null) {
+                leftColumn = column.getColumn();
+            }
+        } else {
+            leftColumn = leftTarget;
+        }
+        final Column column = ((AbstractBaseCriteria<?>) rc).getPrimaryKey();
+        if (column != null) {
+            this.where(JoinableCondition.builder()
+                    .leftCriteria(this)
+                    .leftColumn(leftColumn)
+                    .rightCriteria(rc)
+                    .rightColumn(column.getColumn())
+                    .build());
+        }
+        return this.context;
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param lc          {@link AbstractBaseCriteria}
+     * @param rc          {@link Criteria}
+     * @param rightTarget 右表关联属性/字段名
+     * @param rightIsProp 是否为属性
+     * @return {@code this}
+     */
+    protected C joinableConditionAccept(final AbstractBaseCriteria<?> lc, final Criteria<?> rc,
+                                        final String rightTarget, final boolean rightIsProp) {
+        final Column leftColumn = lc.getPrimaryKey();
+        if (leftColumn != null) {
+            String rightColumn = null;
+            if (rightIsProp) {
+                final Column column = ((AbstractBaseCriteria<?>) rc).convert(rightTarget);
+                if (column != null) {
+                    rightColumn = column.getColumn();
+                }
+            } else {
+                rightColumn = rightTarget;
+            }
+            if (rightColumn != null) {
+                this.where(JoinableCondition.builder()
+                        .leftCriteria(this)
+                        .leftColumn(leftColumn.getColumn())
+                        .rightCriteria(rc)
+                        .rightColumn(rightColumn)
+                        .build());
+            }
+        }
+        return this.context;
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param lc          {@link AbstractBaseCriteria}
+     * @param leftTarget  左表关联属性/字段名
+     * @param leftIsProp  是否为属性
+     * @param rc          {@link Query}
+     * @param rightTarget 右表关联属性/字段名
+     * @param rightIsProp 是否为属性
+     * @return {@code this}
+     */
+    protected C joinableConditionAccept(final AbstractBaseCriteria<?> lc, final String leftTarget,
+                                        final boolean leftIsProp, final Criteria<?> rc, final String rightTarget,
+                                        final boolean rightIsProp) {
+        String leftColumn = null;
+        String rightColumn = null;
+        if (leftIsProp) {
+            final Column column = lc.convert(leftTarget);
+            if (column != null) {
+                leftColumn = column.getColumn();
+            }
+        } else {
+            leftColumn = leftTarget;
+        }
+        if (rightIsProp) {
+            final Column column = ((AbstractBaseCriteria<?>) rc).convert(rightTarget);
+            if (column != null) {
+                rightColumn = column.getColumn();
+            }
+        } else {
+            rightColumn = rightTarget;
+        }
+        if (leftColumn != null && rightColumn != null) {
+            this.where(JoinableCondition.builder()
+                    .leftCriteria(this)
+                    .leftColumn(leftColumn)
+                    .rightCriteria(rc)
+                    .rightColumn(rightColumn)
+                    .build());
         }
         return this.context;
     }

@@ -15,29 +15,14 @@
  */
 package io.github.mybatisx.core.criteria.query;
 
-import io.github.mybatisx.base.constant.Join;
-
 /**
- * 联表查询接口
+ * 子查询接口
  *
  * @param <T> 实体类型
  * @author wvkity
- * @created 2022/1/22
+ * @created 2022/2/9
  * @since 1.0.0
  */
-public interface JointQuery<T> extends Query<T> {
+public interface SubQuery<T> extends Query<T> {
 
-    /**
-     * 获取联表方式
-     *
-     * @return {@link Join}
-     */
-    Join getJoin();
-
-    /**
-     * 是否抓取联表字段
-     *
-     * @return boolean
-     */
-    boolean isFetch();
 }

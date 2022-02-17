@@ -136,8 +136,26 @@ public final class TableHelper {
      * @param entity 实体类
      * @return 主键
      */
-    public static Column getPrimaryKey(final Class<?> entity) {
-        return Optional.ofNullable(TableHelper.getTable(entity)).map(Table::getPrimaryKey).orElse(null);
+    public static Column getPrimaryKey(final Class<?> entity, final boolean nonMatchesThrowing,
+                                       final boolean printWarning) {
+        if (entity == null) {
+            return null;
+        }
+        final Table table = TableHelper.getTable(entity);
+        final Column pk = Optional.ofNullable(table).map(Table::getPrimaryKey).orElse(null);
+        if (pk == null) {
+            if (nonMatchesThrowing) {
+                throw new MyBatisException("The table mapping object of entity class(" + entity.getName() + ") does " +
+                        "not have a primary key");
+            } else {
+                if (printWarning) {
+                    log.warn("The table mapping object of entity class({}) does not have a primary key", entity.getName());
+                }
+            }
+        } else if (!table.isOnlyOnePrimaryKey()) {
+            throw new MyBatisException("The entity class '" + entity.getName() + "' has multiple primary keys");
+        }
+        return pk;
     }
 
     /**

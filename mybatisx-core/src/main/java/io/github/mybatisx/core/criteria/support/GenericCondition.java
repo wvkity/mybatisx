@@ -16,6 +16,9 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
+import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.util.Maps;
 
@@ -84,7 +87,7 @@ public interface GenericCondition<T, C extends GenericCondition<T, C>> extends S
     <V> C idEq(final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
     // endregion
-    
+
     // region Template methods
 
     /**

@@ -19,6 +19,7 @@ import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 import io.github.mybatisx.core.property.Property;
@@ -43,7 +44,6 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
 
     @Override
     public <V> C idEq(V value, Matcher<V> matcher, LogicSymbol slot) {
-        this.checkPrimaryKey();
         final Column id = this.getPrimaryKey();
         return this.simpleConditionAccept(id, value, matcher, Symbol.EQ, slot);
     }
@@ -161,6 +161,26 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     public C template(String template, String property, Map<String, Object> values, LogicSymbol slot) {
         return this.templateConditionAccept(property, template, null, null, values,
                 ParamMode.MAP, slot);
+    }
+
+    @Override
+    public C on(String leftProperty, Criteria<?> rc) {
+        return this.joinableConditionAccept(this, leftProperty, true, rc);
+    }
+
+    @Override
+    public C on(Criteria<?> rc, String rightProperty) {
+        return this.joinableConditionAccept(this, rc, rightProperty, true);
+    }
+
+    @Override
+    public C on(String leftProperty, Criteria<?> rc, String rightProperty) {
+        return this.joinableConditionAccept(this, leftProperty, true, rc, rightProperty, true);
+    }
+
+    @Override
+    public C onWith(String leftProperty, Criteria<?> rc, String rightColumn) {
+        return this.joinableConditionAccept(this, leftProperty, true, rc, rightColumn, false);
     }
 
 }

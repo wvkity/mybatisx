@@ -69,8 +69,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     /**
      * 实体类
      */
-    @Getter
-    protected Class<T> entity;
+    protected Class<?> entity;
     /**
      * 数据库方言
      */
@@ -185,8 +184,8 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      *
      * @param source 源对象
      */
-    protected void clone(final AbstractBaseCriteria<T> source) {
-        this.clone(source, this, true);
+    protected void clone(final AbstractBaseCriteria<?> source) {
+        this.clone(source, true);
     }
 
     /**
@@ -195,7 +194,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @param source 源对象
      * @param deep   是否深度拷贝
      */
-    protected void clone(final AbstractBaseCriteria<T> source, final boolean deep) {
+    protected void clone(final AbstractBaseCriteria<?> source, final boolean deep) {
         this.clone(source, this, deep);
     }
 
@@ -206,7 +205,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @param target 目标对象
      * @param deep   是否深度拷贝
      */
-    protected void clone(final AbstractBaseCriteria<T> source, final AbstractBaseCriteria<T> target,
+    protected void clone(final AbstractBaseCriteria<?> source, final AbstractBaseCriteria<?> target,
                          final boolean deep) {
         if (source != null && target != null) {
             target.parameterSequence = source.parameterSequence;
@@ -217,6 +216,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
             target.parameterConverter = source.parameterConverter;
             target.fragmentManager = new DefaultFragmentManager(this, this.parameterConverter, this.placeholderConverter);
             target.conditionConverter = new DefaultConditionConverter(this);
+            target.useAlias = source.useAlias;
             if (deep) {
                 target.dialect = source.dialect;
                 target.entity = source.entity;
@@ -239,8 +239,8 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      *
      * @return 主键
      */
-    protected Column getPrimaryKey() {
-        return TableHelper.getPrimaryKey(this.getEntity());
+    public Column getPrimaryKey() {
+        return TableHelper.getPrimaryKey(this.getEntity(), this.isStrict(), true);
     }
 
     /**
@@ -415,6 +415,12 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
             sb.append(as);
         }
         return sb.toString();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Class<T> getEntity() {
+        return this.entity == null ? null : (Class<T>) this.entity;
     }
 
     @Override

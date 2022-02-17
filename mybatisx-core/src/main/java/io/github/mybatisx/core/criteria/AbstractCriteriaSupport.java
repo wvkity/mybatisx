@@ -18,7 +18,7 @@ package io.github.mybatisx.core.criteria;
 import com.google.common.collect.ImmutableList;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.dialect.Dialect;
-import io.github.mybatisx.core.criteria.query.JointQuery;
+import io.github.mybatisx.core.criteria.query.Joinable;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.management.FragmentManager;
 import io.github.mybatisx.core.support.select.SelectType;
@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * 抽象条件
@@ -86,13 +87,18 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
      */
     protected boolean keepOrderly;
     /**
+     * 是否抓取关联表字段
+     */
+    protected boolean fetch;
+    /**
      * 嵌套/子查询
      */
     protected Query<?> outerQuery;
     /**
      * 联表查询对象
      */
-    protected Set<? extends JointQuery<?>> associations;
+    protected Set<Joinable<?>> associations;
+
     // endregion
 
     // region EmbeddableResult fields
@@ -157,7 +163,7 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
             }
         }
         if (Objects.isNotEmpty(this.associations)) {
-            for (JointQuery<?> it : this.associations) {
+            for (Joinable<?> it : this.associations) {
                 if (it != null && (it.hasSelect() || it.isFetch())) {
                     final List<Selectable> ass = it.fetchSelects();
                     if (Objects.isNotEmpty(ass)) {
@@ -187,12 +193,12 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
             final StandardSelectable.StandardSelectableBuilder builder = StandardSelectable.builder()
                     .query(to)
                     .type(SelectType.PLAIN);
-            final boolean hasAs;
-            if ((hasAs = Strings.isWhitespace(as)) && this.inherit) {
+            final boolean notAs;
+            if ((notAs = Strings.isWhitespace(as)) && this.inherit) {
                 builder.column(column)
                         .alias(it.getProperty());
             } else {
-                builder.column(hasAs ? as : column);
+                builder.column(notAs ? column : as);
             }
             final StandardSelectable newSelectable = builder.build();
             to.select(newSelectable);
@@ -204,6 +210,15 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     // endregion
 
     // region Override methods
+
+
+    @Override
+    public C chain(Consumer<C> action) {
+        if (action != null) {
+            action.accept(this.context);
+        }
+        return this.context;
+    }
 
     @Override
     public String as() {

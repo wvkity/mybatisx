@@ -16,6 +16,8 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.property.PropertyConverter;
 import io.github.mybatisx.matcher.Matcher;
@@ -830,4 +832,119 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
 
     // endregion
 
+    // region Column equal methods
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty 当前实体属性
+     * @param rc           {@link Criteria}
+     * @return {@code this}
+     */
+    default C on(final Property<T, ?> leftProperty, final Criteria<?> rc) {
+        return this.on(this.convert(leftProperty), rc);
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty 当前实体属性
+     * @param rc           {@link Criteria}
+     * @return {@code this}
+     */
+    C on(final String leftProperty, final Criteria<?> rc);
+
+    /**
+     * 关联条件
+     *
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @param <S>           实体类型
+     * @return {@code this}
+     */
+    default <S> C on(final Criteria<S> rc, final Property<S, ?> rightProperty) {
+        return this.on(rc, LambdaMetadataWeakCache.getProperty(rightProperty));
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @return {@code this}
+     */
+    C on(final Criteria<?> rc, final String rightProperty);
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty  属性
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @return {@code this}
+     */
+    default C on(final Property<T, ?> leftProperty, final Criteria<?> rc, final String rightProperty) {
+        return this.on(this.convert(leftProperty), rc, rightProperty);
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty  属性
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @return {@code this}
+     */
+    C on(final String leftProperty, final Criteria<?> rc, final String rightProperty);
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty  属性
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @param <S>           实体类型
+     * @return {@code this}
+     */
+    default <S> C on(final Property<T, ?> leftProperty, final Criteria<S> rc, final Property<S, ?> rightProperty) {
+        return this.on(this.convert(leftProperty), rc, rightProperty);
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty  属性
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @param <S>           实体类型
+     * @return {@code this}
+     */
+    default <S> C on(final String leftProperty, final Criteria<S> rc, final Property<S, ?> rightProperty) {
+        return this.on(leftProperty, rc, LambdaMetadataWeakCache.getProperty(rightProperty));
+    }
+
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty 属性
+     * @param rc           {@link Criteria}
+     * @param rightColumn  右表关联字段
+     * @return {@code this}
+     */
+    default C onWith(final Property<T, ?> leftProperty, final Criteria<?> rc, final String rightColumn) {
+        return this.onWith(LambdaMetadataWeakCache.getProperty(leftProperty), rc, rightColumn);
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param leftProperty 属性
+     * @param rc           {@link Criteria}
+     * @param rightColumn  右表关联字段
+     * @return {@code this}
+     */
+    C onWith(final String leftProperty, final Criteria<?> rc, final String rightColumn);
+
+    // endregion
 }

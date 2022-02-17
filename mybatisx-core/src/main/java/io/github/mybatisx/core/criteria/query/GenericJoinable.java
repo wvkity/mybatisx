@@ -13,26 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.convert;
+package io.github.mybatisx.core.criteria.query;
 
 /**
- * 转换器
+ * 关联查询接口
  *
- * @param <S> 源类型
- * @param <T> 目标类型
+ * @param <T> 实体类型
+ * @param <C> 子类型
  * @author wvkity
- * @created 2021/12/28
+ * @created 2022/2/9
  * @since 1.0.0
  */
-@FunctionalInterface
-public interface Converter<S, T> {
-
-    /**
-     * 转换
-     *
-     * @param src 源对象
-     * @return 目标对象
-     */
-    T convert(final S src);
+public interface GenericJoinable<T, C extends GenericJoinable<T, C>> extends PlainJoinable<T, C>,
+        LambdaJoinable<T, C>, GenericQueryCriteria<T, C> {
 
 }

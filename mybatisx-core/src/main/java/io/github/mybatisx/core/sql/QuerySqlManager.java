@@ -21,7 +21,7 @@ import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.helper.SqlHelper;
 import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
-import io.github.mybatisx.core.criteria.query.JointQuery;
+import io.github.mybatisx.core.criteria.query.Joinable;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.management.FragmentManager;
 import io.github.mybatisx.lang.Objects;
@@ -51,9 +51,9 @@ public class QuerySqlManager extends AbstractSqlManager {
     /**
      * 联表查询对象
      */
-    private final Set<? extends JointQuery<?>> associations;
+    private final Set<Joinable<?>> associations;
 
-    public QuerySqlManager(Query<?> criteria, Query<?> outerQuery, Set<? extends JointQuery<?>> associations,
+    public QuerySqlManager(Query<?> criteria, Query<?> outerQuery, Set<Joinable<?>> associations,
                            FragmentManager fragmentManager) {
         super(fragmentManager);
         this.rootQuery = criteria;
@@ -86,13 +86,13 @@ public class QuerySqlManager extends AbstractSqlManager {
             return this.getSelectString();
         }
         final String ss = this.getSelectString();
-        final Set<? extends JointQuery<?>> _$associations = this.associations;
+        final Set<Joinable<?>> _$associations = this.associations;
         if (Objects.isNotEmpty(_$associations)) {
             final List<String> list = new ArrayList<>();
             if (Strings.isNotWhitespace(ss)) {
                 list.add(ss.trim());
             }
-            for (JointQuery<?> it : _$associations) {
+            for (Joinable<?> it : _$associations) {
                 if (it != null && (it.hasSelect() || it.isFetch())) {
                     final String ass = it.getSelectFragment(false);
                     if (Strings.isNotWhitespace(ass)) {
@@ -110,7 +110,7 @@ public class QuerySqlManager extends AbstractSqlManager {
 
     @Override
     public String getGroupFragment() throws MyBatisException {
-        final Set<? extends JointQuery<?>> _$associations = this.associations;
+        final Set<Joinable<?>> _$associations = this.associations;
         if (Objects.isNotEmpty(_$associations)) {
             final List<String> it = new ArrayList<>(_$associations.size() + 1);
             final String _$ss = this.fragmentManager.getSelectString(false);
@@ -119,7 +119,7 @@ public class QuerySqlManager extends AbstractSqlManager {
                 it.add(_$ss);
                 i += 1;
             }
-            for (JointQuery<?> jq : _$associations) {
+            for (Joinable<?> jq : _$associations) {
                 if (jq.hasSelect() || jq.isFetch()) {
                     final String fss = jq.getGroupFragment();
                     if (Strings.isNotWhitespace(fss)) {
@@ -151,10 +151,10 @@ public class QuerySqlManager extends AbstractSqlManager {
      * @return 条件
      */
     protected String mergeCondition(final String condition) {
-        final Set<? extends JointQuery<?>> _$associations = this.associations;
+        final Set<Joinable<?>> _$associations = this.associations;
         if (Objects.isNotEmpty(_$associations)) {
             final List<String> conditions = new ArrayList<>(_$associations.size() + 1);
-            for (JointQuery<?> it : _$associations) {
+            for (Joinable<?> it : _$associations) {
                 if (it instanceof AbstractBaseCriteria) {
                     final AbstractBaseCriteria<?> genericCriteria = (AbstractBaseCriteria<?>) it;
                     final String fws = genericCriteria.getWhereString(false, false, null);

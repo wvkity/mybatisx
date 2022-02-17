@@ -1427,6 +1427,16 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     // endregion
 
     @Override
+    public C join(Joinable<?> joinable) {
+        if (joinable != null) {
+            this.associations.add(joinable);
+        } else {
+            log.warn("The associated query object cannot be null");
+        }
+        return this.context;
+    }
+
+    @Override
     public String getSelectFragment() {
         return this.sqlManager.getSelectFragment();
     }

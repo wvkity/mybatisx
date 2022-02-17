@@ -20,6 +20,7 @@ import io.github.mybatisx.core.expression.Expression;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -32,6 +33,14 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends BaseCriteria<T> {
+
+    /**
+     * 链式消费
+     *
+     * @param action {@link Consumer}
+     * @return {@code this}
+     */
+    C chain(Consumer<C> action);
 
     /**
      * 嵌套条件
@@ -178,7 +187,7 @@ public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends Bas
     default C or(final Expression... expressions) {
         return this.or(Arrays.asList(expressions));
     }
-    
+
     /**
      * or嵌套表达式
      *
@@ -199,7 +208,7 @@ public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends Bas
     default C or(final boolean not, final Expression... expressions) {
         return this.or(not, Arrays.asList(expressions));
     }
-    
+
     /**
      * or嵌套表达式
      *

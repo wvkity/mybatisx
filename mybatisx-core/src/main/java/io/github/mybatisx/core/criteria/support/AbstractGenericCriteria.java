@@ -19,6 +19,7 @@ import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.MatchMode;
 import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
+import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
 
@@ -129,4 +130,24 @@ public abstract class AbstractGenericCriteria<T, C extends GenericCriteriaWrappe
     public C colTemplate(String template, String column, Map<String, Object> values, LogicSymbol slot) {
         return this.colTemplateConditionAccept(column, template, null, null, values, ParamMode.MAP, slot);
     }
+
+    @Override
+    public C colOn(Criteria<?> rc, String rightColumn) {
+        return this.joinableConditionAccept(this, rc, rightColumn, false);
+    }
+
+    @Override
+    public C colOn(String leftColumn, Criteria<?> rc) {
+        return this.joinableConditionAccept(this, leftColumn, false, rc);
+    }
+
+    @Override
+    public C colOn(String leftColumn, Criteria<?> rc, String rightColumn) {
+        return this.joinableConditionAccept(this, leftColumn, false, rc, rightColumn, false);
+    }
+
+    public C colOnWith(String leftColumn, Criteria<?> rc, String rightProperty) {
+        return this.joinableConditionAccept(this, leftColumn, false, rc, rightProperty, true);
+    }
+
 }

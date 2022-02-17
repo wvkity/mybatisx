@@ -16,6 +16,9 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
+import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.matcher.Matcher;
 
 import java.util.Map;
@@ -429,6 +432,62 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @return {@code this}
      */
     <V> C colLe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    // endregion
+
+    // region Column equal methods
+
+    /**
+     * 关联条件
+     *
+     * @param rc          {@link Criteria}
+     * @param rightColumn 右表关联对象
+     * @return {@code this}
+     */
+    C colOn(final Criteria<?> rc, final String rightColumn);
+
+    /**
+     * 关联条件
+     *
+     * @param leftColumn 左表关联字段名
+     * @param rc         {@link Criteria}
+     * @return {@code this}
+     */
+    C colOn(final String leftColumn, final Criteria<?> rc);
+
+    /**
+     * 关联条件
+     *
+     * @param leftColumn  左表关联字段名
+     * @param rc          {@link Criteria}
+     * @param rightColumn 右表关联字段名
+     * @return {@code this}
+     */
+    C colOn(final String leftColumn, final Criteria<?> rc, final String rightColumn);
+
+
+    /**
+     * 关联条件
+     *
+     * @param leftColumn    左表关联字段名
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @param <R>           实体类型
+     * @return {@code this}
+     */
+    default <R> C colOnWith(final String leftColumn, final Criteria<R> rc, final Property<R, ?> rightProperty) {
+        return this.colOnWith(leftColumn, rc, LambdaMetadataWeakCache.getProperty(rightProperty));
+    }
+
+    /**
+     * 关联条件
+     *
+     * @param leftColumn    左表关联字段名
+     * @param rc            {@link Criteria}
+     * @param rightProperty 属性
+     * @return {@code this}
+     */
+    C colOnWith(final String leftColumn, final Criteria<?> rc, final String rightProperty);
 
     // endregion
 

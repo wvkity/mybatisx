@@ -400,6 +400,14 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     boolean hasSelect();
 
     /**
+     * 添加关联查询
+     *
+     * @param joinable {@link Joinable}
+     * @return {@code this}
+     */
+    Query<T> join(final Joinable<?> joinable);
+
+    /**
      * 获取查询字段片段
      *
      * @return 查询字段片段
