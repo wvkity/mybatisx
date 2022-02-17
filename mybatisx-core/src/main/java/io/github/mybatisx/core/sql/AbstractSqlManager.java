@@ -19,7 +19,7 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.helper.SqlHelper;
-import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.fragment.FragmentManager;
 import io.github.mybatisx.lang.Strings;
 import lombok.RequiredArgsConstructor;
 

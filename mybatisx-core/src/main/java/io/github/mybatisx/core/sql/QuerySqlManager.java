@@ -23,7 +23,7 @@ import io.github.mybatisx.base.helper.SqlHelper;
 import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
 import io.github.mybatisx.core.criteria.query.Joinable;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.fragment.FragmentManager;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 

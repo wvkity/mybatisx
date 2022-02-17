@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.core.management;
+package io.github.mybatisx.core.fragment;
 
 import com.google.common.collect.ImmutableList;
 import io.github.mybatisx.base.constant.Constants;

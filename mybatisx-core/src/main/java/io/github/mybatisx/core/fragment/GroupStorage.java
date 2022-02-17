@@ -13,37 +13,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.core.management;
+package io.github.mybatisx.core.fragment;
 
+import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.fragment.AbstractFragmentList;
 import io.github.mybatisx.base.fragment.Fragment;
-import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.lang.Strings;
 
 import java.util.stream.Collectors;
 
 /**
- * 排序片段存储
+ * 分组片段存储
  *
  * @author wvkity
- * @created 2022/1/25
+ * @created 2022/1/26
  * @since 1.0.0
  */
-public class OrderStorage extends AbstractFragmentList<Order> {
+public class GroupStorage extends AbstractFragmentList<Group> {
 
-    private static final long serialVersionUID = 9171804614605389219L;
+    private static final long serialVersionUID = -2913423230791126516L;
 
     @Override
     public String getFragment() {
         if (!this.isEmpty()) {
-            final String orderStr = this.fragments.stream().map(Fragment::getFragment)
-                    .filter(Strings::isNotWhitespace)
-                    .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
-            if (Strings.isNotWhitespace(orderStr)) {
-                return SqlSymbol.ORDER_BY_SPACE + orderStr;
+            final String groupStr = this.fragments.stream().map(Fragment::getFragment)
+                    .filter(Strings::isNotWhitespace).collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
+            if (Strings.isNotWhitespace(groupStr)) {
+                return SqlSymbol.GROUP_BY_SPACE + groupStr;
             }
         }
-        return SqlSymbol.EMPTY;
+        return Constants.EMPTY;
     }
 }

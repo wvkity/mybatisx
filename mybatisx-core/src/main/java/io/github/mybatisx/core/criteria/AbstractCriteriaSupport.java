@@ -20,7 +20,7 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.core.criteria.query.Joinable;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.fragment.FragmentManager;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;

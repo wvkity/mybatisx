@@ -16,7 +16,7 @@
 package io.github.mybatisx.core.sql;
 
 import io.github.mybatisx.base.criteria.Criteria;
-import io.github.mybatisx.core.management.FragmentManager;
+import io.github.mybatisx.core.fragment.FragmentManager;
 import lombok.Getter;
 
 /**
