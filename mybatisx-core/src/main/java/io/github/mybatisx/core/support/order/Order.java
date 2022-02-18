@@ -33,34 +33,44 @@ public interface Order extends Fragment {
      *
      * @return {@link Query}
      */
-    Query<?> getQuery();
+    default Query<?> getQuery() {
+        return null;
+    }
 
     /**
      * 获取表别名
      *
      * @return 表别名
      */
-    String getAlias();
+    default String getAlias() {
+        return null;
+    }
 
     /**
      * 是否为升序
      *
      * @return boolean
      */
-    boolean isAscending();
+    default boolean isAscending() {
+        return false;
+    }
 
     /**
      * 是否忽略大小写排序
      *
      * @return boolean
      */
-    boolean isIgnoreCase();
+    default boolean isIgnoreCase() {
+        return false;
+    }
 
     /**
      * 空值排序优先级
      *
      * @return {@link NullPrecedence}
      */
-    NullPrecedence getPrecedence();
+    default NullPrecedence getPrecedence() {
+        return NullPrecedence.NONE;
+    }
 
 }
