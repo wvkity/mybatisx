@@ -337,7 +337,7 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
-    public C select(Map<String, String> properties) {
+    public C selects(Map<String, String> properties) {
         if (Objects.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
                 this.select(it.getValue(), it.getKey());
@@ -370,7 +370,7 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
-    public C colSelect(Map<String, String> columns) {
+    public C colSelects(Map<String, String> columns) {
         if (Objects.isNotEmpty(columns)) {
             for (Map.Entry<String, String> it : columns.entrySet()) {
                 this.colSelect(it.getValue(), it.getKey());

@@ -337,7 +337,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C select(Map<String, String> properties) {
+    public C selects(Map<String, String> properties) {
         if (Objects.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
                 this.select(it.getValue(), it.getKey());

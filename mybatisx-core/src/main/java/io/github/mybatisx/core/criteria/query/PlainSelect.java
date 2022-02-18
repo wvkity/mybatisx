@@ -52,14 +52,6 @@ public interface PlainSelect<T, C extends PlainSelect<T, C>> {
     /**
      * 添加查询列
      *
-     * @param columns 多个字段(Map&lt;别名, 字段名&gt;)
-     * @return {@code this}
-     */
-    C colSelect(final Map<String, String> columns);
-
-    /**
-     * 添加查询列
-     *
      * @param c1  字段1
      * @param as1 字段1对应别名
      * @param c2  字段2
@@ -103,6 +95,14 @@ public interface PlainSelect<T, C extends PlainSelect<T, C>> {
      * @return {@code this}
      */
     C colSelects(final Collection<String> columns);
+
+    /**
+     * 添加查询列
+     *
+     * @param columns 多个字段(Map&lt;别名, 字段名&gt;)
+     * @return {@code this}
+     */
+    C colSelects(final Map<String, String> columns);
 
     /**
      * 排除查询列

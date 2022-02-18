@@ -86,14 +86,6 @@ public interface LambdaSelect<T, C extends LambdaSelect<T, C>> extends PropertyC
     /**
      * 添加查询列
      *
-     * @param properties 多个属性(Map<别名, 属性名>)
-     * @return {@code this}
-     */
-    C select(final Map<String, String> properties);
-
-    /**
-     * 添加查询列
-     *
      * @param p1  属性1
      * @param as1 属性1对应别名
      * @param p2  属性2
@@ -166,6 +158,14 @@ public interface LambdaSelect<T, C extends LambdaSelect<T, C>> extends PropertyC
      * @return {@code this}
      */
     C selects(final Collection<String> properties);
+    
+    /**
+     * 添加查询列
+     *
+     * @param properties 多个属性(Map<别名, 属性名>)
+     * @return {@code this}
+     */
+    C selects(final Map<String, String> properties);
 
     /**
      * 忽略查询列

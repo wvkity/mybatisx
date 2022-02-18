@@ -295,7 +295,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     }
 
     @Override
-    public C colSelect(Map<String, String> columns) {
+    public C colSelects(Map<String, String> columns) {
         if (Objects.isNotEmpty(columns)) {
             for (Map.Entry<String, String> it : columns.entrySet()) {
                 this.colSelect(it.getValue(), it.getKey());
