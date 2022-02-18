@@ -16,6 +16,11 @@
 package io.github.mybatisx.core.criteria;
 
 import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
+import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
+import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
+
+import java.util.function.Consumer;
 
 /**
  * 基础条件接口
@@ -42,4 +47,152 @@ public interface BaseCriteria<T> extends Criteria<T> {
      * @return 表名
      */
     String getTableName(final boolean jointAs);
+
+    /**
+     * 创建{@link LambdaQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param <S>    实体类型
+     * @return {@link LambdaQueryImplementor}
+     */
+    default <S> LambdaQueryImplementor<S> newLambdaQuery(final Class<S> entity) {
+        return LambdaQueryImplementor.from(this, entity);
+    }
+
+    /**
+     * 创建{@link LambdaQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param <S>    实体类型
+     * @return {@link LambdaQueryImplementor}
+     */
+    default <S> LambdaQueryImplementor<S> newLambdaQuery(final Class<S> entity, final String alias) {
+        return LambdaQueryImplementor.from(this, entity, alias);
+    }
+
+    /**
+     * 创建{@link LambdaQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link LambdaQueryImplementor}
+     */
+    default <S> LambdaQueryImplementor<S> newLambdaQuery(final Class<S> entity, final Consumer<LambdaQueryImplementor<S>> action) {
+        return LambdaQueryImplementor.from(this, entity, action);
+    }
+
+    /**
+     * 创建{@link LambdaQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link LambdaQueryImplementor}
+     */
+    default <S> LambdaQueryImplementor<S> newLambdaQuery(final Class<S> entity, final String alias,
+                                                         final Consumer<LambdaQueryImplementor<S>> action) {
+        return LambdaQueryImplementor.from(this, entity, alias, action);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param <S>    实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    default <S> PlainQueryImplementor<S> newPlainQuery(final Class<S> entity) {
+        return PlainQueryImplementor.from(this, entity);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param <S>    实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    default <S> PlainQueryImplementor<S> newPlainQuery(final Class<S> entity, final String alias) {
+        return PlainQueryImplementor.from(this, entity, alias);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    default <S> PlainQueryImplementor<S> newPlainQuery(final Class<S> entity, final Consumer<PlainQueryImplementor<S>> action) {
+        return PlainQueryImplementor.from(this, entity, action);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    default <S> PlainQueryImplementor<S> newPlainQuery(final Class<S> entity, final String alias,
+                                                       final Consumer<PlainQueryImplementor<S>> action) {
+        return PlainQueryImplementor.from(this, entity, alias, action);
+    }
+
+    /**
+     * 创建{@link GenericQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param <S>    实体类型
+     * @return {@link GenericQueryImplementor}
+     */
+    default <S> GenericQueryImplementor<S> newGenericQuery(final Class<S> entity) {
+        return GenericQueryImplementor.from(this, entity);
+    }
+
+    /**
+     * 创建{@link GenericQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param <S>    实体类型
+     * @return {@link GenericQueryImplementor}
+     */
+    default <S> GenericQueryImplementor<S> newGenericQuery(final Class<S> entity, final String alias) {
+        return GenericQueryImplementor.from(this, entity, alias);
+    }
+
+    /**
+     * 创建{@link GenericQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link GenericQueryImplementor}
+     */
+    default <S> GenericQueryImplementor<S> newGenericQuery(final Class<S> entity, final Consumer<GenericQueryImplementor<S>> action) {
+        return GenericQueryImplementor.from(this, entity, action);
+    }
+
+    /**
+     * 创建{@link GenericQueryImplementor}
+     *
+     * @param entity 实体类
+     * @param alias  别名
+     * @param action {@link Consumer}
+     * @param <S>    实体类型
+     * @return {@link GenericQueryImplementor}
+     */
+    default <S> GenericQueryImplementor<S> newGenericQuery(final Class<S> entity, final String alias,
+                                                           final Consumer<GenericQueryImplementor<S>> action) {
+        return GenericQueryImplementor.from(this, entity, alias, action);
+    }
+
 }

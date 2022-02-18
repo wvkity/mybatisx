@@ -15,11 +15,16 @@
  */
 package io.github.mybatisx.core.criteria.query;
 
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
 import io.github.mybatisx.core.sql.QuerySqlManager;
+import io.github.mybatisx.lang.Strings;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashSet;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -43,6 +48,15 @@ public class PlainQueryImplementor<T> extends AbstractPlainQueryCriteria<T, Plai
         this.entity = entity;
         this.newInit(alias, true);
         this.associations = new LinkedHashSet<>(5);
+        this.sqlManager = new QuerySqlManager(this, this.outerQuery, this.associations, this.fragmentManager);
+    }
+
+    protected PlainQueryImplementor(final Criteria<?> outerCriteria, final Class<T> entity, final String alias) {
+        this.entity = entity;
+        this.clone((AbstractBaseCriteria<?>) outerCriteria, this, false);
+        this.defaultAlias = this.genDefaultAlias();
+        this.aliasRef = new AtomicReference<>(Strings.isNotWhitespace(alias) ? alias : Constants.EMPTY);
+        this.associations = new LinkedHashSet<>();
         this.sqlManager = new QuerySqlManager(this, this.outerQuery, this.associations, this.fragmentManager);
     }
 
@@ -103,6 +117,64 @@ public class PlainQueryImplementor<T> extends AbstractPlainQueryCriteria<T, Plai
     public static <T> PlainQueryImplementor<T> from(final Class<T> entity, final String alias,
                                                     final Consumer<PlainQueryImplementor<T>> action) {
         final PlainQueryImplementor<T> it = new PlainQueryImplementor<>(entity, alias);
+        if (action != null) {
+            action.accept(it);
+        }
+        return it;
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param outerCriteria {@link Criteria}
+     * @param entity        实体类
+     * @param <T>           实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    public static <T> PlainQueryImplementor<T> from(final Criteria<?> outerCriteria, final Class<T> entity) {
+        return from(outerCriteria, entity, null, null);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param outerCriteria {@link Criteria}
+     * @param entity        实体类
+     * @param alias         别名
+     * @param <T>           实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    public static <T> PlainQueryImplementor<T> from(final Criteria<?> outerCriteria, final Class<T> entity, final String alias) {
+        return from(outerCriteria, entity, alias, null);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param outerCriteria {@link Criteria}
+     * @param entity        实体类
+     * @param action        {@link Consumer}
+     * @param <T>           实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    public static <T> PlainQueryImplementor<T> from(final Criteria<?> outerCriteria, final Class<T> entity,
+                                                    final Consumer<PlainQueryImplementor<T>> action) {
+        return from(outerCriteria, entity, null, action);
+    }
+
+    /**
+     * 创建{@link PlainQueryImplementor}
+     *
+     * @param outerCriteria {@link Criteria}
+     * @param entity        实体类
+     * @param alias         别名
+     * @param action        {@link Consumer}
+     * @param <T>           实体类型
+     * @return {@link PlainQueryImplementor}
+     */
+    public static <T> PlainQueryImplementor<T> from(final Criteria<?> outerCriteria, final Class<T> entity, final String alias,
+                                                    final Consumer<PlainQueryImplementor<T>> action) {
+        final PlainQueryImplementor<T> it = new PlainQueryImplementor<>(outerCriteria, entity, alias);
         if (action != null) {
             action.accept(it);
         }

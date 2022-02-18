@@ -39,7 +39,7 @@ import java.util.function.Consumer;
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlainForeignImplementor<T> extends AbstractPlainJoinable<T, PlainForeignImplementor<T>> {
-    
+
     private static final long serialVersionUID = 7258747642877419163L;
 
     public PlainForeignImplementor(Query<?> reference, Class<T> entity, Join join) {
@@ -55,7 +55,7 @@ public class PlainForeignImplementor<T> extends AbstractPlainJoinable<T, PlainFo
         this.useAlias();
         this.defaultAlias = this.genDefaultAlias();
         this.aliasRef = new AtomicReference<>(Strings.isNotWhitespace(alias) ? alias : Constants.EMPTY);
-        this.associations = new LinkedHashSet<>(5);
+        this.associations = new LinkedHashSet<>();
         this.sqlManager = new QuerySqlManager(this, this.outerQuery, this.associations, this.fragmentManager);
     }
 
