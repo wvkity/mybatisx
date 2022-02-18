@@ -37,8 +37,11 @@ import io.github.mybatisx.core.support.group.MultiGroup;
 import io.github.mybatisx.core.support.group.SingleGroup;
 import io.github.mybatisx.core.support.having.FunctionHaving;
 import io.github.mybatisx.core.support.having.Having;
+import io.github.mybatisx.core.support.order.AliasOrder;
+import io.github.mybatisx.core.support.order.FunctionOrder;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.order.PureOrder;
 import io.github.mybatisx.core.support.order.SingleOrder;
 import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
@@ -449,6 +452,17 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
             this.function(new Max(this, column.getColumn(), alias, false));
         }
         return this.context;
+    }
+
+    @Override
+    public AggFunction getFunction(String alias) {
+        final FunctionSelectable function = this.fragmentManager.getFunction(alias);
+        if (function != null) {
+            return function.getFunction();
+        } else {
+            log.warn("The specified aggregate function object cannot be found by alias({})", alias);
+        }
+        return null;
     }
 
     @Override
@@ -918,11 +932,9 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C having(String alias, Param param) {
-        final FunctionSelectable function = this.fragmentManager.getFunction(alias);
+        final AggFunction function = this.getFunction(alias);
         if (function != null) {
-            return this.having(function.getFunction(), param);
-        } else {
-            log.warn("The specified aggregate function object cannot be found by alias({})", alias);
+            return this.having(function, param);
         }
         return this.context;
     }
@@ -1003,6 +1015,31 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
             this.order(MultiOrder.desc(this, this.lambdaConvert(properties), ignoreCase, precedence));
         }
         return this.context;
+    }
+
+    @Override
+    public C funcAsc(AggFunction function) {
+        return this.order(FunctionOrder.asc(function));
+    }
+
+    @Override
+    public C aliasAsc(String alias) {
+        return this.order(AliasOrder.asc(alias));
+    }
+
+    @Override
+    public C funcDesc(AggFunction function) {
+        return this.order(FunctionOrder.desc(function));
+    }
+
+    @Override
+    public C aliasDesc(String alias) {
+        return this.order(AliasOrder.desc(alias));
+    }
+
+    @Override
+    public C orderWithPure(String orderBody) {
+        return this.order(PureOrder.of(orderBody));
     }
 
     @Override

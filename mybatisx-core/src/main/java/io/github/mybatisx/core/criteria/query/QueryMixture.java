@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.base.constant.Join;
+import io.github.mybatisx.core.support.function.AggFunction;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -609,4 +610,69 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
     }
 
     // endregion
+
+    // region Order by
+
+    /**
+     * 聚合函数升序
+     *
+     * @param alias 聚合函数别名
+     * @return {@code this}
+     */
+    default C funcAsc(final String alias) {
+        return this.funcAsc(this.getFunction(alias));
+    }
+
+    /**
+     * 聚合函数升序
+     *
+     * @param function {@link AggFunction}
+     * @return {@code this}
+     */
+    C funcAsc(final AggFunction function);
+
+    /**
+     * 升序
+     *
+     * @param alias 别名
+     * @return {@code this}
+     */
+    C aliasAsc(final String alias);
+
+    /**
+     * 聚合函数降序
+     *
+     * @param alias 聚合函数别名
+     * @return {@code this}
+     */
+    default C funcDesc(final String alias) {
+        return this.funcDesc(this.getFunction(alias));
+    }
+
+    /**
+     * 聚合函数降序
+     *
+     * @param function {@link AggFunction}
+     * @return {@code this}
+     */
+    C funcDesc(final AggFunction function);
+
+    /**
+     * 降序
+     *
+     * @param alias 别名
+     * @return {@code this}
+     */
+    C aliasDesc(final String alias);
+
+    /**
+     * 纯SQL排序
+     *
+     * @param orderBody SQL语句
+     * @return {@code this}
+     */
+    C orderWithPure(final String orderBody);
+
+    // endregion
+
 }

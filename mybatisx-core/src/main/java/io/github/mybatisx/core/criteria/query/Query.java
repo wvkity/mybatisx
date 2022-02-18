@@ -276,6 +276,14 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
     Query<T> countWithAlias(final String alias);
 
     /**
+     * 获取聚合函数
+     *
+     * @param alias 聚合函数别名
+     * @return {@link AggFunction}
+     */
+    AggFunction getFunction(final String alias);
+
+    /**
      * 添加聚合函数
      *
      * @param function {@link AggFunction}

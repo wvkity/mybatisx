@@ -37,8 +37,11 @@ import io.github.mybatisx.core.support.group.MultiGroup;
 import io.github.mybatisx.core.support.group.SingleGroup;
 import io.github.mybatisx.core.support.having.FunctionHaving;
 import io.github.mybatisx.core.support.having.Having;
+import io.github.mybatisx.core.support.order.AliasOrder;
+import io.github.mybatisx.core.support.order.FunctionOrder;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
+import io.github.mybatisx.core.support.order.PureOrder;
 import io.github.mybatisx.core.support.order.SingleOrder;
 import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
@@ -537,6 +540,17 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
+    public AggFunction getFunction(String alias) {
+        final FunctionSelectable function = this.fragmentManager.getFunction(alias);
+        if (function != null) {
+            return function.getFunction();
+        } else {
+            log.warn("The specified aggregate function object cannot be found by alias({})", alias);
+        }
+        return null;
+    }
+
+    @Override
     public C function(AggFunction function) {
         if (function != null) {
             this.select(new FunctionSelectable(SelectType.FUNCTION, function));
@@ -993,7 +1007,7 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
         return this.havingAccept(this, property, false, value, Symbol.LE, slot,
                 AggType.MAX, Restrictions.Mode.PROPERTY);
     }
-    
+
     @Override
     public C colCountLe(String column, boolean distinct, long value, LogicSymbol slot) {
         return this.havingAccept(this, column, distinct, value, Symbol.LE, slot, AggType.COUNT, Restrictions.Mode.COLUMN);
@@ -1297,14 +1311,12 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     // endregion
-    
+
     @Override
     public C having(String alias, Param param) {
-        final FunctionSelectable function = this.fragmentManager.getFunction(alias);
+        final AggFunction function = this.getFunction(alias);
         if (function != null) {
-            return this.having(function.getFunction(), param);
-        } else {
-            log.warn("The specified aggregate function object cannot be found by alias({})", alias);
+            return this.having(function, param);
         }
         return this.context;
     }
@@ -1405,6 +1417,31 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     @Override
     public C colDesc(List<String> columns, boolean ignoreCase, NullPrecedence precedence) {
         return this.order(MultiOrder.desc(this, columns, ignoreCase, precedence));
+    }
+
+    @Override
+    public C funcAsc(AggFunction function) {
+        return this.order(FunctionOrder.asc(function));
+    }
+
+    @Override
+    public C aliasAsc(String alias) {
+        return this.order(AliasOrder.asc(alias));
+    }
+
+    @Override
+    public C funcDesc(AggFunction function) {
+        return this.order(FunctionOrder.desc(function));
+    }
+
+    @Override
+    public C aliasDesc(String alias) {
+        return this.order(AliasOrder.desc(alias));
+    }
+
+    @Override
+    public C orderWithPure(String orderBody) {
+        return this.order(PureOrder.of(orderBody));
     }
 
     @Override
