@@ -16,19 +16,19 @@
 package io.github.mybatisx.core.criteria.query;
 
 /**
- * 子查询接口
+ * 抽象子查询条件
  *
+ * @param <C> 子类型
  * @author wvkity
- * @created 2022/2/9
+ * @created 2022/2/18
  * @since 1.0.0
  */
-public interface SubQuery extends Query<Object> {
+@SuppressWarnings({"serial"})
+public abstract class AbstractPlainSubQuery<C extends PlainSubQuery<C>> extends AbstractPlainQueryCriteria<Object, C>
+        implements PlainSubQuery<C> {
 
-    /**
-     * 获取{@link Query}对象
-     *
-     * @return {@link Query}
-     */
-    Query<?> getOuterQuery();
-
+    @Override
+    public String getTableName(boolean jointAs) {
+        return this.getTableName(this.outerQuery.getFragment(), jointAs);
+    }
 }

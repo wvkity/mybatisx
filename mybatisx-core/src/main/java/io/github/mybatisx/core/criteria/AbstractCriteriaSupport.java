@@ -193,12 +193,18 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
             final StandardSelectable.StandardSelectableBuilder builder = StandardSelectable.builder()
                     .query(to)
                     .type(SelectType.PLAIN);
-            final boolean notAs;
-            if ((notAs = Strings.isWhitespace(as)) && this.inherit) {
-                builder.column(column)
-                        .alias(it.getProperty());
+            final boolean notAs = Strings.isWhitespace(as);
+            if (notAs) {
+                final Query<?> query;
+                if (Objects.nonNull((query = it.getQuery())) && query.isPropAsAlias()) {
+                    builder.column(it.getProperty());
+                } else if (this.inherit) {
+                    builder.column(column).alias(it.getProperty());
+                } else {
+                    builder.column(column);
+                }
             } else {
-                builder.column(notAs ? column : as);
+                builder.column(as);
             }
             final StandardSelectable newSelectable = builder.build();
             to.select(newSelectable);

@@ -196,11 +196,7 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
     @SuppressWarnings("unchecked")
     default <S> C joinLambda(final Class<S> entity, final String alias, final Join join,
                              final BiConsumer<LambdaForeignImplementor<S>, C> onConsumer) {
-        final LambdaForeignImplementor<S> joinable = LambdaForeignImplementor.from(this, entity, alias, join);
-        this.join(joinable);
-        if (onConsumer != null) {
-            onConsumer.accept(joinable, (C) this);
-        }
+        this.join(LambdaForeignImplementor.from((C) this, entity, alias, join, onConsumer));
         return (C) this;
     }
 
@@ -371,11 +367,7 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
     @SuppressWarnings("unchecked")
     default <S> C joinPlain(final Class<S> entity, final String alias, final Join join,
                             final BiConsumer<PlainForeignImplementor<S>, C> onConsumer) {
-        final PlainForeignImplementor<S> joinable = PlainForeignImplementor.from(this, entity, alias, join);
-        this.join(joinable);
-        if (onConsumer != null) {
-            onConsumer.accept(joinable, (C) this);
-        }
+        this.join(PlainForeignImplementor.from((C) this, entity, alias, join, onConsumer));
         return (C) this;
     }
 
@@ -546,14 +538,75 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
     @SuppressWarnings("unchecked")
     default <S> C joinGeneric(final Class<S> entity, final String alias, final Join join,
                               final BiConsumer<GenericForeignImplementor<S>, C> onConsumer) {
-        final GenericForeignImplementor<S> joinable = GenericForeignImplementor.from(this, entity, alias, join);
-        this.join(joinable);
-        if (onConsumer != null) {
-            onConsumer.accept(joinable, (C) this);
-        }
+        this.join(GenericForeignImplementor.from((C) this, entity, alias, join, onConsumer));
         return (C) this;
     }
 
     // endregion
 
+    // region SubQuery
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @return {@link PlainSubQueryImplementor}
+     */
+    default PlainSubQueryImplementor newSubQuery() {
+        return this.newSubQuery((String) null);
+    }
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @param alias 别名
+     * @return {@link PlainSubQueryImplementor}
+     */
+    default PlainSubQueryImplementor newSubQuery(final String alias) {
+        return PlainSubQueryImplementor.from(this, alias);
+    }
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @param action {@link Consumer}
+     * @return {@link PlainSubQueryImplementor}
+     */
+    default PlainSubQueryImplementor newSubQuery(Consumer<PlainSubQueryImplementor> action) {
+        return this.newSubQuery(null, action);
+    }
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @param alias  别名
+     * @param action {@link Consumer}
+     * @return {@link PlainSubQueryImplementor}
+     */
+    default PlainSubQueryImplementor newSubQuery(final String alias, Consumer<PlainSubQueryImplementor> action) {
+        return PlainSubQueryImplementor.from(this, alias, action);
+    }
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @param action {@link BiConsumer}
+     * @return {@link PlainSubQueryImplementor}
+     */
+    default PlainSubQueryImplementor newSubQuery(BiConsumer<C, PlainSubQueryImplementor> action) {
+        return this.newSubQuery(null, action);
+    }
+
+    /**
+     * 创建{@link PlainSubQueryImplementor}对象
+     *
+     * @param alias  别名
+     * @param action {@link BiConsumer}
+     * @return {@link PlainSubQueryImplementor}
+     */
+    @SuppressWarnings("unchecked")
+    default PlainSubQueryImplementor newSubQuery(final String alias, BiConsumer<C, PlainSubQueryImplementor> action) {
+        return PlainSubQueryImplementor.from((C) this, alias, action);
+    }
+
+    // endregion
 }

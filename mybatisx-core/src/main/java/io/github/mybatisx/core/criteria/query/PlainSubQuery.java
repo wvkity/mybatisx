@@ -16,19 +16,13 @@
 package io.github.mybatisx.core.criteria.query;
 
 /**
- * 子查询接口
+ * 子查询条件接口
  *
+ * @param <C> 子类型
  * @author wvkity
- * @created 2022/2/9
+ * @created 2022/2/18
  * @since 1.0.0
  */
-public interface SubQuery extends Query<Object> {
-
-    /**
-     * 获取{@link Query}对象
-     *
-     * @return {@link Query}
-     */
-    Query<?> getOuterQuery();
+public interface PlainSubQuery<C extends PlainSubQuery<C>> extends SubQuery, PlainQueryWrapper<Object, C> {
 
 }
