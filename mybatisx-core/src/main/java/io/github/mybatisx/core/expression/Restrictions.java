@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 条件表达式工具
@@ -6478,4 +6479,106 @@ public class Restrictions {
     }
 
     // endregion
+
+    // region Nested expression methods
+
+    /**
+     * and嵌套表达式
+     *
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression and(final Expression... expressions) {
+        return and(false, expressions);
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression and(final List<Expression> expressions) {
+        return and(false, expressions);
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression and(final boolean not, final Expression... expressions) {
+        return and(not, Arrays.asList(expressions));
+    }
+
+    /**
+     * and嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression and(final boolean not, final List<Expression> expressions) {
+        return nested(not, expressions, LogicSymbol.AND);
+    }
+
+    /**
+     * or嵌套表达式
+     *
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression or(final Expression... expressions) {
+        return or(false, expressions);
+    }
+
+    /**
+     * or嵌套表达式
+     *
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression or(final List<Expression> expressions) {
+        return or(false, expressions);
+    }
+
+    /**
+     * or嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression or(final boolean not, final Expression... expressions) {
+        return or(not, Arrays.asList(expressions));
+    }
+
+    /**
+     * or嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions {@link Expression}列表
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression or(final boolean not, final List<Expression> expressions) {
+        return nested(not, expressions, LogicSymbol.OR);
+    }
+
+    /**
+     * 嵌套表达式
+     *
+     * @param not         是否拼接not
+     * @param expressions {@link Expression}列表
+     * @param slot        {@link LogicSymbol}
+     * @return {@link NestedExpression}
+     */
+    public static NestedExpression nested(final boolean not, final List<Expression> expressions,
+                                          final LogicSymbol slot) {
+        return NestedExpression.builder().not(not).slot(slot).expressions(expressions).build();
+    }
+
+    // endregion
+
 }
