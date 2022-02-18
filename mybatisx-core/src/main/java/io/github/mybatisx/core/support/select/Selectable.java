@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.support.select;
 
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.core.criteria.query.Query;
 
 /**
  * 查询列
@@ -70,6 +71,15 @@ public interface Selectable extends Fragment {
      * @return 引用属性
      */
     default String getReference() {
+        return null;
+    }
+
+    /**
+     * {@link Query}
+     *
+     * @return {@link Query}
+     */
+    default Query<?> getQuery() {
         return null;
     }
 

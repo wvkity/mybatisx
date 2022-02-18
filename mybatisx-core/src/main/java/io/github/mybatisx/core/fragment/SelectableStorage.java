@@ -148,6 +148,11 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
         this.addSelects(c);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return Objects.isEmpty(this.fragments) && Objects.isEmpty(this.selectableCache);
+    }
+
     /**
      * 检查是否已缓存
      *
@@ -189,6 +194,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
     public void addExcludeColumn(final String column) {
         if (Strings.isNotWhitespace(column)) {
             this.excludeColumns.add(column);
+            this.cached.set(false);
         }
     }
 

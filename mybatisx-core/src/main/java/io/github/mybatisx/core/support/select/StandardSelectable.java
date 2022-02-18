@@ -43,6 +43,7 @@ public class StandardSelectable implements Selectable {
     /**
      * {@link Query}
      */
+    @Getter
     private final Query<?> query;
     /**
      * 表别名
@@ -61,6 +62,7 @@ public class StandardSelectable implements Selectable {
     /**
      * 属性
      */
+    @Getter
     private final String property;
     /**
      * 引用属性
