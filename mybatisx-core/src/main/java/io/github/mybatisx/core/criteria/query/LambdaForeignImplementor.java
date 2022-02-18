@@ -55,7 +55,7 @@ public class LambdaForeignImplementor<T> extends AbstractLambdaJoinable<T, Lambd
         this.useAlias();
         this.defaultAlias = this.genDefaultAlias();
         this.aliasRef = new AtomicReference<>(Strings.isNotWhitespace(alias) ? alias : Constants.EMPTY);
-        this.associations = new LinkedHashSet<>(5);
+        this.associations = new LinkedHashSet<>();
         this.sqlManager = new QuerySqlManager(this, this.outerQuery, this.associations, this.fragmentManager);
     }
 
