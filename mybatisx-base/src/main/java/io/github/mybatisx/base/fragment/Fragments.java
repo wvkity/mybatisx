@@ -39,7 +39,7 @@ public interface Fragments<T> extends Fragment {
      *
      * @param c 片段列表
      */
-    void addAll(final Collection<T> c);
+    void addAll(final Collection<? extends T> c);
 
     /**
      * 检查片段列表是否为空

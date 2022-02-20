@@ -44,7 +44,7 @@ public abstract class AbstractFragmentSet<T> implements Fragments<T> {
     }
 
     @Override
-    public void addAll(Collection<T> c) {
+    public void addAll(Collection<? extends T> c) {
         if (Objects.isNotEmpty(c)) {
             for (T it : c) {
                 this.add(it);

@@ -258,7 +258,7 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @param selectables {@link Selectable}列表
      * @return {@code this}
      */
-    Query<T> selects(final List<Selectable> selectables);
+    Query<T> selects(final List<? extends Selectable> selectables);
 
     /**
      * count聚合函数

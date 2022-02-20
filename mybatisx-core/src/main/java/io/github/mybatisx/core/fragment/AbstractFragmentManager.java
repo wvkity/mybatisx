@@ -80,7 +80,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addConditions(Collection<Criterion> conditions) {
+    public void addConditions(Collection<? extends Criterion> conditions) {
         this.conditionStorage.addAll(conditions);
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addSelects(Collection<Selectable> selectables) {
+    public void addSelects(Collection<? extends Selectable> selectables) {
         this.selectableStorage.addSelects(selectables);
     }
 
@@ -128,7 +128,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addGroups(List<Group> groups) {
+    public void addGroups(List<? extends Group> groups) {
         this.groupStorage.addAll(groups);
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addHaving(List<Having> havingList) {
+    public void addHaving(List<? extends Having> havingList) {
         this.havingStorage.addAll(havingList);
     }
 
@@ -148,7 +148,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
-    public void addOrders(List<Order> orders) {
+    public void addOrders(List<? extends Order> orders) {
         this.orderStorage.addAll(orders);
     }
 

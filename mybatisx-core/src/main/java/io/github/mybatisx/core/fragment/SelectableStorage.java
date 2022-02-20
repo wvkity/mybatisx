@@ -130,7 +130,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      *
      * @param selectables {@link Selectable}列表
      */
-    public void addSelects(final Collection<Selectable> selectables) {
+    public void addSelects(final Collection<? extends Selectable> selectables) {
         if (Objects.isNotEmpty(selectables)) {
             for (Selectable it : selectables) {
                 this.addSelect(it);
@@ -144,7 +144,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
     }
 
     @Override
-    public void addAll(Collection<Selectable> c) {
+    public void addAll(Collection<? extends Selectable> c) {
         this.addSelects(c);
     }
 

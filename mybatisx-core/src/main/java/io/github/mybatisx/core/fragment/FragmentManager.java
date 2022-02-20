@@ -47,7 +47,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param conditions 条件列表
      */
-    void addConditions(final Collection<Criterion> conditions);
+    void addConditions(final Collection<? extends Criterion> conditions);
 
     /**
      * 添加查询列
@@ -61,7 +61,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param selectables {@link Selectable}列表
      */
-    void addSelects(final Collection<Selectable> selectables);
+    void addSelects(final Collection<? extends Selectable> selectables);
 
     /**
      * 添加排除查询属性
@@ -111,7 +111,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param groups {@link Group}列表
      */
-    void addGroups(final List<Group> groups);
+    void addGroups(final List<? extends Group> groups);
 
     /**
      * 添加分组筛选条件
@@ -125,7 +125,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param havingList {@link Having}列表
      */
-    void addHaving(final List<Having> havingList);
+    void addHaving(final List<? extends Having> havingList);
 
     /**
      * 添加排序
@@ -139,7 +139,7 @@ public interface FragmentManager extends Fragment {
      *
      * @param orders {@link Order}列表
      */
-    void addOrders(final List<Order> orders);
+    void addOrders(final List<? extends Order> orders);
 
     /**
      * 检查是否存在条件
