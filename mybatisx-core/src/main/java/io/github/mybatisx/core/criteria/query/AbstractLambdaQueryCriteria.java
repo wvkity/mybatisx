@@ -43,7 +43,9 @@ import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.PureOrder;
 import io.github.mybatisx.core.support.order.SingleOrder;
+import io.github.mybatisx.core.support.select.ComplexSelectable;
 import io.github.mybatisx.core.support.select.FunctionSelectable;
+import io.github.mybatisx.core.support.select.PureSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -337,6 +339,21 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
+    public C selectWithPure(String selectBody) {
+        return this.selects(PureSelectable.of(selectBody));
+    }
+
+    @Override
+    public C selectWithPure(String column, String alias) {
+        return this.select(PureSelectable.of(column, alias));
+    }
+
+    @Override
+    public C selectWithComplex(String selectBody) {
+        return this.select(ComplexSelectable.of(selectBody));
+    }
+
+    @Override
     public C selects(Map<String, String> properties) {
         if (Objects.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
@@ -368,7 +385,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C selects(List<Selectable> selectables) {
+    public C selects(List<? extends Selectable> selectables) {
         this.fragmentManager.addSelects(selectables);
         return this.context;
     }

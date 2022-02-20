@@ -40,7 +40,9 @@ import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.order.PureOrder;
 import io.github.mybatisx.core.support.order.SingleOrder;
+import io.github.mybatisx.core.support.select.ComplexSelectable;
 import io.github.mybatisx.core.support.select.FunctionSelectable;
+import io.github.mybatisx.core.support.select.PureSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -295,13 +297,18 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     }
 
     @Override
-    public C colSelects(Map<String, String> columns) {
-        if (Objects.isNotEmpty(columns)) {
-            for (Map.Entry<String, String> it : columns.entrySet()) {
-                this.colSelect(it.getValue(), it.getKey());
-            }
-        }
-        return this.context;
+    public C selectWithPure(String selectBody) {
+        return this.selects(PureSelectable.of(selectBody));
+    }
+
+    @Override
+    public C selectWithPure(String column, String alias) {
+        return this.select(PureSelectable.of(column, alias));
+    }
+
+    @Override
+    public C selectWithComplex(String selectBody) {
+        return this.select(ComplexSelectable.of(selectBody));
     }
 
     @Override
@@ -309,6 +316,16 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
         if (Objects.isNotEmpty(columns)) {
             for (String it : columns) {
                 this.colSelect(it, null);
+            }
+        }
+        return this.context;
+    }
+
+    @Override
+    public C colSelects(Map<String, String> columns) {
+        if (Objects.isNotEmpty(columns)) {
+            for (Map.Entry<String, String> it : columns.entrySet()) {
+                this.colSelect(it.getValue(), it.getKey());
             }
         }
         return this.context;
@@ -326,7 +343,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     }
 
     @Override
-    public C selects(List<Selectable> selectables) {
+    public C selects(List<? extends Selectable> selectables) {
         this.fragmentManager.addSelects(selectables);
         return this.context;
     }

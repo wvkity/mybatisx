@@ -611,6 +611,35 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
 
     // endregion
 
+    // region Selectable
+
+    /**
+     * 纯SQL查询字段
+     *
+     * @param selectBody 查询字段SQL语句
+     * @return {@code this}
+     */
+    C selectWithPure(final String selectBody);
+
+    /**
+     * 纯SQL查询字段
+     *
+     * @param column 字段名
+     * @param alias  别名
+     * @return {@code this}
+     */
+    C selectWithPure(final String column, final String alias);
+
+    /**
+     * 纯SQL查询字段
+     *
+     * @param selectBody 查询字段SQL语句
+     * @return {@code this}
+     */
+    C selectWithComplex(final String selectBody);
+
+    // endregion
+
     // region Order by
 
     /**
