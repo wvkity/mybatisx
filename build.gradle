@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id "com.github.hierynomus.license" version "0.15.0"
     id "io.freefair.lombok" version "6.3.0"
@@ -105,27 +107,36 @@ subprojects {
         options.compilerArgs += ["-parameters"]
     }
 
-    /*sourceSets {
-        main {
-            java {
-                srcDirs = ['src/main/java']
-            }
-            resources {
-                srcDirs = ['src/main/resources']
-            }
-        }
-        test {
-            java {
-                srcDirs = ['src/test/java']
-            }
-            resources {
-                srcDirs = ['src/test/resources']
+    jar {
+        afterEvaluate {
+            manifest {
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Bundle-DocURL': ''
+                attributes 'Build-OS': ''
+                attributes 'Built-By': 'wvkity'
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
             }
         }
-    }*/
+    }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    javadoc {
+        options.tags = ['created']
+    }
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
 
     test {
-        //dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
+        dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
         useJUnitPlatform()
     }
 
@@ -156,4 +167,74 @@ subprojects {
         all*.exclude module: 'org.hibernate.validator'
         all*.exclude module: 'spring-boot-starter-tomcat'
     }
+
+    publishing {
+        repositories {
+            mavenLocal()
+            maven {
+                def userName = ossUserName
+                def passWord = ossPassword
+                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username userName
+                    password passWord
+                }
+            }
+        }
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'mybatisx'
+                    packaging 'jar'
+                    description = 'Mybatis extension kit.'
+                    url = 'https://github.com/wvkity/mybatisx'
+
+                    scm {
+                        connection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                        developerConnection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                        url = 'https://github.com/wvkity/mybatisx'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'wvkity'
+                            name = 'wvkity'
+                            email = 'wvkity@gmail.com'
+                        }
+                    }
+                    withXml {
+                        def root = asNode()
+                        root.dependencies.'*'.findAll {
+                            def d = it
+                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
+                                dep.name == it.artifactId.text()
+                            }.each() {
+                                d.scope*.value = 'compile'
+                                d.appendNode('optional', true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        signing {
+            sign publishing.publications.mavenJava
+        }
+    }
+    
 }
