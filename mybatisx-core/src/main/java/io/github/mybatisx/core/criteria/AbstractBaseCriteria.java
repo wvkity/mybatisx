@@ -37,6 +37,8 @@ import io.github.mybatisx.core.sql.SqlManager;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.sql.parsing.JSqlParser;
+import io.github.mybatisx.sql.parsing.SqlParser;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -131,6 +133,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * 普通条件/having筛选条件切换
      */
     protected AtomicBoolean conditionToggle = new AtomicBoolean(true);
+    /**
+     * SQL解析器
+     */
+    protected AtomicReference<SqlParser> parserRef;
 
     // endregion
 
@@ -164,8 +170,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
         this.placeholderConverter = new DefaultPlaceholderConverter(this.parameterConverter);
         this.conditionConverter = new DefaultConditionConverter(this);
+        this.parserRef = new AtomicReference<>();
         if (isQuery) {
             this.fragmentManager = new DefaultFragmentManager(this, this.parameterConverter, this.placeholderConverter);
+            this.parserRef.set(new JSqlParser());
         } else {
             this.fragmentManager = new DefaultFragmentManager(this,
                     new ConditionStorage(this.parameterConverter, this.placeholderConverter));
@@ -208,6 +216,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     protected void clone(final AbstractBaseCriteria<?> source, final AbstractBaseCriteria<?> target,
                          final boolean deep) {
         if (source != null && target != null) {
+            target.parserRef = source.parserRef;
             target.parameterSequence = source.parameterSequence;
             target.paramValueMapping = source.paramValueMapping;
             target.placeholderConverter = source.placeholderConverter;

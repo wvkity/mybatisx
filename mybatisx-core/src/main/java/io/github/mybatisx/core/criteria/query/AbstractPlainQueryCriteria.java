@@ -48,6 +48,7 @@ import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.sql.parsing.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -217,6 +218,17 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     @Override
     public boolean isKeepOrderly() {
         return this.keepOrderly;
+    }
+
+    @Override
+    public SqlParser getSqlParser() {
+        return this.parserRef.get();
+    }
+
+    @Override
+    public C sqlParser(SqlParser sqlParser) {
+        this.parserRef.set(sqlParser);
+        return this.context;
     }
 
     @Override

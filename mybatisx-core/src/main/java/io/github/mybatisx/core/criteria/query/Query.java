@@ -22,6 +22,7 @@ import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.embedded.EmbeddableResult;
+import io.github.mybatisx.sql.parsing.SqlParser;
 
 import java.util.List;
 
@@ -414,6 +415,21 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @return {@code this}
      */
     Query<T> join(final Joinable<?> joinable);
+
+    /**
+     * 获取{@link SqlParser}
+     *
+     * @return {@link SqlParser}
+     */
+    SqlParser getSqlParser();
+
+    /**
+     * 设置{@link SqlParser}
+     *
+     * @param sqlParser {@link SqlParser}
+     * @return {@code this}
+     */
+    Query<T> sqlParser(final SqlParser sqlParser);
 
     /**
      * 获取查询字段片段
