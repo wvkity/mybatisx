@@ -17,7 +17,9 @@ ext {
             disruptorV = "3.4.4",
             mybatisV = "3.5.4",
             mybatisSpringV = "2.0.5",
+            jsqlparserV = "4.2",
             guavaV = "31.0.1-jre",
+            caffeineV = "3.0.5",
             springV = "5.3.9",
             springbootV = "2.5.4",
             lombokV = "1.18.21",
@@ -33,9 +35,11 @@ ext {
             "log4j2-core"                       : "org.apache.logging.log4j:log4j-core:${log4j2V}",
             "log4j2-slf4j-impl"                 : "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
             "mysql-driver"                      : "mysql:mysql-connector-java:${mysqlDriverV}",
+            "jsqlparser"                        : "com.github.jsqlparser:jsqlparser:${jsqlparserV}",
             "disruptor"                         : "com.lmax:disruptor:${disruptorV}",
             "fastjson"                          : "com.alibaba:fastjson:${fastjsonV}",
             "guava"                             : "com.google.guava:guava:${guavaV}",
+            "caffeine"                          : "com.github.ben-manes.caffeine:caffeine:${caffeineV}",
             "mybatis"                           : "org.mybatis:mybatis:${mybatisV}",
             "mybatis-spring"                    : "org.mybatis:mybatis-spring:${mybatisSpringV}",
             "mybatis-thymeleaf"                 : "org.mybatis.scripting:mybatis-thymeleaf:1.0.2",
@@ -69,6 +73,7 @@ allprojects {
     group 'io.github.wvkity'
     version '1.0.0-SNAPSHOT'
     apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
+    apply plugin: 'idea'
     tasks.withType(Javadoc) {
         options.addStringOption('Xdoclint:none', '-quiet')
         options.addStringOption('encoding', 'UTF-8')
@@ -77,7 +82,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'idea'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
     apply plugin: 'io.freefair.lombok'
