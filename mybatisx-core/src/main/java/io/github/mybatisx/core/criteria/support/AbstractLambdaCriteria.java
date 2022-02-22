@@ -23,6 +23,8 @@ import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.criterion.ExistsCondition;
+import io.github.mybatisx.core.criterion.PureCondition;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
@@ -222,6 +224,21 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     @Override
     public C onWith(String leftProperty, Criteria<?> rc, String rightColumn) {
         return this.joinableConditionAccept(this, leftProperty, true, rc, rightColumn, false);
+    }
+
+    @Override
+    public C exists(Query<?> query, LogicSymbol slot) {
+        return this.where(ExistsCondition.exists(query, slot));
+    }
+
+    @Override
+    public C notExists(Query<?> query, LogicSymbol slot) {
+        return this.where(ExistsCondition.notExists(query, slot));
+    }
+
+    @Override
+    public C condition(String condition, LogicSymbol slot) {
+        return this.where(PureCondition.of(condition, slot));
     }
 
 }

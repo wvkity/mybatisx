@@ -16,9 +16,7 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
-import io.github.mybatisx.base.criteria.Criteria;
-import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
-import io.github.mybatisx.core.property.Property;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.util.Maps;
 
@@ -267,5 +265,66 @@ public interface GenericCondition<T, C extends GenericCondition<T, C>> extends S
     C template(final String template, final Map<String, Object> values, final LogicSymbol slot);
 
     // endregion
+
+    // region Exists methods
+
+    /**
+     * exists条件
+     *
+     * @param query {@link Query}
+     * @return {@code this}
+     */
+    default C exists(final Query<?> query) {
+        return this.exists(query, this.slot());
+    }
+
+    /**
+     * exists条件
+     *
+     * @param query {@link Query}
+     * @param slot  {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C exists(final Query<?> query, final LogicSymbol slot);
+
+    /**
+     * not exists条件
+     *
+     * @param query {@link Query}
+     * @return {@code this}
+     */
+    default C notExists(final Query<?> query) {
+        return this.notExists(query, this.slot());
+    }
+
+    /**
+     * not exists条件
+     *
+     * @param query {@link Query}
+     * @param slot  {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C notExists(final Query<?> query, final LogicSymbol slot);
+
+    // endregion
+
+    /**
+     * 纯SQL
+     *
+     * @param condition 条件语句
+     * @return {@code this}
+     */
+    default C condition(final String condition) {
+        return this.condition(condition, this.slot());
+    }
+    
+    /**
+     * 纯SQL
+     *
+     * @param condition 条件语句
+     * @param slot      {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C condition(final String condition, final LogicSymbol slot);
 
 }
