@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.property.PropertyConverter;
@@ -140,6 +141,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      * @return {@code this}
      */
     <V> C eq(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subEq(final Property<T, ?> property, final Query<?> query) {
+        return this.subEq(property, query, this.slot());
+    }
+
+    /**
+     * 等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subEq(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subEq(this.convert(property), query, slot);
+    }
+
+    /**
+     * 等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subEq(final String property, final Query<?> query) {
+        return this.subEq(property, query, this.slot());
+    }
+
+    /**
+     * 等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subEq(final String property, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 
@@ -406,6 +451,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      */
     <V> C ne(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 不等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subNe(final Property<T, ?> property, final Query<?> query) {
+        return this.subNe(property, query, this.slot());
+    }
+
+    /**
+     * 不等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subNe(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subNe(this.convert(property), query, slot);
+    }
+
+    /**
+     * 不等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subNe(final String property, final Query<?> query) {
+        return this.subNe(property, query, this.slot());
+    }
+
+    /**
+     * 不等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subNe(final String property, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Greater than methods
@@ -511,6 +600,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      * @return {@code this}
      */
     <V> C gt(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 大于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subGt(final Property<T, ?> property, final Query<?> query) {
+        return this.subGt(property, query, this.slot());
+    }
+
+    /**
+     * 大于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subGt(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subGt(this.convert(property), query, slot);
+    }
+
+    /**
+     * 大于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subGt(final String property, final Query<?> query) {
+        return this.subGt(property, query, this.slot());
+    }
+
+    /**
+     * 大于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subGt(final String property, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 
@@ -618,6 +751,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      */
     <V> C ge(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subGe(final Property<T, ?> property, final Query<?> query) {
+        return this.subGe(property, query, this.slot());
+    }
+
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subGe(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subGe(this.convert(property), query, slot);
+    }
+
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subGe(final String property, final Query<?> query) {
+        return this.subGe(property, query, this.slot());
+    }
+
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subGe(final String property, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Less than methods
@@ -724,6 +901,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      */
     <V> C lt(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 小于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subLt(final Property<T, ?> property, final Query<?> query) {
+        return this.subLt(property, query, this.slot());
+    }
+
+    /**
+     * 小于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subLt(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subLt(this.convert(property), query, slot);
+    }
+
+    /**
+     * 小于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subLt(final String property, final Query<?> query) {
+        return this.subLt(property, query, this.slot());
+    }
+
+    /**
+     * 小于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subLt(final String property, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Less than or equal to methods
@@ -829,6 +1050,50 @@ public interface LambdaCompare<T, C extends LambdaCompare<T, C>> extends Slot<T,
      * @return {@code this}
      */
     <V> C le(final String property, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subLe(final Property<T, ?> property, final Query<?> query) {
+        return this.subLe(property, query, this.slot());
+    }
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subLe(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subLe(this.convert(property), query, slot);
+    }
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subLe(final String property, final Query<?> query) {
+        return this.subLe(property, query, this.slot());
+    }
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subLe(final String property, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 

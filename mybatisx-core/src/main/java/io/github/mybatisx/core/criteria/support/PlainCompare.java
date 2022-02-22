@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.property.LambdaMetadataWeakCache;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.matcher.Matcher;
@@ -83,6 +84,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @return {@code this}
      */
     <V> C colEq(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubEq(final String column, final Query<?> query) {
+        return this.colSubEq(column, query, this.slot());
+    }
+
+    /**
+     * 等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubEq(final String column, final Query<?> query, final LogicSymbol slot);
 
     /**
      * 等于
@@ -217,6 +239,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      */
     <V> C colNe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 不等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubNe(final String column, final Query<?> query) {
+        return this.colSubNe(column, query, this.slot());
+    }
+
+    /**
+     * 不等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubNe(final String column, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Greater than methods
@@ -270,6 +313,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @return {@code this}
      */
     <V> C colGt(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 大于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubGt(final String column, final Query<?> query) {
+        return this.colSubGt(column, query, this.slot());
+    }
+
+    /**
+     * 大于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubGt(final String column, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 
@@ -325,6 +389,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      */
     <V> C colGe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubGe(final String column, final Query<?> query) {
+        return this.colSubGe(column, query, this.slot());
+    }
+
+    /**
+     * 大于或等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubGe(final String column, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Less than methods
@@ -379,6 +464,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      */
     <V> C colLt(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
 
+    /**
+     * 小于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubLt(final String column, final Query<?> query) {
+        return this.colSubLt(column, query, this.slot());
+    }
+
+    /**
+     * 小于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubLt(final String column, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Less than or equal methods
@@ -432,6 +538,27 @@ public interface PlainCompare<T, C extends PlainCompare<T, C>> extends Slot<T, C
      * @return {@code this}
      */
     <V> C colLe(final String column, final V value, final Matcher<V> matcher, final LogicSymbol slot);
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubLe(final String column, final Query<?> query) {
+        return this.colSubLe(column, query, this.slot());
+    }
+
+    /**
+     * 小于或等于(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubLe(final String column, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 

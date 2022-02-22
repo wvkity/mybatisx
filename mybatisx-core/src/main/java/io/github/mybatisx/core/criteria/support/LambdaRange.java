@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.core.property.PropertyConverter;
 
@@ -245,6 +246,50 @@ public interface LambdaRange<T, C extends LambdaRange<T, C>> extends Slot<T, C>,
      */
     <V> C in(final String property, final Collection<V> values, final LogicSymbol slot);
 
+    /**
+     * in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subIn(final Property<T, ?> property, final Query<?> query) {
+        return this.subIn(property, query, this.slot());
+    }
+
+    /**
+     * in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subIn(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subIn(this.convert(property), query, slot);
+    }
+
+    /**
+     * in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subIn(final String property, final Query<?> query) {
+        return this.subIn(property, query, this.slot());
+    }
+
+    /**
+     * in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subIn(final String property, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Not in methods
@@ -346,6 +391,50 @@ public interface LambdaRange<T, C extends LambdaRange<T, C>> extends Slot<T, C>,
      * @return {@code this}
      */
     <V> C notIn(final String property, final Collection<V> values, final LogicSymbol slot);
+
+    /**
+     * not in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subNotIn(final Property<T, ?> property, final Query<?> query) {
+        return this.subNotIn(property, query, this.slot());
+    }
+
+    /**
+     * not in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    default C subNotIn(final Property<T, ?> property, final Query<?> query, final LogicSymbol slot) {
+        return this.subNotIn(this.convert(property), query, slot);
+    }
+
+    /**
+     * not in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @return {@code this}
+     */
+    default C subNotIn(final String property, final Query<?> query) {
+        return this.subNotIn(property, query, this.slot());
+    }
+
+    /**
+     * not in(子查询)
+     *
+     * @param property 属性
+     * @param query    {@link Query}
+     * @param slot     {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C subNotIn(final String property, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 

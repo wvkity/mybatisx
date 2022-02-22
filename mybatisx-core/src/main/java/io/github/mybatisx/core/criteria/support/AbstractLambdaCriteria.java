@@ -22,6 +22,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.property.Property;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
@@ -64,8 +65,18 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     }
 
     @Override
+    public C subEq(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.EQ, slot, false);
+    }
+
+    @Override
     public <V> C ne(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.simpleConditionAccept(property, value, matcher, Symbol.NE, slot);
+    }
+
+    @Override
+    public C subNe(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.NE, slot, false);
     }
 
     @Override
@@ -74,8 +85,18 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     }
 
     @Override
+    public C subGt(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.GT, slot, false);
+    }
+
+    @Override
     public <V> C ge(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.simpleConditionAccept(property, value, matcher, Symbol.GE, slot);
+    }
+
+    @Override
+    public C subGe(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.GE, slot, false);
     }
 
     @Override
@@ -84,8 +105,18 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     }
 
     @Override
+    public C subLt(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.LT, slot, false);
+    }
+
+    @Override
     public <V> C le(String property, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.simpleConditionAccept(property, value, matcher, Symbol.LE, slot);
+    }
+
+    @Override
+    public C subLe(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.LE, slot, false);
     }
 
     @Override
@@ -104,8 +135,18 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
     }
 
     @Override
+    public C subIn(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.IN, slot, false);
+    }
+
+    @Override
     public <V> C notIn(String property, Collection<V> values, LogicSymbol slot) {
         return this.inConditionAccept(property, values, Symbol.NOT_IN, slot);
+    }
+
+    @Override
+    public C subNotIn(String property, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(property, query, Symbol.NOT_IN, slot, false);
     }
 
     @Override

@@ -22,6 +22,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
 
@@ -53,6 +54,11 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public C colSubEq(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.EQ, slot, true);
+    }
+
+    @Override
     public C colEq(Map<String, ?> columns, LogicSymbol slot) {
         if (Objects.isNotEmpty(columns)) {
             for (Map.Entry<String, ?> it : columns.entrySet()) {
@@ -68,8 +74,18 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public C colSubNe(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.NE, slot, true);
+    }
+
+    @Override
     public <V> C colGt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.colSimpleConditionAccept(column, value, matcher, Symbol.GT, slot);
+    }
+
+    @Override
+    public C colSubGt(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.GT, slot, true);
     }
 
     @Override
@@ -78,13 +94,28 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public C colSubGe(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.GE, slot, true);
+    }
+
+    @Override
     public <V> C colLt(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.colSimpleConditionAccept(column, value, matcher, Symbol.LT, slot);
     }
 
     @Override
+    public C colSubLt(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.LT, slot, true);
+    }
+
+    @Override
     public <V> C colLe(String column, V value, Matcher<V> matcher, LogicSymbol slot) {
         return this.colSimpleConditionAccept(column, value, matcher, Symbol.LE, slot);
+    }
+
+    @Override
+    public C colSubLe(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.LE, slot, true);
     }
 
     @Override
@@ -103,8 +134,18 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
     }
 
     @Override
+    public C colSubIn(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.IN, slot, true);
+    }
+
+    @Override
     public <V> C colNotIn(String column, Collection<V> values, LogicSymbol slot) {
         return this.colInConditionAccept(column, values, Symbol.NOT_IN, slot);
+    }
+
+    @Override
+    public C colSubNotIn(String column, Query<?> query, LogicSymbol slot) {
+        return this.subConditionAccept(column, query, Symbol.NOT_IN, slot, true);
     }
 
     @Override

@@ -26,6 +26,7 @@ import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.criterion.JoinableCondition;
 import io.github.mybatisx.core.criterion.NestedCondition;
+import io.github.mybatisx.core.criterion.SubQueryCondition;
 import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.expression.NestedExpression;
 import io.github.mybatisx.core.param.BetweenParam;
@@ -460,6 +461,37 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     protected C colNullableConditionAccept(final String column, final Symbol symbol, final LogicSymbol slot) {
         if (Strings.isNotWhitespace(column)) {
             this.conditionConverter.accept(column, NullParam.builder()
+                    .symbol(symbol)
+                    .slot(slot)
+                    .build());
+        }
+        return this.context;
+    }
+
+    /**
+     * 添加子查询条件
+     *
+     * @param target   属性/字段名
+     * @param query    {@link Query}
+     * @param symbol   {@link Symbol}
+     * @param slot     {@link LogicSymbol}
+     * @param isColumn 是否为字段名
+     * @return {@code this}
+     */
+    protected C subConditionAccept(final String target, final Query<?> query, final Symbol symbol,
+                                   final LogicSymbol slot, final boolean isColumn) {
+        final String columnName;
+        if (isColumn) {
+            columnName = target;
+        } else {
+            final Column column = this.convert(target);
+            columnName = column == null ? null : column.getColumn();
+        }
+        if (columnName != null) {
+            this.where(SubQueryCondition.builder()
+                    .criteria(this)
+                    .column(columnName)
+                    .query(query)
                     .symbol(symbol)
                     .slot(slot)
                     .build());

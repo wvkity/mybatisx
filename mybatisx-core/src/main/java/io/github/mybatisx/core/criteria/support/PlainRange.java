@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.support;
 
 import io.github.mybatisx.base.constant.LogicSymbol;
+import io.github.mybatisx.core.criteria.query.Query;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -139,6 +140,27 @@ public interface PlainRange<T, C extends PlainRange<T, C>> extends Slot<T, C> {
      */
     <V> C colIn(final String column, final Collection<V> values, final LogicSymbol slot);
 
+    /**
+     * in(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubIn(final String column, final Query<?> query) {
+        return this.colSubIn(column, query, this.slot());
+    }
+
+    /**
+     * in(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubIn(final String column, final Query<?> query, final LogicSymbol slot);
+
     // endregion
 
     // region Not in methods
@@ -190,6 +212,27 @@ public interface PlainRange<T, C extends PlainRange<T, C>> extends Slot<T, C> {
      * @return {@code this}
      */
     <V> C colNotIn(final String column, final Collection<V> values, final LogicSymbol slot);
+
+    /**
+     * not in(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @return {@code this}
+     */
+    default C colSubNotIn(final String column, final Query<?> query) {
+        return this.colSubNotIn(column, query, this.slot());
+    }
+
+    /**
+     * not in(子查询)
+     *
+     * @param column 字段名
+     * @param query  {@link Query}
+     * @param slot   {@link LogicSymbol}
+     * @return {@code this}
+     */
+    C colSubNotIn(final String column, final Query<?> query, final LogicSymbol slot);
 
     // endregion
 }
