@@ -32,4 +32,12 @@ public interface SqlParser {
      */
     String smartRemoveOrderBy(final String source);
 
+    /**
+     * 智能转换解析成exists语句
+     *
+     * @param source SQL语句
+     * @return 处理后的SQL语句
+     */
+    String smartParseOfExists(final String source);
+
 }
