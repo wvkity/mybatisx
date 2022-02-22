@@ -49,7 +49,7 @@ public class PureCondition implements Criterion {
     /**
      * 逻辑符号正则表达式
      */
-    private final Pattern slotStartWithRegex = Pattern.compile("(?i)^\\s*(and|or)?\\s+(.*)$");
+    private final Pattern slotStartWithRegex = Pattern.compile("^(?i)\\s*(and|or)?\\s+(.*)$");
 
     @Override
     public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
