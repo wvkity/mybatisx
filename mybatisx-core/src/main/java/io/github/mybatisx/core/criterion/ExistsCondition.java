@@ -73,7 +73,7 @@ public class ExistsCondition implements Criterion {
             final SqlParser parser = this.query.getSqlParser();
             final String selectBody = this.query.getFragment();
             if (parser != null) {
-                sb.append(parser.smartRemoveOrderBy(selectBody));
+                sb.append(parser.smartParseOfExists(selectBody));
             } else {
                 sb.append(selectBody);
             }
