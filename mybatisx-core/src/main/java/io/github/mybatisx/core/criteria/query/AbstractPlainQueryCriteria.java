@@ -18,10 +18,8 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.constant.NullPrecedence;
-import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
-import io.github.mybatisx.core.expression.Restrictions;
 import io.github.mybatisx.core.param.Param;
 import io.github.mybatisx.core.support.function.AggFunction;
 import io.github.mybatisx.core.support.function.Avg;
@@ -505,388 +503,56 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     // region Having methods
 
-    // region Equal
+    // region Count
 
     @Override
     public C countEq(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.EQ, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.EQ, slot);
     }
-
-    @Override
-    public C colCountEq(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.EQ, slot, AggType.COUNT,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumEq(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.EQ, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgEq(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.EQ, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinEq(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.EQ, slot, AggType.MIN,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxEq(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.EQ, slot, AggType.MAX,
-                Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Not equal
 
     @Override
     public C countNe(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.NE, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.NE, slot);
     }
-
-    @Override
-    public C colCountNe(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.NE, slot, AggType.COUNT,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumNe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.NE, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgNe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.NE, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinNe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.NE, slot, AggType.MIN,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxNe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.NE, slot, AggType.MAX,
-                Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Greater than
 
     @Override
     public C countGt(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.GT, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.GT, slot);
     }
-
-    @Override
-    public C colCountGt(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GT, slot, AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumGt(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GT, slot, AggType.SUM, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgGt(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GT, slot, AggType.AVG, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinGt(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.GT, slot, AggType.MIN, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxGt(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.GT, slot, AggType.MAX, Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Greater than or equal to
 
     @Override
     public C countGe(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.GE, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.GE, slot);
     }
-
-    @Override
-    public C colCountGe(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GE, slot, AggType.COUNT,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumGe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GE, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgGe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.GE, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinGe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.GE, slot, AggType.MIN,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxGe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.GE, slot, AggType.MAX,
-                Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Less than
 
     @Override
     public C countLt(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.LT, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.LT, slot);
     }
-
-    @Override
-    public C colCountLt(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LT, slot, AggType.COUNT,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumLt(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LT, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgLt(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LT, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinLt(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.LT, slot, AggType.MIN,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxLt(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.LT, slot, AggType.MAX,
-                Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Less than or equal to
 
     @Override
     public C countLe(long value, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, value, Symbol.LE, slot, AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, value, Symbol.LE, slot);
     }
-
-    @Override
-    public C colCountLe(String column, boolean distinct, long value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LE, slot, AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumLe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LE, slot, AggType.SUM, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgLe(String column, boolean distinct, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, value, Symbol.LE, slot, AggType.AVG, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinLe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.LE, slot, AggType.MIN, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxLe(String column, Object value, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, value, Symbol.LE, slot, AggType.MAX, Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Between
 
     @Override
     public C countBetween(long begin, long end, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, new Object[]{begin, end}, Symbol.BETWEEN,
-                slot, AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, new Object[]{begin, end}, Symbol.BETWEEN, slot);
     }
-
-    @Override
-    public C colCountBetween(String column, boolean distinct, long begin, long end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.BETWEEN, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumBetween(String column, boolean distinct, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.BETWEEN, slot,
-                AggType.SUM, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgBetween(String column, boolean distinct, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.BETWEEN, slot,
-                AggType.AVG, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinBetween(String column, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, new Object[]{begin, end}, Symbol.BETWEEN, slot,
-                AggType.MIN, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxBetween(String column, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, new Object[]{begin, end}, Symbol.BETWEEN, slot,
-                AggType.MAX, Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Not between
 
     @Override
     public C countNotBetween(long begin, long end, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, new Object[]{begin, end}, Symbol.NOT_BETWEEN,
-                slot, AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot);
     }
-
-    @Override
-    public C colCountNotBetween(String column, boolean distinct, long begin, long end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot,
-                AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumNotBetween(String column, boolean distinct, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot,
-                AggType.SUM, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgNotBetween(String column, boolean distinct, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot,
-                AggType.AVG, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinNotBetween(String column, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot,
-                AggType.MIN, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxNotBetween(String column, Object begin, Object end, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, new Object[]{begin, end}, Symbol.NOT_BETWEEN, slot,
-                AggType.MAX, Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region In
 
     @Override
     public C countIn(Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, values, Symbol.IN,
-                slot, AggType.COUNT, Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, values, Symbol.IN, slot);
     }
-
-    @Override
-    public C colCountIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.IN, slot, AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.IN, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.IN, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinIn(String column, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, values, Symbol.IN, slot, AggType.MIN, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxIn(String column, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, values, Symbol.IN, slot, AggType.MAX, Restrictions.Mode.COLUMN);
-    }
-
-    // endregion
-
-    // region Not in
 
     @Override
     public C countNotIn(Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, SqlSymbol.STAR, false, values, Symbol.NOT_IN,
-                slot, AggType.COUNT, Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colCountNotIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.NOT_IN, slot, AggType.COUNT,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colSumNotIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.NOT_IN, slot, AggType.SUM,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colAvgNotIn(String column, boolean distinct, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, distinct, values, Symbol.NOT_IN, slot, AggType.AVG,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMinNotIn(String column, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, values, Symbol.NOT_IN, slot, AggType.MIN,
-                Restrictions.Mode.COLUMN);
-    }
-
-    @Override
-    public C colMaxNotIn(String column, Collection<?> values, LogicSymbol slot) {
-        return this.havingAccept(this, column, false, values, Symbol.NOT_IN, slot, AggType.MAX,
-                Restrictions.Mode.COLUMN);
+        return this.countHavingAccept(this, values, Symbol.NOT_IN, slot);
     }
 
     // endregion 

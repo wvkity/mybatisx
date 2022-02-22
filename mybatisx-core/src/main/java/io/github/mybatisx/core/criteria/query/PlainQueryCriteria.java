@@ -30,7 +30,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface PlainQueryCriteria<T, C extends PlainQueryCriteria<T, C>> extends CriteriaWrapper<T, C>,
-        QueryMixture<T, C>, PlainSelect<T, C>, PlainFunctionSelect<T, C>, PlainSort<T, C>, PlainHaving<T, C> {
+        QueryMixture<T, C>, PlainSelect<T, C>, PlainFunctionSelect<T, C>, PlainSort<T, C>, GenericHaving<T, C> {
 
     /**
      * 分组
