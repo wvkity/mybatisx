@@ -24,7 +24,7 @@ package io.github.mybatisx.core.criteria.query;
  * @since 1.0.0
  */
 @SuppressWarnings({"serial"})
-public class AbstractPlainSubJoinable<C extends SubJoinable<C>> extends AbstractPlainJoinable<Object, C> implements SubJoinable<C> {
+public abstract class AbstractPlainSubJoinable<C extends SubJoinable<C>> extends AbstractPlainJoinable<Object, C> implements SubJoinable<C> {
 
     @Override
     @SuppressWarnings("unchecked")
