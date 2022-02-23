@@ -545,6 +545,190 @@ interface QueryMixture<T, C extends QueryMixture<T, C>> extends Query<T> {
 
     // endregion
 
+    // region Sub joinable
+
+    /**
+     * 左关联查询
+     *
+     * @param right      {@link Query}
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C leftSub(final R right, final Consumer<PlainSubForeignImplementor> onConsumer) {
+        return this.leftSub(right, null, onConsumer);
+    }
+
+    /**
+     * 左关联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C leftSub(final R right, final String alias,
+                                              final Consumer<PlainSubForeignImplementor> onConsumer) {
+        return this.joinSub(right, alias, Join.LEFT, onConsumer);
+    }
+
+    /**
+     * 左关联查询
+     *
+     * @param right      {@link Query}
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C leftSub(final R right,
+                                              final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        return this.leftSub(right, null, onConsumer);
+    }
+
+    /**
+     * 左关联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C leftSub(final R right, final String alias,
+                                              final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        return this.joinSub(right, alias, Join.LEFT, onConsumer);
+    }
+
+    /**
+     * 内联查询
+     *
+     * @param right      {@link Query}
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C innerSub(final R right, final Consumer<PlainSubForeignImplementor> onConsumer) {
+        return this.innerSub(right, null, onConsumer);
+    }
+
+    /**
+     * 内联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C innerSub(final R right, final String alias,
+                                               final Consumer<PlainSubForeignImplementor> onConsumer) {
+        return this.joinSub(right, alias, Join.INNER, onConsumer);
+    }
+
+    /**
+     * 内联查询
+     *
+     * @param right      {@link Query}
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C innerSub(final R right,
+                                               final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        return this.innerSub(right, null, onConsumer);
+    }
+
+    /**
+     * 内联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C innerSub(final R right, final String alias,
+                                               final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        return this.joinSub(right, alias, Join.INNER, onConsumer);
+    }
+
+    /**
+     * 关联查询
+     *
+     * @param right      {@link Query}
+     * @param join       {@link Join}
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C joinSub(final R right, final Join join,
+                                              final Consumer<PlainSubForeignImplementor> onConsumer) {
+        return this.joinSub(right, null, join, onConsumer);
+    }
+
+    /**
+     * 关联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param join       {@link Join}
+     * @param onConsumer {@link Consumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    @SuppressWarnings({"unchecked"})
+    default <S, R extends Query<S>> C joinSub(final R right, final String alias, final Join join,
+                                              final Consumer<PlainSubForeignImplementor> onConsumer) {
+        this.join(PlainSubForeignImplementor.from(this, right, alias, join, onConsumer));
+        return (C) this;
+    }
+
+    /**
+     * 关联查询
+     *
+     * @param right      {@link Query}
+     * @param join       {@link Join}
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    default <S, R extends Query<S>> C joinSub(final R right, final Join join,
+                                              final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        return this.joinSub(right, null, join, onConsumer);
+    }
+
+    /**
+     * 关联查询
+     *
+     * @param right      {@link Query}
+     * @param alias      别名
+     * @param join       {@link Join}
+     * @param onConsumer {@link BiConsumer}
+     * @param <S>        实体类型
+     * @param <R>        {@link Query}
+     * @return {@code this}
+     */
+    @SuppressWarnings({"unchecked"})
+    default <S, R extends Query<S>> C joinSub(final R right, final String alias, final Join join,
+                                              final BiConsumer<PlainSubForeignImplementor, C> onConsumer) {
+        this.join(PlainSubForeignImplementor.from((C) this, right, alias, join, onConsumer));
+        return (C) this;
+    }
+
+    // endregion
+
     // region SubQuery
 
     /**
