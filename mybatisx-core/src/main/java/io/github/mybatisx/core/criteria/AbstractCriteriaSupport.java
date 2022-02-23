@@ -155,11 +155,9 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
                 selects.addAll(selectables);
             }
         } else {
-            if (_$manager.hasSelect()) {
-                final List<Selectable> selectables = _$manager.getSelects();
-                if (Objects.isNotEmpty(selectables)) {
-                    selects.addAll(selectables);
-                }
+            final List<Selectable> selectables = _$manager.getSelects();
+            if (Objects.isNotEmpty(selectables)) {
+                selects.addAll(selectables);
             }
         }
         if (Objects.isNotEmpty(this.associations)) {
