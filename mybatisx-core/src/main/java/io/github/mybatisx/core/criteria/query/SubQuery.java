@@ -27,8 +27,9 @@ public interface SubQuery extends Query<Object> {
     /**
      * 获取{@link Query}对象
      *
+     * @param <S> 实体类型
      * @return {@link Query}
      */
-    Query<?> getOuterQuery();
+    <S> Query<S> getOuterQuery();
 
 }

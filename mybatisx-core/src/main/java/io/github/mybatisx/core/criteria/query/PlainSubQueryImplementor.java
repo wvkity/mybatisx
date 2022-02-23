@@ -60,11 +60,6 @@ public class PlainSubQueryImplementor extends AbstractPlainSubQuery<PlainSubQuer
         return it;
     }
 
-    @Override
-    public Query<?> getOuterQuery() {
-        return this.outerQuery;
-    }
-
     ///// static methods /////
 
     /**

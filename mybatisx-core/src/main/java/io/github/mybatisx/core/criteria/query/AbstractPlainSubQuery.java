@@ -28,6 +28,12 @@ public abstract class AbstractPlainSubQuery<C extends PlainSubQuery<C>> extends 
         implements PlainSubQuery<C> {
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <S> Query<S> getOuterQuery() {
+        return (Query<S>) this.outerQuery;
+    }
+    
+    @Override
     public String getTableName(boolean jointAs) {
         return this.getTableName(this.outerQuery.getFragment(), jointAs);
     }

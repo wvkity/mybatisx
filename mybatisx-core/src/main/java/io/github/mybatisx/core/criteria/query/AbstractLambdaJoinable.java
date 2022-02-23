@@ -45,6 +45,12 @@ public abstract class AbstractLambdaJoinable<T, C extends LambdaJoinable<T, C>> 
     protected Join join;
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <S> Query<S> getLeft() {
+        return (Query<S>) this.reference;
+    }
+
+    @Override
     public C fetch() {
         return this.fetch(true);
     }
@@ -93,5 +99,5 @@ public abstract class AbstractLambdaJoinable<T, C extends LambdaJoinable<T, C>> 
     public C onWith(String leftProperty, String rightColumn) {
         return this.joinableConditionAccept(this, leftProperty, true, this.reference, rightColumn, false);
     }
-    
+
 }

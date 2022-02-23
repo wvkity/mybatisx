@@ -45,6 +45,12 @@ public abstract class AbstractPlainJoinable<T, C extends PlainJoinable<T, C>> ex
     protected Join join;
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <S> Query<S> getLeft() {
+        return (Query<S>) this.reference;
+    }
+
+    @Override
     public C fetch() {
         return this.fetch(true);
     }
@@ -98,5 +104,5 @@ public abstract class AbstractPlainJoinable<T, C extends PlainJoinable<T, C>> ex
     public C colOnWith(String leftColumn, String rightProperty) {
         return this.joinableConditionAccept(this, leftColumn, false, this.reference, rightProperty, true);
     }
-    
+
 }

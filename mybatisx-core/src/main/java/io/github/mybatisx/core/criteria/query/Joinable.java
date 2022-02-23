@@ -29,6 +29,14 @@ import io.github.mybatisx.core.property.Property;
 public interface Joinable<T> extends Query<T> {
 
     /**
+     * 获取{@link Query}对象
+     *
+     * @param <S> 实体类型
+     * @return {@link Query}
+     */
+    <S> Query<S> getLeft();
+
+    /**
      * 获取联表方式
      *
      * @return {@link Join}

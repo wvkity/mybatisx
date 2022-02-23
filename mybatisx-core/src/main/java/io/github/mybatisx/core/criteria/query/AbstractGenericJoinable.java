@@ -45,6 +45,12 @@ public abstract class AbstractGenericJoinable<T, C extends GenericJoinable<T, C>
     protected Join join;
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <S> Query<S> getLeft() {
+        return (Query<S>) this.reference;
+    }
+    
+    @Override
     public C fetch() {
         return this.fetch(true);
     }
