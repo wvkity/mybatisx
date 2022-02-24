@@ -156,7 +156,7 @@ public class Table {
                 Function.identity())));
         this.columnMap =
                 ImmutableMap.copyOf(this.columns.stream().collect(Collectors.toMap((it) ->
-                        it.getColumn().toUpperCase(Locale.ENGLISH), Function.identity())));
+                        it.getOrgColumn().toUpperCase(Locale.ENGLISH), Function.identity())));
     }
 
     /**

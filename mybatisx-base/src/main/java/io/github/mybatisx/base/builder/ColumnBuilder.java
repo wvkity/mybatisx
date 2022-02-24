@@ -71,6 +71,10 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
     /**
      * 数据库字段
      */
+    private String orgColumn;
+    /**
+     * 数据库字段
+     */
     private String column;
     /**
      * JAVA类型
@@ -262,10 +266,10 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
         if (this.logicDelete) {
             logicDeleteMeta = new LogicDeleteMeta(true, this.logicDeleteInit, this.yet, this.already);
         }
-        return new Column(this.entity, this.property, this.handleColumn(), this.jdbcType, this.typeHandler,
-                this.primaryKey, this.blob, this.insertable, this.updatable, this.spliceJavaType, this.checkNull,
-                this.checkEmpty, this.version, this.multiTenant, this.logicDelete, this.autoAddedIsPrefix,
-                descriptor, uniqueMeta, auditMeta, versionMeta, logicDeleteMeta);
+        return new Column(this.entity, this.property, this.handleColumn(), this.orgColumn, this.jdbcType,
+                this.typeHandler, this.primaryKey, this.blob, this.insertable, this.updatable, this.spliceJavaType,
+                this.checkNull, this.checkEmpty, this.version, this.multiTenant, this.logicDelete,
+                this.autoAddedIsPrefix, descriptor, uniqueMeta, auditMeta, versionMeta, logicDeleteMeta);
     }
 
     private String handleColumn() {
@@ -285,6 +289,7 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
         } else {
             realColumn = this.column;
         }
+        this.orgColumn = realColumn;
         this.autoAddedIsPrefix = this.autoAddedIsPrefix && Objects.isAssignable(Boolean.class, this.javaType);
         if (ReservedKeywordRegistry.contains(realColumn)) {
             if (this.keywordConverter != null) {

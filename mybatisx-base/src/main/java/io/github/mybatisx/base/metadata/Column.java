@@ -46,9 +46,13 @@ public class Column {
     @EqualsAndHashCode.Include
     private final String property;
     /**
-     * 数据库字段
+     * 数据库字段(关键字格式化后的字段名)
      */
     private final String column;
+    /**
+     * 数据库字段
+     */
+    private final String orgColumn;
     /**
      * {@link JdbcType}类型
      */
@@ -122,7 +126,7 @@ public class Column {
      * 逻辑删除元数据
      */
     private final LogicDeleteMeta logicDeleteMeta;
-    
+
     public boolean isAuditInsertable() {
         return this.insertable && this.auditMeta != null && this.auditMeta.isInsertable();
     }
