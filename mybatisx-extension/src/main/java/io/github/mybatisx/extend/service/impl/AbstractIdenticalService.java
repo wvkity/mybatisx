@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.extend.service.impl;
 
-import io.github.mybatisx.base.mapper.IdenticalMapper;
-import io.github.mybatisx.extend.service.IdenticalService;
+import io.github.mybatisx.base.mapper.SelfsameMapper;
+import io.github.mybatisx.extend.service.SelfsameService;
 
 import java.io.Serializable;
 
@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public abstract class AbstractIdenticalService<M extends IdenticalMapper<T, ID>, T, ID extends Serializable> extends
-        AbstractBaseService<M, T, T, ID> implements IdenticalService<M, T, ID> {
+public abstract class AbstractIdenticalService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends
+        AbstractBaseService<M, T, T, ID> implements SelfsameService<M, T, ID> {
 
 }

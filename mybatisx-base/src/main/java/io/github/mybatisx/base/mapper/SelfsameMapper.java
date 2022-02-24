@@ -28,6 +28,6 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface IdenticalMapper<T, ID extends Serializable> extends BaseMapper<T, T, ID> {
+public interface SelfsameMapper<T, ID extends Serializable> extends BaseMapper<T, T, ID> {
 
 }

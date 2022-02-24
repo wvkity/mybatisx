@@ -21,7 +21,7 @@ import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.mapper.EasilyMapper;
-import io.github.mybatisx.base.mapper.IdenticalMapper;
+import io.github.mybatisx.base.mapper.SelfsameMapper;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
@@ -126,7 +126,7 @@ public abstract class AbstractInjector implements Injector {
      * @return 返回值类型
      */
     protected Class<?> getReturnType(final Class<?>[] classes, final Class<?> mapperInterface) {
-        return (Objects.isAssignable(IdenticalMapper.class, mapperInterface) || Objects.isAssignable(EasilyMapper.class,
+        return (Objects.isAssignable(SelfsameMapper.class, mapperInterface) || Objects.isAssignable(EasilyMapper.class,
                 mapperInterface)) ? classes[0] : classes[1];
     }
 
