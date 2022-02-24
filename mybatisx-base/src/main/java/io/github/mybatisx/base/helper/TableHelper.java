@@ -72,7 +72,7 @@ public final class TableHelper {
             final String entityName = Reflections.getRealClass(entityClass).getName();
             final Table oldTable = TABLE_MAPPED_CACHE.get(entityName);
             if (Objects.isNull(oldTable)) {
-                log.info("Parsing the entity class corresponding table mapping information: {}", entityName);
+                log.debug("Parsing the entity class corresponding table mapping information: {}", entityName);
                 final Configuration cfg = mba.getConfiguration();
                 final MyBatisGlobalConfig globalConfig = MyBatisGlobalConfigCache.getGlobalConfig(cfg);
                 final Table table = TableHelper.getEntityParser(globalConfig).parse(cfg, entityClass,
