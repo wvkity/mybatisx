@@ -139,9 +139,13 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
         } else {
             tableName = realPrefix + this.namingConverter.convert(this.entity.getSimpleName());
         }
-        final String realTableName;
-        if (Strings.isNotWhitespace(this.keywordFormatTemplate) && ReservedKeywordRegistry.contains(tableName)) {
-            realTableName = MessageFormat.format(this.keywordFormatTemplate, tableName);
+        String realTableName = null;
+        if (ReservedKeywordRegistry.contains(tableName)) {
+            if (this.keywordConverter != null) {
+                realTableName = this.keywordConverter.convert(this.entity, tableName, true);
+            } else if (Strings.isNotWhitespace(this.keywordFormatTemplate)) {
+                realTableName = MessageFormat.format(this.keywordFormatTemplate, tableName);
+            }
         } else {
             realTableName = tableName;
         }
@@ -157,7 +161,7 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
             for (ColumnBuilder it : this.columns) {
                 final Column column = it.build();
                 if (column.isPrimaryKey()) {
-                    if ( primaryKeyColumn == null || column.getUniqueMeta().isPriority()) {
+                    if (primaryKeyColumn == null || column.getUniqueMeta().isPriority()) {
                         primaryKeyColumn = column;
                     }
                     primaryKeySet.add(column);

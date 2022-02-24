@@ -16,6 +16,7 @@
 package io.github.mybatisx.base.builder;
 
 import io.github.mybatisx.annotation.NamingStrategy;
+import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.base.naming.NamingConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,9 +41,15 @@ public abstract class AbstractBuilder {
     @EqualsAndHashCode.Include
     protected Class<?> entity;
     /**
-     * 关键词格式化模板
+     * 关键字格式化模板
+     * <p/>
+     * 采用{@link java.text.MessageFormat}进行格式化
      */
     protected String keywordFormatTemplate;
+    /**
+     * 关键字转换器
+     */
+    protected KeywordConverter keywordConverter;
     /**
      * 命名策略
      */

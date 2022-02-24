@@ -23,6 +23,7 @@ import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyParser;
 import io.github.mybatisx.base.config.MatcherConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.matcher.ClassMatcher;
@@ -572,7 +573,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
         this.ifPresent(ac, AuditConfig::getAuditParser, AuditParser.class, ac::setAuditParser, () ->
                 DefaultAuditPropertyParser.of(this.globalConfig.getAudit().isAutoScan(),
                         this.globalConfig.getAudit().getAutoScanParser()));
-        
+
         // JdbcType自动映射
         final JdbcType jdbcType;
         if (this.globalConfig.isAutoMappingJdbcType()
@@ -581,6 +582,10 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
             JdbcTypeMappingRegistry.registry(boolean.class, jdbcType, true);
             JdbcTypeMappingRegistry.registry(Boolean.class, jdbcType, true);
         }
+
+        // 注入关键字转换器
+        this.ifPresent(KeywordConverter.class, this.globalConfig.getKeywordConverter(),
+                this.globalConfig::setKeywordConverter, null);
 
         // 缓存全局变量
         this.globalConfig.cacheSelf(targetConfiguration);

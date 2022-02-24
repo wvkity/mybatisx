@@ -286,8 +286,12 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
             realColumn = this.column;
         }
         this.autoAddedIsPrefix = this.autoAddedIsPrefix && Objects.isAssignable(Boolean.class, this.javaType);
-        if (Strings.isNotWhitespace(this.keywordFormatTemplate) && ReservedKeywordRegistry.contains(realColumn)) {
-            return MessageFormat.format(this.keywordFormatTemplate, realColumn);
+        if (ReservedKeywordRegistry.contains(realColumn)) {
+            if (this.keywordConverter != null) {
+                return this.keywordConverter.convert(this.entity, realColumn, false);
+            } else if (Strings.isNotWhitespace(this.keywordFormatTemplate)) {
+                return MessageFormat.format(this.keywordFormatTemplate, realColumn);
+            }
         }
         return realColumn;
     }

@@ -112,9 +112,10 @@ public class DefaultEntityParser implements EntityParser {
     public Table parse(Configuration cfg, Class<?> entityClass, String namespace) {
         final MyBatisGlobalConfig mgc = MyBatisGlobalConfigCache.getGlobalConfig(cfg);
         final TableBuilder tb = TableBuilder.create();
-        tb.entity(entityClass);
+        tb.entity(entityClass)
+                .keywordFormatTemplate(mgc.getKeywordFormatTemplate())
+                .keywordConverter(mgc.getKeywordConverter());
         tb.namespace(namespace);
-        tb.keywordFormatTemplate(mgc.getKeywordFormatTemplate());
         this.initConfig(mgc);
         // 反射器
         final MatcherConfig mc = mgc.getMatchers();
@@ -218,7 +219,10 @@ public class DefaultEntityParser implements EntityParser {
             final boolean autoAddedIsPrefix = mgc.isAutoAddedIsPrefixForBooleanProp();
             fields.forEach(it -> {
                 final ColumnBuilder cb = ColumnBuilder.create();
-                cb.entity(entityClass).naming(naming).namingConverter(converter);
+                cb.entity(entityClass)
+                        .naming(naming)
+                        .namingConverter(converter)
+                        .keywordConverter(tb.keywordConverter());
                 cb.keywordFormatTemplate(mgc.getKeywordFormatTemplate());
                 cb.property(it.getName()).autoAddedIsPrefix(autoAddedIsPrefix);
                 cb.field(it.getField()).javaType(it.getJavaType());

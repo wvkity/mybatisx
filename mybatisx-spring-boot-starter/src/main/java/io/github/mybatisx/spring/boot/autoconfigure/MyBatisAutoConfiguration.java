@@ -22,6 +22,7 @@ import io.github.mybatisx.base.config.MyBatisGlobalConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
 import io.github.mybatisx.base.config.OptimisticLockConfig;
 import io.github.mybatisx.base.config.PrimaryKeyConfig;
+import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.session.MyBatisConfiguration;
 import io.github.mybatisx.spring.MyBatisSqlSessionFactoryBean;
 import org.apache.ibatis.annotations.Mapper;
@@ -202,6 +203,8 @@ public class MyBatisAutoConfiguration implements InitializingBean {
                 this.properties::getLogicDelete);
         // 注入审计配置
         this.ifPresent(AuditConfig.class, mgc.getAudit(), mgc::setAudit, this.properties::getAudit);
+        // 注入关键字转换器
+        this.ifPresent(KeywordConverter.class, mgc.getKeywordConverter(), mgc::setKeywordConverter, null);
         return factory.getObject();
     }
 

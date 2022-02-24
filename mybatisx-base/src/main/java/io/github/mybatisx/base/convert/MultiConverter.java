@@ -16,12 +16,25 @@
 package io.github.mybatisx.base.convert;
 
 /**
- * 关键字转换器
+ * 多参数转换器
  *
+ * @param <F> 参数一类型
+ * @param <S> 参数二类型
+ * @param <T> 参数三类型
+ * @param <U> 返回值类型
  * @author wvkity
  * @created 2022/2/24
  * @since 1.0.0
  */
-public interface KeywordConverter extends MultiConverter<Class<?>, String, Boolean, String> {
+public interface MultiConverter<F, S, T, U> {
 
+    /**
+     * 转换
+     *
+     * @param p1 参数1
+     * @param p2 参数2
+     * @param p3 参数3
+     * @return 转换后的值
+     */
+    U convert(F p1, S p2, T p3);
 }

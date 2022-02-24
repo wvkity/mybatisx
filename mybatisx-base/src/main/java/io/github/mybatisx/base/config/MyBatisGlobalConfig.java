@@ -17,6 +17,7 @@ package io.github.mybatisx.base.config;
 
 import io.github.mybatisx.annotation.NamingStrategy;
 import io.github.mybatisx.auditable.config.AuditConfig;
+import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.mapper.BaseMapper;
@@ -92,9 +93,15 @@ public class MyBatisGlobalConfig {
      */
     private boolean jpaSupport;
     /**
-     * 关键词格式化模板
+     * 关键字格式化模板
+     * <p/>
+     * 采用{@link java.text.MessageFormat}进行格式化
      */
     private String keywordFormatTemplate;
+    /**
+     * 关键字转换器
+     */
+    private KeywordConverter keywordConverter;
     /**
      * 表名前缀
      */
