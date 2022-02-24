@@ -48,8 +48,17 @@ import java.util.Locale;
 public abstract class AbstractMappedMethod implements MappedMethod {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractMappedMethod.class);
+    /**
+     * {@link MapperBuilderAssistant}对象
+     */
     protected MapperBuilderAssistant mba;
+    /**
+     * {@link Configuration}对象
+     */
     protected Configuration cfg;
+    /**
+     * {@link LanguageDriver}对象
+     */
     protected LanguageDriver driver;
 
     @Override

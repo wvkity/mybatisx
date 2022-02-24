@@ -21,12 +21,12 @@ import io.github.mybatisx.support.mapping.SqlSupplier;
 /**
  * 抽象更新方法
  *
- * @param <T> {@link SqlSupplier}类型
+ * @param <S> {@link SqlSupplier}类型
  * @author wvkity
  * @created 2022/1/2
  * @since 1.0.0
  */
-public abstract class AbstractUpdateMethod<T extends SqlSupplier> extends AbstractInjectMethod<T> {
+public abstract class AbstractUpdateMethod<S extends SqlSupplier> extends AbstractInjectMethod<S> {
 
     @Override
     public void injectMappedStatement(Table table, Class<?> mapperInterface, Class<?> returnType) {

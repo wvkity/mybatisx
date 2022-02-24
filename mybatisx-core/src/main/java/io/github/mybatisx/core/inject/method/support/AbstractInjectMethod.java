@@ -43,13 +43,13 @@ import java.util.Optional;
 /**
  * 抽象注入方法
  *
- * @param <T> SQL供应器
+ * @param <S> {@link SqlSupplier}类型
  * @author wvkity
  * @created 2022/1/1
  * @since 1.0.0
  */
-public abstract class AbstractInjectMethod<T extends SqlSupplier> extends AbstractMappedMethod implements
-        SupplierBuilder<T> {
+public abstract class AbstractInjectMethod<S extends SqlSupplier> extends AbstractMappedMethod implements
+        SupplierBuilder<S> {
 
     /**
      * 添加{@link MappedStatement}对象到容器中(保持操作)
@@ -165,11 +165,11 @@ public abstract class AbstractInjectMethod<T extends SqlSupplier> extends Abstra
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public T build(Object... args) {
+    public S build(Object... args) {
         if (this.cfg instanceof MyBatisConfiguration) {
-            return (T) ((MyBatisConfiguration) this.cfg).getSupplier(getClass(), args);
+            return (S) ((MyBatisConfiguration) this.cfg).getSupplier(getClass(), args);
         }
-        return (T) SupplierWeakCache.newInstance(this.getClass(), args);
+        return (S) SupplierWeakCache.newInstance(this.getClass(), args);
     }
 
 }
