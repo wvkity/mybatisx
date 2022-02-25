@@ -52,6 +52,7 @@ public class MyBatisMapResultHandler<K, V> extends DefaultMapResultHandler<K, V>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void handleResult(ResultContext<? extends V> context) {
         final V value = context.getResultObject();
         final MetaObject mo = MetaObject.forObject(value, objectFactory, objectWrapperFactory, reflectorFactory);
