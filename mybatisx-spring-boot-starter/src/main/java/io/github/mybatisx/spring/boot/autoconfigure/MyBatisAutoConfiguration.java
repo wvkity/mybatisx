@@ -19,7 +19,7 @@ import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.base.config.LogicDeleteConfig;
 import io.github.mybatisx.base.config.MatcherConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.config.OptimisticLockConfig;
 import io.github.mybatisx.base.config.PrimaryKeyConfig;
 import io.github.mybatisx.base.convert.KeywordConverter;
@@ -189,7 +189,7 @@ public class MyBatisAutoConfiguration implements InitializingBean {
         factory.setContext(this.context);
         // 注入全局配置对象
         this.ifPresent(MyBatisGlobalConfig.class, this.properties.getGlobalConfig(), factory::setGlobalConfig,
-                MyBatisGlobalConfigCache::newInstance);
+                MyBatisGlobalConfigContext::newInstance);
         final MyBatisGlobalConfig mgc = factory.getGlobalConfig();
         // 注入匹配器配置
         this.ifPresent(MatcherConfig.class, mgc.getMatchers(), mgc::setMatchers, this.properties::getMatchers);

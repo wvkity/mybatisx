@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.builder.annotation;
 
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import org.apache.ibatis.annotations.Arg;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.CacheNamespaceRef;
@@ -149,7 +149,7 @@ public class MyBatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
                 }
             }
             // CURD方法注入
-            MyBatisGlobalConfigCache.getInjector(this.configuration).inject(this.assistant, this.type);
+            MyBatisGlobalConfigContext.getInjector(this.configuration).inject(this.assistant, this.type);
         }
         parsePendingMethods();
     }
@@ -365,7 +365,7 @@ public class MyBatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
             
             // 记录是否为自定义结果集
             if (isSelect) {
-                MyBatisGlobalConfigCache.registryEmbeddableMethod(mappedStatementId, this.type, method);
+                MyBatisGlobalConfigContext.registryEmbeddableMethod(mappedStatementId, this.type, method);
             }
             
             assistant.addMappedStatement(

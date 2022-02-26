@@ -177,6 +177,6 @@ public class MyBatisGlobalConfig {
      * @param cfg {@link Configuration}
      */
     public void cacheSelf(final Configuration cfg) {
-        Optional.ofNullable(cfg).ifPresent(it -> MyBatisGlobalConfigCache.cacheMyBatisGlobalConfig(cfg, this));
+        Optional.ofNullable(cfg).ifPresent(it -> MyBatisGlobalConfigContext.cacheMyBatisGlobalConfig(cfg, this));
     }
 }

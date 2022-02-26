@@ -43,7 +43,7 @@ import io.github.mybatisx.base.builder.TableBuilder;
 import io.github.mybatisx.base.config.LogicDeleteConfig;
 import io.github.mybatisx.base.config.MatcherConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.config.OptimisticLockConfig;
 import io.github.mybatisx.base.config.PrimaryKeyConfig;
 import io.github.mybatisx.base.constant.Jpa;
@@ -110,7 +110,7 @@ public class DefaultEntityParser implements EntityParser {
 
     @Override
     public Table parse(Configuration cfg, Class<?> entityClass, String namespace) {
-        final MyBatisGlobalConfig mgc = MyBatisGlobalConfigCache.getGlobalConfig(cfg);
+        final MyBatisGlobalConfig mgc = MyBatisGlobalConfigContext.getGlobalConfig(cfg);
         final TableBuilder tb = TableBuilder.create();
         tb.entity(entityClass)
                 .keywordFormatTemplate(mgc.getKeywordFormatTemplate())

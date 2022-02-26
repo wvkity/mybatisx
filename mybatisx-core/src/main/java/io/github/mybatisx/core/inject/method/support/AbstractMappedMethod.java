@@ -16,7 +16,7 @@
 package io.github.mybatisx.core.inject.method.support;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
@@ -112,7 +112,7 @@ public abstract class AbstractMappedMethod implements MappedMethod {
                 if (Objects.isNotEmpty(methods)) {
                     for (Method method : methods) {
                         if (method.getName().equals(realMsName)) {
-                            MyBatisGlobalConfigCache.registryEmbeddableMethod(msId, mapperInterface, method);
+                            MyBatisGlobalConfigContext.registryEmbeddableMethod(msId, mapperInterface, method);
                         }
                     }
                 }
@@ -242,7 +242,7 @@ public abstract class AbstractMappedMethod implements MappedMethod {
      * @return 全局配置对象
      */
     protected MyBatisGlobalConfig getGlobalConfig() {
-        return MyBatisGlobalConfigCache.getGlobalConfig(this.cfg);
+        return MyBatisGlobalConfigContext.getGlobalConfig(this.cfg);
     }
 
     /**

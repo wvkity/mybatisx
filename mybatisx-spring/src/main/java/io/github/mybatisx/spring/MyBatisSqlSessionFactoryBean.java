@@ -22,7 +22,7 @@ import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyAutoScanParser;
 import io.github.mybatisx.auditable.parsing.DefaultAuditPropertyParser;
 import io.github.mybatisx.base.config.MatcherConfig;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
@@ -495,7 +495,7 @@ public class MyBatisSqlSessionFactoryBean implements FactoryBean<SqlSessionFacto
 
         // 注入全局配置
         this.ifPresent(MyBatisGlobalConfig.class, this.globalConfig, this::setGlobalConfig,
-                MyBatisGlobalConfigCache::newInstance);
+                MyBatisGlobalConfigContext::newInstance);
 
         final MyBatisConfiguration targetConfiguration;
 

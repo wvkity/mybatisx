@@ -17,7 +17,7 @@ package io.github.mybatisx.core.inject.method.support;
 
 import io.github.mybatisx.annotation.ExecuteType;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Descriptor;
@@ -140,7 +140,7 @@ public abstract class AbstractInjectMethod<S extends SqlSupplier> extends Abstra
                     kg = new Jdbc3KeyGenerator();
                     this.cfg.setUseGeneratedKeys(true);
                 } else if (Strings.isNotWhitespace((sequence = unique.getSequence()))) {
-                    final MyBatisGlobalConfig mgc = MyBatisGlobalConfigCache.getGlobalConfig(this.cfg);
+                    final MyBatisGlobalConfig mgc = MyBatisGlobalConfigContext.getGlobalConfig(this.cfg);
                     final SequenceGenerator sg;
                     if (mgc != null && (Objects.nonNull((sg = mgc.getSequenceGenerator())))) {
                         final Descriptor descriptor = id.getDescriptor();

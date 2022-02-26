@@ -17,7 +17,7 @@ package io.github.mybatisx.base.helper;
 
 import com.google.common.collect.ImmutableList;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
@@ -74,7 +74,7 @@ public final class TableHelper {
             if (Objects.isNull(oldTable)) {
                 log.debug("Parsing the entity class corresponding table mapping information: {}", entityName);
                 final Configuration cfg = mba.getConfiguration();
-                final MyBatisGlobalConfig globalConfig = MyBatisGlobalConfigCache.getGlobalConfig(cfg);
+                final MyBatisGlobalConfig globalConfig = MyBatisGlobalConfigContext.getGlobalConfig(cfg);
                 final Table table = TableHelper.getEntityParser(globalConfig).parse(cfg, entityClass,
                         mba.getCurrentNamespace());
                 if (Objects.nonNull(table) && !TABLE_MAPPED_CACHE.containsKey(entityName)) {

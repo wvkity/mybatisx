@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.executor.resultset;
 
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.embedded.EmbeddableResult;
 import org.apache.ibatis.annotations.AutomapConstructor;
@@ -145,7 +145,7 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
         this.resultHandler = resultHandler;
         final Optional<EmbeddableResult> optional = this.erOptional();
         this.embeddedMapType = optional.map(EmbeddableResult::getMapType).orElse(null);
-        if (optional.isPresent() && MyBatisGlobalConfigCache.isEmbeddableMethod(mappedStatement.getId())) {
+        if (optional.isPresent() && MyBatisGlobalConfigContext.isEmbeddableMethod(mappedStatement.getId())) {
             final EmbeddableResult er = optional.get();
             this.embeddedResultType = er.getReturnType();
             this.embeddedResultMap = er.getResultMap();

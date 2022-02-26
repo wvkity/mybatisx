@@ -17,7 +17,7 @@ package io.github.mybatisx.core.inject;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.base.config.MyBatisGlobalConfig;
-import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
 import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.mapper.EasilyMapper;
@@ -104,13 +104,13 @@ public abstract class AbstractInjector implements Injector {
     @Override
     public void inject(MapperBuilderAssistant mba, Class<?> mapperInterface) {
         final Configuration cfg = mba.getConfiguration();
-        final MyBatisGlobalConfig mgc = MyBatisGlobalConfigCache.getGlobalConfig(cfg);
+        final MyBatisGlobalConfig mgc = MyBatisGlobalConfigContext.getGlobalConfig(cfg);
         if (Objects.isAssignable(mgc.getInjectMapperClass(), mapperInterface)) {
             final Class<?>[] genericTypes = this.getGenericTypes(mapperInterface);
             if (Objects.isNotEmpty(genericTypes)) {
                 final Class<?> entityClass = genericTypes[0];
                 Optional.ofNullable(entityClass).ifPresent(it -> {
-                    if (MyBatisGlobalConfigCache.registryInterfaceIfNotExists(cfg, mapperInterface)) {
+                    if (MyBatisGlobalConfigContext.registryInterfaceIfNotExists(cfg, mapperInterface)) {
                         final Table table = TableHelper.parse(mba, entityClass);
                         final Collection<MappedMethod> methods = this.getMappedMethods(table, mapperInterface);
                         if (Objects.isNotEmpty(methods)) {

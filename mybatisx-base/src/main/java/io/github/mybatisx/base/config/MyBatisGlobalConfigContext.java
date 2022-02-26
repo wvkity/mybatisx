@@ -33,15 +33,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
- * MyBatisX全局配置缓存
+ * MyBatisX全局配置上下文
  *
  * @author wvkity
  * @created 2021/12/25
  * @since 1.0.0
  */
-public class MyBatisGlobalConfigCache {
+public class MyBatisGlobalConfigContext {
 
-    private MyBatisGlobalConfigCache() {
+    private MyBatisGlobalConfigContext() {
     }
 
     /**
