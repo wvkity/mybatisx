@@ -27,6 +27,11 @@ import io.github.mybatisx.lang.Strings;
 public interface Constants {
 
     /**
+     * 存在标识值
+     */
+    int EXISTS = 1;
+
+    /**
      * 空字符串
      */
     String EMPTY = "";
@@ -54,6 +59,11 @@ public interface Constants {
      * 主键参数名
      */
     String PARAM_ID = "id";
+
+    /**
+     * 主键列表
+     */
+    String PARAM_ID_LIST = "idList";
 
     /**
      * 实体参数名
