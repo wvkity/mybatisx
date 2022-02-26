@@ -15,12 +15,18 @@
  */
 package io.github.mybatisx.extend.service.impl;
 
+import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.mapper.BaseMapper;
+import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.extend.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * MyBatisX抽象通用Service接口
@@ -78,6 +84,91 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     }
 
     @Override
+    public boolean existsById(ID id) {
+        return this.mapper.existsById(id) == Constants.EXISTS;
+    }
+
+    @Override
+    public boolean exists(T entity) {
+        return this.mapper.existsByEntity(entity);
+    }
+
+    @Override
+    public boolean exists(Query<T> query) {
+        return this.mapper.existsByCriteria(query);
+    }
+
+    @Override
+    public long selectTotal() {
+        return this.mapper.selectTotal();
+    }
+
+    @Override
+    public long selectCount(T entity) {
+        return this.mapper.selectCountByEntity(entity);
+    }
+
+    @Override
+    public long selectCount(Query<T> query) {
+        return this.mapper.selectCountByCriteria(query);
+    }
+
+    @Override
+    public List<R> selectAll() {
+        return this.mapper.selectAll();
+    }
+
+    @Override
+    public Optional<R> selectOneById(ID id) {
+        return this.mapper.selectOneById(id);
+    }
+
+    @Override
+    public Optional<R> selectOneByEntity(T entity) {
+        return this.mapper.selectOneByEntity(entity);
+    }
+
+    @Override
+    public <K> Map<K, R> selectMap(T entity) {
+        return this.mapper.selectMapByEntity(entity);
+    }
+
+    @Override
+    public <K> Map<K, R> selectMap(Query<T> query) {
+        return this.mapper.selectMapByCriteria(query);
+    }
+
+    @Override
+    public <K, V> Map<K, V> selectCustomMap(Query<T> query) {
+        return this.mapper.selectCustomMap(query);
+    }
+
+    @Override
+    public List<R> selectList(Collection<ID> ids) {
+        return this.mapper.selectListByIds(ids);
+    }
+
+    @Override
+    public List<R> selectList(T entity) {
+        return this.mapper.selectListByEntity(entity);
+    }
+
+    @Override
+    public List<R> selectList(Query<T> query) {
+        return this.mapper.selectListByCriteria(query);
+    }
+
+    @Override
+    public List<Object> selectObjects(Query<T> query) {
+        return this.mapper.selectObjects(query);
+    }
+
+    @Override
+    public List<Object[]> selectArrays(Query<T> query) {
+        return this.mapper.selectArrays(query);
+    }
+
+    @Override
     public M getMapper() {
         return this.mapper;
     }
@@ -87,5 +178,5 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     public void setMapper(M mapper) {
         this.mapper = mapper;
     }
-    
+
 }
