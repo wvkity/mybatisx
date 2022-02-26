@@ -19,7 +19,8 @@ import java.util.Map;
 
 /**
  * 嵌入结果
- *
+ * <p/>
+ * resultMap > returnType
  * @author wvkity
  * @created 2022/1/16
  * @since 1.0.0
