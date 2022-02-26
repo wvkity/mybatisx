@@ -26,6 +26,8 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
+import io.github.mybatisx.core.inject.method.invoke.SelectCustomMap;
+import io.github.mybatisx.core.inject.method.invoke.SelectMapByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.Update;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithSpecial;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithSpecialExcNull;
@@ -83,16 +85,19 @@ public abstract class AbstractInjector implements Injector {
         final UpdateWithoutNull uwn = new UpdateWithoutNull();
         final UpdateWithSpecial uws = new UpdateWithSpecial();
         final UpdateWithSpecialExcNull uwe = new UpdateWithSpecialExcNull();
-        
+        // select方法映射
+        final SelectCustomMap scm = new SelectCustomMap();
+        final SelectMapByCriteria smb = new SelectMapByCriteria();
+
         ALL_MAPPED_METHOD_CACHE.put(InjectType.INSERT, ImmutableSet.of(
                 insert, iwn
         ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
-                update, uwn, uws, uwe
+                update, uwn, uws, uwe, scm, smb
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, iwn, update, uwn, uws, uwe
+                insert, iwn, update, uwn, uws, uwe, scm, smb
         );
     }
 
