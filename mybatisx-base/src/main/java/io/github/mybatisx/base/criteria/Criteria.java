@@ -43,7 +43,7 @@ public interface Criteria<T> extends Fragment {
      * @return 表别名
      */
     String as();
-    
+
     /**
      * 获取引用属性
      *
@@ -108,6 +108,20 @@ public interface Criteria<T> extends Fragment {
     LogicSymbol slot();
 
     /**
+     * 检查是否存在条件
+     *
+     * @return boolean
+     */
+    boolean isHasCondition();
+
+    /**
+     * 是否存在片段(where/group/having/order/)
+     *
+     * @return boolean
+     */
+    boolean isHasFragment();
+
+    /**
      * 获取条件片段
      *
      * @return 条件片段
@@ -129,15 +143,6 @@ public interface Criteria<T> extends Fragment {
      */
     default String completeString() {
         return null;
-    }
-
-    /**
-     * 是否存在片段(where/group/having/order/)
-     *
-     * @return boolean
-     */
-    default boolean isHasFragment() {
-        return false;
     }
 
 }
