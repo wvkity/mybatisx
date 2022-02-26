@@ -36,6 +36,7 @@ import org.apache.ibatis.session.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 /**
@@ -104,6 +105,21 @@ public abstract class AbstractMappedMethod implements MappedMethod {
             return;
         }
         final boolean isSelect = command == SqlCommandType.SELECT;
+        if (isSelect) {
+            // 记录是否为自定义结果集
+            try {
+                final Method[] methods = mapperInterface.getMethods();
+                if (Objects.isNotEmpty(methods)) {
+                    for (Method method : methods) {
+                        if (method.getName().equals(realMsName)) {
+                            MyBatisGlobalConfigCache.registryEmbeddableMethod(msId, mapperInterface, method);
+                        }
+                    }
+                }
+            } catch (Throwable e) {
+                // ignore
+            }
+        }
         this.mba.addMappedStatement(realMsName, source, StatementType.PREPARED, command, null, null, null,
                 parameterType, resultMap, returnType, null, !isSelect, isSelect, false, keyGenerator, property,
                 column, this.cfg.getDatabaseId(), this.driver, null);
