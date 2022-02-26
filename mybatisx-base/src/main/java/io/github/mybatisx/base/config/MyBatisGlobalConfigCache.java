@@ -16,13 +16,16 @@
 package io.github.mybatisx.base.config;
 
 import io.github.mybatisx.annotation.NamingStrategy;
+import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.inject.Injector;
+import io.github.mybatisx.embedded.Embeddable;
 import io.github.mybatisx.lang.Objects;
 import org.apache.ibatis.session.Configuration;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -53,6 +56,10 @@ public class MyBatisGlobalConfigCache {
      * 已注册Mapper接口缓存
      */
     private static final Map<String, Set<String>> MAPPER_INTERFACE_REGISTRY_CACHE = new ConcurrentHashMap<>();
+    /**
+     * 自定义返回值方法缓存
+     */
+    private static final Map<String, Boolean> EMBEDDABLE_METHOD_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 创建全局配置对象
@@ -139,6 +146,32 @@ public class MyBatisGlobalConfigCache {
         final String value = mapperInterface.getName();
         return Objects.computeIfAbsent(MAPPER_INTERFACE_REGISTRY_CACHE, key,
                 k -> new ConcurrentSkipListSet<>()).add(value);
+    }
+
+    /**
+     * 注册自定义返回值方法
+     *
+     * @param id     唯一标识
+     * @param type   Mapper接口
+     * @param method 方法
+     */
+    public static void registryEmbeddableMethod(final String id, final Class<?> type, final Method method) {
+        final String signature = type.getName() + SqlSymbol.DOT + method.getName();
+        if (!EMBEDDABLE_METHOD_CACHE.containsKey(id) && signature.equals(id)) {
+            if (method.isAnnotationPresent(Embeddable.class)) {
+                EMBEDDABLE_METHOD_CACHE.putIfAbsent(id, Boolean.TRUE);
+            }
+        }
+    }
+
+    /**
+     * 根据唯一标识检查是否为自定义返回方法
+     *
+     * @param id 唯一标识
+     * @return boolean
+     */
+    public static boolean isEmbeddableMethod(final String id) {
+        return EMBEDDABLE_METHOD_CACHE.containsKey(id);
     }
 
 }

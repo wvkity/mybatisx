@@ -362,7 +362,12 @@ public class MyBatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
             } else if (isSelect) {
                 resultMapId = parseResultMap(method);
             }
-
+            
+            // 记录是否为自定义结果集
+            if (isSelect) {
+                MyBatisGlobalConfigCache.registryEmbeddableMethod(mappedStatementId, this.type, method);
+            }
+            
             assistant.addMappedStatement(
                     mappedStatementId,
                     sqlSource,
