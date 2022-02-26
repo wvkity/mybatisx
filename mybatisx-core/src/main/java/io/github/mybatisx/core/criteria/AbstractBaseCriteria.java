@@ -438,6 +438,16 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     }
 
     @Override
+    public boolean isHasCondition() {
+        return this.fragmentManager.hasCondition();
+    }
+
+    @Override
+    public boolean isHasFragment() {
+        return this.fragmentManager.hasFragment();
+    }
+
+    @Override
     public String getWhereString() {
         return this.sqlManager.getWhereString();
     }
