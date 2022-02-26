@@ -41,13 +41,19 @@ public class MyBatisMapResultHandler<K, V> extends DefaultMapResultHandler<K, V>
     private final ObjectWrapperFactory objectWrapperFactory;
     private final ReflectorFactory reflectorFactory;
 
-    @SuppressWarnings("unchecked")
-    public MyBatisMapResultHandler(String mapKey, ObjectFactory objectFactory, ObjectWrapperFactory objectWrapperFactory, ReflectorFactory reflectorFactory) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public MyBatisMapResultHandler(String mapKey, Class<? extends Map> returnType,
+                                   ObjectFactory objectFactory,
+                                   ObjectWrapperFactory objectWrapperFactory, ReflectorFactory reflectorFactory) {
         super(mapKey, objectFactory, objectWrapperFactory, reflectorFactory);
         this.objectFactory = objectFactory;
         this.objectWrapperFactory = objectWrapperFactory;
         this.reflectorFactory = reflectorFactory;
-        this.mappedResults = objectFactory.create(Map.class);
+        if (returnType != null) {
+            this.mappedResults = objectFactory.create(returnType);
+        } else {
+            this.mappedResults = objectFactory.create(Map.class);
+        }
         this.mapKey = mapKey;
     }
 
