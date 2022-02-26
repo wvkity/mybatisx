@@ -39,7 +39,7 @@ public interface LambdaQueryCriteria<T, C extends LambdaQueryCriteria<T, C>> ext
      * @param property {@link Property}
      * @return {@code this}
      */
-    C setMapKey(final Property<T, ?> property);
+    C mapKey(final Property<T, ?> property);
 
     /**
      * 分组

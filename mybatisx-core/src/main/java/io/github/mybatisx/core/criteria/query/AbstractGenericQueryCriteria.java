@@ -275,7 +275,7 @@ public abstract class AbstractGenericQueryCriteria<T, C extends GenericQueryCrit
     }
 
     @Override
-    public C setMapKey(Property<T, ?> property) {
+    public C mapKey(Property<T, ?> property) {
         //  noinspection DuplicatedCode
         if (property != null) {
             final String prop = this.convert(property);
