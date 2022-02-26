@@ -15,10 +15,17 @@
  */
 package io.github.mybatisx.binding;
 
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.embedded.EmbeddableResult;
+import io.github.mybatisx.embedded.ReturnsMap;
+import io.github.mybatisx.executor.result.MyBatisMapResultHandler;
+import io.github.mybatisx.lang.Strings;
 import org.apache.ibatis.annotations.Flush;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.cursor.Cursor;
+import org.apache.ibatis.executor.result.DefaultMapResultHandler;
+import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.StatementType;
@@ -54,7 +61,7 @@ public class MyBatisMapperMethod {
 
     public MyBatisMapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
         this.command = new SqlCommand(config, mapperInterface, method);
-        this.method = new MethodSignature(config, mapperInterface, method);
+        this.method = new MethodSignature(config, mapperInterface, method, this.command.getType());
     }
 
     public Object execute(SqlSession sqlSession, Object[] args) {
@@ -193,16 +200,80 @@ public class MyBatisMapperMethod {
         }
     }
 
+    @SuppressWarnings({"unchecked"})
     private <K, V> Map<K, V> executeForMap(SqlSession sqlSession, Object[] args) {
         Map<K, V> result;
         Object param = method.convertArgsToSqlCommandParam(args);
+        String mapKey = this.method.getMapKey();
+        Class<? extends Map<K, V>> mapType = null;
+        final EmbeddableResult er = this.getCustomResult(param);
+        if (er != null) {
+            if (Strings.isNotWhitespace(er.getMapKey())) {
+                // 覆盖@MapKey注解的值
+                mapKey = er.getMapKey();
+                mapType = (Class<? extends Map<K, V>>) er.getMapType();
+            }
+        }
+        if (mapType != null) {
+            return this.selectMap(sqlSession, param, mapKey, mapType, args);
+        }
         if (method.hasRowBounds()) {
             RowBounds rowBounds = method.extractRowBounds(args);
-            result = sqlSession.selectMap(command.getName(), param, method.getMapKey(), rowBounds);
+            result = sqlSession.selectMap(command.getName(), param, mapKey, rowBounds);
         } else {
-            result = sqlSession.selectMap(command.getName(), param, method.getMapKey());
+            result = sqlSession.selectMap(command.getName(), param, mapKey);
         }
         return result;
+    }
+
+    /**
+     * 获取自定义结果参数
+     *
+     * @param paramObject 参数
+     * @return {@link EmbeddableResult}
+     */
+    @SuppressWarnings("unchecked")
+    private EmbeddableResult getCustomResult(final Object paramObject) {
+        if (paramObject instanceof EmbeddableResult) {
+            return (EmbeddableResult) paramObject;
+        } else if (paramObject instanceof Map) {
+            final Map<String, Object> paramMap = (Map<String, Object>) paramObject;
+            if (paramMap.containsKey(Constants.PARAM_CRITERIA)) {
+                final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
+                if (criteriaObject instanceof EmbeddableResult) {
+                    return (EmbeddableResult) criteriaObject;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 查询
+     *
+     * @param sqlSession  {@link SqlSession}
+     * @param paramObject 参数
+     * @param mapKey      键
+     * @param mapType     {@link Map}类型
+     * @param args        参数列表
+     * @param <K>         键类型
+     * @param <V>         值类型
+     * @return {@link Map}
+     */
+    @SuppressWarnings({"rawtypes"})
+    private <K, V> Map<K, V> selectMap(final SqlSession sqlSession, final Object paramObject, final String mapKey,
+                                       final Class<? extends Map> mapType, final Object[] args) {
+        final RowBounds rowBounds = this.method.hasRowBounds() ? this.method.extractRowBounds(args) : RowBounds.DEFAULT;
+        final List<? extends V> list = sqlSession.selectList(this.command.getName(), paramObject, rowBounds);
+        final Configuration cfg = sqlSession.getConfiguration();
+        final DefaultMapResultHandler<K, V> mapResultHandler = new MyBatisMapResultHandler<>(mapKey, mapType,
+                cfg.getObjectFactory(), cfg.getObjectWrapperFactory(), cfg.getReflectorFactory());
+        final DefaultResultContext<V> context = new DefaultResultContext<>();
+        for (V o : list) {
+            context.nextResultObject(o);
+            mapResultHandler.handleResult(context);
+        }
+        return mapResultHandler.getMappedResults();
     }
 
     public static class ParamMap<V> extends HashMap<String, V> {
@@ -288,7 +359,8 @@ public class MyBatisMapperMethod {
         private final Integer rowBoundsIndex;
         private final ParamNameResolver paramNameResolver;
 
-        public MethodSignature(Configuration configuration, Class<?> mapperInterface, Method method) {
+        public MethodSignature(Configuration configuration, Class<?> mapperInterface, Method method,
+                               SqlCommandType commandType) {
             Type resolvedReturnType = TypeParameterResolver.resolveReturnType(method, mapperInterface);
             if (resolvedReturnType instanceof Class<?>) {
                 this.returnType = (Class<?>) resolvedReturnType;
@@ -302,7 +374,8 @@ public class MyBatisMapperMethod {
             this.returnsCursor = Cursor.class.equals(this.returnType);
             this.returnsOptional = Optional.class.equals(this.returnType);
             this.mapKey = getMapKey(method);
-            this.returnsMap = this.mapKey != null;
+            this.returnsMap =
+                    this.mapKey != null || (commandType == SqlCommandType.SELECT && method.isAnnotationPresent(ReturnsMap.class));
             this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
             this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);
             this.paramNameResolver = new ParamNameResolver(configuration, method);

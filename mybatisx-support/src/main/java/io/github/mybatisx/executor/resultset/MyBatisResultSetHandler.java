@@ -15,6 +15,9 @@
  */
 package io.github.mybatisx.executor.resultset;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfigCache;
+import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.embedded.EmbeddableResult;
 import org.apache.ibatis.annotations.AutomapConstructor;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.cache.CacheKey;
@@ -61,6 +64,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -70,6 +74,7 @@ import java.util.Set;
  * @created 2021/12/24
  * @since 1.0.0
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class MyBatisResultSetHandler extends DefaultResultSetHandler {
 
     private static final Object DEFERRED = new Object();
@@ -100,6 +105,11 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
     // temporary marking flag that indicate using constructor mapping (use field to reduce memory usage)
     private boolean useConstructorMappings;
 
+    // custom return value types: embeddedResultMap > embeddedResultType
+    private final String embeddedResultMap;
+    private final Class<?> embeddedResultType;
+    private final Class<? extends Map> embeddedMapType;
+
     private static class PendingRelation {
         public MetaObject metaObject;
         public ResultMapping propertyMapping;
@@ -119,8 +129,9 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
         }
     }
 
-    public MyBatisResultSetHandler(Executor executor, MappedStatement mappedStatement, ParameterHandler parameterHandler, ResultHandler<?> resultHandler, BoundSql boundSql,
-                                   RowBounds rowBounds) {
+    public MyBatisResultSetHandler(Executor executor, MappedStatement mappedStatement,
+                                   ParameterHandler parameterHandler, ResultHandler<?> resultHandler,
+                                   BoundSql boundSql, RowBounds rowBounds) {
         super(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
         this.executor = executor;
         this.configuration = mappedStatement.getConfiguration();
@@ -132,6 +143,38 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
         this.objectFactory = configuration.getObjectFactory();
         this.reflectorFactory = configuration.getReflectorFactory();
         this.resultHandler = resultHandler;
+        final Optional<EmbeddableResult> optional = this.erOptional();
+        this.embeddedMapType = optional.map(EmbeddableResult::getMapType).orElse(null);
+        if (optional.isPresent() && MyBatisGlobalConfigCache.isEmbeddableMethod(mappedStatement.getId())) {
+            final EmbeddableResult er = optional.get();
+            this.embeddedResultType = er.getReturnType();
+            this.embeddedResultMap = er.getResultMap();
+        } else {
+            this.embeddedResultType = null;
+            this.embeddedResultMap = null;
+        }
+    }
+
+    /**
+     * 获取{@link EmbeddableResult}对象
+     *
+     * @return {@link Optional}
+     */
+    @SuppressWarnings({"unchecked"})
+    private Optional<EmbeddableResult> erOptional() {
+        final Object paramObject = this.parameterHandler.getParameterObject();
+        if (paramObject instanceof EmbeddableResult) {
+            return Optional.of((EmbeddableResult) paramObject);
+        } else if (paramObject instanceof Map) {
+            final Map<String, Object> paramMap = (Map<String, Object>) paramObject;
+            if (paramMap.containsKey(Constants.PARAM_CRITERIA)) {
+                final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
+                if (criteriaObject instanceof EmbeddableResult) {
+                    return Optional.of((EmbeddableResult) criteriaObject);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     //
@@ -188,16 +231,18 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
 
         int resultSetCount = 0;
         MyBatisResultSetWrapper rsw = getFirstResultSet(stmt);
-
-        List<ResultMap> resultMaps = mappedStatement.getResultMaps();
-        int resultMapCount = resultMaps.size();
-        validateResultMapsCount(rsw, resultMapCount);
-        while (rsw != null && resultMapCount > resultSetCount) {
-            ResultMap resultMap = resultMaps.get(resultSetCount);
-            handleResultSet(rsw, resultMap, multipleResults, null);
-            rsw = getNextResultSet(stmt);
-            cleanUpAfterHandlingResultSet();
-            resultSetCount++;
+        final ResultMap erm = Optional.ofNullable(this.embeddedResultMap).map(this.configuration::getResultMap).orElse(null);
+        if (erm != null) {
+            rsw = this.handleEmbeddedResultMap(rsw, erm, multipleResults, stmt);
+        } else {
+            List<ResultMap> resultMaps = mappedStatement.getResultMaps();
+            int resultMapCount = resultMaps.size();
+            validateResultMapsCount(rsw, resultMapCount);
+            while (rsw != null && resultMapCount > resultSetCount) {
+                ResultMap resultMap = resultMaps.get(resultSetCount);
+                rsw = this.handleEmbeddedResultMap(rsw, resultMap, multipleResults, stmt);
+                resultSetCount++;
+            }
         }
 
         String[] resultSets = mappedStatement.getResultSets();
@@ -216,6 +261,26 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
         }
 
         return collapseSingleResultList(multipleResults);
+    }
+
+    /**
+     * 处理自定义ResultMap结果集
+     *
+     * @param rsw             {@link MyBatisResultSetWrapper}
+     * @param resultMap       {@link ResultMap}
+     * @param multipleResults 多结果集
+     * @param stmt            {@link Statement}
+     * @return {@link MyBatisResultSetWrapper}
+     * @throws SQLException SQL异常
+     */
+    protected MyBatisResultSetWrapper handleEmbeddedResultMap(final MyBatisResultSetWrapper rsw,
+                                                              final ResultMap resultMap,
+                                                              final List<Object> multipleResults,
+                                                              final Statement stmt) throws SQLException {
+        this.handleResultSet(rsw, resultMap, multipleResults, null);
+        final MyBatisResultSetWrapper newRsw = getNextResultSet(stmt);
+        cleanUpAfterHandlingResultSet();
+        return newRsw;
     }
 
     @Override
@@ -617,7 +682,18 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
                                       List<Class<?>> constructorArgTypes,
                                       List<Object> constructorArgs, String columnPrefix)
             throws SQLException {
-        final Class<?> resultType = resultMap.getType();
+        // 覆盖返回值类型
+        final Class<?> resultType;
+        final Class<?> _$resultType = resultMap.getType();
+        if (this.embeddedResultType != null && !_$resultType.isArray() && _$resultType == Object.class) {
+            resultType = this.embeddedResultType;
+        } else {
+            if (Map.class.isAssignableFrom(_$resultType) && this.embeddedMapType != null) {
+                resultType = this.embeddedMapType;
+            } else {
+                resultType = _$resultType;
+            }
+        }
         final MetaClass metaType = MetaClass.forClass(resultType, reflectorFactory);
         final List<ResultMapping> constructorMappings = resultMap.getConstructorResultMappings();
         if (hasTypeHandlerForResultObject(rsw, resultType)) {
@@ -724,11 +800,36 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
             final List<ResultMapping> resultMappingList = resultMap.getResultMappings();
             final ResultMapping mapping = resultMappingList.get(0);
             columnName = prependPrefix(mapping.getColumn(), columnPrefix);
+        } else if (this.embeddedResultType != null && this.embeddedResultType.isArray()) {
+            return this.createArrayResultObject(rsw, this.embeddedResultType);
+        } else if (resultType.isArray()) {
+            return this.createArrayResultObject(rsw, resultType);
         } else {
             columnName = rsw.getColumnNames().get(0);
         }
         final TypeHandler<?> typeHandler = rsw.getTypeHandler(resultType, columnName);
         return typeHandler.getResult(rsw.getResultSet(), columnName);
+    }
+
+    /**
+     * 处理数组值
+     *
+     * @param rsw        {@link MyBatisResultSetWrapper}
+     * @param resultType 数组类型
+     * @return 数组
+     * @throws SQLException SQL异常
+     */
+    private Object[] createArrayResultObject(MyBatisResultSetWrapper rsw, final Class<?> resultType) throws SQLException {
+        final Class<?> propertyClass = resultType.getComponentType();
+        final List<String> columnNames = rsw.getColumnNames();
+        final int size = columnNames.size();
+        final Object[] values = new Object[size];
+        for (int i = 0; i < size; i++) {
+            final String colName = columnNames.get(i);
+            final TypeHandler<?> typeHandler = rsw.getTypeHandler(propertyClass, colName);
+            values[i] = typeHandler.getResult(rsw.getResultSet(), colName);
+        }
+        return values;
     }
 
     //
@@ -1161,6 +1262,17 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
     private boolean hasTypeHandlerForResultObject(MyBatisResultSetWrapper rsw, Class<?> resultType) {
         if (rsw.getColumnNames().size() == 1) {
             return typeHandlerRegistry.hasTypeHandler(resultType, rsw.getJdbcType(rsw.getColumnNames().get(0)));
+        } else if (this.embeddedResultType != null) {
+            // 处理检查是否为数组类型
+            if (resultType == Object.class || Map.class.isAssignableFrom(resultType)) {
+                if (this.embeddedResultType.isArray()) {
+                    return this.typeHandlerRegistry.hasTypeHandler(this.embeddedResultType.getComponentType());
+                } else {
+                    return this.typeHandlerRegistry.hasTypeHandler(this.embeddedResultType);
+                }
+            } else if (resultType.isArray()) {
+                return this.typeHandlerRegistry.hasTypeHandler(resultType.getComponentType());
+            }
         }
         return typeHandlerRegistry.hasTypeHandler(resultType);
     }
