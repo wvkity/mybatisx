@@ -39,22 +39,22 @@ public interface EmbeddableResult {
      * @param resultMap resultMap标识
      * @return {@code this}
      */
-    EmbeddableResult setResultMap(final String resultMap);
+    EmbeddableResult resultMap(final String resultMap);
 
     /**
      * 获取自定义返回值类型
      *
      * @return 返回值类型
      */
-    Class<?> getResultType();
+    Class<?> getReturnType();
 
     /**
      * 设置返回值类型
      *
-     * @param resultType 返回值类型
+     * @param returnType 返回值类型
      * @return {@code this}
      */
-    EmbeddableResult setResultType(final Class<?> resultType);
+    EmbeddableResult returnType(final Class<?> returnType);
 
     /**
      * 获取Map类型返回值指定的键
@@ -69,7 +69,7 @@ public interface EmbeddableResult {
      * @param mapKey 键
      * @return {@code this}
      */
-    EmbeddableResult setMapKey(final String mapKey);
+    EmbeddableResult mapKey(final String mapKey);
 
     /**
      * 获取Map实现类
@@ -86,6 +86,6 @@ public interface EmbeddableResult {
      * @return {@code this}
      */
     @SuppressWarnings({"rawtypes"})
-    EmbeddableResult setMapType(final Class<? extends Map> mapType);
+    EmbeddableResult mapType(final Class<? extends Map> mapType);
 
 }
