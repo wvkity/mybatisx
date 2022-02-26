@@ -168,7 +168,7 @@ public abstract class AbstractMappedMethod implements MappedMethod {
     protected void addSelectMappedStatement(final Class<?> mapperInterface, final String id, final SqlSource source,
                                             final Class<?> parameterType, final Class<?> returnType,
                                             final String resultMap) {
-        this.addMappedStatement(mapperInterface, id, source, SqlCommandType.INSERT, new NoKeyGenerator(), null, null,
+        this.addMappedStatement(mapperInterface, id, source, SqlCommandType.SELECT, new NoKeyGenerator(), null, null,
                 parameterType, returnType, resultMap);
     }
 
