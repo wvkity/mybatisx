@@ -41,6 +41,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,6 +243,12 @@ public class MyBatisMapperMethod {
                 final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
                 if (criteriaObject instanceof EmbeddableResult) {
                     return (EmbeddableResult) criteriaObject;
+                }
+            }
+            final Collection<Object> paramItems = paramMap.values();
+            for (Object it : paramItems) {
+                if (it instanceof EmbeddableResult) {
+                    return (EmbeddableResult) it;
                 }
             }
         }

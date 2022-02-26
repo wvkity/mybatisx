@@ -59,6 +59,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -171,6 +172,12 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
                 final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
                 if (criteriaObject instanceof EmbeddableResult) {
                     return Optional.of((EmbeddableResult) criteriaObject);
+                }
+            }
+            final Collection<Object> paramItems = paramMap.values();
+            for (Object it : paramItems) {
+                if (it instanceof EmbeddableResult) {
+                    return Optional.of((EmbeddableResult) it);
                 }
             }
         }
