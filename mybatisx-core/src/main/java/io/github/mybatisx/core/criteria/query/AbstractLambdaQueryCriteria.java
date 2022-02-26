@@ -284,7 +284,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
             } else {
                 final Column column = this.convert(this.convert(property));
                 if (column != null) {
-                    this.setMapKey(column.getColumn());
+                    this.setMapKey(column.getProperty());
                 }
             }
         }
