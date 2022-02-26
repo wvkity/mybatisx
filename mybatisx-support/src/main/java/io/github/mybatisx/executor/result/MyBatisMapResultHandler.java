@@ -61,10 +61,16 @@ public class MyBatisMapResultHandler<K, V> extends DefaultMapResultHandler<K, V>
     @SuppressWarnings("unchecked")
     public void handleResult(ResultContext<? extends V> context) {
         final V value = context.getResultObject();
-        final MetaObject mo = MetaObject.forObject(value, objectFactory, objectWrapperFactory, reflectorFactory);
-        // TODO is that assignment always true?
-        final K key = (K) mo.getValue(mapKey);
-        mappedResults.put(key, value);
+        if (value != null && value.getClass().isArray()) {
+            // 处理数组类型
+            final int index = Integer.parseInt(this.mapKey);
+            this.mappedResults.put((K) ((Object[]) value)[index], value);
+        } else {
+            final MetaObject mo = MetaObject.forObject(value, objectFactory, objectWrapperFactory, reflectorFactory);
+            // TODO is that assignment always true?
+            final K key = (K) mo.getValue(mapKey);
+            mappedResults.put(key, value);
+        }
     }
 
     @Override
