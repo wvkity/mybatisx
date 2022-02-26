@@ -109,7 +109,7 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
     /**
      * 返回值类型
      */
-    protected Class<?> resultType;
+    protected Class<?> returnType;
     /**
      * {@link Map}返回值键
      */

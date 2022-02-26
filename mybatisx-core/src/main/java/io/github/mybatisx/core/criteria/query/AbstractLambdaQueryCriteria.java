@@ -253,19 +253,19 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C setResultMap(String resultMap) {
+    public C resultMap(String resultMap) {
         this.resultMap = resultMap;
         return this.context;
     }
 
     @Override
-    public Class<?> getResultType() {
-        return this.resultType;
+    public Class<?> getReturnType() {
+        return this.returnType;
     }
 
     @Override
-    public C setResultType(Class<?> resultType) {
-        this.resultType = resultType;
+    public C returnType(Class<?> returnType) {
+        this.returnType = returnType;
         return this.context;
     }
 
@@ -280,11 +280,11 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
         if (property != null) {
             final String prop = this.convert(property);
             if (this.propertyAsAlias) {
-                this.setMapKey(prop);
+                this.mapKey(prop);
             } else {
                 final Column column = this.convert(this.convert(property));
                 if (column != null) {
-                    this.setMapKey(column.getProperty());
+                    this.mapKey(column.getProperty());
                 }
             }
         }
@@ -292,7 +292,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C setMapKey(String mapKey) {
+    public C mapKey(String mapKey) {
         this.mapKey = mapKey;
         return this.context;
     }
@@ -305,7 +305,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     @SuppressWarnings("rawtypes")
-    public C setMapType(Class<? extends Map> mapType) {
+    public C mapType(Class<? extends Map> mapType) {
         this.mapType = mapType;
         return this.context;
     }
