@@ -16,8 +16,8 @@
 package io.github.mybatisx.extend.service.impl;
 
 import io.github.mybatisx.base.constant.Constants;
-import io.github.mybatisx.base.mapper.BaseMapper;
 import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.mapper.BaseMapper;
 import io.github.mybatisx.extend.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

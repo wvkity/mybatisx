@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.mapper;
+package io.github.mybatisx.core.mapper;
 
 import java.io.Serializable;
 
 /**
  * MyBatisX通用Mapper接口
  * <p>
- * 实体/返回值一致
+ * 主键类型为Serializable
  *
- * @param <T>  实体类型
- * @param <ID> 主键类型
+ * @param <T> 实体类型
+ * @param <R> 返回值类型
  * @author wvkity
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface SelfsameMapper<T, ID extends Serializable> extends BaseMapper<T, T, ID> {
+public interface SerialMapper<T, R> extends BaseMapper<T, R, Serializable> {
 
 }

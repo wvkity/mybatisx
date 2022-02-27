@@ -13,19 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.mapper;
+package io.github.mybatisx.core.mapper;
 
 import java.io.Serializable;
 
 /**
- * MyBatisX删除操作接口
+ * MyBatisX通用Mapper接口
  *
  * @param <T>  实体类型
- * @param <ID> 主键类型
+ * @param <R>  返回值类型
+ * @param <ID> ID类型
  * @author wvkity
  * @created 2021/12/24
  * @since 1.0.0
  */
-interface DeleteMapper<T, ID extends Serializable> {
+public interface BaseMapper<T, R, ID extends Serializable> extends InsertMapper<T>, UpdateMapper<T>,
+        DeleteMapper<T, ID>, QueryMapper<T, R, ID> {
 
 }

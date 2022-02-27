@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.base.mapper;
+package io.github.mybatisx.core.mapper;
 
 import io.github.mybatisx.base.constant.Constants;
 import org.apache.ibatis.annotations.Param;

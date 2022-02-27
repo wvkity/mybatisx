@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.extend.service;
 
-import io.github.mybatisx.base.mapper.EasilyMapper;
+import io.github.mybatisx.core.mapper.EasilyMapper;
 
 /**
  * MyBatisX通用Service接口

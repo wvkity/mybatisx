@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.extend.service;
 
-import io.github.mybatisx.base.mapper.SelfsameMapper;
+import io.github.mybatisx.core.mapper.SelfsameMapper;
 
 import java.io.Serializable;
 

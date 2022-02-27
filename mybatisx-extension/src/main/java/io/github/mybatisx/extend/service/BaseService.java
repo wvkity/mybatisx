@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.extend.service;
 
-import io.github.mybatisx.base.mapper.BaseMapper;
+import io.github.mybatisx.core.mapper.BaseMapper;
 
 import java.io.Serializable;
 
