@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.binding;
 
-import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.embedded.EmbeddableResult;
+import io.github.mybatisx.embedded.EmbeddableUtil;
 import io.github.mybatisx.embedded.ReturnsMap;
 import io.github.mybatisx.executor.result.MyBatisMapResultHandler;
 import io.github.mybatisx.lang.Strings;
@@ -41,7 +41,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,8 +206,9 @@ public class MyBatisMapperMethod {
         Object param = method.convertArgsToSqlCommandParam(args);
         String mapKey = this.method.getMapKey();
         Class<? extends Map<K, V>> mapType = null;
-        final EmbeddableResult er = this.getCustomResult(param);
-        if (er != null) {
+        final Optional<EmbeddableResult> erOptional = EmbeddableUtil.optional(param);
+        if (erOptional.isPresent()) {
+            final EmbeddableResult er = erOptional.get();
             if (Strings.isNotWhitespace(er.getMapKey())) {
                 // 覆盖@MapKey注解的值
                 mapKey = er.getMapKey();
@@ -225,34 +225,6 @@ public class MyBatisMapperMethod {
             result = sqlSession.selectMap(command.getName(), param, mapKey);
         }
         return result;
-    }
-
-    /**
-     * 获取自定义结果参数
-     *
-     * @param paramObject 参数
-     * @return {@link EmbeddableResult}
-     */
-    @SuppressWarnings("unchecked")
-    private EmbeddableResult getCustomResult(final Object paramObject) {
-        if (paramObject instanceof EmbeddableResult) {
-            return (EmbeddableResult) paramObject;
-        } else if (paramObject instanceof Map) {
-            final Map<String, Object> paramMap = (Map<String, Object>) paramObject;
-            if (paramMap.containsKey(Constants.PARAM_CRITERIA)) {
-                final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
-                if (criteriaObject instanceof EmbeddableResult) {
-                    return (EmbeddableResult) criteriaObject;
-                }
-            }
-            final Collection<Object> paramItems = paramMap.values();
-            for (Object it : paramItems) {
-                if (it instanceof EmbeddableResult) {
-                    return (EmbeddableResult) it;
-                }
-            }
-        }
-        return null;
     }
 
     /**

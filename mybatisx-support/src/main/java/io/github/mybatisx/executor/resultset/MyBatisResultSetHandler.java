@@ -16,8 +16,8 @@
 package io.github.mybatisx.executor.resultset;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
-import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.embedded.EmbeddableResult;
+import io.github.mybatisx.embedded.EmbeddableUtil;
 import org.apache.ibatis.annotations.AutomapConstructor;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.cache.CacheKey;
@@ -59,7 +59,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -144,7 +143,7 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
         this.objectFactory = configuration.getObjectFactory();
         this.reflectorFactory = configuration.getReflectorFactory();
         this.resultHandler = resultHandler;
-        final Optional<EmbeddableResult> optional = this.erOptional();
+        final Optional<EmbeddableResult> optional = EmbeddableUtil.optional(this.parameterHandler.getParameterObject());
         this.embeddedMapType = optional.map(EmbeddableResult::getMapType).orElse(null);
         if (optional.isPresent() && MyBatisGlobalConfigContext.isEmbeddableMethod(mappedStatement.getId())) {
             final EmbeddableResult er = optional.get();
@@ -154,34 +153,6 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
             this.embeddedResultType = null;
             this.embeddedResultMap = null;
         }
-    }
-
-    /**
-     * 获取{@link EmbeddableResult}对象
-     *
-     * @return {@link Optional}
-     */
-    @SuppressWarnings({"unchecked"})
-    private Optional<EmbeddableResult> erOptional() {
-        final Object paramObject = this.parameterHandler.getParameterObject();
-        if (paramObject instanceof EmbeddableResult) {
-            return Optional.of((EmbeddableResult) paramObject);
-        } else if (paramObject instanceof Map) {
-            final Map<String, Object> paramMap = (Map<String, Object>) paramObject;
-            if (paramMap.containsKey(Constants.PARAM_CRITERIA)) {
-                final Object criteriaObject = paramMap.get(Constants.PARAM_CRITERIA);
-                if (criteriaObject instanceof EmbeddableResult) {
-                    return Optional.of((EmbeddableResult) criteriaObject);
-                }
-            }
-            final Collection<Object> paramItems = paramMap.values();
-            for (Object it : paramItems) {
-                if (it instanceof EmbeddableResult) {
-                    return Optional.of((EmbeddableResult) it);
-                }
-            }
-        }
-        return Optional.empty();
     }
 
     //
