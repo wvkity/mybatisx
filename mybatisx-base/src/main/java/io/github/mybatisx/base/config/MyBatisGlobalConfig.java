@@ -20,11 +20,10 @@ import io.github.mybatisx.auditable.config.AuditConfig;
 import io.github.mybatisx.base.convert.KeywordConverter;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.keygen.SequenceGenerator;
-import io.github.mybatisx.base.mapper.BaseMapper;
 import io.github.mybatisx.base.parsing.EntityParser;
 import io.github.mybatisx.base.type.JdbcTypeMappingRegistry;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.id.Sequence;
+import io.github.mybatisx.lang.Types;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -44,18 +43,17 @@ import java.util.Optional;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@SuppressWarnings({"rawtypes"})
 public class MyBatisGlobalConfig {
 
     /**
-     * 默认SQL注入Mapper基类
+     * 注入Mapper基类名
      */
-    private static Class<? extends BaseMapper> DEFAULT_INJECT_MAPPER_CLASS = BaseMapper.class;
+    private String injectMapperClassName = "io.github.mybatisx.core.mapper.BaseMapper";
     /**
-     * SQL注入Mapper基类
+     * 注入Mapper基类
      */
     @Getter(AccessLevel.NONE)
-    private Class<? extends BaseMapper> injectMapperClass = DEFAULT_INJECT_MAPPER_CLASS;
+    private Class<?> injectMapperClass;
     /**
      * 实体解析器
      */
@@ -168,7 +166,10 @@ public class MyBatisGlobalConfig {
     private AuditConfig audit;
 
     public Class<?> getInjectMapperClass() {
-        return Objects.ifNull(this.injectMapperClass, DEFAULT_INJECT_MAPPER_CLASS);
+        if (this.injectMapperClass == null) {
+            this.injectMapperClass = Types.loadClassIgnoreExp(this.injectMapperClassName);
+        }
+        return this.injectMapperClass;
     }
 
     /**
