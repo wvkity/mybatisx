@@ -15,13 +15,19 @@
  */
 package io.github.mybatisx.executor;
 
+import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
+import io.github.mybatisx.embedded.EmbeddableResult;
+import io.github.mybatisx.embedded.EmbeddableUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.BaseExecutor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
+
+import java.util.Optional;
 
 /**
  * 重写{@link BaseExecutor}
@@ -39,7 +45,18 @@ public abstract class AbstractMyBatisBaseExecutor extends BaseExecutor {
     @Override
     public CacheKey createCacheKey(MappedStatement ms, Object parameterObject,
                                    RowBounds rowBounds, BoundSql boundSql) {
-        return super.createCacheKey(ms, parameterObject, rowBounds, boundSql);
+        final CacheKey cacheKey = super.createCacheKey(ms, parameterObject, rowBounds, boundSql);
+        if (ms.getSqlCommandType() == SqlCommandType.SELECT && MyBatisGlobalConfigContext.isEmbeddableMethod(ms.getId())) {
+            final Optional<EmbeddableResult> optional = EmbeddableUtil.optional(parameterObject);
+            if (optional.isPresent()) {
+                final EmbeddableResult er = optional.get();
+                Optional.ofNullable(er.getResultMap()).ifPresent(cacheKey::update);
+                Optional.ofNullable(er.getReturnType()).ifPresent(cacheKey::update);
+                Optional.ofNullable(er.getMapKey()).ifPresent(cacheKey::update);
+                Optional.ofNullable(er.getMapType()).ifPresent(cacheKey::update);
+            }
+        }
+        return cacheKey;
     }
 
 }
