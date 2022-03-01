@@ -21,7 +21,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * {@link java.util.Map}返回值注解
+ * 返回{@link java.util.Map}值注解
  *
  * @author wvkity
  * @created 2022/2/25
@@ -29,6 +29,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ReturnsMap {
+public @interface ReturnMap {
 
 }
