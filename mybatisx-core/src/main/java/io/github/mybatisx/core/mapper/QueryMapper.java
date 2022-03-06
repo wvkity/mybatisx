@@ -18,7 +18,7 @@ package io.github.mybatisx.core.mapper;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.embedded.Embeddable;
-import io.github.mybatisx.embedded.ReturnsMap;
+import io.github.mybatisx.embedded.ReturnMap;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
@@ -120,7 +120,7 @@ interface QueryMapper<T, R, ID extends Serializable> {
      * @param <K>    键类型
      * @return {@link Map}数据
      */
-    @ReturnsMap
+    @ReturnMap
     <K> Map<K, R> selectMapByEntity(final @Param(Constants.PARAM_ENTITY) T entity);
 
     /**
@@ -130,7 +130,7 @@ interface QueryMapper<T, R, ID extends Serializable> {
      * @param <K>      键类型
      * @return {@link Map}数据
      */
-    @ReturnsMap
+    @ReturnMap
     <K> Map<K, R> selectMapByCriteria(final @Param(Constants.PARAM_CRITERIA) Criteria<T> criteria);
 
     /**
@@ -141,7 +141,7 @@ interface QueryMapper<T, R, ID extends Serializable> {
      * @param <V>      值类型
      * @return {@link Map}数据
      */
-    @ReturnsMap
+    @ReturnMap
     @Embeddable
     <K, V> Map<K, V> selectCustomMap(final @Param(Constants.PARAM_CRITERIA) Criteria<T> criteria);
 

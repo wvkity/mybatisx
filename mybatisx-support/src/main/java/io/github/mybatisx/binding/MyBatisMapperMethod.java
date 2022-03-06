@@ -17,7 +17,7 @@ package io.github.mybatisx.binding;
 
 import io.github.mybatisx.embedded.EmbeddableResult;
 import io.github.mybatisx.embedded.EmbeddableUtil;
-import io.github.mybatisx.embedded.ReturnsMap;
+import io.github.mybatisx.embedded.ReturnMap;
 import io.github.mybatisx.executor.result.MyBatisMapResultHandler;
 import io.github.mybatisx.lang.Strings;
 import org.apache.ibatis.annotations.Flush;
@@ -354,7 +354,7 @@ public class MyBatisMapperMethod {
             this.returnsOptional = Optional.class.equals(this.returnType);
             this.mapKey = getMapKey(method);
             this.returnsMap =
-                    this.mapKey != null || (commandType == SqlCommandType.SELECT && method.isAnnotationPresent(ReturnsMap.class));
+                    this.mapKey != null || (commandType == SqlCommandType.SELECT && method.isAnnotationPresent(ReturnMap.class));
             this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
             this.resultHandlerIndex = getUniqueParamIndex(method, ResultHandler.class);
             this.paramNameResolver = new ParamNameResolver(configuration, method);
