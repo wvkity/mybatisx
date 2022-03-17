@@ -1,4 +1,0 @@
-dependencies {
-    api project(":mybatisx-core")
-    implementation "${libs["spring-tx"]}"
-}

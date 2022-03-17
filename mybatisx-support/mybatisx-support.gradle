@@ -1,0 +1,5 @@
+dependencies {
+    api(project(":mybatisx-base"))
+    api(project(":mybatisx-pageable"))
+    optional("org.mybatis:mybatis")
+}

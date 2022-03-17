@@ -33,6 +33,7 @@ import org.apache.ibatis.type.TypeHandler;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
+@SuppressWarnings({"unused"})
 public class Column {
 
     /**

@@ -1,0 +1,74 @@
+apply plugin: 'signing'
+apply plugin: "maven-publish"
+
+publishing {
+    repositories {
+        mavenLocal()
+        maven {
+            def userName = "${OOS_USER_NAME}"
+            def passWord = "${OOS_PASSWORD}"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username userName
+                password passWord
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                afterEvaluate {
+                    name = project.description
+                    description = project.description
+                }
+                url = 'https://github.com/wvkity/mybatisx'
+                scm {
+                    connection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                    developerConnection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                    url = 'https://github.com/wvkity/mybatisx'
+                }
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'wvkity'
+                        name = 'wvkity'
+                        email = 'wvkity@gmail.com'
+                    }
+                }
+            }
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionResult()
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
+
+/*configureDeploymentRepository(project)
+
+static void configureDeploymentRepository(Project project) {
+    project.plugins.withType(MavenPublishPlugin.class).all {
+        PublishingExtension publishing = project.getExtensions().getByType(PublishingExtension.class);
+        if (project.hasProperty("deploymentRepository")) {
+            publishing.repositories.maven {
+                it.url = project.property("deploymentRepository")
+                it.name = "deployment"
+            }
+        }
+    }
+}*/

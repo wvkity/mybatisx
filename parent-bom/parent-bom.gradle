@@ -1,0 +1,19 @@
+apply plugin: "java-platform"
+apply from: "${rootDir}/gradle/publications.gradle"
+
+dependencies {
+    constraints {
+        parent.moduleProjects.sort {"$it.name"}.each {
+            api it
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'mybatisx-parent'
+            from components.javaPlatform
+        }
+    }
+}

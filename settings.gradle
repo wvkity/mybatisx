@@ -2,16 +2,17 @@ pluginManagement {
     repositories {
         mavenLocal()
         gradlePluginPortal()
+        maven { url "https://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/release" }
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url "https://repo.spring.io/plugins-release" }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://jcenter.bintray.com/' }
         mavenCentral()
     }
 }
 plugins {
-    id "com.gradle.enterprise" version "3.3.1"
+    id "com.gradle.enterprise" version "3.8.1"
 }
 gradleEnterprise {
     buildScan {
@@ -19,28 +20,26 @@ gradleEnterprise {
         termsOfServiceAgree = 'no'
     }
 }
-rootProject.name = 'mybatisx-parent'
+rootProject.name = 'mybatisx'
+include 'parent-bom'
 include 'mybatisx-annotation'
 include 'mybatisx-auditable'
 include 'mybatisx-base'
 include 'mybatisx-batch'
 include 'mybatisx-core'
 include 'mybatisx-extension'
-include 'mybatisx-pageable'
 include 'mybatisx-multi-datasource'
+include 'mybatisx-pageable'
 include 'mybatisx-plugin'
 include 'mybatisx-plugin-auditable'
-include 'mybatisx-plugin-pageable'
 include 'mybatisx-plugin-batch'
+include 'mybatisx-plugin-pageable'
 include 'mybatisx-result'
 include 'mybatisx-sequence'
 include 'mybatisx-spring'
-include 'mybatisx-spring-boot-starter'
-include 'mybatisx-spring-boot-starter-auditable'
-include 'mybatisx-spring-boot-starter-batch'
-include 'mybatisx-spring-boot-starter-multi-datasource'
-include 'mybatisx-spring-boot-starter-pageable'
-include 'mybatisx-spring-boot-starter-sequence'
 include 'mybatisx-support'
 include 'mybatisx-utils'
-include 'mybatisx-example'
+
+rootProject.children.each {project ->
+    project.buildFileName = "${project.name}.gradle"
+}

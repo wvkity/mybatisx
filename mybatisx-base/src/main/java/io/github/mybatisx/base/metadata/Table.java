@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings({"unused"})
 public class Table {
 
     /**

@@ -1,0 +1,78 @@
+import java.text.SimpleDateFormat
+
+apply plugin: 'java-library'
+//apply plugin: 'io.github.mybatisx.build.compile'
+apply plugin: 'io.github.mybatisx.build.optional-dependencies'
+apply from: "$rootDir/gradle/publications.gradle"
+
+compileJava {
+    sourceCompatibility = "${JAVA_VERSION}"
+    targetCompatibility = "${JAVA_VERSION}"
+    options.encoding = 'UTF-8'
+    options.deprecation = true
+    options.compilerArgs += ["-parameters"]
+}
+
+jar {
+    manifest.attributes["Implementation-Title"] = project.name
+    manifest.attributes["Implementation-Version"] = project.version
+    manifest.attributes["Automatic-Module-Name"] = project.name.replace('-', '.')
+    manifest.attributes["Bundle-DocURL"] = ""
+    manifest.attributes["Build-OS"] = ""
+    manifest.attributes["Built-By"] = "wvkity"
+    manifest.attributes["Build-Jdk"] = System.getProperty("java.version")
+    manifest.attributes["Build-Timestamp"] = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+}
+
+javadoc {
+    description = "Generates project-level javadoc for use in -javadoc jar"
+
+    options.encoding = "UTF-8"
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.author = true
+    options.header = project.name
+    options.use = true
+    options.links(project.ext.javadocLinks)
+    options.addStringOption("Xdoclint:none", "-quiet")
+    options.tags = ["created"]
+
+    // Suppress warnings due to cross-module @see and @link references.
+    // Note that global 'api' task does display all warnings.
+    logging.captureStandardError LogLevel.INFO
+    logging.captureStandardOutput LogLevel.INFO  // suppress "## warnings" message
+
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+    // Don't include or exclude anything explicitly by default. See SPR-12085.
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set("javadoc")
+    from javadoc
+}
+
+task mkdir {
+    sourceSets*.java.srcDirs*.each {it.mkdirs()}
+    sourceSets*.resources.srcDirs*.each {it.mkdirs()}
+}
+
+test {
+    dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
+    useJUnitPlatform()
+    include(["**/*Tests.class", "**/*Test.class"])
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+

@@ -16,6 +16,7 @@
 package io.github.mybatisx.result.test;
 
 import com.alibaba.fastjson.JSON;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.result.Status;
 import io.github.mybatisx.result.core.MultiResult;
 import io.github.mybatisx.result.core.PlainResult;
@@ -54,8 +55,8 @@ public class ResultAppTest {
     @Test
     public void multiResultTest() {
         final MultiResult mr1 = MultiResult.create().build();
-        mr1.put("s1", "admin").put("v1", 1L).put("v2", "a").array("array", 1L, 2L, 3L);
-        mr1.withArray("array", 4L, 5L);
+        mr1.put("s1", "admin").put("v1", 1L).put("v2", "a").array("array", Objects.asArray(1L, 2L, 3L));
+        mr1.withArray("array", Objects.asArray(4L, 5L));
         mr1.map("map", "k1", 1L).withMap("map", "k2", 2L);
         log.info("mr1结果: {}", JSON.toJSONString(mr1));
         log.info("获取字符串值: {}", mr1.getString("s1"));

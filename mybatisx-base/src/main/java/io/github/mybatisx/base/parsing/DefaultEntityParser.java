@@ -589,9 +589,8 @@ public class DefaultEntityParser implements EntityParser {
                 yet = ldc.getYet();
                 already = ldc.getAlready();
             }
-            Objects.requireNonEmpty(yet, "The undeleted value cannot be null.");
-            Objects.requireNonEmpty(already, "The deleted value cannot be null.");
-            cb.yet(Objects.convert(cb.javaType(), yet)).already(Objects.convert(cb.javaType(), already));
+            cb.yet(Objects.convert(cb.javaType(), Objects.requireNonEmpty(yet, "The undeleted value cannot be null.")))
+                    .already(Objects.convert(cb.javaType(), Objects.requireNonEmpty(already, "The deleted value cannot be null.")));
         }
     }
 

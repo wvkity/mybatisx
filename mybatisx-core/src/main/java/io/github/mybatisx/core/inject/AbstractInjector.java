@@ -33,10 +33,9 @@ import io.github.mybatisx.core.inject.method.invoke.UpdateWithoutNull;
 import io.github.mybatisx.core.mapper.EasilyMapper;
 import io.github.mybatisx.core.mapper.SelfsameMapper;
 import io.github.mybatisx.lang.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -55,10 +54,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @created 2021/12/25
  * @since 1.0.0
  */
+@Slf4j
 public abstract class AbstractInjector implements Injector {
-
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
+    
     public enum InjectType {
         INSERT, UPDATE, DELETE, SELECT
     }

@@ -1,0 +1,8 @@
+dependencies {
+    api(project(":mybatisx-auditable"))
+    api(project(":mybatisx-batch"))
+    api(project(":mybatisx-sequence"))
+    api(project(":mybatisx-annotation"))
+    optional("org.mybatis:mybatis")
+    optional("com.google.guava:guava")
+}

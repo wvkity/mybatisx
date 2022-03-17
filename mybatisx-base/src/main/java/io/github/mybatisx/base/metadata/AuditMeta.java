@@ -35,6 +35,7 @@ import java.util.Set;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
+@SuppressWarnings({"unused"})
 public class AuditMeta {
 
     /**

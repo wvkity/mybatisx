@@ -1,0 +1,9 @@
+dependencies {
+    api(project(":mybatisx-core"))
+    api(project(":mybatisx-multi-datasource"))
+    optional("org.mybatis:mybatis")
+    optional("org.mybatis:mybatis-spring")
+    optional("org.springframework:spring-jdbc")
+    optional("org.springframework:spring-context")
+    optional("org.springframework:spring-aspects")
+}

@@ -30,6 +30,7 @@ import java.util.Set;
  * @created 2021/12/27
  * @since 1.0.0
  */
+@SuppressWarnings({"unused"})
 public interface Annotated {
 
     /**
@@ -81,6 +82,7 @@ public interface Annotated {
      * @param classes 注解列表
      * @return boolean
      */
+    @SuppressWarnings({"unchecked"})
     default boolean isMatches(final Class<? extends Annotation>... classes) {
         return this.isMatches(Objects.filterNull(classes));
     }

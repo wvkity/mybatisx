@@ -1,0 +1,240 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id "com.github.hierynomus.license" version "0.15.0"
+    id "io.freefair.lombok" version "6.3.0"
+    id 'org.springframework.boot' version '2.5.4'
+}
+
+ext {
+    configuration = [
+            JAVA_VERSION = JavaVersion.VERSION_1_8
+    ]
+    libraries = [
+            junitV = "5.4.2",
+            jmockitV = "1.49",
+            fastjsonV = "1.2.72",
+            slf4jV = "1.7.30",
+            log4j2V = "2.13.1",
+            disruptorV = "3.4.4",
+            mybatisV = "3.5.4",
+            mybatisSpringV = "2.0.5",
+            jsqlparserV = "4.2",
+            guavaV = "31.0.1-jre",
+            caffeineV = "3.0.5",
+            springV = "5.3.9",
+            springbootV = "2.5.4",
+            lombokV = "1.18.21",
+            mysqlDriverV = "8.0.21",
+    ]
+    libs = [
+            "junit-jupiter"                     : "org.junit.jupiter:junit-jupiter:${junitV}",
+            "jmockit"                           : "org.jmockit:jmockit:${jmockitV}",
+            "lombok"                            : "org.projectlombok:lombok:${lombokV}",
+            "slf4j"                             : "org.slf4j:slf4j-api:${slf4jV}",
+            "slf4j-simple"                      : "org.slf4j:slf4j-simple:${slf4jV}",
+            "log4j2"                            : "org.apache.logging.log4j:log4j-api:${log4j2V}",
+            "log4j2-core"                       : "org.apache.logging.log4j:log4j-core:${log4j2V}",
+            "log4j2-slf4j-impl"                 : "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
+            "mysql-driver"                      : "mysql:mysql-connector-java:${mysqlDriverV}",
+            "jsqlparser"                        : "com.github.jsqlparser:jsqlparser:${jsqlparserV}",
+            "disruptor"                         : "com.lmax:disruptor:${disruptorV}",
+            "fastjson"                          : "com.alibaba:fastjson:${fastjsonV}",
+            "guava"                             : "com.google.guava:guava:${guavaV}",
+            "caffeine"                          : "com.github.ben-manes.caffeine:caffeine:${caffeineV}",
+            "mybatis"                           : "org.mybatis:mybatis:${mybatisV}",
+            "mybatis-spring"                    : "org.mybatis:mybatis-spring:${mybatisSpringV}",
+            "mybatis-thymeleaf"                 : "org.mybatis.scripting:mybatis-thymeleaf:1.0.2",
+            "mybatis-freemarker"                : "org.mybatis.scripting:mybatis-freemarker:1.2.2",
+            "mybatis-velocity"                  : "org.mybatis.scripting:mybatis-velocity:2.1.0",
+            "spring-jdbc"                       : "org.springframework:spring-jdbc:${springV}",
+            "spring-context"                    : "org.springframework:spring-context:${springV}",
+            "spring-beans"                      : "org.springframework:spring-beans:${springV}",
+            "spring-tx"                         : "org.springframework:spring-tx:${springV}",
+            "spring-aspects"                    : "org.springframework:spring-aspects:${springV}",
+            "spring-web"                        : "org.springframework:spring-web:${springV}",
+            "springboot"                        : "org.springframework.boot:spring-boot:${springbootV}",
+            "springboot-dependencies"           : "org.springframework.boot:spring-boot-dependencies:${springbootV}",
+            "springboot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc",
+            "springboot-atomikos"               : "org.springframework.boot:spring-boot-starter-jta-atomikos",
+            "springboot-aop"                    : "org.springframework.boot:spring-boot-starter-aop",
+            "springboot-autoconfigure"          : "org.springframework.boot:spring-boot-autoconfigure",
+            "springboot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor",
+            "springboot-autoconfigure-processor": "org.springframework.boot:spring-boot-autoconfigure-processor",
+            "springboot-log4j2"                 : "org.springframework.boot:spring-boot-starter-log4j2",
+            "springboot-thymeleaf"              : "org.springframework.boot:spring-boot-starter-thymeleaf",
+            "springboot-web"                    : "org.springframework.boot:spring-boot-starter-web",
+            "springboot-webflux"                : "org.springframework.boot:spring-boot-starter-webflux",
+            "springboot-security"               : "org.springframework.boot:spring-boot-starter-security",
+            "springboot-undertow"               : "org.springframework.boot:spring-boot-starter-undertow",
+            "springboot-test"                   : "org.springframework.boot:spring-boot-starter-test",
+    ]
+}
+
+allprojects {
+    group 'io.github.wvkity'
+    version '1.0.0-SNAPSHOT'
+    apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
+    apply plugin: 'idea'
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+    apply plugin: 'io.freefair.lombok'
+    apply plugin: 'com.github.hierynomus.license'
+
+    sourceCompatibility = "${JAVA_VERSION}"
+    targetCompatibility = "${JAVA_VERSION}"
+
+    repositories {
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url 'https://jcenter.bintray.com/' }
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.deprecation = true
+        options.compilerArgs += ["-parameters"]
+    }
+
+    jar {
+        afterEvaluate {
+            manifest {
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Bundle-DocURL': ''
+                attributes 'Build-OS': ''
+                attributes 'Built-By': 'wvkity'
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+            }
+        }
+    }
+
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    javadoc {
+        options.tags = ['created']
+    }
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
+
+    test {
+        dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
+        useJUnitPlatform()
+    }
+
+    task mkdir {
+        sourceSets*.java.srcDirs*.each { it.mkdirs() }
+        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+    }
+
+    dependencies {
+        implementation fileTree(dir: "libs", include: ["*.jar"])
+        runtimeOnly "${libs.slf4j}"
+        compileOnly "${libs.slf4j}"
+        testImplementation "${libs.slf4j}"
+        testImplementation "${libs["slf4j-simple"]}"
+        testImplementation "${libs["junit-jupiter"]}"
+        testAnnotationProcessor "${libs["junit-jupiter"]}"
+        testImplementation "${libs["jmockit"]}"
+        testImplementation "${libs.fastjson}"
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+        all*.exclude module: 'spring-boot-starter-logging'
+        all*.exclude module: 'logback-classic'
+        all*.exclude module: 'log4j-over-slf4j'
+        all*.exclude module: 'org.hibernate.validator'
+        all*.exclude module: 'spring-boot-starter-tomcat'
+    }
+
+    publishing {
+        repositories {
+            mavenLocal()
+            maven {
+                def userName = ossUserName
+                def passWord = ossPassword
+                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username userName
+                    password passWord
+                }
+            }
+        }
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'mybatisx'
+                    packaging 'jar'
+                    description = 'Mybatis extension kit.'
+                    url = 'https://github.com/wvkity/mybatisx'
+
+                    scm {
+                        connection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                        developerConnection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
+                        url = 'https://github.com/wvkity/mybatisx'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'wvkity'
+                            name = 'wvkity'
+                            email = 'wvkity@gmail.com'
+                        }
+                    }
+                    withXml {
+                        def root = asNode()
+                        root.dependencies.'*'.findAll {
+                            def d = it
+                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
+                                dep.name == it.artifactId.text()
+                            }.each() {
+                                d.scope*.value = 'compile'
+                                d.appendNode('optional', true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        signing {
+            sign publishing.publications.mavenJava
+        }
+    }
+    
+}

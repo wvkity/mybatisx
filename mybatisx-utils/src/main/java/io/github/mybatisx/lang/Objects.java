@@ -696,6 +696,7 @@ public final class Objects {
      * @param <T>  参数类型
      * @return 集合
      */
+    @SafeVarargs
     public static <T> List<T> objectAsList(final T... args) {
         if (isNotEmpty(args)) {
             return new ArrayList<>(Arrays.asList(args));
@@ -728,6 +729,50 @@ public final class Objects {
             return new ArrayList<>(Collections.singletonList((T) arg));
         }
         return new ArrayList<>(0);
+    }
+
+    /**
+     * 基本整型数组转包装数组
+     *
+     * @param args 值列表
+     * @return 包装数组
+     */
+    public static Integer[] asArray(final int... args) {
+        if (args == null || args.length == 0) {
+            return new Integer[0];
+        }
+        return asList(args).toArray(new Integer[0]);
+    }
+
+    /**
+     * 基本长整型数组转包装数组
+     *
+     * @param args 值列表
+     * @return 包装数组
+     */
+    public static Long[] asArray(final long... args) {
+        if (args == null || args.length == 0) {
+            return new Long[0];
+        }
+        return asList(args).toArray(new Long[0]);
+    }
+
+    /**
+     * 基本长整型数组转长整型数组
+     *
+     * @param args 值列表
+     * @return 长整型数组
+     */
+    public static Long[] asLongArray(final int... args) {
+        final int len;
+        if (args == null || (len = args.length) == 0) {
+            return new Long[0];
+        }
+        final Long[] array = new Long[len];
+        for (int i = 0; i < len; i++) {
+            array[i] = (long) args[i];
+        }
+        return array;
     }
 
     /**

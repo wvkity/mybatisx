@@ -127,12 +127,12 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult array(Object key, T... values) {
+    public <T> AbstractMultiResult array(Object key, T[] values) {
         return this.put(key, values);
     }
 
     @Override
-    public <T> AbstractMultiResult withArray(Object key, T... values) {
+    public <T> AbstractMultiResult withArray(Object key, T[] values) {
         if (Objects.isNotEmpty(values)) {
             final T[] array = this.getArray(key);
             if (Objects.isNull(array)) {
@@ -149,7 +149,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult set(Object key, T... values) {
+    public <T> AbstractMultiResult set(Object key, T[] values) {
         if (Objects.isNotEmpty(values)) {
             this.put(key, new HashSet<>(Arrays.asList(values)));
         }
@@ -157,7 +157,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withSet(Object key, T... values) {
+    public <T> AbstractMultiResult withSet(Object key, T[] values) {
         if (Objects.isNotEmpty(values)) {
             this.withSet(key, Arrays.asList(values));
         }
@@ -178,7 +178,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult list(Object key, T... values) {
+    public <T> AbstractMultiResult list(Object key, T[] values) {
         if (Objects.isNotEmpty(values)) {
             this.put(key, new ArrayList<>(Arrays.asList(values)));
         }
@@ -186,7 +186,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withList(Object key, T... values) {
+    public <T> AbstractMultiResult withList(Object key, T[] values) {
         if (Objects.isNotEmpty(values)) {
             this.withList(key, Arrays.asList(values));
         }

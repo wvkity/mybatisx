@@ -1,0 +1,4 @@
+dependencies {
+    api(project(":mybatisx-core"))
+    optional("org.springframework:spring-tx")
+}

@@ -1,4 +1,0 @@
-dependencies {
-    api project(":mybatisx-batch")
-    api project(":mybatisx-plugin")
-}

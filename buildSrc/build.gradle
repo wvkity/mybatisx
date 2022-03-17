@@ -1,0 +1,53 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+repositories {
+    mavenLocal()
+    gradlePluginPortal()
+}
+
+
+ext {
+    configuration = [
+            JAVA_VERSION = JavaVersion.VERSION_1_8
+    ]
+}
+
+compileJava {
+    sourceCompatibility = "${JAVA_VERSION}"
+    targetCompatibility = "${JAVA_VERSION}"
+    options.encoding = 'UTF-8'
+    options.deprecation = true
+    options.compilerArgs += ["-parameters"]
+}
+
+javadoc {
+    options.tags = ["created"]
+}
+
+task mkdir {
+    sourceSets*.java.srcDirs*.forEach {
+        it.mkdirs()
+    }
+    sourceSets*.resources.srcDirs*.forEach {
+        it.mkdirs()
+    }
+}
+
+dependencies {
+    implementation "me.champeau.gradle:japicmp-gradle-plugin:0.3.0"
+}
+
+gradlePlugin {
+    plugins {
+        compileConventionsPlugin {
+            id = "io.github.mybatisx.build.compile"
+            implementationClass = "io.github.mybatisx.build.compile.CompilerConventionsPlugin"
+        }
+        optionalDependenciesPlugin {
+            id = "io.github.mybatisx.build.optional-dependencies"
+            implementationClass = "io.github.mybatisx.build.optional.OptionalDependenciesPlugin"
+        }
+    }
+}

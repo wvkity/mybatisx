@@ -1,0 +1,5 @@
+dependencies {
+    api(project(":mybatisx-utils"))
+    optional("com.google.guava:guava")
+    testImplementation("org.slf4j:slf4j-simple")
+}

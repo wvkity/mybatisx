@@ -1,5 +1,0 @@
-dependencies {
-    api project(":mybatisx-utils")
-    api "${libs.jsqlparser}"
-    api "${libs.caffeine}"
-}

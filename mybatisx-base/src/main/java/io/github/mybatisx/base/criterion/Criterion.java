@@ -27,6 +27,7 @@ import io.github.mybatisx.base.fragment.Fragment;
  * @created 2022/1/5
  * @since 1.0.0
  */
+@SuppressWarnings({"unused"})
 public interface Criterion extends Fragment {
 
     /**

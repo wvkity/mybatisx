@@ -118,7 +118,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult array(final Object key, final T... values);
+    <T> MapResult array(final Object key, final T[] values);
 
     /**
      * 追加元素到指定数组
@@ -128,7 +128,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult withArray(final Object key, final T... values);
+    <T> MapResult withArray(final Object key, final T[] values);
 
     /**
      * 添加{@link java.util.Set}元素
@@ -138,7 +138,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult set(final Object key, final T... values);
+    <T> MapResult set(final Object key, final T[] values);
 
     /**
      * 追加元素到指定的{@link java.util.Set}集合
@@ -148,7 +148,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult withSet(final Object key, final T... values);
+    <T> MapResult withSet(final Object key, final T[] values);
 
     /**
      * 追加元素到指定的{@link java.util.Set}集合
@@ -168,7 +168,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult list(final Object key, final T... values);
+    <T> MapResult list(final Object key, final T[] values);
 
     /**
      * 追加元素到指定的{@link java.util.List}集合
@@ -178,7 +178,7 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult withList(final Object key, final T... values);
+    <T> MapResult withList(final Object key, final T[] values);
 
     /**
      * 追加元素到指定的{@link java.util.List}集合

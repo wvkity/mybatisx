@@ -1,240 +1,134 @@
-import java.text.SimpleDateFormat
+buildscript {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        maven { url "https://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/release" }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://jcenter.bintray.com/' }
+        mavenCentral()
+    }
+}
 
 plugins {
-    id "com.github.hierynomus.license" version "0.15.0"
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
     id "io.freefair.lombok" version "6.3.0"
-    id 'org.springframework.boot' version '2.5.4'
 }
 
 ext {
     configuration = [
             JAVA_VERSION = JavaVersion.VERSION_1_8
     ]
-    libraries = [
-            junitV = "5.4.2",
-            jmockitV = "1.49",
-            fastjsonV = "1.2.72",
-            slf4jV = "1.7.30",
-            log4j2V = "2.13.1",
-            disruptorV = "3.4.4",
-            mybatisV = "3.5.4",
-            mybatisSpringV = "2.0.5",
-            jsqlparserV = "4.2",
-            guavaV = "31.0.1-jre",
-            caffeineV = "3.0.5",
-            springV = "5.3.9",
-            springbootV = "2.5.4",
-            lombokV = "1.18.21",
-            mysqlDriverV = "8.0.21",
-    ]
-    libs = [
-            "junit-jupiter"                     : "org.junit.jupiter:junit-jupiter:${junitV}",
-            "jmockit"                           : "org.jmockit:jmockit:${jmockitV}",
-            "lombok"                            : "org.projectlombok:lombok:${lombokV}",
-            "slf4j"                             : "org.slf4j:slf4j-api:${slf4jV}",
-            "slf4j-simple"                      : "org.slf4j:slf4j-simple:${slf4jV}",
-            "log4j2"                            : "org.apache.logging.log4j:log4j-api:${log4j2V}",
-            "log4j2-core"                       : "org.apache.logging.log4j:log4j-core:${log4j2V}",
-            "log4j2-slf4j-impl"                 : "org.apache.logging.log4j:log4j-slf4j-impl:${log4j2V}",
-            "mysql-driver"                      : "mysql:mysql-connector-java:${mysqlDriverV}",
-            "jsqlparser"                        : "com.github.jsqlparser:jsqlparser:${jsqlparserV}",
-            "disruptor"                         : "com.lmax:disruptor:${disruptorV}",
-            "fastjson"                          : "com.alibaba:fastjson:${fastjsonV}",
-            "guava"                             : "com.google.guava:guava:${guavaV}",
-            "caffeine"                          : "com.github.ben-manes.caffeine:caffeine:${caffeineV}",
-            "mybatis"                           : "org.mybatis:mybatis:${mybatisV}",
-            "mybatis-spring"                    : "org.mybatis:mybatis-spring:${mybatisSpringV}",
-            "mybatis-thymeleaf"                 : "org.mybatis.scripting:mybatis-thymeleaf:1.0.2",
-            "mybatis-freemarker"                : "org.mybatis.scripting:mybatis-freemarker:1.2.2",
-            "mybatis-velocity"                  : "org.mybatis.scripting:mybatis-velocity:2.1.0",
-            "spring-jdbc"                       : "org.springframework:spring-jdbc:${springV}",
-            "spring-context"                    : "org.springframework:spring-context:${springV}",
-            "spring-beans"                      : "org.springframework:spring-beans:${springV}",
-            "spring-tx"                         : "org.springframework:spring-tx:${springV}",
-            "spring-aspects"                    : "org.springframework:spring-aspects:${springV}",
-            "spring-web"                        : "org.springframework:spring-web:${springV}",
-            "springboot"                        : "org.springframework.boot:spring-boot:${springbootV}",
-            "springboot-dependencies"           : "org.springframework.boot:spring-boot-dependencies:${springbootV}",
-            "springboot-jdbc"                   : "org.springframework.boot:spring-boot-starter-jdbc",
-            "springboot-atomikos"               : "org.springframework.boot:spring-boot-starter-jta-atomikos",
-            "springboot-aop"                    : "org.springframework.boot:spring-boot-starter-aop",
-            "springboot-autoconfigure"          : "org.springframework.boot:spring-boot-autoconfigure",
-            "springboot-configuration-processor": "org.springframework.boot:spring-boot-configuration-processor",
-            "springboot-autoconfigure-processor": "org.springframework.boot:spring-boot-autoconfigure-processor",
-            "springboot-log4j2"                 : "org.springframework.boot:spring-boot-starter-log4j2",
-            "springboot-thymeleaf"              : "org.springframework.boot:spring-boot-starter-thymeleaf",
-            "springboot-web"                    : "org.springframework.boot:spring-boot-starter-web",
-            "springboot-webflux"                : "org.springframework.boot:spring-boot-starter-webflux",
-            "springboot-security"               : "org.springframework.boot:spring-boot-starter-security",
-            "springboot-undertow"               : "org.springframework.boot:spring-boot-starter-undertow",
-            "springboot-test"                   : "org.springframework.boot:spring-boot-starter-test",
-    ]
-}
-
-allprojects {
-    group 'io.github.wvkity'
-    version '1.0.0-SNAPSHOT'
-    apply from: rootDir.canonicalPath + '/.gradle/publish.gradle'
-    apply plugin: 'idea'
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-        options.addStringOption('encoding', 'UTF-8')
+    moduleProjects = subprojects.findAll {it.name.startsWith("mybatisx-")}
+    javaProjects = subprojects - project(":parent-bom")
+    withoutJclOverSlf4j = {
+        exclude group: "org.slf4j", name: "jcl-over-slf4j"
     }
 }
 
-subprojects {
-    apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
-    apply plugin: 'io.freefair.lombok'
-    apply plugin: 'com.github.hierynomus.license'
-
-    sourceCompatibility = "${JAVA_VERSION}"
-    targetCompatibility = "${JAVA_VERSION}"
-
-    repositories {
-        mavenLocal()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url 'https://jcenter.bintray.com/' }
-        mavenCentral()
-    }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-        options.deprecation = true
-        options.compilerArgs += ["-parameters"]
-    }
-
-    jar {
-        afterEvaluate {
-            manifest {
-                attributes 'Implementation-Version': archiveVersion
-                attributes 'Built-Gradle': gradle.gradleVersion
-                attributes 'Bundle-DocURL': ''
-                attributes 'Build-OS': ''
-                attributes 'Built-By': 'wvkity'
-                attributes 'Build-Jdk': System.getProperty("java.version")
-                attributes 'Build-Timestamp': new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+configure(allprojects) {project ->
+    group = "io.github.mybatisx"
+    version = '1.0.0-SNAPSHOT'
+    apply plugin: "io.spring.dependency-management"
+    apply from: "${rootDir}/.gradle/publish.gradle"
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework:spring-framework-bom:5.3.9"
+            mavenBom "org.junit:junit-bom:5.8.2"
+        }
+        
+        dependencies {
+            dependency "com.google.guava:guava:31.1-jre"
+            dependency "org.mybatis:mybatis:3.5.4"
+            dependency "org.mybatis:mybatis-spring:2.0.5"
+            dependency "com.alibaba:fastjson:1.2.72"
+            dependency "com.github.jsqlparser:jsqlparser:4.2"
+            dependency "com.github.ben-manes.caffeine:caffeine:3.0.5"
+            dependency "org.slf4j:slf4j-api:1.7.35"
+            dependency "org.slf4j:slf4j-simple:1.7.35"
+            dependency "com.google.code.gson:gson:2.9.0"
+            dependencySet(group: 'org.mockito', version: '4.3.1') {
+                entry('mockito-core') {
+                    exclude group: "org.hamcrest", name: "hamcrest-core"
+                }
+                entry 'mockito-junit-jupiter'
+            }
+            dependency "io.mockk:mockk:1.12.1"
+            dependency "org.assertj:assertj-core:3.22.0"
+            dependencySet(group: 'org.apache.logging.log4j', version: '2.17.2') {
+                entry 'log4j-api'
+                entry 'log4j-core'
+                entry 'log4j-jul'
+                entry 'log4j-slf4j-impl'
             }
         }
-    }
-
-    task sourcesJar(type: Jar) {
-        archiveClassifier = 'sources'
-        from sourceSets.main.allJava
-    }
-
-    javadoc {
-        options.tags = ['created']
-    }
-
-    task javadocJar(type: Jar) {
-        archiveClassifier = 'javadoc'
-        from javadoc
-    }
-
-    test {
-        dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
-        useJUnitPlatform()
-    }
-
-    task mkdir {
-        sourceSets*.java.srcDirs*.each { it.mkdirs() }
-        sourceSets*.resources.srcDirs*.each { it.mkdirs() }
-    }
-
-    dependencies {
-        implementation fileTree(dir: "libs", include: ["*.jar"])
-        runtimeOnly "${libs.slf4j}"
-        compileOnly "${libs.slf4j}"
-        testImplementation "${libs.slf4j}"
-        testImplementation "${libs["slf4j-simple"]}"
-        testImplementation "${libs["junit-jupiter"]}"
-        testAnnotationProcessor "${libs["junit-jupiter"]}"
-        testImplementation "${libs["jmockit"]}"
-        testImplementation "${libs.fastjson}"
-    }
-
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
+        
+        generatedPomCustomization {
+            enabled = false
         }
-        all*.exclude module: 'spring-boot-starter-logging'
-        all*.exclude module: 'logback-classic'
-        all*.exclude module: 'log4j-over-slf4j'
-        all*.exclude module: 'org.hibernate.validator'
-        all*.exclude module: 'spring-boot-starter-tomcat'
-    }
 
-    publishing {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, "seconds"
+        }
+        
         repositories {
             mavenLocal()
-            maven {
-                def userName = ossUserName
-                def passWord = ossPassword
-                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                credentials {
-                    username userName
-                    password passWord
-                }
-            }
-        }
-        publications {
-            mavenJava(MavenPublication) {
-                groupId = project.group
-                artifactId = project.name
-                version = project.version
-                from components.java
-                artifact sourcesJar
-                artifact javadocJar
-                pom {
-                    name = 'mybatisx'
-                    packaging 'jar'
-                    description = 'Mybatis extension kit.'
-                    url = 'https://github.com/wvkity/mybatisx'
-
-                    scm {
-                        connection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
-                        developerConnection = 'scm:git@github.com:https://github.com/wvkity/mybatisx.git'
-                        url = 'https://github.com/wvkity/mybatisx'
-                    }
-
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'wvkity'
-                            name = 'wvkity'
-                            email = 'wvkity@gmail.com'
-                        }
-                    }
-                    withXml {
-                        def root = asNode()
-                        root.dependencies.'*'.findAll {
-                            def d = it
-                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
-                                dep.name == it.artifactId.text()
-                            }.each() {
-                                d.scope*.value = 'compile'
-                                d.appendNode('optional', true)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        signing {
-            sign publishing.publications.mavenJava
+            gradlePluginPortal()
+            maven { url "https://repo.spring.io/plugins-release" }
+            maven { url "https://repo.spring.io/release" }
+            maven { url 'https://plugins.gradle.org/m2/' }
+            maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+            maven { url 'https://maven.aliyun.com/repository/central' }
+            maven { url 'https://jcenter.bintray.com/' }
+            mavenCentral()
         }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, "seconds"
+            cacheDynamicVersionsFor 0, "seconds"
+        }
+    }
+}
+
+configure([rootProject] + javaProjects) { project ->
+    apply plugin: "java-library"
+    apply plugin: "idea"
+    //apply plugin: "io.github.mybatisx.build.compile"
+    ext.javadocLinks = [
+            "https://docs.oracle.com/en/java/javase/17/docs/api/"
+    ] as String[]
+}
+
+configure(moduleProjects) { project ->
+    apply plugin: "io.freefair.lombok"
+    apply from: "${rootDir}/gradle/mybatisx-module.gradle"
     
+    dependencies {
+        implementation fileTree(dir: "libs", include: ["*.jar"])
+        testImplementation("org.junit.jupiter:junit-jupiter-api")
+        testImplementation("org.junit.jupiter:junit-jupiter-params")
+        testImplementation("org.junit.platform:junit-platform-suite-api")
+        testImplementation("org.mockito:mockito-core")
+        testImplementation("org.mockito:mockito-junit-jupiter")
+        testImplementation("io.mockk:mockk")
+        testImplementation("org.assertj:assertj-core")
+        optional("org.slf4j:slf4j-api")
+        testImplementation("org.slf4j:slf4j-api")
+        testImplementation("com.alibaba:fastjson")
+        // Pull in the latest JUnit 5 Launcher API to ensure proper support in IDEs.
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testRuntimeOnly("org.junit.platform:junit-platform-suite-engine")
+        testRuntimeOnly("org.apache.logging.log4j:log4j-core")
+        testRuntimeOnly("org.apache.logging.log4j:log4j-jul")
+        testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")
+    }
+}
+
+configure(rootProject) {
+    description = "MyBatis Extension Framework"
 }
