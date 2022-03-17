@@ -39,7 +39,3 @@ include 'mybatisx-sequence'
 include 'mybatisx-spring'
 include 'mybatisx-support'
 include 'mybatisx-utils'
-
-rootProject.children.each {project ->
-    project.buildFileName = "${project.name}.gradle"
-}
