@@ -37,13 +37,13 @@ import java.util.Set;
 public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Object>> implements MapResult {
 
     @Override
-    public boolean isNotEmpty() {
-        return Objects.isNotEmpty(this.data);
+    public boolean isEmpty() {
+        return Objects.isEmpty(this.data);
     }
 
     @Override
     public Object getObject(Object key) {
-        if (Objects.nonNull(key) && this.isNotEmpty()) {
+        if (Objects.nonNull(key) && this.isEmpty()) {
             return this.data.get(key);
         }
         return null;
@@ -97,12 +97,12 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public boolean containsKey(Object key) {
-        return Objects.nonNull(key) && this.isNotEmpty() && this.data.containsKey(key);
+        return Objects.nonNull(key) && this.isEmpty() && this.data.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return this.isNotEmpty() && this.data.containsValue(value);
+        return this.isEmpty() && this.data.containsValue(value);
     }
 
     @Override
@@ -112,7 +112,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public AbstractMultiResult remove(Object key) {
-        if (Objects.nonNull(key) && this.isNotEmpty()) {
+        if (Objects.nonNull(key) && this.isEmpty()) {
             this.data.remove(key);
         }
         return this;
@@ -120,7 +120,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public AbstractMultiResult clear() {
-        if (this.isNotEmpty()) {
+        if (this.isEmpty()) {
             this.data.clear();
         }
         return this;

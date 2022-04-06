@@ -15,11 +15,11 @@
  */
 package io.github.mybatisx.result.core;
 
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.builder.ObjectBuilder;
+import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.result.Result;
-import io.github.mybatisx.result.Status;
+import io.github.mybatisx.result.error.Error;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,9 +51,9 @@ public class MultiResult extends AbstractMultiResult implements Result {
         this.putAll(data);
     }
 
-    public MultiResult(Status status) {
+    public MultiResult(Error error) {
         this();
-        this.error(status);
+        this.error(error);
     }
 
     public MultiResult(Throwable e) {
@@ -61,9 +61,9 @@ public class MultiResult extends AbstractMultiResult implements Result {
         this.error(e);
     }
 
-    public MultiResult(Status status, Throwable e) {
+    public MultiResult(Error error, Throwable e) {
         this();
-        this.error(status, e);
+        this.error(error, e);
     }
 
     public MultiResult(int code, Throwable e) {
@@ -113,20 +113,20 @@ public class MultiResult extends AbstractMultiResult implements Result {
         return new MultiResult(data, msg);
     }
 
-    public static MultiResult failure(final Status status) {
-        return new MultiResult(status);
+    public static MultiResult failure(final Error error) {
+        return new MultiResult(error);
     }
 
     public static MultiResult failure(final Throwable e) {
         return new MultiResult(e);
     }
 
-    public static MultiResult failure(final Status status, final String msg) {
-        return new MultiResult(status.getCode(), msg);
+    public static MultiResult failure(final Error error, final String msg) {
+        return new MultiResult(error.getCode(), msg);
     }
 
-    public static MultiResult failure(final Status status, final Throwable e) {
-        return new MultiResult(status, e);
+    public static MultiResult failure(final Error error, final Throwable e) {
+        return new MultiResult(error, e);
     }
 
     public static MultiResult failure(final int code, final Throwable e) {

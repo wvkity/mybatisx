@@ -15,8 +15,9 @@
  */
 package io.github.mybatisx.result;
 
+import io.github.mybatisx.lang.Objects;
+
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 数据模型
@@ -33,8 +34,8 @@ public interface Data<T> extends Serializable {
      *
      * @return boolean
      */
-    default boolean isNotEmpty() {
-        return Objects.nonNull(this.getData());
+    default boolean isEmpty() {
+        return Objects.isNull(this.getData());
     }
 
     /**

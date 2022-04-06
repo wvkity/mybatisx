@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.result;
 
+import io.github.mybatisx.result.error.Error;
+
 /**
  * 状态码
  *
@@ -22,7 +24,7 @@ package io.github.mybatisx.result;
  * @created 2021/12/16
  * @since 1.0.0
  */
-public enum Status {
+public enum Status implements Error {
 
     /**
      * OK
@@ -64,18 +66,19 @@ public enum Status {
     /**
      * 描述
      */
-    final String desc;
+    final String msg;
 
     Status(int code, String desc) {
         this.code = code;
-        this.desc = desc;
+        this.msg = desc;
     }
 
     public int getCode() {
         return code;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getMsg() {
+        return msg;
     }
+    
 }

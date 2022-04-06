@@ -18,7 +18,7 @@ package io.github.mybatisx.result.core;
 import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.builder.ObjectBuilder;
 import io.github.mybatisx.result.DataResult;
-import io.github.mybatisx.result.Status;
+import io.github.mybatisx.result.error.Error;
 
 /**
  * 响应结果
@@ -39,16 +39,16 @@ public class PlainResult<T> extends AbstractResult<T> implements DataResult<T> {
         this.data = data;
     }
 
-    public PlainResult(Status status) {
-        this.error(status);
+    public PlainResult(Error error) {
+        this.error(error);
     }
 
     public PlainResult(Throwable e) {
         this.error(e);
     }
 
-    public PlainResult(Status status, Throwable e) {
-        this.error(status, e);
+    public PlainResult(Error error, Throwable e) {
+        this.error(error, e);
     }
 
     public PlainResult(int code, Throwable e) {
@@ -102,20 +102,20 @@ public class PlainResult<T> extends AbstractResult<T> implements DataResult<T> {
         return new PlainResult<>(data, msg);
     }
 
-    public static <T> PlainResult<T> failure(final Status status) {
-        return new PlainResult<>(status);
+    public static <T> PlainResult<T> failure(final Error error) {
+        return new PlainResult<>(error);
     }
 
     public static <T> PlainResult<T> failure(final Throwable e) {
         return new PlainResult<>(e);
     }
 
-    public static <T> PlainResult<T> failure(final Status status, final String msg) {
-        return new PlainResult<>(status.getCode(), msg);
+    public static <T> PlainResult<T> failure(final Error error, final String msg) {
+        return new PlainResult<>(error.getCode(), msg);
     }
 
-    public static <T> PlainResult<T> failure(final Status status, final Throwable e) {
-        return new PlainResult<>(status, e);
+    public static <T> PlainResult<T> failure(final Error error, final Throwable e) {
+        return new PlainResult<>(error, e);
     }
 
     public static <T> PlainResult<T> failure(final int code, final Throwable e) {

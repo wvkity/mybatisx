@@ -16,10 +16,11 @@
 package io.github.mybatisx.result.core;
 
 import io.github.mybatisx.result.DataResult;
-import io.github.mybatisx.result.error.AbstractError;
+import io.github.mybatisx.result.error.AbstractResultError;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 抽象响应结果集
@@ -30,16 +31,24 @@ import java.time.ZoneId;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
-public abstract class AbstractResult<T> extends AbstractError implements DataResult<T> {
+public abstract class AbstractResult<T> extends AbstractResultError implements DataResult<T> {
 
     /**
      * 数据
      */
     protected T data;
     /**
+     * 当前时间
+     */
+    protected final OffsetDateTime currentTime = OffsetDateTime.now();
+    /**
      * 当前时间戳
      */
-    protected final long timestamp = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    protected final long timestamp = currentTime.atZoneSameInstant(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    /**
+     * 当前时间字符串
+     */
+    protected final String gmtCreateAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(currentTime);
 
     @Override
     public T getData() {
@@ -60,9 +69,11 @@ public abstract class AbstractResult<T> extends AbstractError implements DataRes
         return this.timestamp;
     }
 
-
     public String getCreateAt() {
         return Long.toString(this.timestamp);
     }
 
+    public String getGmtCreateAt() {
+        return gmtCreateAt;
+    }
 }

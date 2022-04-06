@@ -25,7 +25,7 @@ import io.github.mybatisx.result.Status;
  * @since 1.0.0
  */
 @SuppressWarnings("serial")
-public abstract class AbstractError implements Error {
+public abstract class AbstractResultError implements ResultError {
 
     /**
      * 响应状态码
