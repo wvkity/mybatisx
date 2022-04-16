@@ -75,8 +75,9 @@ public abstract class AbstractInjectMethod<S extends SqlSupplier> extends Abstra
             }
         } else {
             kg = new NoKeyGenerator();
-            this.addInsertMappedStatement(mapperInterface, msName, this.createSource(this.build(), entity), kg, null,
-                    null, entity);
+            this.addInsertMappedStatement(mapperInterface, msName,
+                    this.createSource(this.build(this.getGlobalConfig(), table), entity), kg,
+                    null, null, entity);
         }
     }
 
