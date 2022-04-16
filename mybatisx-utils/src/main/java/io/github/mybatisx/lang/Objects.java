@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -804,4 +805,74 @@ public final class Objects {
         return value;
     }
 
+    /**
+     * 检查集合元素是否为空，如果为空，则返回null
+     *
+     * @param origin 待检查集合
+     * @param <C>    {@link Collection}
+     * @param <T>    元素类型
+     * @return 集合
+     */
+    public static <C extends Collection<T>, T> C checkNull(final C origin) {
+        return checkNull(origin, null);
+    }
+
+    /**
+     * 检查集合元素是否为空，如果为空则返回默认值
+     *
+     * @param origin       待检查集合
+     * @param defaultValue 默认值
+     * @param <C>          {@link Collection}
+     * @param <T>          元素类型
+     * @return 集合
+     */
+    public static <C extends Collection<T>, T> C checkNull(final C origin, final C defaultValue) {
+        if (isNotEmpty(origin)) {
+            for (T it : origin) {
+                if (it != null) {
+                    return origin;
+                }
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * 字符串元素转成小写
+     *
+     * @param data 字符串集合
+     * @return 处理后的数据
+     */
+    public static List<String> lowerCase(final Collection<String> data) {
+        return transform(data, Objects::nonNull, it -> it.toLowerCase(Locale.ENGLISH));
+    }
+
+    /**
+     * 字符串元素转成大写
+     *
+     * @param data 字符串集合
+     * @return 处理后的字符串集合
+     */
+    public static List<String> upperCase(final Collection<String> data) {
+        return transform(data, Objects::nonNull, it -> it.toUpperCase(Locale.ENGLISH));
+    }
+
+    /**
+     * 数据转换
+     *
+     * @param origin 原数据
+     * @param filter {@link Predicate}
+     * @param mapper {@link Function}
+     * @param <C>    {@link Collection}
+     * @param <T>    数据类型
+     * @param <R>    返回值类型
+     * @return 处理后的数据集合
+     */
+    public static <C extends Collection<T>, T, R> List<R> transform(final C origin, final Predicate<T> filter,
+                                                                    final Function<T, R> mapper) {
+        if (isNotEmpty(origin)) {
+            return origin.stream().filter(filter).map(mapper).collect(Collectors.toList());
+        }
+        return null;
+    }
 }

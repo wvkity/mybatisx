@@ -17,6 +17,9 @@ package io.github.mybatisx.result;
 
 import io.github.mybatisx.result.error.Error;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 状态码
  *
@@ -27,38 +30,50 @@ import io.github.mybatisx.result.error.Error;
 public enum Status implements Error {
 
     /**
-     * OK
+     * ok
      */
-    OK(200, "成功"),
+    OK(200, 200, "成功"),
+    /**
+     * unauthorized
+     */
+    UNAUTHORIZED(401, 400401, "未授权"),
+    /**
+     * invalid token
+     */
+    INVALID_TOKEN(402, 400402, "无效token"),
+    /**
+     * forbidden
+     */
+    FORBIDDEN(403, 400403, "无效请求"),
+    /**
+     * not found
+     */
+    NOT_FOUND(404, 400404, "请求资源不存在"),
+    /**
+     * method not allowed
+     */
+    NOT_ALLOWED(405, 400405, "请求中存在禁用方法"),
+    /**
+     * timeout
+     */
+    TIMEOUT(408, 400408, "请求超时"),
+    /**
+     * server error
+     */
+    SERVER_ERROR(500, 500500, "系统繁忙，请稍后再试"),
+    /**
+     * Service Unavailable
+     */
+    SERVICE_UNAVAILABLE(503, 500503, "系统正在维护，暂不提供服务，请稍后再试"),
     /**
      * FAILURE
      */
-    FAILURE(100000, "失败"),
-    /**
-     * UNAUTHORIZED
-     */
-    UNAUTHORIZED(400401, "未授权"),
-    /**
-     * INVALID TOKEN
-     */
-    INVALID_TOKEN(400402, "无效token"),
-    /**
-     * FORBIDDEN
-     */
-    FORBIDDEN(400403, "无效请求"),
-    /**
-     * NOT FOUND(
-     */
-    NOT_FOUND(400404, "未找到资源"),
-    /**
-     * TIMEOUT
-     */
-    TIMEOUT(400405, "请求超时"),
-    /**
-     * SERVER ERROR
-     */
-    SERVER_ERROR(500500, "服务器发生异常");
+    FAILURE(510, 500510, "请求失败");
 
+    /**
+     * http状态
+     */
+    final int status;
     /**
      * 状态码
      */
@@ -68,9 +83,14 @@ public enum Status implements Error {
      */
     final String msg;
 
-    Status(int code, String desc) {
+    Status(int status, int code, String msg) {
+        this.status = status;
         this.code = code;
-        this.msg = desc;
+        this.msg = msg;
+    }
+
+    public int getStatus() {
+        return status;
     }
 
     public int getCode() {
@@ -80,5 +100,24 @@ public enum Status implements Error {
     public String getMsg() {
         return msg;
     }
-    
+
+    private static final Map<Integer, Status> CACHE = new HashMap<>(Status.values().length * 2);
+
+    static {
+        for (Status it : Status.values()) {
+            CACHE.put(it.getStatus(), it);
+            CACHE.put(it.getCode(), it);
+        }
+    }
+
+    /**
+     * 根据状态值获取{@link Status}
+     *
+     * @param status 状态值
+     * @return {@link Status}
+     */
+    public static Status getStatus(final int status) {
+        return CACHE.getOrDefault(status, FAILURE);
+    }
+
 }
