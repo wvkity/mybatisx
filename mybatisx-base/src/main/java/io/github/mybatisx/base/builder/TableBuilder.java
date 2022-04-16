@@ -139,12 +139,14 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
         } else {
             tableName = realPrefix + this.namingConverter.convert(this.entity.getSimpleName());
         }
-        String realTableName = null;
+        final String realTableName;
         if (ReservedKeywordRegistry.contains(tableName)) {
             if (this.keywordConverter != null) {
                 realTableName = this.keywordConverter.convert(this.entity, tableName, true);
             } else if (Strings.isNotWhitespace(this.keywordFormatTemplate)) {
                 realTableName = MessageFormat.format(this.keywordFormatTemplate, tableName);
+            } else {
+                realTableName = tableName;
             }
         } else {
             realTableName = tableName;
