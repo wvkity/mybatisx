@@ -33,6 +33,28 @@ import java.io.Serializable;
 public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> extends 
         SaveService<T>, UpdateService<T>, DeleteService<T, ID>, QueryService<T, R, ID> {
 
+
+    /**
+     * 获取mapper类型
+     *
+     * @return mapper类型
+     */
+    Class<M> getMapperType();
+
+    /**
+     * 获取实体类型
+     *
+     * @return 实体类型
+     */
+    Class<T> getEntityType();
+
+    /**
+     * 获取返回值类型
+     *
+     * @return 返回值类型
+     */
+    Class<R> getReturnType();
+    
     /**
      * 获取Mapper接口对象
      *

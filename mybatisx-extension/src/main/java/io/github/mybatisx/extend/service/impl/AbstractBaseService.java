@@ -19,7 +19,10 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.mapper.BaseMapper;
 import io.github.mybatisx.extend.service.BaseService;
+import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.reflect.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -42,6 +45,43 @@ import java.util.Optional;
 public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> implements
         BaseService<M, T, R, ID> {
 
+
+    private final Class<?>[] genericClasses = this.genericClasses();
+    /**
+     * mapper类型
+     */
+    protected final Class<M> currentMapperType = this.getGenericType(0);
+    /**
+     * 实体类型
+     */
+    protected final Class<T> currentEntityType = this.getGenericType(1);
+    /**
+     * 返回值类型
+     */
+    protected final Class<R> currentReturnType = this.getGenericType(2);
+
+    /**
+     * 获取当前实体类型
+     *
+     * @return 实体类型
+     */
+    @SuppressWarnings({"unchecked"})
+    protected <E> Class<E> getGenericType(final int index) {
+        if (index < 0 || index >= this.genericClasses.length) {
+            return null;
+        }
+        return Objects.isEmpty(this.genericClasses) ? null : (Class<E>) this.genericClasses[index];
+    }
+
+    /**
+     * 获取泛型列表
+     *
+     * @return 泛型列表
+     */
+    protected Class<?>[] genericClasses() {
+        return GenericTypeResolver.resolveTypeArguments(Reflections.getRealClass(this.getClass()), BaseService.class);
+    }
+    
     /**
      * 通用Mapper接口
      */
@@ -166,6 +206,21 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     @Override
     public List<Object[]> selectArrays(Query<T> query) {
         return this.mapper.selectArrays(query);
+    }
+
+    @Override
+    public Class<M> getMapperType() {
+        return this.currentMapperType;
+    }
+
+    @Override
+    public Class<T> getEntityType() {
+        return this.currentEntityType;
+    }
+
+    @Override
+    public Class<R> getReturnType() {
+        return this.currentReturnType;
     }
 
     @Override
