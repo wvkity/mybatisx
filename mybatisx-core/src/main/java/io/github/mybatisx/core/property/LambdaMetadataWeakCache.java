@@ -16,7 +16,6 @@
 package io.github.mybatisx.core.property;
 
 import io.github.mybatisx.lambda.LambdaMetadata;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -51,11 +50,28 @@ public final class LambdaMetadataWeakCache {
      */
     public static <T> LambdaMetadata get(final Property<T, ?> property) {
         final Class<?> clazz = property.getClass();
-        return Optional.ofNullable(LAMBDA_METADATA_CACHE.get(clazz)).map(WeakReference::get).orElseGet(() -> {
-            final LambdaMetadata it = LambdaMetadataFactory.get(property);
-            final WeakReference<LambdaMetadata> ref = new WeakReference<>(it);
-            return Objects.ifNonNull(LAMBDA_METADATA_CACHE.putIfAbsent(clazz, ref), ref).get();
-        });
+        return Optional.ofNullable(LAMBDA_METADATA_CACHE.get(clazz)).map(ref -> {
+            final LambdaMetadata it = ref.get();
+            if (it != null) {
+                return it;
+            }
+            return getAndCache(property, clazz);
+        }).orElseGet(() -> getAndCache(property, clazz));
+    }
+
+    /**
+     * 获取{@link  LambdaMetadata}对象并缓存
+     *
+     * @param property {@link Property}
+     * @param clazz    目标类
+     * @param <T>      实体类型
+     * @return {@link LambdaMetadata}
+     */
+    public static <T> LambdaMetadata getAndCache(final Property<T, ?> property, final Class<?> clazz) {
+        final LambdaMetadata it = LambdaMetadataFactory.get(property);
+        final WeakReference<LambdaMetadata> ref = new WeakReference<>(it);
+        LAMBDA_METADATA_CACHE.putIfAbsent(clazz, ref);
+        return it;
     }
 
     /**
