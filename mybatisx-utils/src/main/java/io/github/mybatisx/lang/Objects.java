@@ -452,53 +452,53 @@ public final class Objects {
     /**
      * 如果值为null则返回默认值
      *
-     * @param v            值
+     * @param t            值
      * @param defaultValue 默认值
-     * @param <V>          值类型
+     * @param <T>          值类型
      * @return 值
      */
-    public static <V> V ifNull(final V v, final V defaultValue) {
-        return Objects.isNull(v) ? defaultValue : v;
+    public static <T> T ifNull(final T t, final T defaultValue) {
+        return Objects.isNull(t) ? defaultValue : t;
     }
 
     /**
      * 如果给定值为不为null则返回v，否则返回默认值
      *
-     * @param v            指定值
+     * @param t            指定值
      * @param defaultValue 默认值
-     * @param <V>          值类型
+     * @param <T>          值类型
      * @return 值
      */
-    public static <V> V ifNonNull(final V v, final V defaultValue) {
-        return Objects.nonNull(v) ? v : defaultValue;
+    public static <T> T ifNonNull(final T t, final T defaultValue) {
+        return Objects.nonNull(t) ? t : defaultValue;
     }
 
     /**
      * 如果给定值为不为null则返回v1，否则返回v2
      *
-     * @param v   指定值
-     * @param v1  真返回值
-     * @param v2  假返回值
-     * @param <V> 值类型
+     * @param t   指定值
+     * @param t1  真返回值
+     * @param t2  假返回值
+     * @param <T> 值类型
      * @return 值
      */
-    public static <V> V ifNonNull(final V v, final V v1, final V v2) {
-        return Objects.nonNull(v) ? v1 : v2;
+    public static <T> T ifNonNull(final T t, final T t1, final T t2) {
+        return Objects.nonNull(t) ? t1 : t2;
     }
 
     /**
      * 如果指定值为null则返回默认值
      *
-     * @param v            指定值
+     * @param t            指定值
      * @param defaultValue 默认值
      * @param action       {@link Function}
-     * @param <V>          值类型
+     * @param <T>          值类型
      * @param <R>          值类型
      * @return 处理后的值
      */
-    public static <V, R> R ifNullThen(final V v, final R defaultValue, final Function<V, R> action) {
-        if (Objects.nonNull(v) && Objects.nonNull(action)) {
-            return action.apply(v);
+    public static <T, R> R ifNullThen(final T t, final R defaultValue, final Function<T, R> action) {
+        if (Objects.nonNull(t) && Objects.nonNull(action)) {
+            return action.apply(t);
         }
         return defaultValue;
     }
@@ -506,13 +506,25 @@ public final class Objects {
     /**
      * 如果给定的值不为null则消费
      *
-     * @param v        指定值
+     * @param t        指定值
      * @param consumer {@link Consumer}
-     * @param <V>      值类型
+     * @param <T>      值类型
      */
-    public static <V> void ifNonNullThen(final V v, final Consumer<V> consumer) {
-        if (Objects.nonNull(v)) {
-            consumer.accept(v);
+    public static <T> void ifNonNullThen(final T t, final Consumer<T> consumer) {
+        Objects.ifTrueThen(t, Objects::nonNull, consumer);
+    }
+
+    /**
+     * 给定值符合要求并消费
+     *
+     * @param t         指定值
+     * @param predicate {@link  Predicate}
+     * @param consumer  {@link  Consumer}
+     * @param <T>       值类型
+     */
+    public static <T> void ifTrueThen(final T t, final Predicate<T> predicate, final Consumer<T> consumer) {
+        if (Objects.nonNull(predicate) && Objects.nonNull(consumer) && predicate.test(t)) {
+            consumer.accept(t);
         }
     }
 
@@ -874,5 +886,46 @@ public final class Objects {
             return origin.stream().filter(filter).map(mapper).collect(Collectors.toList());
         }
         return null;
+    }
+
+    /**
+     * 数据合并
+     *
+     * @param array 多个集合
+     * @param <T>   数据类型
+     * @param <C>   集合类型
+     * @return 合并后的数据
+     */
+    @SafeVarargs
+    public static <T, C extends Iterable<T>> List<T> combine(final C... array) {
+        return combine(null, array);
+    }
+
+    /**
+     * 数据合并
+     *
+     * @param filter 过滤器
+     * @param array  多个集合
+     * @param <T>    数据类型
+     * @param <C>    集合类型
+     * @return 合并后的数据
+     */
+    @SafeVarargs
+    public static <T, C extends Iterable<T>> List<T> combine(final Predicate<T> filter, final C... array) {
+        final Predicate<T> ipt = filter == null ? __ -> true : filter;
+        if (isNotEmpty(array)) {
+            final List<T> result = new ArrayList<>();
+            for (C c : array) {
+                if (nonNull(c)) {
+                    for (T it : c) {
+                        if (ipt.test(it)) {
+                            result.add(it);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        return new ArrayList<>(0);
     }
 }
