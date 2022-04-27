@@ -69,7 +69,7 @@ public abstract class AbstractPageable implements Pageable {
     }
 
     public AbstractPageable(String page, String size) {
-        this(Strings.parsePositiveInt(page), Strings.parseInt(size, DEFAULT_PAGE_SIZE));
+        this(Strings.parsePositiveInt(page, ONE), Strings.parsePositiveInt(size, DEFAULT_PAGE_SIZE));
     }
 
     public AbstractPageable(int page, int size) {
