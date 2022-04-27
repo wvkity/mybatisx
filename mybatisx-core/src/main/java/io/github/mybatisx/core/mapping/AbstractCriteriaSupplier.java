@@ -66,7 +66,8 @@ public abstract class AbstractCriteriaSupplier extends AbstractSupplier {
      * @return 完整查询SQL语句
      */
     protected String criteriaSelect(final String selectFragment, final String whereFragment) {
-        return SELECT + START_CDATA + selectFragment + END_CDATA + SPACE + FROM + DOLLAR_START_BRACE + Constants.PARAM_CRITERIA + ".tableName" + END_BRACE + SPACE + whereFragment;
+        return SELECT + START_CDATA + selectFragment + END_CDATA + SPACE + FROM + SPACE + DOLLAR_START_BRACE + 
+                Constants.PARAM_CRITERIA + ".tableName" + END_BRACE + SPACE + whereFragment;
     }
 
     /**
