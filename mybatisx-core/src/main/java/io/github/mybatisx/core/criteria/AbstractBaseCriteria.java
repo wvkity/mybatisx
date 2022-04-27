@@ -448,7 +448,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     }
 
     @Override
-    public String getWhereString() {
+    public String getWhereFragment() {
         return this.sqlManager.getWhereString();
     }
 

@@ -23,6 +23,7 @@ import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.metadata.Column;
+import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.criterion.JoinableCondition;
 import io.github.mybatisx.core.criterion.NestedCondition;
@@ -39,6 +40,10 @@ import io.github.mybatisx.core.param.TemplateParam;
 import io.github.mybatisx.core.support.function.Count;
 import io.github.mybatisx.core.support.having.CriterionHaving;
 import io.github.mybatisx.core.support.having.FunctionHaving;
+import io.github.mybatisx.core.support.part.ListPart;
+import io.github.mybatisx.core.support.part.MapPart;
+import io.github.mybatisx.core.support.part.PurePart;
+import io.github.mybatisx.core.support.part.SinglePart;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
@@ -846,6 +851,38 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 this.where(it);
             }
         }
+        return this.context;
+    }
+
+    @Override
+    public C tail(String sql) {
+        return this.tail(PurePart.of(sql));
+    }
+
+    @Override
+    public C tail(String template, Object value) {
+        return this.tail(SinglePart.of(template, value));
+    }
+
+    @Override
+    public C tail(String template, List<?> values) {
+        return this.tail(ListPart.of(template, values));
+    }
+
+    @Override
+    public C tail(String template, Map<String, Object> values) {
+        return this.tail(MapPart.of(template, values));
+    }
+
+    @Override
+    public C tail(Part part) {
+        this.fragmentManager.addPart(part);
+        return this.context;
+    }
+
+    @Override
+    public C tail(List<Part> parts) {
+        this.fragmentManager.addParts(parts);
         return this.context;
     }
 

@@ -19,6 +19,7 @@ import io.github.mybatisx.base.constant.LogicSymbol;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.dialect.Dialect;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.base.part.Part;
 
 /**
  * 条件接口
@@ -126,7 +127,7 @@ public interface Criteria<T> extends Fragment {
      *
      * @return 条件片段
      */
-    String getWhereString();
+    String getWhereFragment();
 
     /**
      * 添加条件
@@ -135,6 +136,14 @@ public interface Criteria<T> extends Fragment {
      * @return {@code this}
      */
     Criteria<T> where(final Criterion criterion);
+
+    /**
+     * 添加尾部SQL片段
+     *
+     * @param part SQL片段
+     * @return {@code this}
+     */
+    Criteria<T> tail(final Part part);
 
     /**
      * 获取完整SQL语句

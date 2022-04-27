@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria;
 
+import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.expression.Expression;
 
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import java.util.function.Function;
  * @created 2022/1/5
  * @since 1.0.0
  */
-public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends BaseCriteria<T> {
+public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends BaseCriteria<T>, TailPartWrapper<T, C> {
 
     /**
      * 链式消费
@@ -241,4 +242,12 @@ public interface CriteriaWrapper<T, C extends CriteriaWrapper<T, C>> extends Bas
      * @return {@code this}
      */
     C where(final Collection<Expression> expressions);
+
+    /**
+     * 尾部添加多个SQL片段
+     *
+     * @param parts 多个SQL片段
+     * @return {@code this}
+     */
+    C tail(final List<Part> parts);
 }
