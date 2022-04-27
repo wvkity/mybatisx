@@ -199,6 +199,11 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     }
 
     @Override
+    public <E> List<E> selectCustomList(Query<T> query) {
+        return this.mapper.selectCustomList(query);
+    }
+
+    @Override
     public List<Object> selectObjects(Query<T> query) {
         return this.mapper.selectObjects(query);
     }
