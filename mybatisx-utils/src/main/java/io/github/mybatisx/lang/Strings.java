@@ -385,7 +385,7 @@ public final class Strings {
      * @return 整数
      */
     public static int parseInt(final String arg, final int defaultValue) {
-        if (Regex.isInteger(arg)) {
+        if (Strings.isNotEmpty(arg) && Regex.isInteger(arg)) {
             return Integer.parseInt(arg);
         }
         return defaultValue;
