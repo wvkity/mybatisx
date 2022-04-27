@@ -17,6 +17,7 @@ package io.github.mybatisx.core.fragment;
 
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.Fragment;
+import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
@@ -142,6 +143,20 @@ public interface FragmentManager extends Fragment {
     void addOrders(final List<? extends Order> orders);
 
     /**
+     * 添加尾部SQL片段
+     *
+     * @param part {@link  Part}
+     */
+    void addPart(final Part part);
+
+    /**
+     * 添加多个尾部SQL片段
+     *
+     * @param tailParts {@link  Part}列表
+     */
+    void addParts(final List<? extends Part> tailParts);
+
+    /**
      * 检查是否存在条件
      *
      * @return boolean
@@ -161,6 +176,13 @@ public interface FragmentManager extends Fragment {
      * @return boolean
      */
     boolean hasSort();
+
+    /**
+     * 是否存在尾部SQL片段
+     *
+     * @return boolean
+     */
+    boolean hasPart();
 
     /**
      * 是否已缓存
@@ -236,6 +258,12 @@ public interface FragmentManager extends Fragment {
      * @return 排序语句
      */
     String getOrderString();
+
+    /**
+     * 获取尾部SQL语句
+     * @return 尾部SQL语句
+     */
+    String getTailString();
 
     @Override
     default String getFragment() {

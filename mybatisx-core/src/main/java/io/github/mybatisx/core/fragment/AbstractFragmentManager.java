@@ -21,6 +21,7 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.base.criterion.Criterion;
+import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.support.group.Group;
 import io.github.mybatisx.core.support.having.Having;
 import io.github.mybatisx.core.support.order.Order;
@@ -67,11 +68,16 @@ public abstract class AbstractFragmentManager implements FragmentManager {
      * 排序存储器
      */
     protected final OrderStorage orderStorage;
+    /**
+     * 尾部SQL片段存储器
+     */
+    protected final TailPartStorage tailPartStorage;
 
     public AbstractFragmentManager(Criteria<?> criteria, ParameterConverter parameterConverter,
                                    PlaceholderConverter placeholderConverter) {
         this(criteria, new ConditionStorage(parameterConverter, placeholderConverter), new SelectableStorage(criteria),
-                new GroupStorage(), new HavingStorage(parameterConverter, placeholderConverter), new OrderStorage());
+                new GroupStorage(), new HavingStorage(parameterConverter, placeholderConverter), new OrderStorage(),
+                new TailPartStorage(parameterConverter, placeholderConverter));
     }
 
     @Override
@@ -153,6 +159,16 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public void addPart(Part part) {
+        this.tailPartStorage.add(part);
+    }
+
+    @Override
+    public void addParts(List<? extends Part> tailParts) {
+        this.tailPartStorage.addAll(tailParts);
+    }
+
+    @Override
     public boolean hasCondition() {
         return !this.conditionStorage.isEmpty();
     }
@@ -168,6 +184,11 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public boolean hasPart() {
+        return this.tailPartStorage != null && !this.tailPartStorage.isEmpty();
+    }
+
+    @Override
     public boolean isCached() {
         return this.selectableStorage != null && this.selectableStorage.isCached();
     }
@@ -175,7 +196,7 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     @Override
     public boolean hasFragment() {
         return this.hasCondition() || this.hasSelect() || (this.groupStorage != null && !this.groupStorage.isEmpty())
-                || (this.havingStorage != null && !this.havingStorage.isEmpty()) || this.hasSort();
+                || (this.havingStorage != null && !this.havingStorage.isEmpty()) || this.hasSort() || hasPart();
     }
 
     @Override
@@ -229,29 +250,26 @@ public abstract class AbstractFragmentManager implements FragmentManager {
     }
 
     @Override
+    public String getTailString() {
+        if (this.tailPartStorage != null) {
+            return this.tailPartStorage.getFragment();
+        }
+        return Constants.EMPTY;
+    }
+
+    @Override
     public String getCompleteString(String groupReplacement) {
         if (this.hasFragment()) {
             final StringBuilder sb = new StringBuilder(128);
-            final String condition = this.getWhereString();
-            if (Strings.isNotWhitespace(condition)) {
-                sb.append(condition);
-            }
+            Strings.ifNotWhitespaceThen(this.getWhereString(), sb::append);
             if (Strings.isNotWhitespace(groupReplacement)) {
                 sb.append(SqlSymbol.GROUP_BY_SPACE_BOTH).append(groupReplacement);
             } else {
-                final String group = this.getGroupString();
-                if (Strings.isNotWhitespace(group)) {
-                    sb.append(SqlSymbol.SPACE).append(group);
-                }
+                Strings.ifNotWhitespaceThen(this.getGroupString(), v -> sb.append(SqlSymbol.SPACE).append(v));
             }
-            final String having = this.getHavingString();
-            if (Strings.isNotWhitespace(having)) {
-                sb.append(SqlSymbol.SPACE).append(having);
-            }
-            final String order = this.getOrderString();
-            if (Strings.isNotWhitespace(order)) {
-                sb.append(SqlSymbol.SPACE).append(order);
-            }
+            Strings.ifNotWhitespaceThen(this.getHavingString(), v -> sb.append(SqlSymbol.SPACE).append(v));
+            Strings.ifNotWhitespaceThen(this.getOrderString(), v -> sb.append(SqlSymbol.SPACE).append(v));
+            Strings.ifNotWhitespaceThen(this.getTailString(), v -> sb.append(SqlSymbol.SPACE).append(v));
             return sb.toString();
         }
         return Constants.EMPTY;
