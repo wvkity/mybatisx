@@ -860,7 +860,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
     }
 
     @Override
-    public C tail(String template, Object value) {
+    public C singleTail(String template, Object value) {
         return this.tail(SinglePart.of(template, value));
     }
 

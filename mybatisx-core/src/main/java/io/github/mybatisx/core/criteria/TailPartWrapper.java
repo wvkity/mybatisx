@@ -32,7 +32,7 @@ public interface TailPartWrapper<T, C extends TailPartWrapper<T, C>> {
      * @param value    值
      * @return {@code this}
      */
-    C tail(final String template, final Object value);
+    C singleTail(final String template, final Object value);
 
     /**
      * 尾部SQL片段
@@ -67,13 +67,11 @@ public interface TailPartWrapper<T, C extends TailPartWrapper<T, C>> {
      * 尾部SQL片段
      *
      * @param template 模板
-     * @param key      键
+     * @param key      占位符参数
      * @param value    值
-     * @param <K>      键类型
-     * @param <V>      值类型
      * @return {@code  this}
      */
-    default <K, V> C tail(final String template, final K key, final V value) {
+    default C tail(final String template, final String key, final Object value) {
         return this.tail(template, Maps.of(key, value));
     }
 
@@ -81,15 +79,13 @@ public interface TailPartWrapper<T, C extends TailPartWrapper<T, C>> {
      * 尾部SQL片段
      *
      * @param template 模板
-     * @param k1       键1
-     * @param v1       k1对应值
-     * @param k2       键2
-     * @param v2       k2对应值
-     * @param <K>      键类型
-     * @param <V>      值类型
+     * @param k1       占位符参数1
+     * @param v1       参数1对应值
+     * @param k2       占位符参数2
+     * @param v2       参数2对应值
      * @return {@code  this}
      */
-    default <K, V> C tail(final String template, final K k1, final V v1, final K k2, final V v2) {
+    default C tail(final java.lang.String template, final String k1, final Object v1, final String k2, final Object v2) {
         return this.tail(template, Maps.of(k1, v1, k2, v2));
     }
 
@@ -97,18 +93,16 @@ public interface TailPartWrapper<T, C extends TailPartWrapper<T, C>> {
      * 尾部SQL片段
      *
      * @param template 模板
-     * @param k1       键1
-     * @param v1       k1对应值
-     * @param k2       键2
-     * @param v2       k2对应值
-     * @param k3       键3
-     * @param v3       k3对应值
-     * @param <K>      键类型
-     * @param <V>      值类型
+     * @param k1       占位符参数1
+     * @param v1       参数1对应值
+     * @param k2       占位符参数2
+     * @param v2       参数2对应值
+     * @param k3       占位符参数3
+     * @param v3       参数3对应值
      * @return {@code  this}
      */
-    default <K, V> C tail(final String template, final K k1, final V v1, final K k2, final V v2, final K k3,
-                          final V v3) {
+    default C tail(final java.lang.String template, final String k1, final Object v1,
+                   final String k2, final Object v2, final String k3, final Object v3) {
         return this.tail(template, Maps.of(k1, v1, k2, v2, k3, v3));
     }
 
