@@ -262,7 +262,7 @@ public interface LambdaSort<T, C extends LambdaSort<T, C>> extends PropertyConve
      * @return {@code this}
      */
     default C desc(final Property<T, ?> property) {
-        return this.asc(property, false);
+        return this.desc(property, false);
     }
 
     /**
@@ -306,7 +306,7 @@ public interface LambdaSort<T, C extends LambdaSort<T, C>> extends PropertyConve
      * @return {@code this}
      */
     default C desc(final String property) {
-        return this.asc(property, false);
+        return this.desc(property, false);
     }
 
     /**
