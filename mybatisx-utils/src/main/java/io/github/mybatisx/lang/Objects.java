@@ -515,7 +515,7 @@ public final class Objects {
     }
 
     /**
-     * 给定值符合要求并消费
+     * 指定值符合要求并消费
      *
      * @param t         指定值
      * @param predicate {@link  Predicate}
@@ -525,6 +525,47 @@ public final class Objects {
     public static <T> void ifTrueThen(final T t, final Predicate<T> predicate, final Consumer<T> consumer) {
         if (Objects.nonNull(predicate) && Objects.nonNull(consumer) && predicate.test(t)) {
             consumer.accept(t);
+        }
+    }
+
+    /**
+     * 指定值符合要求则设定该值，否则设定默认值
+     *
+     * @param t            指定值
+     * @param defaultValue 默认值
+     * @param predicate    {@link  Predicate}
+     * @param consumer     {@link  Consumer}
+     * @param <T>          值类型
+     */
+    public static <T> void ifTrueThen(final T t, final T defaultValue, final Predicate<T> predicate,
+                                      final Consumer<T> consumer) {
+        if (Objects.nonNull(predicate) && Objects.nonNull(consumer)) {
+            if (predicate.test(t)) {
+                consumer.accept(t);
+            } else {
+                consumer.accept(defaultValue);
+            }
+        }
+    }
+
+    /**
+     * 指定值符合要求，则执行预期消费，否则执行默认消费
+     *
+     * @param expectValue   预期值
+     * @param defaultValue  默认值
+     * @param predicate     {@link  Predicate}
+     * @param expectAction  {@link  Consumer}
+     * @param defaultAction {@link  Consumer}
+     * @param <T>           值类型
+     */
+    public static <T> void ifTrueThen(final T expectValue, final T defaultValue, final Predicate<T> predicate,
+                                      final Consumer<T> expectAction, final Consumer<T> defaultAction) {
+        if (Objects.nonNull(predicate)) {
+            if (predicate.test(expectValue) && Objects.nonNull(expectAction)) {
+                expectAction.accept(expectValue);
+            } else if (Objects.nonNull(defaultAction)) {
+                defaultAction.accept(defaultValue);
+            }
         }
     }
 
