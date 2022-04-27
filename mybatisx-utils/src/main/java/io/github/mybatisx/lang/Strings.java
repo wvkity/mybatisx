@@ -409,7 +409,7 @@ public final class Strings {
      * @return 整数
      */
     public static int parsePositiveInt(final String arg, final int defaultValue) {
-        if (Regex.isPositiveInteger(arg)) {
+        if (Strings.isNotEmpty(arg) && Regex.isPositiveInteger(arg)) {
             return Integer.parseInt(arg);
         }
         return defaultValue;
