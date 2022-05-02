@@ -72,7 +72,7 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      *
      * @return {@code this}
      */
-    Query<T> propAsAlias();
+    Query<T> aliasFromProp();
 
     /**
      * 设置属性名是否作为字段别名
@@ -80,7 +80,7 @@ public interface Query<T> extends BaseCriteria<T>, EmbeddableResult {
      * @param using 是否使用
      * @return {@code this}
      */
-    Query<T> propAsAlias(final boolean using);
+    Query<T> aliasFromProp(final boolean using);
 
     /**
      * 属性名是否作为别名
