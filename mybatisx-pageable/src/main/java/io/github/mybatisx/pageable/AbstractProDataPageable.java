@@ -16,6 +16,7 @@
 package io.github.mybatisx.pageable;
 
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +66,7 @@ public abstract class AbstractProDataPageable<T> extends AbstractProPageable imp
 
     @Override
     public void addAll(Collection<T> data) {
-        if (Objects.isNotEmpty(data)) {
+        if (Collections.isNotEmpty(data)) {
             if (Objects.isNull(this.data)) {
                 this.data = new ArrayList<>(data.size());
             }

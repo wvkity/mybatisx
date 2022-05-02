@@ -51,6 +51,8 @@ import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.sql.parsing.SqlParser;
+import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -98,12 +100,12 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
     }
 
     @Override
-    public C propAsAlias() {
-        return this.propAsAlias(true);
+    public C aliasFromProp() {
+        return this.aliasFromProp(true);
     }
 
     @Override
-    public C propAsAlias(boolean using) {
+    public C aliasFromProp(boolean using) {
         this.propertyAsAlias = using;
         return this.context;
     }
@@ -334,7 +336,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
         //  noinspection DuplicatedCode
         if (matcher != null) {
             final List<Column> columns;
-            if (Objects.isNotEmpty((columns = TableHelper.getColumns(this.getEntity(), matcher)))) {
+            if (Collections.isNotEmpty((columns = TableHelper.getColumns(this.getEntity(), matcher)))) {
                 for (Column column : columns) {
                     this.select(StandardSelectable.builder()
                             .query(this)
@@ -365,7 +367,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C selects(Map<String, String> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Maps.isNotEmpty(properties)) {
             for (Map.Entry<String, String> it : properties.entrySet()) {
                 this.select(it.getValue(), it.getKey());
             }
@@ -375,7 +377,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C selects(Collection<String> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             for (String property : properties) {
                 this.select(property);
             }
@@ -507,7 +509,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C functions(List<AggFunction> functions) {
-        if (Objects.isNotEmpty(functions)) {
+        if (Collections.isNotEmpty(functions)) {
             for (AggFunction it : functions) {
                 this.function(it);
             }
@@ -530,7 +532,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C group(List<String> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.group(MultiGroup.group(this, this.stringConvert(properties)));
         }
         return this.context;
@@ -658,7 +660,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C asc(List<String> properties, boolean ignoreCase, NullPrecedence precedence) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.order(MultiOrder.asc(this, this.stringConvert(properties), ignoreCase, precedence));
         }
         return this.context;
@@ -666,7 +668,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C asc(boolean ignoreCase, NullPrecedence precedence, List<Property<T, ?>> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.order(MultiOrder.asc(this, this.lambdaConvert(properties), ignoreCase, precedence));
         }
         return this.context;
@@ -684,7 +686,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C desc(List<String> properties, boolean ignoreCase, NullPrecedence precedence) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.order(MultiOrder.desc(this, this.stringConvert(properties), ignoreCase, precedence));
         }
         return this.context;
@@ -692,7 +694,7 @@ public abstract class AbstractLambdaQueryCriteria<T, C extends LambdaQueryWrappe
 
     @Override
     public C desc(boolean ignoreCase, NullPrecedence precedence, List<Property<T, ?>> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.order(MultiOrder.desc(this, this.lambdaConvert(properties), ignoreCase, precedence));
         }
         return this.context;

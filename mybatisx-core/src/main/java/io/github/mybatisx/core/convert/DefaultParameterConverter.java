@@ -20,6 +20,7 @@ import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Maps;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
@@ -115,7 +116,7 @@ public class DefaultParameterConverter implements ParameterConverter {
 
     @Override
     public Map<String, String> converts(String template, Map<String, ?> args) {
-        if (Strings.isNotWhitespace(template) && Objects.isNotEmpty(args)) {
+        if (Strings.isNotWhitespace(template) && Maps.isNotEmpty(args)) {
             final Map<String, String> newArgs = new HashMap<>(args.size());
             for (Map.Entry<String, ?> it : args.entrySet()) {
                 newArgs.put(it.getKey(), this.convert(template, it.getValue()));

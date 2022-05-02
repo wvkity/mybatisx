@@ -39,6 +39,7 @@ import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
 import io.github.mybatisx.sql.parsing.JSqlParser;
 import io.github.mybatisx.sql.parsing.SqlParser;
+import io.github.mybatisx.util.Collections;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -289,7 +290,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @return 字段列表
      */
     protected List<String> stringConvert(final List<String> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             final Table table = TableHelper.getTable(this.entity);
             if (table != null) {
                 final List<String> columns = new ArrayList<>(properties.size());
@@ -318,7 +319,7 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @return 字段列表
      */
     protected List<String> lambdaConvert(final List<Property<T, ?>> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             final Table table = TableHelper.getTable(this.entity);
             if (table != null) {
                 final List<String> columns = new ArrayList<>(properties.size());

@@ -20,8 +20,8 @@ import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.NullPrecedence;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -72,7 +72,7 @@ public class MultiOrder extends AbstractOrder {
     @Override
     public String getFragment() {
         final List<String> _$columns = this.columns;
-        if (Objects.isNotEmpty(_$columns)) {
+        if (Collections.isNotEmpty(_$columns)) {
             final List<String> fragments = new ArrayList<>(_$columns.size());
             for (String c : _$columns) {
                 final String it = this.render(c);
@@ -80,7 +80,7 @@ public class MultiOrder extends AbstractOrder {
                     fragments.add(it);
                 }
             }
-            if (Objects.isNotEmpty(fragments)) {
+            if (Collections.isNotEmpty(fragments)) {
                 return String.join(SqlSymbol.COMMA_SPACE, fragments);
             }
         }
@@ -89,7 +89,7 @@ public class MultiOrder extends AbstractOrder {
 
     @Override
     public String toString() {
-        if (Objects.isNotEmpty(this.columns)) {
+        if (Collections.isNotEmpty(this.columns)) {
             return this.columns.stream().filter(Strings::isNotWhitespace).map(it -> it + ' ' + super.toString())
                     .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
         }
@@ -195,7 +195,7 @@ public class MultiOrder extends AbstractOrder {
      */
     public static MultiOrder asc(final Query<?> query, final List<String> columns, final boolean ignoreCase,
                                  final NullPrecedence precedence) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiOrder(query, null, columns, true, ignoreCase, precedence);
         }
         return null;
@@ -296,7 +296,7 @@ public class MultiOrder extends AbstractOrder {
      */
     public static MultiOrder asc(final String alias, final List<String> columns, final boolean ignoreCase,
                                  final NullPrecedence precedence) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiOrder(null, alias, columns, true, ignoreCase, precedence);
         }
         return null;
@@ -399,7 +399,7 @@ public class MultiOrder extends AbstractOrder {
      */
     public static MultiOrder desc(final Query<?> query, final List<String> columns, final boolean ignoreCase,
                                   final NullPrecedence precedence) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiOrder(query, null, columns, false, ignoreCase, precedence);
         }
         return null;
@@ -500,7 +500,7 @@ public class MultiOrder extends AbstractOrder {
      */
     public static MultiOrder desc(final String alias, final List<String> columns, final boolean ignoreCase,
                                   final NullPrecedence precedence) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiOrder(null, alias, columns, false, ignoreCase, precedence);
         }
         return null;

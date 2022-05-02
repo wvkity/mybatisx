@@ -47,6 +47,7 @@ import io.github.mybatisx.core.support.part.SinglePart;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
@@ -547,7 +548,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
                 final C c = apply.apply(context);
                 if (c != null) {
                     final List<Criterion> conditions = ((AbstractBaseCriteria<?>) c).fragmentManager.getConditions();
-                    if (Objects.isNotEmpty(conditions)) {
+                    if (Collections.isNotEmpty(conditions)) {
                         this.where(NestedCondition.builder().not(not).slot(slot).conditions(conditions).build());
                     }
                 }
@@ -565,7 +566,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
      * @return {@code this}
      */
     protected C doIt(final LogicSymbol slot, final boolean not, final List<Expression> expressions) {
-        if (Objects.isNotEmpty(expressions)) {
+        if (Collections.isNotEmpty(expressions)) {
             final LogicSymbol _$slot = this.slot();
             expressions.forEach(it -> {
                 it.ifSlotNull(_$slot);
@@ -846,7 +847,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
 
     @Override
     public C where(Collection<Expression> expressions) {
-        if (Objects.isNotEmpty(expressions)) {
+        if (Collections.isNotEmpty(expressions)) {
             for (Expression it : expressions) {
                 this.where(it);
             }

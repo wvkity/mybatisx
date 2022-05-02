@@ -21,8 +21,8 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.AbstractFragmentList;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.ref.SoftReference;
@@ -63,7 +63,7 @@ public class ConditionStorage extends AbstractFragmentList<Criterion> {
                     Strings.ifNotWhitespaceThen(it.getFragment(this.parameterConverter, this.placeholderConverter),
                             conditions::add);
                 }
-                if (Objects.isNotEmpty(conditions)) {
+                if (Collections.isNotEmpty(conditions)) {
                     final String fragment = String.join(SqlSymbol.SPACE, conditions).trim();
                     this.reference = new SoftReference<>(fragment);
                     return fragment;

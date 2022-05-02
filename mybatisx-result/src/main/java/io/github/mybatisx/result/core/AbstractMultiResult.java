@@ -16,6 +16,8 @@
 package io.github.mybatisx.result.core;
 
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.Maps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +40,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public boolean isEmpty() {
-        return Objects.isEmpty(this.data);
+        return Maps.isEmpty(this.data);
     }
 
     @Override
@@ -77,7 +79,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public AbstractMultiResult putAll(Map<?, ?> data) {
-        if (Objects.isNotEmpty(data)) {
+        if (Maps.isNotEmpty(data)) {
             for (Map.Entry<?, ?> entry : data.entrySet()) {
                 this.put(entry.getKey(), entry.getValue());
             }
@@ -87,7 +89,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public AbstractMultiResult putAllIfAbsent(Map<?, ?> data) {
-        if (Objects.isNotEmpty(data)) {
+        if (Maps.isNotEmpty(data)) {
             for (Map.Entry<?, ?> entry : data.entrySet()) {
                 this.putIfAbsent(entry.getKey(), entry.getValue());
             }
@@ -107,7 +109,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public int getSize() {
-        return Objects.size(this.data);
+        return Maps.size(this.data);
     }
 
     @Override
@@ -166,7 +168,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public <T> AbstractMultiResult withSet(Object key, Collection<T> values) {
-        if (Objects.isNotEmpty(values)) {
+        if (Collections.isNotEmpty(values)) {
             final Set<T> set = this.getSet(key);
             if (Objects.isNull(set)) {
                 this.put(key, new HashSet<>(values));
@@ -195,7 +197,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
 
     @Override
     public <T> AbstractMultiResult withList(Object key, Collection<T> values) {
-        if (Objects.isNotEmpty(values)) {
+        if (Collections.isNotEmpty(values)) {
             final List<T> list = this.getList(key);
             if (Objects.isNull(list)) {
                 this.put(key, new ArrayList<>(values));
@@ -207,7 +209,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult map(Object key, Object k, Object v) {
+    public AbstractMultiResult map(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
             this.put(key, this.newMap(k, v));
         }
@@ -215,7 +217,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withMap(Object key, Object k, Object v) {
+    public AbstractMultiResult withMap(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
             final Map<Object, Object> map = this.getMap(key);
             if (Objects.nonNull(map)) {
@@ -228,8 +230,8 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withMap(Object key, Map<?, ?> values) {
-        if (Objects.isNotEmpty(values)) {
+    public AbstractMultiResult withMap(Object key, Map<?, ?> values) {
+        if (Maps.isNotEmpty(values)) {
             final Map<Object, Object> map = this.getMap(key);
             if (Objects.isNull(map)) {
                 this.put(key, values);
@@ -241,7 +243,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult mapIfAbsent(Object key, Object k, Object v) {
+    public AbstractMultiResult mapIfAbsent(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
             this.putIfAbsent(key, this.newMap(k, v));
         }
@@ -249,7 +251,7 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withMapIfAbsent(Object key, Object k, Object v) {
+    public AbstractMultiResult withMapIfAbsent(Object key, Object k, Object v) {
         if (Objects.nonNull(k)) {
             final Map<Object, Object> map = this.getMap(key);
             if (Objects.nonNull(map)) {
@@ -262,8 +264,8 @@ public abstract class AbstractMultiResult extends AbstractResult<Map<Object, Obj
     }
 
     @Override
-    public <T> AbstractMultiResult withMapIfAbsent(Object key, Map<?, ?> values) {
-        if (Objects.isNotEmpty(values)) {
+    public AbstractMultiResult withMapIfAbsent(Object key, Map<?, ?> values) {
+        if (Maps.isNotEmpty(values)) {
             final Map<Object, Object> map = this.getMap(key);
             if (Objects.isNull(map)) {
                 this.putIfAbsent(key, values);

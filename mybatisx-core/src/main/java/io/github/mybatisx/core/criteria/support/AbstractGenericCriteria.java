@@ -21,8 +21,8 @@ import io.github.mybatisx.base.constant.ParamMode;
 import io.github.mybatisx.base.constant.Symbol;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.util.Maps;
 
 import java.util.Collection;
 import java.util.Map;
@@ -52,7 +52,7 @@ public abstract class AbstractGenericCriteria<T, C extends GenericCriteriaWrappe
 
     @Override
     public C colEq(Map<String, ?> columns, LogicSymbol slot) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Maps.isNotEmpty(columns)) {
             for (Map.Entry<String, ?> it : columns.entrySet()) {
                 this.colEq(it.getKey(), it.getValue(), slot);
             }

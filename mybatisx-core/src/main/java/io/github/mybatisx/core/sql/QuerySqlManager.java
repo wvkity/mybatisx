@@ -24,8 +24,8 @@ import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
 import io.github.mybatisx.core.criteria.query.Joinable;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.fragment.FragmentManager;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public class QuerySqlManager extends AbstractSqlManager {
         }
         final String ss = this.getSelectString();
         final Set<Joinable<?>> _$associations = this.associations;
-        if (Objects.isNotEmpty(_$associations)) {
+        if (Collections.isNotEmpty(_$associations)) {
             final List<String> list = new ArrayList<>();
             if (Strings.isNotWhitespace(ss)) {
                 list.add(ss.trim());
@@ -111,7 +111,7 @@ public class QuerySqlManager extends AbstractSqlManager {
     @Override
     public String getGroupFragment() throws MyBatisException {
         final Set<Joinable<?>> _$associations = this.associations;
-        if (Objects.isNotEmpty(_$associations)) {
+        if (Collections.isNotEmpty(_$associations)) {
             final List<String> it = new ArrayList<>(_$associations.size() + 1);
             final String _$ss = this.fragmentManager.getSelectString(false);
             int i = 0;
@@ -152,7 +152,7 @@ public class QuerySqlManager extends AbstractSqlManager {
      */
     protected String mergeCondition(final String condition) {
         final Set<Joinable<?>> _$associations = this.associations;
-        if (Objects.isNotEmpty(_$associations)) {
+        if (Collections.isNotEmpty(_$associations)) {
             final List<String> conditions = new ArrayList<>(_$associations.size() + 1);
             for (Joinable<?> it : _$associations) {
                 if (it instanceof AbstractBaseCriteria) {

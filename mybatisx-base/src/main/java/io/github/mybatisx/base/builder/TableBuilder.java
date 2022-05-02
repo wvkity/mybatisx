@@ -22,6 +22,7 @@ import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.keyword.ReservedKeywordRegistry;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -153,13 +154,13 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
         }
         final String realCatalog = Strings.ifNull(this.catalog, Strings.DEFAULT_STR_EMPTY);
         final String realSchema = Strings.ifNull(this.schema, Strings.DEFAULT_STR_EMPTY);
-        final Set<Column> columnSet = new LinkedHashSet<>(Objects.size(this.columns));
-        final Set<Column> primaryKeySet = new LinkedHashSet<>(Objects.size(this.primaryKeys));
+        final Set<Column> columnSet = new LinkedHashSet<>(Collections.size(this.columns));
+        final Set<Column> primaryKeySet = new LinkedHashSet<>(Collections.size(this.primaryKeys));
         Column primaryKeyColumn = null;
         Column logicDeleteColumn = null;
         Column versionColumn = null;
         Column multiTenantColumn = null;
-        if (Objects.isNotEmpty(this.columns)) {
+        if (Collections.isNotEmpty(this.columns)) {
             for (ColumnBuilder it : this.columns) {
                 final Column column = it.build();
                 if (column.isPrimaryKey()) {

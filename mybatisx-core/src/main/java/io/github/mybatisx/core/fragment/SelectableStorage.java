@@ -28,8 +28,8 @@ import io.github.mybatisx.core.support.select.FunctionSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -131,7 +131,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      * @param selectables {@link Selectable}列表
      */
     public void addSelects(final Collection<? extends Selectable> selectables) {
-        if (Objects.isNotEmpty(selectables)) {
+        if (Collections.isNotEmpty(selectables)) {
             for (Selectable it : selectables) {
                 this.addSelect(it);
             }
@@ -150,7 +150,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
 
     @Override
     public boolean isEmpty() {
-        return Objects.isEmpty(this.fragments) && Objects.isEmpty(this.selectableCache);
+        return Collections.isEmpty(this.fragments) && Collections.isEmpty(this.selectableCache);
     }
 
     /**
@@ -180,7 +180,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      * @param properties 属性名列表
      */
     public void addExcludeProperties(final Collection<String> properties) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Collections.isNotEmpty(properties)) {
             this.excludeProperties.addAll(properties);
             this.cached.set(false);
         }
@@ -204,7 +204,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      * @param columns 字段名列表
      */
     public void addExcludeColumns(final Collection<String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             this.excludeColumns.addAll(columns);
             this.cached.set(false);
         }
@@ -239,7 +239,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
         } else {
             selects = this.filtrate();
         }
-        if (Objects.isNotEmpty(selects)) {
+        if (Collections.isNotEmpty(selects)) {
             this.selectableCache = ImmutableList.copyOf(selects);
             this.cached.compareAndSet(false, true);
             return this.selectableCache;
@@ -256,7 +256,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
         final Table table = TableHelper.getTable(this.query.getEntity());
         if (table != null) {
             final List<Column> columns = table.getColumns();
-            if (Objects.isNotEmpty(columns)) {
+            if (Collections.isNotEmpty(columns)) {
                 return columns.stream()
                         .filter(it -> this.matches(this.excludeProperties, it.getProperty(), false)
                                 && this.matches(this.excludeColumns, it.getColumn(), true))
@@ -281,7 +281,7 @@ public class SelectableStorage extends AbstractFragmentList<Selectable> {
      * @return boolean
      */
     protected boolean matches(final Collection<String> sources, final String target, final boolean ignoreCase) {
-        if (Objects.isNotEmpty(sources)) {
+        if (Collections.isNotEmpty(sources)) {
             if (ignoreCase) {
                 return sources.stream().noneMatch(target::equalsIgnoreCase);
             }

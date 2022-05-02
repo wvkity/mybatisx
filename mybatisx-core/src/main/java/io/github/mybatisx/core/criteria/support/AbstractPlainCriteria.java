@@ -25,8 +25,8 @@ import io.github.mybatisx.core.criteria.AbstractCriteriaSupport;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.criterion.ExistsCondition;
 import io.github.mybatisx.core.criterion.PureCondition;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.util.Maps;
 
 import java.util.Collection;
 import java.util.Map;
@@ -62,7 +62,7 @@ public abstract class AbstractPlainCriteria<T, C extends PlainCriteriaWrapper<T,
 
     @Override
     public C colEq(Map<String, ?> columns, LogicSymbol slot) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Maps.isNotEmpty(columns)) {
             for (Map.Entry<String, ?> it : columns.entrySet()) {
                 this.colEq(it.getKey(), it.getValue(), slot);
             }

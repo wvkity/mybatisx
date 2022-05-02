@@ -20,6 +20,8 @@ import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
+import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.Maps;
 
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -36,7 +38,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -111,7 +112,8 @@ public final class Reflections {
     /**
      * 类型缓存
      */
-    private static final Map<Class<?>, Set<Class<?>>> CLASS_CACHES = Collections.synchronizedMap(new WeakHashMap<>());
+    private static final Map<Class<?>, Set<Class<?>>> CLASS_CACHES =
+            java.util.Collections.synchronizedMap(new WeakHashMap<>());
     /**
      * 默认超类过滤器
      */
@@ -231,11 +233,11 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Class<?>> getAllTypes(final Class<?> clazz, final Predicate<? super Class<?>>... filters) {
-        final Set<Class<?>> classes = Objects.computeIfAbsent(CLASS_CACHES, clazz, k -> new LinkedHashSet<>());
-        if (Objects.isEmpty(classes)) {
+        final Set<Class<?>> classes = Maps.computeIfAbsent(CLASS_CACHES, clazz, k -> new LinkedHashSet<>());
+        if (Collections.isEmpty(classes)) {
             classes.addAll(Reflections.getAllSuperTypes(clazz, filters));
         }
-        return Objects.isEmpty(classes) ? new LinkedHashSet<>(0) : new LinkedHashSet<>(classes);
+        return Collections.isEmpty(classes) ? new LinkedHashSet<>(0) : new LinkedHashSet<>(classes);
     }
 
     /**
@@ -251,17 +253,17 @@ public final class Reflections {
         final Set<Class<?>> classes = new LinkedHashSet<>();
         if (Objects.nonNull(clazz) && !Types.isObject(clazz)) {
             final Set<Class<?>> superClasses = getSuperTypes(clazz);
-            if (Objects.isNotEmpty(superClasses)) {
+            if (Collections.isNotEmpty(superClasses)) {
                 for (Class<?> it : superClasses) {
                     final Set<Class<?>> set = getAllSuperTypes(it);
-                    if (Objects.isNotEmpty(set)) {
+                    if (Collections.isNotEmpty(set)) {
                         classes.addAll(set);
                     }
                 }
             }
             classes.add(clazz);
         }
-        return Objects.filters(classes, filters);
+        return Collections.filters(classes, filters);
     }
 
     /**
@@ -339,7 +341,7 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Method> getMethods(final Class<?> clazz, final Predicate<? super Method>... filters) {
-        return Objects.filters(clazz.isInterface() ? clazz.getMethods() : clazz.getDeclaredMethods(), filters);
+        return Collections.filters(clazz.isInterface() ? clazz.getMethods() : clazz.getDeclaredMethods(), filters);
     }
 
     /**
@@ -349,7 +351,7 @@ public final class Reflections {
      * @param methods       方法集合
      */
     public static void addUniqueMethods(final Map<String, Method> uniqueMethods, final Set<Method> methods) {
-        if (Objects.isNotEmpty(methods)) {
+        if (Collections.isNotEmpty(methods)) {
             for (Method it : methods) {
                 if (!it.isBridge()) {
                     uniqueMethods.putIfAbsent(Reflections.getMethodSignature(it), it);
@@ -400,7 +402,6 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isGetter(final String name) {
-        final int size;
         return Strings.isNotWhitespace(name) && ((name.startsWith(METHOD_PREFIX_GET) && Strings.size(name) > 3)
                 || name.startsWith(METHOD_PREFIX_IS) && Strings.size(name) > 2);
     }
@@ -491,7 +492,7 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Field> getFields(final Class<?> clazz, final Predicate<? super Field>... filters) {
-        return Objects.filters(clazz.getDeclaredFields(), filters);
+        return Collections.filters(clazz.getDeclaredFields(), filters);
     }
 
     /**
@@ -520,7 +521,7 @@ public final class Reflections {
                                                                  final Predicate<Annotation>... filters) {
         if (Objects.nonNull(type) && Strings.isNotWhitespace(className)) {
             final Set<Annotation> annotations = Reflections.getAllAnnotations(type, filters);
-            return Objects.isNotEmpty(annotations) && annotations.stream().anyMatch(it ->
+            return Collections.isNotEmpty(annotations) && annotations.stream().anyMatch(it ->
                     className.equalsIgnoreCase(it.annotationType().getCanonicalName()));
         }
         return false;
@@ -550,7 +551,7 @@ public final class Reflections {
     @SafeVarargs
     public static Set<Annotation> getAnnotations(final AnnotatedElement type,
                                                  final Predicate<Annotation>... filters) {
-        return Objects.filters(type.getDeclaredAnnotations(), filters);
+        return Collections.filters(type.getDeclaredAnnotations(), filters);
     }
 
     /**
@@ -600,7 +601,7 @@ public final class Reflections {
     public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(final List<T> types,
                                                                                  final Predicate<Annotation>... filters) {
         final Set<Annotation> annotations = new LinkedHashSet<>();
-        if (Objects.isNotEmpty(types)) {
+        if (Collections.isNotEmpty(types)) {
             int size = types.size();
             final List<AnnotatedElement> keys = new ArrayList<>(types);
             for (int i = 0; i < size; i++) {
@@ -682,7 +683,7 @@ public final class Reflections {
         if (Objects.nonNull(instance)) {
             final Set<Method> methods = Reflections.getAllMethods(instance.annotationType(), SUPER_CLASS_FILTER,
                     ANNOTATION_METHOD_FILTER);
-            if (Objects.isNotEmpty(methods)) {
+            if (Collections.isNotEmpty(methods)) {
                 final Map<String, Object> result = new HashMap<>(methods.size());
                 for (Method it : methods) {
                     final String property = it.getName();

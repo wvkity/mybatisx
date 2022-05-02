@@ -17,6 +17,7 @@ package io.github.mybatisx.reflect;
 
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -70,7 +71,7 @@ public interface Annotated {
      */
     default boolean isMatches(final Class<? extends Annotation> clazz) {
         final Set<? extends Annotation> annotations;
-        if (Objects.nonNull(clazz) && Objects.isNotEmpty((annotations = this.getAnnotations()))) {
+        if (Objects.nonNull(clazz) && Collections.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> clazz.equals(it.annotationType()));
         }
         return false;
@@ -84,7 +85,7 @@ public interface Annotated {
      */
     @SuppressWarnings({"unchecked"})
     default boolean isMatches(final Class<? extends Annotation>... classes) {
-        return this.isMatches(Objects.filterNull(classes));
+        return this.isMatches(Collections.filterNull(classes));
     }
 
     /**
@@ -96,8 +97,8 @@ public interface Annotated {
     default boolean isMatches(final Collection<Class<? extends Annotation>> classes) {
         final Set<? extends Annotation> annotations;
         final Set<Class<? extends Annotation>> annotationClasses;
-        if (Objects.isNotEmpty((annotationClasses = Objects.filterNull(classes)))
-                && Objects.isNotEmpty((annotations = this.getAnnotations()))) {
+        if (Collections.isNotEmpty((annotationClasses = Collections.filterNull(classes)))
+                && Collections.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> annotationClasses.contains(it.annotationType()));
         }
         return false;
@@ -140,7 +141,7 @@ public interface Annotated {
      * @return boolean
      */
     default boolean isEmpty() {
-        return Objects.isEmpty(this.getAnnotations());
+        return Collections.isEmpty(this.getAnnotations());
     }
 
     /**

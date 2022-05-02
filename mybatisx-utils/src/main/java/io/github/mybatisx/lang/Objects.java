@@ -20,17 +20,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -58,6 +53,15 @@ public final class Objects {
 
     static {
         JAVA_VERSION_8 = REGEX_JAVA_VERSION_8.matcher(System.getProperty("java.version")).matches();
+    }
+
+    /**
+     * 检查是否为JDK8
+     *
+     * @return boolean
+     */
+    public static boolean isJAVA8() {
+        return JAVA_VERSION_8;
     }
 
     /**
@@ -189,32 +193,6 @@ public final class Objects {
     }
 
     /**
-     * 检查参数列表是否包含数组、集合类型
-     *
-     * @param iterable 参数列表
-     * @return boolean
-     */
-    public static boolean isPureType(final Iterable<?> iterable) {
-        if (iterable != null) {
-            Class<?> current = null;
-            for (Object it : iterable) {
-                if (it != null) {
-                    final Class<?> clazz = it.getClass();
-                    if (clazz.isArray() || isAssignable(Iterable.class, clazz) || isAssignable(Map.class, clazz)) {
-                        return false;
-                    }
-                    if (current != null && !isAssignable(current, clazz)) {
-                        return false;
-                    }
-                    current = clazz;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * 检查数组对象是否为空
      *
      * @param arg 待检查数组对象
@@ -225,52 +203,12 @@ public final class Objects {
     }
 
     /**
-     * 检查集合是否为空
-     *
-     * @param arg 待检查集合
-     * @return boolean
-     */
-    public static boolean isEmpty(final Collection<?> arg) {
-        return isNull(arg) || arg.isEmpty();
-    }
-
-    /**
-     * 检查Map集合是否为空
-     *
-     * @param arg 待检查Map集合
-     * @return boolean
-     */
-    public static boolean isEmpty(final Map<?, ?> arg) {
-        return isNull(arg) || arg.isEmpty();
-    }
-
-    /**
      * 检查数组对象是否不为空
      *
      * @param arg 待检查数组对象
      * @return boolean
      */
     public static boolean isNotEmpty(final Object[] arg) {
-        return !isEmpty(arg);
-    }
-
-    /**
-     * 检查集合是否不为空
-     *
-     * @param arg 待检查集合
-     * @return boolean
-     */
-    public static boolean isNotEmpty(final Collection<?> arg) {
-        return !isEmpty(arg);
-    }
-
-    /**
-     * 检查Map集合是否不为空
-     *
-     * @param arg 待检查Map集合
-     * @return boolean
-     */
-    public static boolean isNotEmpty(final Map<?, ?> arg) {
         return !isEmpty(arg);
     }
 
@@ -308,32 +246,6 @@ public final class Objects {
     }
 
     /**
-     * 获取集合元素个数
-     *
-     * @param arg 集合
-     * @return 集合元素个数
-     */
-    public static int size(final Collection<?> arg) {
-        if (isNotEmpty(arg)) {
-            return arg.size();
-        }
-        return 0;
-    }
-
-    /**
-     * 获取Map集合元素个数
-     *
-     * @param arg Map集合
-     * @return 集合元素个数
-     */
-    public static int size(final Map<?, ?> arg) {
-        if (isNotEmpty(arg)) {
-            return arg.size();
-        }
-        return 0;
-    }
-
-    /**
      * 合并{@link Predicate}
      *
      * @param predicates {@link Predicate}数组
@@ -350,103 +262,6 @@ public final class Objects {
             return Arrays.stream(predicates).reduce(__ -> true, Predicate::and);
         }
         return null;
-    }
-
-    /**
-     * 过滤
-     *
-     * @param values 待过滤集合
-     * @param filter 过滤器
-     * @param <T>    值类型
-     * @return 过滤后的列表
-     */
-    public static <T> Set<T> filter(final Collection<T> values, final Predicate<? super T> filter) {
-        if (Objects.isEmpty(values)) {
-            return new LinkedHashSet<>(0);
-        }
-        if (Objects.isNull(filter)) {
-            return new LinkedHashSet<>(values);
-        }
-        return values.stream().filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    /**
-     * 过滤
-     *
-     * @param values  待过滤值列表
-     * @param filters 过滤器列表
-     * @param <T>     值类型
-     * @return 过滤后的列表
-     */
-    @SafeVarargs
-    public static <T> Set<T> filters(final T[] values, final Predicate<? super T>... filters) {
-        if (Objects.isEmpty(values)) {
-            return new LinkedHashSet<>(0);
-        }
-        final Predicate<T> filter = and(filters);
-        if (Objects.isNull(filter)) {
-            return new LinkedHashSet<>(Arrays.asList(values));
-        }
-        return Arrays.stream(values).filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    /**
-     * 过滤
-     *
-     * @param values  待过滤集合
-     * @param filters 过滤器列表
-     * @param <T>     值类型
-     * @return 过滤后的列表
-     */
-    @SafeVarargs
-    public static <T> Set<T> filters(final Collection<T> values, final Predicate<? super T>... filters) {
-        if (Objects.isEmpty(values)) {
-            return new LinkedHashSet<>(0);
-        }
-        final Predicate<T> filter = and(filters);
-        if (Objects.isNull(filter)) {
-            return new LinkedHashSet<>(values);
-        }
-        return values.stream().filter(filter).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    /**
-     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
-     *
-     * @param map      {@link Map}
-     * @param k        键
-     * @param supplier {@link Supplier}
-     * @param <K>      键类型
-     * @param <V>      值类型
-     * @return 值
-     */
-    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Supplier<V> supplier) {
-        final V v = map.get(k);
-        if (Objects.nonNull(v)) {
-            return v;
-        }
-        final V newValue = supplier.get();
-        return Objects.ifNull(map.putIfAbsent(k, newValue), newValue);
-    }
-
-    /**
-     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
-     *
-     * @param map             {@link Map}
-     * @param k               键
-     * @param mappingFunction {@link Function}
-     * @param <K>             键类型
-     * @param <V>             值类型
-     * @return 值
-     */
-    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Function<K, V> mappingFunction) {
-        if (JAVA_VERSION_8) {
-            final V v = map.get(k);
-            if (Objects.nonNull(v)) {
-                return v;
-            }
-        }
-        return map.computeIfAbsent(k, mappingFunction);
     }
 
     /**
@@ -579,63 +394,6 @@ public final class Objects {
         if (!expression) {
             throw new IllegalArgumentException(message);
         }
-    }
-
-    /**
-     * 过滤null值
-     *
-     * @param factory {@link Supplier}
-     * @param values  待过滤值列表
-     * @param <U>     值类型
-     * @param <C>     集合类型
-     * @return 新的列表
-     */
-    @SafeVarargs
-    public static <U, C extends Collection<U>> C filterNull(final Supplier<C> factory, final U... values) {
-        return Objects.filterNull(factory, Arrays.asList(values));
-    }
-
-    /**
-     * 过滤null值
-     *
-     * @param factory {@link Supplier}
-     * @param values  待过滤值列表
-     * @param <U>     值类型
-     * @param <C>     集合类型
-     * @return 新的列表
-     */
-    public static <U, C extends Collection<U>> C filterNull(final Supplier<C> factory, final Collection<U> values) {
-        if (Objects.isNotEmpty(values)) {
-            return values.stream().filter(Objects::nonNull).collect(Collectors.toCollection(factory));
-        }
-        return factory.get();
-    }
-
-    /**
-     * 过滤null值
-     *
-     * @param values 待过滤值列表
-     * @param <U>    值类型
-     * @return 新的列表
-     */
-    @SafeVarargs
-    public static <U> Set<U> filterNull(final U... values) {
-        if (Objects.isNotEmpty(values)) {
-            return Objects.filterNull(Arrays.asList(values));
-        }
-        return new HashSet<>(0);
-    }
-
-    /**
-     * 过滤null值
-     *
-     * @param values 待过滤值列表
-     * @param <U>    值类型
-     * @return 新的列表
-     */
-    public static <U> Set<U> filterNull(final Collection<U> values) {
-        return Optional.ofNullable(values).map(it -> it.stream().filter(Objects::nonNull).collect(Collectors.toSet()))
-                .orElse(new HashSet<>(0));
     }
 
     /**
@@ -857,116 +615,5 @@ public final class Objects {
         }
         return value;
     }
-
-    /**
-     * 检查集合元素是否为空，如果为空，则返回null
-     *
-     * @param origin 待检查集合
-     * @param <C>    {@link Collection}
-     * @param <T>    元素类型
-     * @return 集合
-     */
-    public static <C extends Collection<T>, T> C checkNull(final C origin) {
-        return checkNull(origin, null);
-    }
-
-    /**
-     * 检查集合元素是否为空，如果为空则返回默认值
-     *
-     * @param origin       待检查集合
-     * @param defaultValue 默认值
-     * @param <C>          {@link Collection}
-     * @param <T>          元素类型
-     * @return 集合
-     */
-    public static <C extends Collection<T>, T> C checkNull(final C origin, final C defaultValue) {
-        if (isNotEmpty(origin)) {
-            for (T it : origin) {
-                if (it != null) {
-                    return origin;
-                }
-            }
-        }
-        return defaultValue;
-    }
-
-    /**
-     * 字符串元素转成小写
-     *
-     * @param data 字符串集合
-     * @return 处理后的数据
-     */
-    public static List<String> lowerCase(final Collection<String> data) {
-        return transform(data, Objects::nonNull, it -> it.toLowerCase(Locale.ENGLISH));
-    }
-
-    /**
-     * 字符串元素转成大写
-     *
-     * @param data 字符串集合
-     * @return 处理后的字符串集合
-     */
-    public static List<String> upperCase(final Collection<String> data) {
-        return transform(data, Objects::nonNull, it -> it.toUpperCase(Locale.ENGLISH));
-    }
-
-    /**
-     * 数据转换
-     *
-     * @param origin 原数据
-     * @param filter {@link Predicate}
-     * @param mapper {@link Function}
-     * @param <C>    {@link Collection}
-     * @param <T>    数据类型
-     * @param <R>    返回值类型
-     * @return 处理后的数据集合
-     */
-    public static <C extends Collection<T>, T, R> List<R> transform(final C origin, final Predicate<T> filter,
-                                                                    final Function<T, R> mapper) {
-        if (isNotEmpty(origin)) {
-            return origin.stream().filter(filter).map(mapper).collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    /**
-     * 数据合并
-     *
-     * @param array 多个集合
-     * @param <T>   数据类型
-     * @param <C>   集合类型
-     * @return 合并后的数据
-     */
-    @SafeVarargs
-    public static <T, C extends Iterable<T>> List<T> combine(final C... array) {
-        return combine(null, array);
-    }
-
-    /**
-     * 数据合并
-     *
-     * @param filter 过滤器
-     * @param array  多个集合
-     * @param <T>    数据类型
-     * @param <C>    集合类型
-     * @return 合并后的数据
-     */
-    @SafeVarargs
-    public static <T, C extends Iterable<T>> List<T> combine(final Predicate<T> filter, final C... array) {
-        final Predicate<T> ipt = filter == null ? __ -> true : filter;
-        if (isNotEmpty(array)) {
-            final List<T> result = new ArrayList<>();
-            for (C c : array) {
-                if (nonNull(c)) {
-                    for (T it : c) {
-                        if (ipt.test(it)) {
-                            result.add(it);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        return new ArrayList<>(0);
-    }
+    
 }

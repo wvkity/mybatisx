@@ -18,8 +18,8 @@ package io.github.mybatisx.core.support.group;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -49,7 +49,7 @@ public class MultiGroup extends AbstractGroup {
 
     @Override
     public String getFragment() {
-        if (Objects.isNotEmpty(this.columns)) {
+        if (Collections.isNotEmpty(this.columns)) {
             return this.columns.stream().filter(Strings::isNotWhitespace).map(this::render)
                     .collect(Collectors.joining(SqlSymbol.COMMA_SPACE));
         }
@@ -75,7 +75,7 @@ public class MultiGroup extends AbstractGroup {
      * @return {@link MultiGroup}
      */
     public static MultiGroup group(final List<String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiGroup(null, null, columns);
         }
         return null;
@@ -100,7 +100,7 @@ public class MultiGroup extends AbstractGroup {
      * @return {@link MultiGroup}
      */
     public static MultiGroup group(final Query<?> query, final List<String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiGroup(query, null, columns);
         }
         return null;
@@ -125,7 +125,7 @@ public class MultiGroup extends AbstractGroup {
      * @return {@link MultiGroup}
      */
     public static MultiGroup group(final String alias, final List<String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             return new MultiGroup(null, alias, columns);
         }
         return null;

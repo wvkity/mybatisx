@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.pageable;
 
-import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
 
 import java.util.Collection;
 import java.util.List;
@@ -57,7 +57,7 @@ public interface DataPageable<T> extends Pageable {
      * @return 数据元素个数
      */
     default int getDataSize() {
-        return Objects.size(this.getData());
+        return Collections.size(this.getData());
     }
 
     /**
@@ -66,6 +66,6 @@ public interface DataPageable<T> extends Pageable {
      * @return boolean
      */
     default boolean isEmpty() {
-        return Objects.isEmpty(this.getData());
+        return Collections.isEmpty(this.getData());
     }
 }

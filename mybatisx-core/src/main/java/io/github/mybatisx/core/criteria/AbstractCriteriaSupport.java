@@ -26,6 +26,7 @@ import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -151,20 +152,20 @@ public abstract class AbstractCriteriaSupport<T, C extends CriteriaWrapper<T, C>
                 return _$manager.getSelects();
             }
             final List<Selectable> selectables = this.outerQuery.fetchSelects();
-            if (Objects.isNotEmpty(selectables)) {
+            if (Collections.isNotEmpty(selectables)) {
                 selects.addAll(selectables);
             }
         } else {
             final List<Selectable> selectables = _$manager.getSelects();
-            if (Objects.isNotEmpty(selectables)) {
+            if (Collections.isNotEmpty(selectables)) {
                 selects.addAll(selectables);
             }
         }
-        if (Objects.isNotEmpty(this.associations)) {
+        if (Collections.isNotEmpty(this.associations)) {
             for (Joinable<?> it : this.associations) {
                 if (it != null && (it.hasSelect() || it.isFetch())) {
                     final List<Selectable> ass = it.fetchSelects();
-                    if (Objects.isNotEmpty(ass)) {
+                    if (Collections.isNotEmpty(ass)) {
                         selects.addAll(ass);
                     }
                 }

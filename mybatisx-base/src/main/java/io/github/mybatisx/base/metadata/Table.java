@@ -19,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -145,7 +146,7 @@ public class Table {
         this.onlyOnePrimaryKey = onlyOnePrimaryKey;
         this.primaryKey = primaryKey;
         this.primaryKeys = ImmutableList.copyOf(primaryKeys);
-        this.hasPrimaryKey = Objects.nonNull(primaryKey) || Objects.isNotEmpty(primaryKeys);
+        this.hasPrimaryKey = Objects.nonNull(primaryKey) || Collections.isNotEmpty(primaryKeys);
         this.optimisticLockColumn = optimisticLockColumn;
         this.logicDeleteColumn = logicDeleteColumn;
         this.multiTenantColumn = multiTenantColumn;

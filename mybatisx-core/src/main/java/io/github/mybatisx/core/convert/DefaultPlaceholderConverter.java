@@ -19,6 +19,8 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.core.mapping.Scripts;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.Maps;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
@@ -67,7 +69,7 @@ public class DefaultPlaceholderConverter implements PlaceholderConverter {
     public List<?> convert(Iterable<?> iterable) {
         if (iterable != null) {
             final Stream<?> stream = StreamSupport.stream(iterable.spliterator(), false);
-            if (Objects.isPureType(iterable)) {
+            if (Collections.isPureType(iterable)) {
                 return stream.map(it -> Scripts.safeJoining(this.converter.convert(it))).collect(Collectors.toList());
             }
             return stream.map(this::convert).collect(Collectors.toList());
@@ -80,7 +82,7 @@ public class DefaultPlaceholderConverter implements PlaceholderConverter {
                            JdbcType jdbcType, Class<?> javaType, boolean spliceJavaType) {
         if (iterable != null) {
             final Stream<?> stream = StreamSupport.stream(iterable.spliterator(), false);
-            if (Objects.isPureType(iterable)) {
+            if (Collections.isPureType(iterable)) {
                 return stream.map(it -> Scripts.safeJoining(this.converter.convert(it),
                                 Scripts.concatTypeArg(typeHandler, jdbcType, spliceJavaType, javaType)))
                         .collect(Collectors.toList());
@@ -92,7 +94,7 @@ public class DefaultPlaceholderConverter implements PlaceholderConverter {
 
     @Override
     public Map<String, ?> convert(Map<String, ?> args) {
-        if (Objects.isNotEmpty(args)) {
+        if (Maps.isNotEmpty(args)) {
             return args.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, 
                     it -> this.convert(it.getValue()), (o, n) -> n, LinkedHashMap::new));
         }

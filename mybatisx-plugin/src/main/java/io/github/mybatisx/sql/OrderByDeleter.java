@@ -17,6 +17,7 @@ package io.github.mybatisx.sql;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.sf.jsqlparser.statement.select.FromItem;
@@ -175,7 +176,7 @@ public class OrderByDeleter {
         } else {
             final SetOperationList sol = (SetOperationList) selectBody;
             final List<SelectBody> selects = sol.getSelects();
-            if (Objects.isNotEmpty(selects)) {
+            if (Collections.isNotEmpty(selects)) {
                 selects.forEach(this::tryRemoveFromSelectBody);
             }
             if (this.canRemove(sol.getOrderByElements())) {
@@ -194,7 +195,7 @@ public class OrderByDeleter {
             select.setOrderByElements(null);
         }
         final List<Join> joins = select.getJoins();
-        if (Objects.isNotEmpty(joins)) {
+        if (Collections.isNotEmpty(joins)) {
             joins.stream().filter(Objects::nonNull).map(Join::getRightItem).forEach(this::tryRemoveFromItem);
         }
     }
@@ -208,7 +209,7 @@ public class OrderByDeleter {
         if (item instanceof SubJoin) {
             final SubJoin subJoin = ((SubJoin) item);
             final List<Join> joins = subJoin.getJoinList();
-            if (Objects.isNotEmpty(joins)) {
+            if (Collections.isNotEmpty(joins)) {
                 joins.stream().filter(Objects::nonNull).map(Join::getRightItem).forEach(this::tryRemoveFromItem);
             }
             Optional.ofNullable(subJoin.getLeft()).ifPresent(this::tryRemoveFromItem);
@@ -227,7 +228,7 @@ public class OrderByDeleter {
      * @return boolean
      */
     protected boolean canRemove(final List<OrderByElement> items) {
-        if (Objects.isNotEmpty(items)) {
+        if (Collections.isNotEmpty(items)) {
             final String it = items.stream().map(oe -> oe.toString().trim()).collect(Collectors.joining(this.commaSpace));
             return !this.keepOrderlyElements.contains(it);
         }

@@ -16,6 +16,7 @@
 package io.github.mybatisx.base.fragment;
 
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +46,7 @@ public abstract class AbstractFragmentList<T> implements Fragments<T> {
 
     @Override
     public void addAll(Collection<? extends T> c) {
-        if (Objects.isNotEmpty(c)) {
+        if (Collections.isNotEmpty(c)) {
             for (T it : c) {
                 this.add(it);
             }

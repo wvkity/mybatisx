@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.reflect;
 
-import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Maps;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -225,7 +225,7 @@ public interface Metadata {
      * @return boolean
      */
     default boolean isEmpty() {
-        return Objects.isEmpty(this.getData());
+        return Maps.isEmpty(this.getData());
     }
 
     /**

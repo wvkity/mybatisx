@@ -21,7 +21,6 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.param.TemplateParam;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.util.Maps;
 import lombok.Builder;
@@ -83,7 +82,7 @@ public class MapPart implements Part {
      * @return {@link MapPart}
      */
     public static MapPart of(final String template, final Map<String, ?> values) {
-        if (Strings.isNotWhitespace(template) && Objects.isNotEmpty(values)) {
+        if (Strings.isNotWhitespace(template) && Maps.isNotEmpty(values)) {
             return new MapPart(TemplateParam.builder().template(template).mapValue(values).paramMode(ParamMode.MAP).build());
         }
         return null;

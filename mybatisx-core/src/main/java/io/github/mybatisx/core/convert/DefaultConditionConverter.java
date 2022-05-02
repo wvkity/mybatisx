@@ -22,8 +22,8 @@ import io.github.mybatisx.core.criterion.StandardCondition;
 import io.github.mybatisx.core.expression.Expression;
 import io.github.mybatisx.core.expression.NestedExpression;
 import io.github.mybatisx.core.param.Param;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,7 +57,7 @@ public class DefaultConditionConverter implements ConditionConverter {
                 // 嵌套条件表达式
                 final NestedExpression nestedExpr = (NestedExpression) src;
                 final List<Expression> expressions = nestedExpr.getExpressions();
-                if (Objects.isNotEmpty(expressions)) {
+                if (Collections.isNotEmpty(expressions)) {
                     final List<Criterion> conditions = new ArrayList<>(expressions.size());
                     for (Expression it : expressions) {
                         final Criterion condition = this.convert(it);
@@ -65,7 +65,7 @@ public class DefaultConditionConverter implements ConditionConverter {
                             conditions.add(condition);
                         }
                     }
-                    if (Objects.isNotEmpty(conditions)) {
+                    if (Collections.isNotEmpty(conditions)) {
                         return NestedCondition.builder()
                                 .not(nestedExpr.isNot())
                                 .slot(nestedExpr.getSlot())

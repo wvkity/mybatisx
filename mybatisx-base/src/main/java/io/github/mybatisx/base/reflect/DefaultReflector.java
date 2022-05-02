@@ -21,9 +21,9 @@ import io.github.mybatisx.base.matcher.ClassMatcher;
 import io.github.mybatisx.base.matcher.FieldMatcher;
 import io.github.mybatisx.base.matcher.GetterMatcher;
 import io.github.mybatisx.base.matcher.SetterMatcher;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.reflect.FieldWrapper;
 import io.github.mybatisx.reflect.Reflections;
+import io.github.mybatisx.util.Maps;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.reflection.ReflectionException;
 import org.apache.ibatis.reflection.TypeParameterResolver;
@@ -298,7 +298,7 @@ public class DefaultReflector implements Reflector {
 
     private void addMethodConflict(final Map<String, List<Method>> conflictingMethods, final String name,
                                    final Method method) {
-        Objects.computeIfAbsent(conflictingMethods, name, k -> new ArrayList<>()).add(method);
+        Maps.computeIfAbsent(conflictingMethods, name, k -> new ArrayList<>()).add(method);
     }
 
     @Override

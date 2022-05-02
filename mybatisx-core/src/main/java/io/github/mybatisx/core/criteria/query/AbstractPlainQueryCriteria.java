@@ -44,9 +44,10 @@ import io.github.mybatisx.core.support.select.PureSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.sql.parsing.SqlParser;
+import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -94,12 +95,12 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
     }
 
     @Override
-    public C propAsAlias() {
-        return this.propAsAlias(true);
+    public C aliasFromProp() {
+        return this.aliasFromProp(true);
     }
 
     @Override
-    public C propAsAlias(boolean using) {
+    public C aliasFromProp(boolean using) {
         this.propertyAsAlias = using;
         return this.context;
     }
@@ -323,7 +324,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     @Override
     public C colSelects(Collection<String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Collections.isNotEmpty(columns)) {
             for (String it : columns) {
                 this.colSelect(it, null);
             }
@@ -333,7 +334,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     @Override
     public C colSelects(Map<String, String> columns) {
-        if (Objects.isNotEmpty(columns)) {
+        if (Maps.isNotEmpty(columns)) {
             for (Map.Entry<String, String> it : columns.entrySet()) {
                 this.colSelect(it.getValue(), it.getKey());
             }
@@ -460,7 +461,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     @Override
     public C functions(List<AggFunction> functions) {
-        if (Objects.isNotEmpty(functions)) {
+        if (Collections.isNotEmpty(functions)) {
             for (AggFunction it : functions) {
                 this.function(it);
             }

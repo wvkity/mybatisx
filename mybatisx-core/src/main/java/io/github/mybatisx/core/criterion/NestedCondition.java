@@ -22,8 +22,8 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.helper.SqlHelper;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
@@ -63,7 +63,7 @@ public class NestedCondition implements Criterion {
 
     @Override
     public String getFragment(ParameterConverter pc, PlaceholderConverter phc) {
-        if (Objects.isNotEmpty(this.conditions)) {
+        if (Collections.isNotEmpty(this.conditions)) {
             final String fragment = this.conditions.stream().map(it -> it.getFragment(pc, phc))
                     .filter(Strings::isNotWhitespace).collect(Collectors.joining(SqlSymbol.SPACE));
             if (Strings.isNotWhitespace(fragment)) {

@@ -196,10 +196,9 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param key 键
      * @param k   键
      * @param v   值
-     * @param <T> 值类型
      * @return {@code this}
      */
-    <T> MapResult map(final Object key, final Object k, final Object v);
+    MapResult map(final Object key, final Object k, final Object v);
 
     /**
      * 追加元素到指定的{@link java.util.Map}集合
@@ -207,20 +206,18 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param key 键
      * @param k   键
      * @param v   值
-     * @param <T> 值类型
      * @return {@code this}
      */
-    <T> MapResult withMap(final Object key, final Object k, final Object v);
+    MapResult withMap(final Object key, final Object k, final Object v);
 
     /**
      * 追加元素到指定的{@link java.util.Map}集合
      *
      * @param key    键
      * @param values 元素集合
-     * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult withMap(final Object key, final Map<?, ?> values);
+    MapResult withMap(final Object key, final Map<?, ?> values);
 
     /**
      * 添加{@link java.util.Map}元素
@@ -228,10 +225,9 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param key 键
      * @param k   键
      * @param v   值
-     * @param <T> 值类型
      * @return {@code this}
      */
-    <T> MapResult mapIfAbsent(final Object key, final Object k, final Object v);
+    MapResult mapIfAbsent(final Object key, final Object k, final Object v);
 
     /**
      * 追加元素到指定的{@link java.util.Map}集合
@@ -239,19 +235,17 @@ public interface MapResult extends DataResult<Map<Object, Object>>, VAware {
      * @param key 键
      * @param k   键
      * @param v   值
-     * @param <T> 值类型
      * @return {@code this}
      */
-    <T> MapResult withMapIfAbsent(final Object key, final Object k, final Object v);
+    MapResult withMapIfAbsent(final Object key, final Object k, final Object v);
 
     /**
      * 追加元素到指定的{@link java.util.Map}集合
      *
      * @param key    键
      * @param values 元素集合
-     * @param <T>    值类型
      * @return {@code this}
      */
-    <T> MapResult withMapIfAbsent(final Object key, final Map<?, ?> values);
+    MapResult withMapIfAbsent(final Object key, final Map<?, ?> values);
 
 }

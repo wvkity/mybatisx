@@ -21,6 +21,7 @@ import io.github.mybatisx.base.constant.SqlSymbol;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Regex;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -121,7 +122,7 @@ public class PlaceholderHelper {
         final boolean isWordMatches = REGEX_WORD_CHECK.matcher(template).matches();
         if (isDigitMatches || isWordMatches) {
             final List<Object> args = Objects.toList(arg);
-            if (Objects.isEmpty(args)) {
+            if (Collections.isEmpty(args)) {
                 return template;
             }
             final boolean isMap = paramMode == ParamMode.MAP;
@@ -130,7 +131,7 @@ public class PlaceholderHelper {
             if (!isMap || isDigitMatches) {
                 if (paramMode == ParamMode.MULTIPLE && PlaceholderHelper.isOnlyOnce(source)) {
                     return source.replaceAll(REGEX_DIGIT_STRING,
-                            this.toString(Objects.isPureType(args) ? args : args.get(0)));
+                            this.toString(Collections.isPureType(args) ? args : args.get(0)));
                 } else {
                     final int size = args.size() - 1;
                     matcher = REGEX_DIGIT.matcher(source);

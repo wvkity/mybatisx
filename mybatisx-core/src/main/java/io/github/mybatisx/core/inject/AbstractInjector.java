@@ -24,7 +24,10 @@ import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
+import io.github.mybatisx.core.inject.method.invoke.SelectCountByCriteria;
+import io.github.mybatisx.core.inject.method.invoke.SelectCustomList;
 import io.github.mybatisx.core.inject.method.invoke.SelectCustomMap;
+import io.github.mybatisx.core.inject.method.invoke.SelectListByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.SelectMapByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.Update;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithSpecial;
@@ -33,6 +36,7 @@ import io.github.mybatisx.core.inject.method.invoke.UpdateWithoutNull;
 import io.github.mybatisx.core.mapper.EasilyMapper;
 import io.github.mybatisx.core.mapper.SelfsameMapper;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.Configuration;
@@ -56,7 +60,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public abstract class AbstractInjector implements Injector {
-    
+
     public enum InjectType {
         INSERT, UPDATE, DELETE, SELECT
     }
@@ -77,25 +81,33 @@ public abstract class AbstractInjector implements Injector {
     static {
         // insert方法映射
         final Insert insert = new Insert();
-        final InsertWithoutNull iwn = new InsertWithoutNull();
+        final InsertWithoutNull insertWithoutNull = new InsertWithoutNull();
         // update方法映射
         final Update update = new Update();
-        final UpdateWithoutNull uwn = new UpdateWithoutNull();
-        final UpdateWithSpecial uws = new UpdateWithSpecial();
-        final UpdateWithSpecialExcNull uwe = new UpdateWithSpecialExcNull();
+        final UpdateWithoutNull updateWithoutNull = new UpdateWithoutNull();
+        final UpdateWithSpecial updateWithSpecial = new UpdateWithSpecial();
+        final UpdateWithSpecialExcNull updateWithSpecialExcNull = new UpdateWithSpecialExcNull();
         // select方法映射
-        final SelectCustomMap scm = new SelectCustomMap();
-        final SelectMapByCriteria smb = new SelectMapByCriteria();
+        final SelectCountByCriteria selectCountByCriteria = new SelectCountByCriteria();
+        final SelectCustomList selectCustomList = new SelectCustomList();
+        final SelectCustomMap selectCustomMap = new SelectCustomMap();
+        final SelectMapByCriteria selectMapByCriteria = new SelectMapByCriteria();
+        final SelectListByCriteria selectListByCriteria = new SelectListByCriteria();
 
         ALL_MAPPED_METHOD_CACHE.put(InjectType.INSERT, ImmutableSet.of(
-                insert, iwn
+                insert, insertWithoutNull
         ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
-                update, uwn, uws, uwe, scm, smb
+                update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                selectCountByCriteria,
+                selectCustomList,
+                selectCustomMap,
+                selectMapByCriteria, selectListByCriteria
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, iwn, update, uwn, uws, uwe, scm, smb
+                insert, insertWithoutNull, update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                selectCountByCriteria, selectCustomList, selectCustomMap, selectMapByCriteria, selectListByCriteria
         );
     }
 
@@ -111,7 +123,7 @@ public abstract class AbstractInjector implements Injector {
                     if (MyBatisGlobalConfigContext.registryInterfaceIfNotExists(cfg, mapperInterface)) {
                         final Table table = TableHelper.parse(mba, entityClass);
                         final Collection<MappedMethod> methods = this.getMappedMethods(table, mapperInterface);
-                        if (Objects.isNotEmpty(methods)) {
+                        if (Collections.isNotEmpty(methods)) {
                             methods.forEach(m -> m.inject(mba, table, mapperInterface,
                                     this.getReturnType(genericTypes, mapperInterface)));
                         }

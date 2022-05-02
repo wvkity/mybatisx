@@ -16,6 +16,7 @@
 package io.github.mybatisx.builder.annotation;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
+import io.github.mybatisx.binding.MyBatisMapperMethod;
 import org.apache.ibatis.annotations.Arg;
 import org.apache.ibatis.annotations.CacheNamespace;
 import org.apache.ibatis.annotations.CacheNamespaceRef;
@@ -39,7 +40,6 @@ import org.apache.ibatis.annotations.TypeDiscriminator;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.binding.BindingException;
-import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.builder.CacheRefResolver;
 import org.apache.ibatis.builder.IncompleteElementException;
@@ -362,12 +362,12 @@ public class MyBatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
             } else if (isSelect) {
                 resultMapId = parseResultMap(method);
             }
-            
+
             // 记录是否为自定义结果集
             if (isSelect) {
                 MyBatisGlobalConfigContext.registryEmbeddableMethod(mappedStatementId, this.type, method);
             }
-            
+
             assistant.addMappedStatement(
                     mappedStatementId,
                     sqlSource,
@@ -414,7 +414,7 @@ public class MyBatisMapperAnnotationBuilder extends MapperAnnotationBuilder {
                     parameterType = currentParameterType;
                 } else {
                     // issue #135
-                    parameterType = MapperMethod.ParamMap.class;
+                    parameterType = MyBatisMapperMethod.ParamMap.class;
                 }
             }
         }

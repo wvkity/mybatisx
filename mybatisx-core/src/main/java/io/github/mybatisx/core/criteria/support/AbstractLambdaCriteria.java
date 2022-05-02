@@ -26,8 +26,8 @@ import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.criterion.ExistsCondition;
 import io.github.mybatisx.core.criterion.PureCondition;
 import io.github.mybatisx.core.property.Property;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.matcher.Matcher;
+import io.github.mybatisx.util.Maps;
 
 import java.util.Collection;
 import java.util.Map;
@@ -58,7 +58,7 @@ public abstract class AbstractLambdaCriteria<T, C extends LambdaCriteriaWrapper<
 
     @Override
     public C eq(Map<String, ?> properties, LogicSymbol slot) {
-        if (Objects.isNotEmpty(properties)) {
+        if (Maps.isNotEmpty(properties)) {
             for (Map.Entry<String, ?> it : properties.entrySet()) {
                 this.eq(it.getKey(), it.getValue(), slot);
             }

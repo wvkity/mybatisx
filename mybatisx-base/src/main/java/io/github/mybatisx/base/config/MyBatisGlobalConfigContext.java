@@ -21,6 +21,7 @@ import io.github.mybatisx.base.exception.MyBatisException;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.embedded.Embeddable;
 import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.util.Maps;
 import org.apache.ibatis.session.Configuration;
 
 import java.lang.invoke.MethodHandles;
@@ -89,7 +90,7 @@ public class MyBatisGlobalConfigContext {
      * @return 全局配置对象
      */
     public static MyBatisGlobalConfig getGlobalConfig(final String id) {
-        return Objects.computeIfAbsent(MY_BATIS_GLOBAL_CONFIG_CACHE, id, it -> newInstance());
+        return Maps.computeIfAbsent(MY_BATIS_GLOBAL_CONFIG_CACHE, id, it -> newInstance());
     }
 
     /**
@@ -144,7 +145,7 @@ public class MyBatisGlobalConfigContext {
     public static boolean registryInterfaceIfNotExists(final Configuration cfg, final Class<?> mapperInterface) {
         final String key = cfg.toString();
         final String value = mapperInterface.getName();
-        return Objects.computeIfAbsent(MAPPER_INTERFACE_REGISTRY_CACHE, key,
+        return Maps.computeIfAbsent(MAPPER_INTERFACE_REGISTRY_CACHE, key,
                 k -> new ConcurrentSkipListSet<>()).add(value);
     }
 

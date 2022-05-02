@@ -16,10 +16,10 @@
 package io.github.mybatisx.executor.resultset;
 
 import io.github.mybatisx.base.config.MyBatisGlobalConfigContext;
+import io.github.mybatisx.binding.MyBatisMapperMethod;
 import io.github.mybatisx.embedded.EmbeddableResult;
 import io.github.mybatisx.embedded.EmbeddableUtil;
 import org.apache.ibatis.annotations.AutomapConstructor;
-import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.cursor.defaults.DefaultCursor;
@@ -896,7 +896,7 @@ public class MyBatisResultSetHandler extends DefaultResultSetHandler {
     private Object instantiateParameterObject(Class<?> parameterType) {
         if (parameterType == null) {
             return new HashMap<>();
-        } else if (MapperMethod.ParamMap.class.equals(parameterType)) {
+        } else if (MyBatisMapperMethod.ParamMap.class.equals(parameterType)) {
             return new HashMap<>(); // issue #649
         } else {
             return objectFactory.create(parameterType);

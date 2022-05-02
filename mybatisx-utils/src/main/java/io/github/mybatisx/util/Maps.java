@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Map工具
@@ -35,6 +37,84 @@ import java.util.Set;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Maps {
+
+    /**
+     * 检查Map集合是否为空
+     *
+     * @param map 待检查Map集合
+     * @param <K> 键类型
+     * @param <V> 值类型
+     * @return boolean
+     */
+    public static <K, V> boolean isEmpty(final Map<K, V> map) {
+        return map == null || map.isEmpty();
+    }
+
+    /**
+     * 检查Map集合是否不为空
+     *
+     * @param map 待检查Map集合
+     * @param <K> 键类型
+     * @param <V> 值类型
+     * @return boolean
+     */
+    public static <K, V> boolean isNotEmpty(final Map<K, V> map) {
+        return !isEmpty(map);
+    }
+
+    /**
+     * 获取Map集合元素个数
+     *
+     * @param map Map集合
+     * @param <K> 键类型
+     * @param <V> 值类型
+     * @return 集合元素个数
+     */
+    public static <K, V> int size(final Map<K, V> map) {
+        if (isNotEmpty(map)) {
+            return map.size();
+        }
+        return 0;
+    }
+
+    /**
+     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
+     *
+     * @param map      {@link Map}
+     * @param k        键
+     * @param supplier {@link Supplier}
+     * @param <K>      键类型
+     * @param <V>      值类型
+     * @return 值
+     */
+    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Supplier<V> supplier) {
+        final V v = map.get(k);
+        if (Objects.nonNull(v)) {
+            return v;
+        }
+        final V newValue = supplier.get();
+        return Objects.ifNull(map.putIfAbsent(k, newValue), newValue);
+    }
+
+    /**
+     * 修复Jdk8版本下{@link Map#computeIfAbsent(Object, Function)}存在的性能问题
+     *
+     * @param map             {@link Map}
+     * @param k               键
+     * @param mappingFunction {@link Function}
+     * @param <K>             键类型
+     * @param <V>             值类型
+     * @return 值
+     */
+    public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Function<K, V> mappingFunction) {
+        if (Objects.isJAVA8()) {
+            final V v = map.get(k);
+            if (Objects.nonNull(v)) {
+                return v;
+            }
+        }
+        return map.computeIfAbsent(k, mappingFunction);
+    }
 
     /**
      * 创建有序{@link Map}

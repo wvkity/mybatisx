@@ -68,6 +68,7 @@ import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.lang.Types;
 import io.github.mybatisx.reflect.FieldWrapper;
 import io.github.mybatisx.reflect.Metadata;
+import io.github.mybatisx.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
@@ -506,7 +507,7 @@ public class DefaultEntityParser implements EntityParser {
             isInit = init == Necessary.REQUIRE || (init == Necessary.UNKNOWN && lock.isInitialize());
         } else if (mgc.isJpaSupport() && field.isMatches(Jpa.VERSION)) {
             isVersion = true;
-        } else if (lock.isAutoScan() && Objects.isNotEmpty(lock.getProperties())
+        } else if (lock.isAutoScan() && Collections.isNotEmpty(lock.getProperties())
                 && lock.getProperties().contains(cb.property())) {
             isVersion = true;
         }
@@ -555,7 +556,7 @@ public class DefaultEntityParser implements EntityParser {
         final LogicDeleteConfig ldc = mgc.getLogicDelete();
         final Set<String> properties;
         if ((hasAnnotation = Objects.nonNull((ld = field.getAnnotation(LogicDelete.class))))
-                || (ldc.isAutoScan() && Objects.isNotEmpty((properties = ldc.getProperties()))
+                || (ldc.isAutoScan() && Collections.isNotEmpty((properties = ldc.getProperties()))
                 && properties.contains(cb.property()))) {
             if (cb.primaryKey()) {
                 throw new MyBatisParserException("The attribute \"" + cb.property() + "\" of the entity class \"" +

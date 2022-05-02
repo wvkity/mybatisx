@@ -21,8 +21,8 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.fragment.AbstractFragmentList;
 import io.github.mybatisx.base.part.Part;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.ref.SoftReference;
@@ -63,7 +63,7 @@ public class TailPartStorage extends AbstractFragmentList<Part> {
                     Strings.ifNotWhitespaceThen(part.getFragment(this.parameterConverter, this.placeholderConverter),
                             parts::add);
                 }
-                if (Objects.isNotEmpty(parts)) {
+                if (Collections.isNotEmpty(parts)) {
                     final String fragment = String.join(SqlSymbol.SPACE, parts).trim();
                     this.reference = new SoftReference<>(fragment);
                     return fragment;

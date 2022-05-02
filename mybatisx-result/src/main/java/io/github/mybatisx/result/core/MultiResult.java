@@ -17,9 +17,9 @@ package io.github.mybatisx.result.core;
 
 import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.builder.ObjectBuilder;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.result.Result;
 import io.github.mybatisx.result.error.Error;
+import io.github.mybatisx.util.Maps;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class MultiResult extends AbstractMultiResult implements Result {
     }
 
     public MultiResult(Map<?, ?> data) {
-        this(Objects.size(data));
+        this(Maps.size(data));
         this.putAll(data);
     }
 
@@ -78,13 +78,13 @@ public class MultiResult extends AbstractMultiResult implements Result {
     }
 
     public MultiResult(Map<?, ?> data, String msg) {
-        this(Objects.size(data));
+        this(Maps.size(data));
         this.msg = msg;
         this.putAll(data);
     }
 
     public MultiResult(Map<?, ?> data, int code, String msg) {
-        this(Objects.size(data));
+        this(Maps.size(data));
         this.code = code;
         this.msg = msg;
         this.putAll(data);

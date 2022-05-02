@@ -21,8 +21,8 @@ import io.github.mybatisx.base.convert.ParameterConverter;
 import io.github.mybatisx.base.convert.PlaceholderConverter;
 import io.github.mybatisx.base.part.Part;
 import io.github.mybatisx.core.param.TemplateParam;
-import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.util.Collections;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
@@ -71,7 +71,7 @@ public class ListPart implements Part {
      * @return {@link ListPart}
      */
     public static ListPart of(final String template, final List<?> values) {
-        if (Strings.isNotWhitespace(template) && Objects.isNotEmpty(values)) {
+        if (Strings.isNotWhitespace(template) && Collections.isNotEmpty(values)) {
             return new ListPart(TemplateParam.builder().template(template).paramMode(ParamMode.MULTIPLE).listValue(values).build());
         }
         return null;
