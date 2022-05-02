@@ -16,6 +16,9 @@
 package io.github.mybatisx.extend.service;
 
 import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
+import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
+import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
 import io.github.mybatisx.core.criteria.query.Query;
 
 import java.io.Serializable;
@@ -172,6 +175,28 @@ interface QueryService<T, R, ID extends Serializable> {
     List<R> selectList(final Query<T> query);
 
     /**
+     * 根据{@link Query}对象查询记录(自定义返回值类型)
+     *
+     * @param query      {@link  Query}对象
+     * @param returnType 返回值类型
+     * @param <E>        返回值类型
+     * @return 多条记录
+     */
+    default <E> List<E> selectList(final Query<T> query, final Class<E> returnType) {
+        query.returnType(returnType);
+        return this.selectCustomList(query);
+    }
+
+    /**
+     * 根据{@link Query}对象查询记录(自定义返回值类型)
+     *
+     * @param query {@link  Query}对象
+     * @param <E>   返回值类型
+     * @return 多条记录
+     */
+    <E> List<E> selectCustomList(final Query<T> query);
+
+    /**
      * 根据{@link Query}对象查询记录
      *
      * @param query {@link Query}对象
@@ -187,5 +212,24 @@ interface QueryService<T, R, ID extends Serializable> {
      */
     List<Object[]> selectArrays(final Query<T> query);
 
+    /**
+     * 创建{@link LambdaQueryImplementor}对象
+     *
+     * @return {@link LambdaQueryImplementor}
+     */
+    LambdaQueryImplementor<T> createLambdaQuery();
 
+    /**
+     * 创建{@link PlainQueryImplementor}对象
+     *
+     * @return {@link PlainQueryImplementor}
+     */
+    PlainQueryImplementor<T> createPlainQuery();
+
+    /**
+     * 创建{@link GenericQueryImplementor}对象
+     *
+     * @return {@link GenericQueryImplementor}
+     */
+    GenericQueryImplementor<T> createGenericQuery();
 }

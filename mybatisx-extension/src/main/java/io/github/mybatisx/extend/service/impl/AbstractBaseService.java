@@ -16,6 +16,9 @@
 package io.github.mybatisx.extend.service.impl;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
+import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
+import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
 import io.github.mybatisx.core.criteria.query.Query;
 import io.github.mybatisx.core.mapper.BaseMapper;
 import io.github.mybatisx.extend.service.BaseService;
@@ -211,6 +214,21 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     @Override
     public List<Object[]> selectArrays(Query<T> query) {
         return this.mapper.selectArrays(query);
+    }
+
+    @Override
+    public LambdaQueryImplementor<T> createLambdaQuery() {
+        return LambdaQueryImplementor.from(this.getEntityType());
+    }
+
+    @Override
+    public PlainQueryImplementor<T> createPlainQuery() {
+        return PlainQueryImplementor.from(this.getEntityType());
+    }
+
+    @Override
+    public GenericQueryImplementor<T> createGenericQuery() {
+        return GenericQueryImplementor.from(this.getEntityType());
     }
 
     @Override
