@@ -389,6 +389,8 @@ public final class Collections {
     }
 
     /**
+     * 获取列表中的第一个元素
+     *
      * @param iterable 集合类型
      * @param <T>      元素类型
      * @param <Iter>   {@link Iterable}
@@ -399,6 +401,31 @@ public final class Collections {
             return Optional.empty();
         }
         return Optional.ofNullable(iterable.iterator().next());
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable 集合类型
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return 第一个元素或null
+     */
+    public static <T, Iter extends Iterable<? extends T>> T firstOrNullable(final Iter iterable) {
+        return first(iterable, null);
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable     集合类型
+     * @param defaultValue 默认值
+     * @param <T>          元素类型
+     * @param <Iter>       {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    public static <T, Iter extends Iterable<? extends T>> T first(final Iter iterable, final T defaultValue) {
+        return first(iterable).orElse(defaultValue);
     }
 
     /**
