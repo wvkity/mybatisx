@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * MyBatisX抽象通用Service接口
@@ -47,7 +48,6 @@ import java.util.Optional;
  */
 public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> implements
         BaseService<M, T, R, ID> {
-
 
     private final Class<?>[] genericClasses = this.genericClasses();
     /**
@@ -84,7 +84,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     protected Class<?>[] genericClasses() {
         return GenericTypeResolver.resolveTypeArguments(Reflections.getRealClass(this.getClass()), BaseService.class);
     }
-    
+
     /**
      * 通用Mapper接口
      */
@@ -229,6 +229,11 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     @Override
     public GenericQueryImplementor<T> createGenericQuery() {
         return GenericQueryImplementor.from(this.getEntityType());
+    }
+
+    @Override
+    public <E> E chain(Function<BaseService<M, T, R, ID>, E> function) {
+        return function.apply(this);
     }
 
     @Override

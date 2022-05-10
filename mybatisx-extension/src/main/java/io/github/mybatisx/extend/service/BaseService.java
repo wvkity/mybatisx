@@ -18,6 +18,7 @@ package io.github.mybatisx.extend.service;
 import io.github.mybatisx.core.mapper.BaseMapper;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * MyBatisX通用Service接口
@@ -30,9 +31,17 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> extends 
+public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> extends
         SaveService<T>, UpdateService<T>, DeleteService<T, ID>, QueryService<T, R, ID> {
 
+    /**
+     * 消费
+     *
+     * @param function {@link Function}
+     * @param <E>      结果类型
+     * @return 处理后的结果
+     */
+    <E> E chain(Function<BaseService<M, T, R, ID>, E> function);
 
     /**
      * 获取mapper类型
@@ -54,7 +63,7 @@ public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Se
      * @return 返回值类型
      */
     Class<R> getReturnType();
-    
+
     /**
      * 获取Mapper接口对象
      *
