@@ -588,6 +588,46 @@ public final class Objects {
     }
 
     /**
+     * 检查ID是否无效
+     *
+     * @param id ID值
+     * @return boolean
+     */
+    public static boolean idIsInvalid(final Long id) {
+        return id == null || id < 1;
+    }
+
+    /**
+     * 检查ID是否无效
+     *
+     * @param id ID值
+     * @return boolean
+     */
+    public static boolean idIsInvalid(final Integer id) {
+        return id == null || id < 1;
+    }
+
+    /**
+     * 检查ID是否有效
+     *
+     * @param id ID值
+     * @return boolean
+     */
+    public static boolean idIsValid(final Long id) {
+        return !idIsInvalid(id);
+    }
+
+    /**
+     * 检查ID是否有效
+     *
+     * @param id ID值
+     * @return boolean
+     */
+    public static boolean idIsValid(final Integer id) {
+        return !idIsInvalid(id);
+    }
+
+    /**
      * 检查指定对象是否为null
      *
      * @param object  待检查对象
@@ -615,5 +655,5 @@ public final class Objects {
         }
         return value;
     }
-    
+
 }
