@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.DefaultSqlManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class PlainImplementor<T> extends AbstractPlainCriteria<T, PlainImplement
     @Override
     protected PlainImplementor<T> newInstance() {
         final PlainImplementor<T> it = new PlainImplementor<>();
+        this.category = Category.BASIC;
         it.clone(this);
         return it;
     }

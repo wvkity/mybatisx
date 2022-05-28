@@ -44,9 +44,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -138,6 +138,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * SQL解析器
      */
     protected AtomicReference<SqlParser> parserRef;
+    /**
+     * 类别
+     */
+    protected Category category;
 
     // endregion
 
@@ -147,32 +151,41 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * 初始化
      */
     protected void newInit() {
-        this.newInit(null, false);
+        this.newInit(null, Category.BASIC);
+    }
+
+    /**
+     * 查询类型对象初始化
+     *
+     * @param alias 表别名
+     */
+    protected void newQueryInit(final String alias) {
+        this.newInit(alias, Category.QUERY);
+    }
+
+    /**
+     * 更新类型对象初始化
+     */
+    protected void newUpdateInit() {
+        this.newInit(null, Category.UPDATE);
     }
 
     /**
      * 初始化
      *
-     * @param alias 表别名
+     * @param alias    表别名
+     * @param category {@link Category}
      */
-    protected void newInit(final String alias) {
-        this.newInit(alias, true);
-    }
-
-    /**
-     * 初始化
-     *
-     * @param alias 表别名
-     */
-    protected void newInit(final String alias, final boolean isQuery) {
+    protected void newInit(final String alias, final Category category) {
         final boolean hasAlias = Strings.isNotWhitespace(alias);
         this.parameterSequence = new AtomicInteger(0);
-        this.paramValueMapping = new ConcurrentHashMap<>(16);
+        this.paramValueMapping = new HashMap<>(16);
         this.parameterConverter = new DefaultParameterConverter(this.parameterSequence, this.paramValueMapping);
         this.placeholderConverter = new DefaultPlaceholderConverter(this.parameterConverter);
         this.conditionConverter = new DefaultConditionConverter(this);
         this.parserRef = new AtomicReference<>();
-        if (isQuery) {
+        this.category = category;
+        if (category == Category.QUERY) {
             this.fragmentManager = new DefaultFragmentManager(this, this.parameterConverter, this.placeholderConverter);
             this.parserRef.set(new JSqlParser());
         } else {

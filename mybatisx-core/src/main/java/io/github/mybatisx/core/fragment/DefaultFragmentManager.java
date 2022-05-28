@@ -36,7 +36,8 @@ public class DefaultFragmentManager extends AbstractFragmentManager {
     }
 
     public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage) {
-        super(criteria, conditionStorage, null, null, null, null, null);
+        super(criteria, conditionStorage, null, null, null, null,
+                new TailPartStorage(conditionStorage.getParameterConverter(), conditionStorage.getPlaceholderConverter()));
     }
 
     public DefaultFragmentManager(Criteria<?> criteria, ConditionStorage conditionStorage,

@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.DefaultSqlManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class LambdaImplementor<T> extends AbstractLambdaCriteria<T, LambdaImplem
     @Override
     protected LambdaImplementor<T> newInstance() {
         final LambdaImplementor<T> it = new LambdaImplementor<>();
+        this.category = Category.BASIC;
         it.clone(this);
         return it;
     }

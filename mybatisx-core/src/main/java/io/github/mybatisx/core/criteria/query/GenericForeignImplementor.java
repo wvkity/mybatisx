@@ -18,6 +18,7 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.constant.Join;
 import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.QuerySqlManager;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -51,6 +52,7 @@ public class GenericForeignImplementor<T> extends AbstractGenericJoinable<T, Gen
         this.entity = entity;
         this.reference = reference;
         this.join = join;
+        this.category = Category.QUERY;
         this.clone((AbstractBaseCriteria<?>) reference, false);
         this.useAlias();
         this.defaultAlias = this.genDefaultAlias();

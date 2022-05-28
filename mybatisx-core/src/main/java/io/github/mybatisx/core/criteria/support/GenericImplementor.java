@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.core.criteria.support;
 
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.DefaultSqlManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class GenericImplementor<T> extends AbstractGenericCriteria<T, GenericImp
     @Override
     protected GenericImplementor<T> newInstance() {
         final GenericImplementor<T> it = new GenericImplementor<>();
+        this.category = Category.BASIC;
         it.clone(this);
         return it;
     }

@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.update;
 
 import io.github.mybatisx.core.criteria.support.AbstractLambdaCriteria;
+import io.github.mybatisx.matcher.Matcher;
 
 /**
  * 抽象更新条件(支持Lambda表达式)
@@ -28,4 +29,18 @@ import io.github.mybatisx.core.criteria.support.AbstractLambdaCriteria;
 public abstract class AbstractLambdaUpdateCriteria<T, C extends LambdaUpdateCriteria<T, C>> extends
         AbstractLambdaCriteria<T, C> implements LambdaUpdateCriteria<T, C> {
 
+    @Override
+    public <V> C set(String property, V value, Matcher<V> matcher) {
+        return null;
+    }
+
+    @Override
+    public C setIfAbsent(String property, Object value) {
+        return null;
+    }
+
+    @Override
+    public String getUpdateFragment() {
+        return null;
+    }
 }

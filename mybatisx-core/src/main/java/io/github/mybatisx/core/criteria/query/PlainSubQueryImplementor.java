@@ -17,6 +17,7 @@ package io.github.mybatisx.core.criteria.query;
 
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.QuerySqlManager;
 import io.github.mybatisx.lang.Strings;
 import lombok.AccessLevel;
@@ -45,6 +46,7 @@ public class PlainSubQueryImplementor extends AbstractPlainSubQuery<PlainSubQuer
 
     public PlainSubQueryImplementor(final Query<?> outerQuery, final String alias) {
         this.outerQuery = outerQuery;
+        this.category = Category.QUERY;
         this.clone((AbstractBaseCriteria<?>) outerQuery, this, false);
         this.defaultAlias = this.genDefaultAlias();
         this.aliasRef = new AtomicReference<>(Strings.isNotWhitespace(alias) ? alias : Constants.EMPTY);

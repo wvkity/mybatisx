@@ -18,6 +18,7 @@ package io.github.mybatisx.core.criteria.query;
 import io.github.mybatisx.base.constant.Constants;
 import io.github.mybatisx.base.criteria.Criteria;
 import io.github.mybatisx.core.criteria.AbstractBaseCriteria;
+import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.QuerySqlManager;
 import io.github.mybatisx.lang.Strings;
 import lombok.AccessLevel;
@@ -46,13 +47,14 @@ public class PlainQueryImplementor<T> extends AbstractPlainQueryCriteria<T, Plai
 
     public PlainQueryImplementor(Class<T> entity, String alias) {
         this.entity = entity;
-        this.newInit(alias, true);
+        this.newQueryInit(alias);
         this.associations = new LinkedHashSet<>(5);
         this.sqlManager = new QuerySqlManager(this, this.outerQuery, this.associations, this.fragmentManager);
     }
 
     protected PlainQueryImplementor(final Criteria<?> outerCriteria, final Class<T> entity, final String alias) {
         this.entity = entity;
+        this.category = Category.QUERY;
         this.clone((AbstractBaseCriteria<?>) outerCriteria, this, false);
         this.defaultAlias = this.genDefaultAlias();
         this.aliasRef = new AtomicReference<>(Strings.isNotWhitespace(alias) ? alias : Constants.EMPTY);

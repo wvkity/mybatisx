@@ -23,6 +23,7 @@ import io.github.mybatisx.base.criterion.Criterion;
 import io.github.mybatisx.base.fragment.AbstractFragmentList;
 import io.github.mybatisx.lang.Strings;
 import io.github.mybatisx.util.Collections;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.lang.ref.SoftReference;
@@ -44,10 +45,12 @@ public class ConditionStorage extends AbstractFragmentList<Criterion> {
     /**
      * 参数转换器
      */
+    @Getter
     private final ParameterConverter parameterConverter;
     /**
      * 占位符转换器
      */
+    @Getter
     private final PlaceholderConverter placeholderConverter;
     /**
      * 条件引用

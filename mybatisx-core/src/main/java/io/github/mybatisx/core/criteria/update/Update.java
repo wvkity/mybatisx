@@ -19,10 +19,17 @@ import io.github.mybatisx.core.criteria.BaseCriteria;
 
 /**
  * 更新条件接口(update/delete)
+ *
  * @author wvkity
  * @created 2021/12/23
  * @since 1.0.0
  */
 public interface Update<T> extends BaseCriteria<T> {
 
+    /**
+     * 获取更新SQL语句片段
+     * @return 更新语句片段
+     */
+    String getUpdateFragment();
+    
 }
