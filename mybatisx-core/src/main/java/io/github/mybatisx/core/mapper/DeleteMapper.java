@@ -15,6 +15,9 @@
  */
 package io.github.mybatisx.core.mapper;
 
+import io.github.mybatisx.base.constant.Constants;
+import org.apache.ibatis.annotations.Param;
+
 import java.io.Serializable;
 
 /**
@@ -28,4 +31,11 @@ import java.io.Serializable;
  */
 interface DeleteMapper<T, ID extends Serializable> {
 
+    /**
+     * 根据主键删除记录
+     *
+     * @param id 主键
+     * @return 受影响行数
+     */
+    int deleteById(final @Param(Constants.PARAM_ID) ID id);
 }

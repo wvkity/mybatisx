@@ -104,6 +104,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public int deleteById(ID id) {
+        return this.mapper.deleteById(id);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public int update(T entity) {
         return this.mapper.update(entity);
     }

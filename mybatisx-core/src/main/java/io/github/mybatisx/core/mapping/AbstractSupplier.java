@@ -70,6 +70,16 @@ public abstract class AbstractSupplier implements SqlSupplier, SqlSymbol {
     }
 
     /**
+     * 拼接完整删除SQL语句
+     *
+     * @param whereFragment 条件部分
+     * @return 完整SQL语句
+     */
+    protected String delete(final String whereFragment) {
+        return "DELETE FROM " + this.table.getFullName() + (Strings.isNotWhitespace(whereFragment) ? (SPACE + whereFragment) : EMPTY);
+    }
+
+    /**
      * 拼接完整更新SQL语句
      *
      * @param setFragment   set部分

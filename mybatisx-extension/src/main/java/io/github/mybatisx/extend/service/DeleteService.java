@@ -28,4 +28,11 @@ import java.io.Serializable;
  */
 interface DeleteService<T, ID extends Serializable> {
 
+    /**
+     * 根据主键删除记录
+     *
+     * @param id 主键
+     * @return 受影响行数
+     */
+    int deleteById(final ID id);
 }

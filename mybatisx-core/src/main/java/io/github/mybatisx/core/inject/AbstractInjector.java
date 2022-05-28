@@ -22,6 +22,7 @@ import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
+import io.github.mybatisx.core.inject.method.invoke.DeleteById;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
 import io.github.mybatisx.core.inject.method.invoke.SelectCountByCriteria;
@@ -82,6 +83,8 @@ public abstract class AbstractInjector implements Injector {
         // insert方法映射
         final Insert insert = new Insert();
         final InsertWithoutNull insertWithoutNull = new InsertWithoutNull();
+        // delete方法映射
+        final DeleteById deleteById = new DeleteById();
         // update方法映射
         final Update update = new Update();
         final UpdateWithoutNull updateWithoutNull = new UpdateWithoutNull();
@@ -97,6 +100,9 @@ public abstract class AbstractInjector implements Injector {
         ALL_MAPPED_METHOD_CACHE.put(InjectType.INSERT, ImmutableSet.of(
                 insert, insertWithoutNull
         ));
+        ALL_MAPPED_METHOD_CACHE.put(InjectType.DELETE, ImmutableSet.of(
+                deleteById
+        ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
                 update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
                 selectCountByCriteria,
@@ -106,7 +112,7 @@ public abstract class AbstractInjector implements Injector {
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, insertWithoutNull, update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                insert, insertWithoutNull, deleteById, update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
                 selectCountByCriteria, selectCustomList, selectCustomMap, selectMapByCriteria, selectListByCriteria
         );
     }
