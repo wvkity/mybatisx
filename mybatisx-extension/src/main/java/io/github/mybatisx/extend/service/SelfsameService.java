@@ -31,6 +31,6 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface SelfsameService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends BaseService<M, T, T, ID> {
+public interface SelfsameService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends CurdService<M, T, T, ID> {
 
 }

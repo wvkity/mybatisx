@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface BaseMapper<T, R, ID extends Serializable> extends InsertMapper<T>, UpdateMapper<T>,
+public interface CurdMapper<T, R, ID extends Serializable> extends InsertMapper<T>, UpdateMapper<T>,
         DeleteMapper<T, ID>, QueryMapper<T, R, ID> {
 
 }

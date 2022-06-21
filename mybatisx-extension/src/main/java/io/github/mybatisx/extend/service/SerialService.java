@@ -31,6 +31,6 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface SerialService<M extends SerialMapper<T, R>, T, R> extends BaseService<M, T, R, Serializable> {
+public interface SerialService<M extends SerialMapper<T, R>, T, R> extends CurdService<M, T, R, Serializable> {
 
 }

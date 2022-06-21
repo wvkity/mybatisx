@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.extend.service;
 
-import io.github.mybatisx.core.mapper.BaseMapper;
+import io.github.mybatisx.core.mapper.CurdMapper;
 
 import java.io.Serializable;
 import java.util.function.Function;
@@ -31,7 +31,7 @@ import java.util.function.Function;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> extends
+public interface CurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> extends
         SaveService<T>, UpdateService<T>, DeleteService<T, ID>, QueryService<T, R, ID> {
 
     /**
@@ -41,7 +41,7 @@ public interface BaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Se
      * @param <E>      结果类型
      * @return 处理后的结果
      */
-    <E> E chain(Function<BaseService<M, T, R, ID>, E> function);
+    <E> E chain(Function<CurdService<M, T, R, ID>, E> function);
 
     /**
      * 获取mapper类型

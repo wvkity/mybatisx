@@ -28,6 +28,6 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public interface SerialMapper<T, R> extends BaseMapper<T, R, Serializable> {
+public interface SerialMapper<T, R> extends CurdMapper<T, R, Serializable> {
 
 }

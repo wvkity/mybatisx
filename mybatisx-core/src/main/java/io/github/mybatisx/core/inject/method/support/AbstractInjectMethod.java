@@ -136,10 +136,10 @@ public abstract class AbstractInjectMethod<S extends SqlSupplier> extends Abstra
             final Column id = table.getPrimaryKey();
             final UniqueMeta unique = id.getUniqueMeta();
             final String sequence;
+            this.cfg.setUseGeneratedKeys(true);
             if (table.isOnlyOnePrimaryKey() || unique.isPriority()) {
                 if (unique.isIdentity()) {
                     kg = new Jdbc3KeyGenerator();
-                    this.cfg.setUseGeneratedKeys(true);
                 } else if (Strings.isNotWhitespace((sequence = unique.getSequence()))) {
                     final MyBatisGlobalConfig mgc = MyBatisGlobalConfigContext.getGlobalConfig(this.cfg);
                     final SequenceGenerator sg;
@@ -156,7 +156,6 @@ public abstract class AbstractInjectMethod<S extends SqlSupplier> extends Abstra
                         kg = new SelectKeyGenerator(ms, Optional.ofNullable(unique.getStrategy())
                                 .map(ExecuteType::isBefore).orElse(false));
                         this.mba.getConfiguration().addKeyGenerator(newMsId, kg);
-                        this.mba.getConfiguration().setUseGeneratedKeys(true);
                     }
                 }
             }

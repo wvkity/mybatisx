@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public abstract class AbstractIdenticalService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends
-        AbstractBaseService<M, T, T, ID> implements SelfsameService<M, T, ID> {
+public abstract class AbstractSelfsameService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends
+        AbstractCurdService<M, T, T, ID> implements SelfsameService<M, T, ID> {
 
 }

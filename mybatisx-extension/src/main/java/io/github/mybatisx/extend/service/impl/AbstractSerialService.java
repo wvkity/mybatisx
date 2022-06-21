@@ -33,6 +33,6 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 public abstract class AbstractSerialService<M extends SerialMapper<T, R>, T, R> extends
-        AbstractBaseService<M, T, R, Serializable> implements SerialService<M, T, R> {
+        AbstractCurdService<M, T, R, Serializable> implements SerialService<M, T, R> {
 
 }

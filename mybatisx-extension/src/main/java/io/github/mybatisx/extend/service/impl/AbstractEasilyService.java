@@ -32,6 +32,6 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 public abstract class AbstractEasilyService<M extends EasilyMapper<T>, T> extends
-        AbstractBaseService<M, T, T, Serializable> implements EasilyService<M, T> {
+        AbstractCurdService<M, T, T, Serializable> implements EasilyService<M, T> {
 
 }

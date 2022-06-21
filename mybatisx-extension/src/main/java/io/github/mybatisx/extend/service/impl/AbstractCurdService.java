@@ -20,8 +20,8 @@ import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
 import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
 import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
 import io.github.mybatisx.core.criteria.query.Query;
-import io.github.mybatisx.core.mapper.BaseMapper;
-import io.github.mybatisx.extend.service.BaseService;
+import io.github.mybatisx.core.mapper.CurdMapper;
+import io.github.mybatisx.extend.service.CurdService;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.reflect.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,8 @@ import java.util.function.Function;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, ID extends Serializable> implements
-        BaseService<M, T, R, ID> {
+public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> implements
+        CurdService<M, T, R, ID> {
 
     private final Class<?>[] genericClasses = this.genericClasses();
     /**
@@ -82,7 +82,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
      * @return 泛型列表
      */
     protected Class<?>[] genericClasses() {
-        return GenericTypeResolver.resolveTypeArguments(Reflections.getRealClass(this.getClass()), BaseService.class);
+        return GenericTypeResolver.resolveTypeArguments(Reflections.getRealClass(this.getClass()), CurdService.class);
     }
 
     /**
@@ -238,7 +238,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<T, R, ID>, T, R, 
     }
 
     @Override
-    public <E> E chain(Function<BaseService<M, T, R, ID>, E> function) {
+    public <E> E chain(Function<CurdService<M, T, R, ID>, E> function) {
         return function.apply(this);
     }
 
