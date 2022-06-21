@@ -17,6 +17,8 @@ package io.github.mybatisx.result.core;
 
 import io.github.mybatisx.result.DataResult;
 import io.github.mybatisx.result.error.AbstractResultError;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -44,11 +46,15 @@ public abstract class AbstractResult<T> extends AbstractResultError implements D
     /**
      * 当前时间戳
      */
-    protected final long timestamp = currentTime.atZoneSameInstant(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    @Getter
+    @Setter
+    protected long timestamp = currentTime.atZoneSameInstant(ZoneId.systemDefault()).toInstant().toEpochMilli();
     /**
      * 当前时间字符串
      */
-    protected final String gmtCreateAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(currentTime);
+    @Getter
+    @Setter
+    protected String gmtCreate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(currentTime);
 
     @Override
     public T getData() {
@@ -60,20 +66,4 @@ public abstract class AbstractResult<T> extends AbstractResultError implements D
         this.data = data;
     }
 
-    /**
-     * 获取时间戳
-     *
-     * @return 时间戳
-     */
-    public long getTimestamp() {
-        return this.timestamp;
-    }
-
-    public String getCreateAt() {
-        return Long.toString(this.timestamp);
-    }
-
-    public String getGmtCreateAt() {
-        return gmtCreateAt;
-    }
 }
