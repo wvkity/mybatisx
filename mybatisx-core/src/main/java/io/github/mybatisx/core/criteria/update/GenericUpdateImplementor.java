@@ -2,6 +2,8 @@ package io.github.mybatisx.core.criteria.update;
 
 import io.github.mybatisx.core.criteria.Category;
 import io.github.mybatisx.core.sql.UpdateSqlManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Consumer;
 
@@ -13,6 +15,7 @@ import java.util.function.Consumer;
  * @created 2022/6/26
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GenericUpdateImplementor<T> extends AbstractGenericUpdateCriteria<T, GenericUpdateImplementor<T>> {
 
     private static final long serialVersionUID = -5356291811547924713L;
