@@ -194,15 +194,32 @@ public final class TableHelper {
     /**
      * 根据实体类、字段名获取{@link Column}对象
      *
-     * @param entity 实体类
-     * @param column 字段名(忽略大小写)
+     * @param entity             实体类
+     * @param column             字段名(忽略大小写)
+     * @param nonMatchesThrowing 忽略查找失败
+     * @param printWarning       是否打印警告信息
      * @return {@link Column}
      */
-    public static Column getColumnByName(final Class<?> entity, final String column) {
+    public static Column getColumnByName(final Class<?> entity, final String column,
+                                         final boolean nonMatchesThrowing, final boolean printWarning) {
         if (entity == null || Strings.isWhitespace(column)) {
             return null;
         }
-        return Optional.ofNullable(getTable(entity)).map(it -> it.getByColumn(column)).orElse(null);
+        final Column _$column = Optional.ofNullable(getTable(entity)).map(it -> it.getByColumn(column)).orElse(null);
+        if (_$column == null) {
+            if (nonMatchesThrowing) {
+                throw new MyBatisException("The field mapping information for the entity class(" +
+                        entity.getName() + ") cannot be found based on the `" + column + "` " +
+                        "column. Check that the Column name is written correctly using the @column annotation");
+            } else {
+                if (printWarning) {
+                    log.warn("The field mapping information for the entity class({}) cannot be found based on the " +
+                            "`{}` column. Check that the Column name is written correctly using the @column annotation",
+                            entity.getName(), column);
+                }
+            }
+        }
+        return _$column;
     }
 
     /**

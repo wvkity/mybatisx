@@ -45,8 +45,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -143,6 +146,17 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      */
     protected Category category;
 
+    // ----- update -----
+
+    /**
+     * 待更新包装字段
+     */
+    protected Map<Column, Object> updateWrapColumns;
+    /**
+     * 待更新字段列表
+     */
+    protected Set<String> updateColumns;
+
     // endregion
 
     // region Protected methods
@@ -191,6 +205,10 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         } else {
             this.fragmentManager = new DefaultFragmentManager(this,
                     new ConditionStorage(this.parameterConverter, this.placeholderConverter));
+            if (category == Category.UPDATE) {
+                this.updateWrapColumns = new HashMap<>(16);
+                this.updateColumns = new HashSet<>(8);
+            }
         }
         this.nonMatchingThenThrows = new AtomicBoolean(true);
         this.tableAliasSequence = new AtomicInteger(0);
@@ -388,10 +406,21 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
      * @return {@link Column}
      */
     public Column convert(final String property) {
-        if (Strings.isNotWhitespace(property)) {
-            return TableHelper.getColumnByProperty(this.entity, property, this.nonMatchingThenThrows.get(), true);
+        return this.convert(property, true);
+    }
+
+    /**
+     * 获取{@link Column}对象
+     *
+     * @param target     字段名/属性
+     * @param isProperty 是否为属性
+     * @return {@link Column}对象
+     */
+    protected Column convert(final String target, final boolean isProperty) {
+        if (isProperty) {
+            return TableHelper.getColumnByProperty(this.entity, target, this.nonMatchingThenThrows.get(), true);
         }
-        return null;
+        return TableHelper.getColumnByName(this.entity, target, this.nonMatchingThenThrows.get(), true);
     }
 
     @Override
@@ -440,6 +469,36 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
         return sb.toString();
     }
 
+    /**
+     * 添加更新字段
+     *
+     * @param target     字段/属性
+     * @param value      值
+     * @param isProperty 是否为属性
+     * @param isAbsent   如果存在是否覆盖
+     */
+    protected void update(final String target, final Object value, final boolean isProperty, final boolean isAbsent) {
+        final Column column = this.convert(target, isProperty);
+        if (column != null) {
+            final String columnName = column.getColumn();
+            if (isAbsent && this.updateIsExists(columnName)) {
+                return;
+            }
+            this.updateColumns.add(columnName.toUpperCase(Locale.ENGLISH));
+            this.updateWrapColumns.put(column, value);
+        }
+    }
+
+    /**
+     * 更新字段是否已存在
+     *
+     * @param column 字段名
+     * @return boolean
+     */
+    protected boolean updateIsExists(final String column) {
+        return this.updateColumns.contains(column.toLowerCase(Locale.ENGLISH));
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public Class<T> getEntity() {
@@ -469,6 +528,11 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     @Override
     public String getFragment() {
         return this.getCompleteString();
+    }
+
+    @Override
+    public String completeString() {
+        return this.sqlManager.getCompleteString();
     }
 
     // endregion

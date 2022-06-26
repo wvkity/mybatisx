@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.update;
 
 import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
+import io.github.mybatisx.matcher.Matcher;
 
 /**
  * 抽象通用更新条件
@@ -30,4 +31,40 @@ import io.github.mybatisx.core.criteria.support.AbstractGenericCriteria;
 public abstract class AbstractGenericUpdateCriteria<T, C extends GenericUpdateCriteria<T, C>> extends
         AbstractGenericCriteria<T, C> implements GenericUpdateCriteria<T, C> {
 
+    @Override
+    public <V> C set(String property, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(property, value, true, false);
+        }
+        return this.context;
+    }
+
+    @Override
+    public <V> C setIfAbsent(String property, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(property, value, true, true);
+        }
+        return this.context;
+    }
+
+    @Override
+    public <V> C colSet(String column, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(column, value, false, false);
+        }
+        return this.context;
+    }
+
+    @Override
+    public <V> C colSetIfAbsent(String column, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(column, value, false, true);
+        }
+        return this.context;
+    }
+
+    @Override
+    public String getUpdateFragment() {
+        return this.sqlManager.getUpdateFragment();
+    }
 }

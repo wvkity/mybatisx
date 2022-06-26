@@ -31,6 +31,7 @@ import io.github.mybatisx.core.inject.method.invoke.SelectCustomMap;
 import io.github.mybatisx.core.inject.method.invoke.SelectListByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.SelectMapByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.Update;
+import io.github.mybatisx.core.inject.method.invoke.UpdateByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithSpecial;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithSpecialExcNull;
 import io.github.mybatisx.core.inject.method.invoke.UpdateWithoutNull;
@@ -87,6 +88,7 @@ public abstract class AbstractInjector implements Injector {
         final DeleteById deleteById = new DeleteById();
         // update方法映射
         final Update update = new Update();
+        final UpdateByCriteria updateByCriteria = new UpdateByCriteria();
         final UpdateWithoutNull updateWithoutNull = new UpdateWithoutNull();
         final UpdateWithSpecial updateWithSpecial = new UpdateWithSpecial();
         final UpdateWithSpecialExcNull updateWithSpecialExcNull = new UpdateWithSpecialExcNull();
@@ -104,7 +106,7 @@ public abstract class AbstractInjector implements Injector {
                 deleteById
         ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
-                update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                update, updateByCriteria, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
                 selectCountByCriteria,
                 selectCustomList,
                 selectCustomMap,
@@ -112,7 +114,8 @@ public abstract class AbstractInjector implements Injector {
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, insertWithoutNull, deleteById, update, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                insert, insertWithoutNull, deleteById, update, updateByCriteria, updateWithoutNull, updateWithSpecial,
+                updateWithSpecialExcNull,
                 selectCountByCriteria, selectCustomList, selectCustomMap, selectMapByCriteria, selectListByCriteria
         );
     }

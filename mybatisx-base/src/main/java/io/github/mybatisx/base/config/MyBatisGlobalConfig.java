@@ -48,7 +48,7 @@ public class MyBatisGlobalConfig {
     /**
      * 注入Mapper基类名
      */
-    private String injectMapperClassName = "io.github.mybatisx.core.mapper.BaseMapper";
+    private String injectMapperClassName = "io.github.mybatisx.core.mapper.CurdMapper";
     /**
      * 注入Mapper基类
      */

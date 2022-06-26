@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.criteria.update;
 
 import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
+import io.github.mybatisx.matcher.Matcher;
 
 /**
  * 抽象更新条件
@@ -30,4 +31,24 @@ import io.github.mybatisx.core.criteria.support.AbstractPlainCriteria;
 public abstract class AbstractPlainUpdateCriteria<T, C extends PlainUpdateCriteria<T, C>> extends
         AbstractPlainCriteria<T, C> implements PlainUpdateCriteria<T, C> {
 
+    @Override
+    public <V> C colSet(String column, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(column, value, false, false);
+        }
+        return this.context;
+    }
+
+    @Override
+    public <V> C colSetIfAbsent(String column, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(column, value, false, true);
+        }
+        return this.context;
+    }
+
+    @Override
+    public String getUpdateFragment() {
+        return this.sqlManager.getUpdateFragment();
+    }
 }

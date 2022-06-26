@@ -65,7 +65,20 @@ public interface LambdaUpdateCriteria<T, C extends LambdaUpdateCriteria<T, C>> e
      * @return {@code this}
      */
     default <V> C setIfAbsent(final Property<T, V> property, final V value) {
-        return this.setIfAbsent(this.convert(property), value);
+        return this.setIfAbsent(property, value, null);
+    }
+
+    /**
+     * 更新字段值
+     *
+     * @param property 属性
+     * @param value    值
+     * @param matcher  {@link Matcher}
+     * @param <V>      值类型
+     * @return {@code this}
+     */
+    default <V> C setIfAbsent(final Property<T, V> property, final V value, final Matcher<V> matcher) {
+        return this.setIfAbsent(this.convert(property), value, matcher);
     }
 
     /**
@@ -97,7 +110,20 @@ public interface LambdaUpdateCriteria<T, C extends LambdaUpdateCriteria<T, C>> e
      * @param value    值
      * @return {@code this}
      */
-    C setIfAbsent(final String property, final Object value);
+    default C setIfAbsent(final String property, final Object value) {
+        return this.setIfAbsent(property, value, null);
+    }
+
+    /**
+     * 更新字段值
+     *
+     * @param property 属性
+     * @param value    值
+     * @param matcher  {@link Matcher}
+     * @param <V>      值类型
+     * @return {@code this}
+     */
+    <V> C setIfAbsent(final String property, final V value, final Matcher<V> matcher);
 
     /**
      * 更新字段值

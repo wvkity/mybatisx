@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.extend.service;
 
+import io.github.mybatisx.core.criteria.update.Update;
+
 /**
  * MyBatisX更新操作Service接口
  *
@@ -61,5 +63,13 @@ interface UpdateService<T> {
      * @return 受影响行数
      */
     int updateWithSpecialExcNull(final T entity);
+
+    /**
+     * 根据{@link Update}对象更新记录
+     *
+     * @param criteria {@link Update}
+     * @return 受影响行数
+     */
+    int update(final Update<T> criteria);
 
 }

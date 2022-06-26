@@ -21,6 +21,8 @@ import io.github.mybatisx.matcher.Matcher;
 /**
  * 抽象更新条件(支持Lambda表达式)
  *
+ * @param <T> 实体类型
+ * @param <C> 子类型
  * @author wvkity
  * @created 2022/1/5
  * @since 1.0.0
@@ -31,16 +33,22 @@ public abstract class AbstractLambdaUpdateCriteria<T, C extends LambdaUpdateCrit
 
     @Override
     public <V> C set(String property, V value, Matcher<V> matcher) {
-        return null;
+        if (matcher == null || matcher.matches(value)) {
+            this.update(property, value, true, false);
+        }
+        return this.context;
     }
 
     @Override
-    public C setIfAbsent(String property, Object value) {
-        return null;
+    public <V> C setIfAbsent(String property, V value, Matcher<V> matcher) {
+        if (matcher == null || matcher.matches(value)) {
+            this.update(property, value, true, true);
+        }
+        return this.context;
     }
 
     @Override
     public String getUpdateFragment() {
-        return null;
+        return this.sqlManager.getUpdateFragment();
     }
 }

@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.mapper;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.core.criteria.update.Update;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -66,4 +67,11 @@ interface UpdateMapper<T> {
      */
     int updateWithSpecialExcNull(@Param(Constants.PARAM_ENTITY) final T entity);
 
+    /**
+     * 根据{@link Update}对象更新记录
+     *
+     * @param criteria {@link Update}
+     * @return 受影响行数
+     */
+    int updateByCriteria(@Param(Constants.PARAM_CRITERIA) final Update<T> criteria);
 }

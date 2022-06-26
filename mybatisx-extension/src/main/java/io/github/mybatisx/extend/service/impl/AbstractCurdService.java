@@ -20,6 +20,7 @@ import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
 import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
 import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
 import io.github.mybatisx.core.criteria.query.Query;
+import io.github.mybatisx.core.criteria.update.Update;
 import io.github.mybatisx.core.mapper.CurdMapper;
 import io.github.mybatisx.extend.service.CurdService;
 import io.github.mybatisx.lang.Objects;
@@ -130,6 +131,12 @@ public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, 
     @Transactional(rollbackFor = Exception.class)
     public int updateWithSpecialExcNull(T entity) {
         return this.mapper.updateWithSpecialExcNull(entity);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int update(Update<T> criteria) {
+        return this.mapper.updateByCriteria(criteria);
     }
 
     @Override

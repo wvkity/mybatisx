@@ -66,6 +66,7 @@ public class LambdaForeignImplementor<T> extends AbstractLambdaJoinable<T, Lambd
         final LambdaForeignImplementor<T> it = new LambdaForeignImplementor<>();
         it.reference = this.reference;
         it.join = this.join;
+        this.category = Category.QUERY;
         it.clone(this);
         return it;
     }
