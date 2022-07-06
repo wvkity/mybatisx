@@ -162,14 +162,14 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     // region Protected methods
 
     /**
-     * 初始化
+     * 属性初始化
      */
     protected void newInit() {
         this.newInit(null, Category.BASIC);
     }
 
     /**
-     * 查询类型对象初始化
+     * 查询类型对象属性初始化
      *
      * @param alias 表别名
      */
@@ -178,14 +178,21 @@ public abstract class AbstractBaseCriteria<T> implements BaseCriteria<T> {
     }
 
     /**
-     * 更新类型对象初始化
+     * 更新类型对象属性初始化
      */
     protected void newUpdateInit() {
         this.newInit(null, Category.UPDATE);
     }
 
     /**
-     * 初始化
+     * 删除类型对象属性初始化
+     */
+    protected void newDeleteInit() {
+        this.newInit(null, Category.DELETE);
+    }
+
+    /**
+     * 属性初始化
      *
      * @param alias    表别名
      * @param category {@link Category}
