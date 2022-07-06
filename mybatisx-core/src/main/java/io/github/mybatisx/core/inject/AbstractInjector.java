@@ -22,6 +22,7 @@ import io.github.mybatisx.base.helper.TableHelper;
 import io.github.mybatisx.base.inject.Injector;
 import io.github.mybatisx.base.metadata.Table;
 import io.github.mybatisx.core.inject.method.MappedMethod;
+import io.github.mybatisx.core.inject.method.invoke.DeleteByCriteria;
 import io.github.mybatisx.core.inject.method.invoke.DeleteById;
 import io.github.mybatisx.core.inject.method.invoke.Insert;
 import io.github.mybatisx.core.inject.method.invoke.InsertWithoutNull;
@@ -85,6 +86,7 @@ public abstract class AbstractInjector implements Injector {
         final Insert insert = new Insert();
         final InsertWithoutNull insertWithoutNull = new InsertWithoutNull();
         // delete方法映射
+        final DeleteByCriteria deleteByCriteria = new DeleteByCriteria();
         final DeleteById deleteById = new DeleteById();
         // update方法映射
         final Update update = new Update();
@@ -103,20 +105,29 @@ public abstract class AbstractInjector implements Injector {
                 insert, insertWithoutNull
         ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.DELETE, ImmutableSet.of(
-                deleteById
+                deleteByCriteria, deleteById
         ));
         ALL_MAPPED_METHOD_CACHE.put(InjectType.UPDATE, ImmutableSet.of(
-                update, updateByCriteria, updateWithoutNull, updateWithSpecial, updateWithSpecialExcNull,
+                update, updateByCriteria,
+                updateWithoutNull, updateWithSpecial,
+                updateWithSpecialExcNull
+        ));
+        ALL_MAPPED_METHOD_CACHE.put(InjectType.SELECT, ImmutableSet.of(
                 selectCountByCriteria,
                 selectCustomList,
                 selectCustomMap,
-                selectMapByCriteria, selectListByCriteria
+                selectMapByCriteria,
+                selectListByCriteria
         ));
         PRIMARY_KEY_MAPPED_METHOD_CACHE = ImmutableSet.of();
         GENERIC_MAPPED_METHOD_CACHE = ImmutableSet.of(
-                insert, insertWithoutNull, deleteById, update, updateByCriteria, updateWithoutNull, updateWithSpecial,
-                updateWithSpecialExcNull,
-                selectCountByCriteria, selectCustomList, selectCustomMap, selectMapByCriteria, selectListByCriteria
+                insert, insertWithoutNull,
+                deleteByCriteria, deleteById,
+                update, updateByCriteria, updateWithoutNull,
+                updateWithSpecial, updateWithSpecialExcNull,
+                selectCountByCriteria, selectCustomList,
+                selectCustomMap, selectMapByCriteria,
+                selectListByCriteria
         );
     }
 

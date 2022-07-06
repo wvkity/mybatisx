@@ -16,6 +16,7 @@
 package io.github.mybatisx.core.mapper;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.core.criteria.delete.Delete;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
@@ -37,5 +38,13 @@ interface DeleteMapper<T, ID extends Serializable> {
      * @param id 主键
      * @return 受影响行数
      */
-    int deleteById(final @Param(Constants.PARAM_ID) ID id);
+    int deleteById(@Param(Constants.PARAM_ID) final ID id);
+
+    /**
+     * 根据{@link Delete}条件对象删除记录
+     *
+     * @param criteria {@link Delete}
+     * @return 受影响行数
+     */
+    int deleteByCriteria(@Param(Constants.PARAM_CRITERIA) final Delete<T> criteria);
 }
