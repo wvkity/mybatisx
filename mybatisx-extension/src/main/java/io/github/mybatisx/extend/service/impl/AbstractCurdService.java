@@ -16,6 +16,7 @@
 package io.github.mybatisx.extend.service.impl;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.core.criteria.delete.Delete;
 import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
 import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
 import io.github.mybatisx.core.criteria.query.PlainQueryImplementor;
@@ -107,6 +108,12 @@ public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, 
     @Transactional(rollbackFor = Exception.class)
     public int deleteById(ID id) {
         return this.mapper.deleteById(id);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int delete(Delete<T> criteria) {
+        return this.mapper.deleteByCriteria(criteria);
     }
 
     @Override

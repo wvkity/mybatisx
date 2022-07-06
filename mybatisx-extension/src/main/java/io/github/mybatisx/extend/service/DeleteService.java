@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.extend.service;
 
+import io.github.mybatisx.core.criteria.delete.Delete;
+
 import java.io.Serializable;
 
 /**
@@ -35,4 +37,13 @@ interface DeleteService<T, ID extends Serializable> {
      * @return 受影响行数
      */
     int deleteById(final ID id);
+
+    /**
+     * 根据{@link Delete}条件对象删除记录
+     *
+     * @param criteria {@link Delete}
+     * @return 受影响行数
+     */
+    int delete(final Delete<T> criteria);
+
 }
