@@ -69,6 +69,7 @@ public class LambdaQueryImplementor<T> extends AbstractLambdaQueryCriteria<T, La
     @Override
     protected LambdaQueryImplementor<T> newInstance() {
         final LambdaQueryImplementor<T> it = new LambdaQueryImplementor<>();
+        it.category = Category.QUERY;
         it.clone(this);
         return it;
     }

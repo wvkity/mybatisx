@@ -65,6 +65,7 @@ public class GenericQueryImplementor<T> extends AbstractGenericQueryCriteria<T, 
     @Override
     protected GenericQueryImplementor<T> newInstance() {
         final GenericQueryImplementor<T> it = new GenericQueryImplementor<>();
+        it.category = Category.QUERY;
         it.clone(this);
         return it;
     }

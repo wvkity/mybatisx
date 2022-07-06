@@ -64,6 +64,7 @@ public class PlainSubForeignImplementor extends AbstractPlainSubJoinable<PlainSu
     @Override
     protected PlainSubForeignImplementor newInstance() {
         final PlainSubForeignImplementor it = new PlainSubForeignImplementor();
+        it.category = Category.QUERY;
         it.reference = this.reference;
         it.outerQuery = this.outerQuery;
         it.join = this.join;

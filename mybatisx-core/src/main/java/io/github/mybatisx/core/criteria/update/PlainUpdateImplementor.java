@@ -29,7 +29,7 @@ public class PlainUpdateImplementor<T> extends AbstractPlainUpdateCriteria<T, Pl
     @Override
     protected PlainUpdateImplementor<T> newInstance() {
         final PlainUpdateImplementor<T> it = new PlainUpdateImplementor<>();
-        this.category = Category.UPDATE;
+        it.category = Category.UPDATE;
         it.clone(this);
         return it;
     }

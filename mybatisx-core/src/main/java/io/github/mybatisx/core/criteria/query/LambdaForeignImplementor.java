@@ -64,6 +64,7 @@ public class LambdaForeignImplementor<T> extends AbstractLambdaJoinable<T, Lambd
     @Override
     protected LambdaForeignImplementor<T> newInstance() {
         final LambdaForeignImplementor<T> it = new LambdaForeignImplementor<>();
+        it.category = Category.QUERY;
         it.reference = this.reference;
         it.join = this.join;
         this.category = Category.QUERY;

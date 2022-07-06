@@ -29,7 +29,7 @@ public class LambdaUpdateImplementor<T> extends AbstractLambdaUpdateCriteria<T, 
     @Override
     protected LambdaUpdateImplementor<T> newInstance() {
         final LambdaUpdateImplementor<T> it = new LambdaUpdateImplementor<>();
-        this.category = Category.UPDATE;
+        it.category = Category.UPDATE;
         it.clone(this);
         return it;
     }

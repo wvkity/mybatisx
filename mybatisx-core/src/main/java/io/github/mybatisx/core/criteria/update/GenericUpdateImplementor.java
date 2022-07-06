@@ -29,7 +29,7 @@ public class GenericUpdateImplementor<T> extends AbstractGenericUpdateCriteria<T
     @Override
     protected GenericUpdateImplementor<T> newInstance() {
         final GenericUpdateImplementor<T> it = new GenericUpdateImplementor<>();
-        this.category = Category.UPDATE;
+        it.category = Category.UPDATE;
         it.clone(this);
         return it;
     }

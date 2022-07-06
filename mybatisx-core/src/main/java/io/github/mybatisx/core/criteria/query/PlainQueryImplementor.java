@@ -65,6 +65,7 @@ public class PlainQueryImplementor<T> extends AbstractPlainQueryCriteria<T, Plai
     @Override
     protected PlainQueryImplementor<T> newInstance() {
         final PlainQueryImplementor<T> it = new PlainQueryImplementor<>();
+        it.category = Category.QUERY;
         it.clone(this);
         return it;
     }

@@ -64,6 +64,7 @@ public class GenericForeignImplementor<T> extends AbstractGenericJoinable<T, Gen
     @Override
     protected GenericForeignImplementor<T> newInstance() {
         final GenericForeignImplementor<T> it = new GenericForeignImplementor<>();
+        it.category = Category.QUERY;
         it.reference = this.reference;
         it.join = this.join;
         it.clone(this);

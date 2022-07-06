@@ -44,7 +44,7 @@ public class GenericImplementor<T> extends AbstractGenericCriteria<T, GenericImp
     @Override
     protected GenericImplementor<T> newInstance() {
         final GenericImplementor<T> it = new GenericImplementor<>();
-        this.category = Category.BASIC;
+        it.category = Category.BASIC;
         it.clone(this);
         return it;
     }

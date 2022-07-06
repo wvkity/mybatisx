@@ -18,7 +18,7 @@ package io.github.mybatisx.core.criteria.update;
 import io.github.mybatisx.core.criteria.BaseCriteria;
 
 /**
- * 更新条件接口(update/delete)
+ * 更新条件接口
  *
  * @author wvkity
  * @created 2021/12/23

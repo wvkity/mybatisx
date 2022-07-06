@@ -44,7 +44,7 @@ public class PlainImplementor<T> extends AbstractPlainCriteria<T, PlainImplement
     @Override
     protected PlainImplementor<T> newInstance() {
         final PlainImplementor<T> it = new PlainImplementor<>();
-        this.category = Category.BASIC;
+        it.category = Category.BASIC;
         it.clone(this);
         return it;
     }

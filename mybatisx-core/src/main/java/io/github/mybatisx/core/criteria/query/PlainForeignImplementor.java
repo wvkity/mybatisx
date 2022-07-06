@@ -64,6 +64,7 @@ public class PlainForeignImplementor<T> extends AbstractPlainJoinable<T, PlainFo
     @Override
     protected PlainForeignImplementor<T> newInstance() {
         final PlainForeignImplementor<T> it = new PlainForeignImplementor<>();
+        it.category = Category.QUERY;
         it.reference = this.reference;
         it.join = this.join;
         it.clone(this);

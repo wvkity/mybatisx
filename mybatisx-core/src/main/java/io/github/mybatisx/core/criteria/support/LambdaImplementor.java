@@ -44,7 +44,7 @@ public class LambdaImplementor<T> extends AbstractLambdaCriteria<T, LambdaImplem
     @Override
     protected LambdaImplementor<T> newInstance() {
         final LambdaImplementor<T> it = new LambdaImplementor<>();
-        this.category = Category.BASIC;
+        it.category = Category.BASIC;
         it.clone(this);
         return it;
     }

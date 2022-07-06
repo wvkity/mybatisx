@@ -57,6 +57,7 @@ public class PlainSubQueryImplementor extends AbstractPlainSubQuery<PlainSubQuer
     @Override
     protected PlainSubQueryImplementor newInstance() {
         final PlainSubQueryImplementor it = new PlainSubQueryImplementor();
+        it.category = Category.QUERY;
         it.outerQuery = this.outerQuery;
         it.clone(this);
         return it;
