@@ -1,0 +1,6 @@
+dependencies {
+    api(project(":mybatisx-extension"))
+    api(project(":mybatisx-result"))
+    optional("io.projectreactor:reactor-core")
+    optional("org.springframework:spring-beans")
+}
