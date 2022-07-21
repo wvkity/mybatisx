@@ -40,7 +40,7 @@ public interface Result extends Serializable {
      *
      * @return 状态码
      */
-    int getStatus();
+    int status();
 
     /**
      * 状态码
