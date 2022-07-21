@@ -32,7 +32,7 @@ public interface ResultError extends Error {
      * @param error {@link Error}
      */
     default void error(final Error error) {
-        this.error(error.getStatus(), error.getCode(), error.getMsg());
+        this.error(error.status(), error.getCode(), error.getMsg());
     }
 
     /**
@@ -60,7 +60,7 @@ public interface ResultError extends Error {
      * @param e     {@link Throwable}
      */
     default void error(final Error error, final Throwable e) {
-        this.error(error.getStatus(), error.getCode(), e);
+        this.error(error.status(), error.getCode(), e);
     }
 
     /**

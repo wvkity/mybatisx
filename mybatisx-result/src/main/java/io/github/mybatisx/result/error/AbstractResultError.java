@@ -30,7 +30,7 @@ public abstract class AbstractResultError implements ResultError {
     /**
      * Http状态码
      */
-    protected int status = Status.OK.getStatus();
+    protected int status = Status.OK.status();
     /**
      * 响应状态码
      */
@@ -54,7 +54,7 @@ public abstract class AbstractResultError implements ResultError {
     }
 
     @Override
-    public int getStatus() {
+    public int status() {
         return this.status;
     }
 

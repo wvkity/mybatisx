@@ -93,8 +93,8 @@ public enum Status implements Error {
         this.msg = msg;
     }
 
-    public int getStatus() {
-        return status;
+    public int status() {
+        return this.status;
     }
 
     public int getCode() {
@@ -109,7 +109,7 @@ public enum Status implements Error {
 
     static {
         for (Status it : Status.values()) {
-            CACHE.put(it.getStatus(), it);
+            CACHE.put(it.status(), it);
             CACHE.put(it.getCode(), it);
         }
     }

@@ -16,7 +16,7 @@ public interface Error extends Serializable {
      *
      * @return http状态码
      */
-    int getStatus();
+    int status();
 
     /**
      * 获取状态码
