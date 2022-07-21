@@ -28,6 +28,10 @@ import io.github.mybatisx.result.Status;
 public abstract class AbstractResultError implements ResultError {
 
     /**
+     * Http状态码
+     */
+    protected int status = Status.OK.getStatus();
+    /**
      * 响应状态码
      */
     protected int code = Status.OK.getCode();
@@ -40,6 +44,23 @@ public abstract class AbstractResultError implements ResultError {
     public void error(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    @Override
+    public void error(int status, int code, String msg) {
+        this.status = status;
+        this.code = code;
+        this.msg = msg;
+    }
+
+    @Override
+    public int getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

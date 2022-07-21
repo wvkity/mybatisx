@@ -36,6 +36,13 @@ public interface Result extends Serializable {
     }
 
     /**
+     * Http状态码
+     *
+     * @return 状态码
+     */
+    int getStatus();
+
+    /**
      * 状态码
      *
      * @return 状态码

@@ -12,6 +12,13 @@ import java.io.Serializable;
 public interface Error extends Serializable {
 
     /**
+     * 获取Http状态码
+     *
+     * @return http状态码
+     */
+    int getStatus();
+
+    /**
      * 获取状态码
      *
      * @return 状态码
@@ -24,5 +31,5 @@ public interface Error extends Serializable {
      * @return 异常详细描述
      */
     String getMsg();
-    
+
 }

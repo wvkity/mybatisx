@@ -68,7 +68,11 @@ public enum Status implements Error {
     /**
      * FAILURE
      */
-    FAILURE(510, 500510, "请求失败");
+    FAILURE(510, 500510, "请求失败"),
+    /**
+     * 非法参数
+     */
+    ILLEGAL_ARGUMENT(200, 500543, "非法参数");
 
     /**
      * http状态

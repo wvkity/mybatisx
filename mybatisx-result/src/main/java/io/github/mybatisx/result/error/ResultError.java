@@ -32,7 +32,7 @@ public interface ResultError extends Error {
      * @param error {@link Error}
      */
     default void error(final Error error) {
-        this.error(error.getCode(), error.getMsg());
+        this.error(error.getStatus(), error.getCode(), error.getMsg());
     }
 
     /**
@@ -60,7 +60,7 @@ public interface ResultError extends Error {
      * @param e     {@link Throwable}
      */
     default void error(final Error error, final Throwable e) {
-        this.error(error.getCode(), e);
+        this.error(error.getStatus(), error.getCode(), e);
     }
 
     /**
@@ -80,6 +80,33 @@ public interface ResultError extends Error {
      * @param msg  异常详细信息
      */
     void error(final int code, final String msg);
+
+    /**
+     * 设置异常信息
+     *
+     * @param status Http状态码
+     * @param code   状态码
+     * @param e      {@link Throwable}
+     */
+    default void error(final int status, final int code, final Throwable e) {
+        this.error(status, code, e.getMessage());
+    }
+
+    /**
+     * 设置异常信息
+     *
+     * @param status Http状态码
+     * @param code   状态码
+     * @param msg    异常详细信息
+     */
+    void error(final int status, final int code, final String msg);
+
+    /**
+     * 设置Http状态码
+     *
+     * @param status Http状态码
+     */
+    void setStatus(final int status);
 
     /**
      * 设置响应状态码
