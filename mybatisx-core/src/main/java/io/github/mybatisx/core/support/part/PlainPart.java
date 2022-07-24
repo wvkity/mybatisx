@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class PurePart implements Part {
+public class PlainPart implements Part {
 
     private static final long serialVersionUID = 4823685616909124790L;
 
@@ -54,15 +54,15 @@ public class PurePart implements Part {
     }
 
     /**
-     * 创建{@link  PurePart}对象
+     * 创建{@link  PlainPart}对象
      *
      * @param sql SQL片段
-     * @return {@link PurePart}
+     * @return {@link PlainPart}
      */
-    public static PurePart of(final String sql) {
+    public static PlainPart of(final String sql) {
         if (Strings.isWhitespace(sql)) {
             return null;
         }
-        return new PurePart(sql);
+        return new PlainPart(sql);
     }
 }

@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.core.mapper;
 
+import io.github.mybatisx.batch.mapper.BatchMapper;
+
 import java.io.Serializable;
 
 /**
@@ -28,6 +30,6 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 public interface CurdMapper<T, R, ID extends Serializable> extends InsertMapper<T>, UpdateMapper<T>,
-        DeleteMapper<T, ID>, QueryMapper<T, R, ID> {
+        DeleteMapper<T, ID>, QueryMapper<T, R, ID>, BatchMapper<T> {
 
 }

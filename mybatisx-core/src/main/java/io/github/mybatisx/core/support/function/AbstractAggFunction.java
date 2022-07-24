@@ -94,7 +94,6 @@ public abstract class AbstractAggFunction implements AggFunction {
         final StringBuilder sb = new StringBuilder(45);
         final String ias = this.as();
         final String _$column = this.column;
-        final boolean isCount = SqlSymbol.AGG_COUNT.equalsIgnoreCase(this.name);
         final boolean isScale = this.scale != null && this.scale > -1;
         final boolean isDistinct = this.distinct && !SqlSymbol.STAR.equals(_$column)
                 && !"0".equals(_$column) && !"1".equals(_$column);

@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class PureOrder implements Order {
+public class PlainOrder implements Order {
 
     private static final long serialVersionUID = -5337169976374296878L;
 
@@ -44,9 +44,9 @@ public class PureOrder implements Order {
         return Constants.EMPTY;
     }
 
-    public static PureOrder of(final String orderBody) {
+    public static PlainOrder of(final String orderBody) {
         if (Strings.isNotWhitespace(orderBody)) {
-            return new PureOrder(orderBody);
+            return new PlainOrder(orderBody);
         }
         return null;
     }

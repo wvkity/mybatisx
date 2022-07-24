@@ -36,11 +36,11 @@ import io.github.mybatisx.core.support.order.AliasOrder;
 import io.github.mybatisx.core.support.order.FunctionOrder;
 import io.github.mybatisx.core.support.order.MultiOrder;
 import io.github.mybatisx.core.support.order.Order;
-import io.github.mybatisx.core.support.order.PureOrder;
+import io.github.mybatisx.core.support.order.PlainOrder;
 import io.github.mybatisx.core.support.order.SingleOrder;
 import io.github.mybatisx.core.support.select.ComplexSelectable;
 import io.github.mybatisx.core.support.select.FunctionSelectable;
-import io.github.mybatisx.core.support.select.PureSelectable;
+import io.github.mybatisx.core.support.select.PlainSelectable;
 import io.github.mybatisx.core.support.select.SelectType;
 import io.github.mybatisx.core.support.select.Selectable;
 import io.github.mybatisx.core.support.select.StandardSelectable;
@@ -309,12 +309,12 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     @Override
     public C selectWithPure(String selectBody) {
-        return this.selects(PureSelectable.of(selectBody));
+        return this.selects(PlainSelectable.of(selectBody));
     }
 
     @Override
     public C selectWithPure(String column, String alias) {
-        return this.select(PureSelectable.of(column, alias));
+        return this.select(PlainSelectable.of(column, alias));
     }
 
     @Override
@@ -635,7 +635,7 @@ public abstract class AbstractPlainQueryCriteria<T, C extends PlainQueryWrapper<
 
     @Override
     public C orderWithPure(String orderBody) {
-        return this.order(PureOrder.of(orderBody));
+        return this.order(PlainOrder.of(orderBody));
     }
 
     @Override

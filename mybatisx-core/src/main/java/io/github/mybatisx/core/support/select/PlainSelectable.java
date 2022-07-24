@@ -32,7 +32,7 @@ import java.util.List;
  * @created 2022/2/18
  * @since 1.0.0
  */
-public class PureSelectable implements Selectable {
+public class PlainSelectable implements Selectable {
 
     private static final long serialVersionUID = -4502018463556863966L;
 
@@ -55,7 +55,7 @@ public class PureSelectable implements Selectable {
     @Getter
     private final String alias;
 
-    protected PureSelectable(String selectBody) {
+    protected PlainSelectable(String selectBody) {
         this.selectBody = selectBody;
         final PureSQLParser parser = new PureSQLParser(selectBody);
         this.tableAlias = parser.getTableAlias();
@@ -63,7 +63,7 @@ public class PureSelectable implements Selectable {
         this.alias = parser.getAlias();
     }
 
-    protected PureSelectable(final String column, final String alias) {
+    protected PlainSelectable(final String column, final String alias) {
         this.selectBody = null;
         this.tableAlias = null;
         this.column = column;
@@ -136,34 +136,34 @@ public class PureSelectable implements Selectable {
     }
 
     /**
-     * 创建{@link PureSelectable}
+     * 创建{@link PlainSelectable}
      *
      * @param column 字段名
      * @param alias  别名
-     * @return {@link PureSelectable}
+     * @return {@link PlainSelectable}
      */
-    public static PureSelectable of(final String column, final String alias) {
+    public static PlainSelectable of(final String column, final String alias) {
         if (Strings.isNotWhitespace(column)) {
-            return new PureSelectable(column, alias);
+            return new PlainSelectable(column, alias);
         }
         return null;
     }
 
     /**
-     * 创建{@link PureSelectable}列表
+     * 创建{@link PlainSelectable}列表
      *
      * @param selectBody 多个字段
-     * @return {@link PureSelectable}列表
+     * @return {@link PlainSelectable}列表
      */
-    public static List<PureSelectable> of(final String selectBody) {
+    public static List<PlainSelectable> of(final String selectBody) {
         if (Strings.isNotWhitespace(selectBody)) {
             final String[] array = selectBody.split(",(\\s*)?");
             final int size = array.length;
             if (size > 0) {
-                final List<PureSelectable> selectables = new ArrayList<>(size);
+                final List<PlainSelectable> selectables = new ArrayList<>(size);
                 for (String it : array) {
                     if (Strings.isNotWhitespace(it)) {
-                        selectables.add(new PureSelectable(it));
+                        selectables.add(new PlainSelectable(it));
                     }
                 }
                 return selectables;

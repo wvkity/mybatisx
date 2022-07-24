@@ -42,7 +42,7 @@ import io.github.mybatisx.core.support.having.CriterionHaving;
 import io.github.mybatisx.core.support.having.FunctionHaving;
 import io.github.mybatisx.core.support.part.ListPart;
 import io.github.mybatisx.core.support.part.MapPart;
-import io.github.mybatisx.core.support.part.PurePart;
+import io.github.mybatisx.core.support.part.PlainPart;
 import io.github.mybatisx.core.support.part.SinglePart;
 import io.github.mybatisx.lang.Objects;
 import io.github.mybatisx.lang.Strings;
@@ -857,7 +857,7 @@ public abstract class AbstractConditionAcceptSupport<T, C extends CriteriaWrappe
 
     @Override
     public C tail(String sql) {
-        return this.tail(PurePart.of(sql));
+        return this.tail(PlainPart.of(sql));
     }
 
     @Override
