@@ -2,8 +2,11 @@ package io.github.mybatisx.biz.reactive.manager;
 
 import io.github.mybatisx.core.mapper.CurdMapper;
 import io.github.mybatisx.extend.service.CurdService;
+import io.github.mybatisx.result.Result;
+import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 反应式业务接口
@@ -18,6 +21,30 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 public interface ReactiveManager<S extends CurdService<M, T, R, ID>, M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> extends GenericManager {
+
+    /**
+     * 根据ID检查记录是否存在
+     *
+     * @param id ID
+     * @return boolean
+     */
+    boolean exists(final ID id);
+
+    /**
+     * 根据ID删除记录
+     *
+     * @param id ID
+     * @return {@link Mono}
+     */
+    Mono<Result> delete(final ID id);
+
+    /**
+     * 批量删除记录
+     *
+     * @param idList ID列表
+     * @return {@link Mono}
+     */
+    Mono<Result> batchDelete(final List<ID> idList);
 
     /**
      * 获取{@link CurdService}对象
