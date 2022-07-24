@@ -17,6 +17,8 @@ package io.github.mybatisx.result.error;
 
 import io.github.mybatisx.result.Status;
 
+import java.util.function.Function;
+
 /**
  * 抽象异常
  *
@@ -83,4 +85,13 @@ public abstract class AbstractResultError implements ResultError {
         this.msg = msg;
     }
 
+    @Override
+    public RuntimeException sneakyThrow(Function<Error, Throwable> action) {
+        return this.sneakyThrow0(action.apply(this));
+    }
+
+    @SuppressWarnings("unchecked")
+    <E extends Throwable> E sneakyThrow0(final Throwable throwable) {
+        return (E) throwable;
+    }
 }

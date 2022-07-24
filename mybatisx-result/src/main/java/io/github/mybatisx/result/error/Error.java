@@ -1,6 +1,7 @@
 package io.github.mybatisx.result.error;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * 异常接口
@@ -31,5 +32,24 @@ public interface Error extends Serializable {
      * @return 异常详细描述
      */
     String getMsg();
+
+    /**
+     * 转换成{@link Throwable}对象
+     *
+     * @return {@link RuntimeException}
+     */
+    default RuntimeException sneakyThrow() {
+        return null;
+    }
+
+    /**
+     * 转换成{@link Throwable}对象
+     *
+     * @param action {@link Function}
+     * @return {@link RuntimeException}
+     */
+    default RuntimeException sneakyThrow(final Function<Error, Throwable> action) {
+        return null;
+    }
 
 }
