@@ -74,6 +74,19 @@ public final class Collections {
     }
 
     /**
+     * 检查集合元素是否匹配
+     *
+     * @param iterable {@link Iterable}
+     * @param filter   {@link Predicate}
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return boolean
+     */
+    public static <T, Iter extends Iterable<? extends T>> boolean anyMatch(final Iter iterable, final Predicate<T> filter) {
+        return StreamSupport.stream(iterable.spliterator(), true).anyMatch(filter);
+    }
+
+    /**
      * 检查参数列表是否包含数组、集合类型
      *
      * @param iterable 参数列表
@@ -396,9 +409,13 @@ public final class Collections {
      * @param <Iter>   {@link Iterable}
      * @return {@link Optional}
      */
+    @SuppressWarnings({"unchecked"})
     public static <T, Iter extends Iterable<? extends T>> Optional<T> first(final Iter iterable) {
         if (isEmpty(iterable)) {
             return Optional.empty();
+        }
+        if (iterable instanceof List) {
+            return Optional.ofNullable(((List<T>) iterable).get(0));
         }
         return Optional.ofNullable(iterable.iterator().next());
     }
@@ -426,6 +443,81 @@ public final class Collections {
      */
     public static <T, Iter extends Iterable<? extends T>> T first(final Iter iterable, final T defaultValue) {
         return first(iterable).orElse(defaultValue);
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable 集合类型
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    public static <T, Iter extends Iterable<? extends T>> Optional<T> justOne(final Iter iterable) {
+        return justOne(iterable, "The result set is greater than one");
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable 集合类型
+     * @param error    异常信息
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    @SuppressWarnings({"unchecked"})
+    public static <T, Iter extends Iterable<? extends T>> Optional<T> justOne(final Iter iterable, final String error) {
+        if (Collections.isEmpty(iterable)) {
+            return Optional.empty();
+        }
+        if (size(iterable) > 1) {
+            throw new UnsupportedOperationException(error);
+        }
+        if (iterable instanceof List) {
+            return Optional.ofNullable(((List<T>) iterable).get(0));
+        }
+        return Optional.ofNullable(iterable.iterator().next());
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable     集合类型
+     * @param defaultValue 默认值
+     * @param error        异常信息
+     * @param <T>          元素类型
+     * @param <Iter>       {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    public static <T, Iter extends Iterable<? extends T>> T justOne(final Iter iterable, final T defaultValue,
+                                                                    final String error) {
+        return justOne(iterable, error).orElse(defaultValue);
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable 集合类型
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    public static <T, Iter extends Iterable<? extends T>> T justOneOrNullable(final Iter iterable) {
+        return justOne(iterable).orElse(null);
+    }
+
+    /**
+     * 获取列表中的第一个元素
+     *
+     * @param iterable 集合类型
+     * @param error    异常信息
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return 第一个元素或默认值
+     */
+    public static <T, Iter extends Iterable<? extends T>> T justOneOrNullable(final Iter iterable, final String error) {
+        return justOne(iterable, null, error);
     }
 
     /**
