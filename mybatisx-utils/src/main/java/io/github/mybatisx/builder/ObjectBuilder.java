@@ -57,9 +57,9 @@ public class ObjectBuilder<T> implements Builder<T> {
     }
 
     @Override
-    public <V> ObjectBuilder<T> with(AssignConsumer<T, V> consumer, V value) {
-        if (Objects.nonNull(consumer)) {
-            this.consumers.add(it -> consumer.accept(it, value));
+    public <V> ObjectBuilder<T> with(SetterConsumer<T, V> setter, V value) {
+        if (Objects.nonNull(setter)) {
+            this.consumers.add(it -> setter.accept(it, value));
         }
         return this;
     }

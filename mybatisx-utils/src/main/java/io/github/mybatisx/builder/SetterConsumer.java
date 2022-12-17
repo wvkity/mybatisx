@@ -25,7 +25,7 @@ package io.github.mybatisx.builder;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface AssignConsumer<T, V> {
+public interface SetterConsumer<T, V> {
 
     /**
      * 消费

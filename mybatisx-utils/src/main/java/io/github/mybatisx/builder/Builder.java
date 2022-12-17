@@ -28,12 +28,12 @@ public interface Builder<T> {
     /**
      * 设置值
      *
-     * @param consumer {@link AssignConsumer}
+     * @param consumer {@link SetterConsumer}
      * @param value    值
      * @param <V>      值类型
      * @return {@code this}
      */
-    <V> Builder<T> with(final AssignConsumer<T, V> consumer, final V value);
+    <V> Builder<T> with(final SetterConsumer<T, V> consumer, final V value);
 
     /**
      * 重置

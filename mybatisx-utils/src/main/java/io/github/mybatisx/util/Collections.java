@@ -10,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -84,6 +83,19 @@ public final class Collections {
      */
     public static <T, Iter extends Iterable<? extends T>> boolean anyMatch(final Iter iterable, final Predicate<T> filter) {
         return StreamSupport.stream(iterable.spliterator(), true).anyMatch(filter);
+    }
+
+    /**
+     * 检查集合元素是否都匹配
+     *
+     * @param iterable {@link Iterable}
+     * @param filter   {@link Predicate}
+     * @param <T>      元素类型
+     * @param <Iter>   {@link Iterable}
+     * @return boolean
+     */
+    public static <T, Iter extends Iterable<? extends T>> boolean allMatch(final Iter iterable, final Predicate<T> filter) {
+        return StreamSupport.stream(iterable.spliterator(), true).allMatch(filter);
     }
 
     /**
