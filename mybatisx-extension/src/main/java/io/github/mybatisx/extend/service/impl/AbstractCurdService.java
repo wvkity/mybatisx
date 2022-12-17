@@ -16,6 +16,8 @@
 package io.github.mybatisx.extend.service.impl;
 
 import io.github.mybatisx.base.constant.Constants;
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.batch.extend.service.impl.AbstractBatchService;
 import io.github.mybatisx.core.criteria.delete.Delete;
 import io.github.mybatisx.core.criteria.query.GenericQueryImplementor;
 import io.github.mybatisx.core.criteria.query.LambdaQueryImplementor;
@@ -48,8 +50,8 @@ import java.util.function.Function;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> implements
-        CurdService<M, T, R, ID> {
+public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> extends AbstractBatchService<M, T>
+        implements CurdService<M, T, R, ID> {
 
     private final Class<?>[] genericClasses = this.genericClasses();
     /**
@@ -238,17 +240,22 @@ public abstract class AbstractCurdService<M extends CurdMapper<T, R, ID>, T, R, 
 
     @Override
     public LambdaQueryImplementor<T> createLambdaQuery() {
-        return LambdaQueryImplementor.from(this.getEntityType());
+        return this.create(LambdaQueryImplementor::from);
     }
 
     @Override
     public PlainQueryImplementor<T> createPlainQuery() {
-        return PlainQueryImplementor.from(this.getEntityType());
+        return this.create(PlainQueryImplementor::from);
     }
 
     @Override
     public GenericQueryImplementor<T> createGenericQuery() {
-        return GenericQueryImplementor.from(this.getEntityType());
+        return this.create(GenericQueryImplementor::from);
+    }
+
+    @Override
+    public <U extends Criteria<T>> U create(Function<Class<T>, U> action) {
+        return action.apply(this.getEntityType());
     }
 
     @Override

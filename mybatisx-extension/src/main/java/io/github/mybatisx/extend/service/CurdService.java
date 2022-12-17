@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.extend.service;
 
+import io.github.mybatisx.base.criteria.Criteria;
+import io.github.mybatisx.batch.extend.service.BatchService;
 import io.github.mybatisx.core.mapper.CurdMapper;
 
 import java.io.Serializable;
@@ -32,7 +34,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 public interface CurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Serializable> extends
-        SaveService<T>, UpdateService<T>, DeleteService<T, ID>, QueryService<T, R, ID> {
+        SaveService<T>, UpdateService<T>, DeleteService<T, ID>, QueryService<T, R, ID>, BatchService<M, T> {
 
     /**
      * 消费
@@ -78,4 +80,12 @@ public interface CurdService<M extends CurdMapper<T, R, ID>, T, R, ID extends Se
      */
     void setMapper(final M mapper);
 
+    /**
+     * 创建{@link Criteria}对象
+     *
+     * @param action {@link Function}
+     * @param <U>    {@link Criteria}类型
+     * @return {@link Criteria}
+     */
+    <U extends Criteria<T>> U create(final Function<Class<T>, U> action);
 }

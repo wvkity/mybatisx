@@ -1,4 +1,5 @@
 dependencies {
+    api(project(":mybatisx-batch-service"))
     api(project(":mybatisx-core"))
     optional("org.springframework:spring-tx")
 }
