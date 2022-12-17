@@ -316,6 +316,15 @@ public final class Optional<T> {
         }
     }
 
+    /**
+     * {@link Optional}转{@link java.util.Optional}
+     *
+     * @return {@link java.util.Optional}
+     */
+    public java.util.Optional<T> to() {
+        return Optional.toOptional(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -407,7 +416,7 @@ public final class Optional<T> {
      * @return {@link java.util.Optional}
      */
     public static <T> java.util.Optional<T> toOptional(final Optional<T> source) {
-        return source.isEmpty() ? java.util.Optional.empty() : java.util.Optional.of(source.get());
+        return source.map(java.util.Optional::of).orElseGet(java.util.Optional::empty);
     }
 
 }

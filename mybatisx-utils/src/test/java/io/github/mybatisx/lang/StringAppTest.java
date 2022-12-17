@@ -15,6 +15,7 @@
  */
 package io.github.mybatisx.lang;
 
+import io.github.mybatisx.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,12 @@ public class StringAppTest {
         log.info(Strings.toUpperCase("admin test"));
         log.info(Strings.toUpperCase(null));
         log.info(Strings.toUpperCase("     "));
-        log.info("string length: {}", Strings.toUpperCase("     ").length());
+        java.util.Optional<String> opt = Optional.of("test").to();
+        final Optional<String> opt2 = opt.map(Optional::ofNullable).orElseGet(Optional::empty);
+        final Optional<Optional<String>>opt3 = Optional.ofNullable(opt2);
+        System.out.println("{}: " + opt);
+        System.out.println("{}: " + opt2);
+        System.out.println("{}: " + opt3);
+        log.info("string length: {}", Strings.toUpperCase("     "));
     }
 }
