@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.github.mybatisx.extend.service.impl;
+package io.github.mybatisx.extend.service;
 
 import io.github.mybatisx.core.mapper.SelfsameMapper;
-import io.github.mybatisx.extend.service.SelfsameService;
 
 import java.io.Serializable;
 
 /**
- * MyBatisX抽象通用Service接口
+ * MyBatisX通用Service接口
  * <p>
  * 实体/返回值一致
  *
@@ -32,7 +31,6 @@ import java.io.Serializable;
  * @created 2021/12/24
  * @since 1.0.0
  */
-public abstract class AbstractSelfsameService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends
-        AbstractCurdService<M, T, T, ID> implements SelfsameService<M, T, ID> {
+public interface ItselfService<M extends SelfsameMapper<T, ID>, T, ID extends Serializable> extends CurdService<M, T, T, ID> {
 
 }
