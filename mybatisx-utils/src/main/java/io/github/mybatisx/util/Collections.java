@@ -55,6 +55,61 @@ public final class Collections {
     }
 
     /**
+     * 根据下标获取元素
+     *
+     * @param list  元素列表
+     * @param index 下标
+     * @param <T>   元素类型
+     * @return 元素
+     */
+    public static <T> Optional<T> get(final List<T> list, final int index) {
+        if (Collections.isNotEmpty(list)) {
+            final int maxIndex = list.size() - 1;
+            if (index == -1) {
+                return Optional.ofNullable(list.get(maxIndex));
+            }
+            if (0 <= index && index <= maxIndex) {
+                return Optional.ofNullable(list.get(index));
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * 根据第一个元素
+     *
+     * @param list  元素列表
+     * @param <T>   元素类型
+     * @return 元素
+     */
+    public static <T> Optional<T> getFirst(final List<T> list) {
+        return Collections.get(list, 0);
+    }
+
+    /**
+     * 根据最后一个元素
+     *
+     * @param list  元素列表
+     * @param <T>   元素类型
+     * @return 元素
+     */
+    public static <T> Optional<T> getLast(final List<T> list) {
+        return Collections.get(list, -1);
+    }
+
+    /**
+     * 根据下标获取元素
+     *
+     * @param list  元素列表
+     * @param index 下标
+     * @param <T>   元素类型
+     * @return 元素
+     */
+    public static <T> T getOrNullable(final List<T> list, final int index) {
+        return Collections.get(list, index).orElse(null);
+    }
+
+    /**
      * 获取集合元素个数
      *
      * @param iterable 集合

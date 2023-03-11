@@ -1,5 +1,7 @@
 package io.github.mybatisx.util;
 
+import io.github.mybatisx.function.Absence;
+
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -67,6 +69,19 @@ public final class Optional<T> {
      * 如果值不为空，则消费
      *
      * @param action {@link Consumer}
+     * @return {@link Optional}
+     */
+    public Optional<T> ifPresentPeek(final Consumer<T> action) {
+        if (this.value != null) {
+            action.accept(this.value);
+        }
+        return this;
+    }
+
+    /**
+     * 如果值不为空，则消费
+     *
+     * @param action {@link Consumer}
      */
     public void ifPresent(final Consumer<? super T> action) {
         if (this.value != null) {
@@ -93,6 +108,17 @@ public final class Optional<T> {
     public void ifAbsent(final Consumer<T> action) {
         if (this.value == null) {
             action.accept(null);
+        }
+    }
+
+    /**
+     * 如果值为空，则消费
+     *
+     * @param action {@link Consumer}
+     */
+    public void ifAbsent(final Absence action) {
+        if (this.value == null) {
+            action.accept();
         }
     }
 
