@@ -17,7 +17,6 @@ package io.github.mybatisx.base.builder;
 
 import io.github.mybatisx.base.metadata.Column;
 import io.github.mybatisx.base.metadata.Table;
-import io.github.mybatisx.builder.AssignConsumer;
 import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.keyword.ReservedKeywordRegistry;
 import io.github.mybatisx.lang.Objects;
@@ -44,7 +43,7 @@ import java.util.Set;
 @Setter
 @Accessors(chain = true, fluent = true)
 @RequiredArgsConstructor
-public class TableBuilder extends AbstractBuilder implements Builder<Table> {
+public class TableBuilder extends AbstractBuilder implements Builder<Table, TableBuilder> {
 
     /**
      * 表名
@@ -181,17 +180,6 @@ public class TableBuilder extends AbstractBuilder implements Builder<Table> {
         return new Table(this.entity, realTableName, this.namespace, realCatalog, realSchema, this.prefix, null,
                 this.onlyOnePrimaryKey, primaryKeyColumn, versionColumn, logicDeleteColumn, multiTenantColumn,
                 primaryKeySet, columnSet);
-    }
-
-    @Override
-    public <V> Builder<Table> with(AssignConsumer<Table, V> consumer, V value) {
-        // Empty
-        return this;
-    }
-
-    @Override
-    public void reset() {
-        // Empty
     }
 
     public static TableBuilder create() {

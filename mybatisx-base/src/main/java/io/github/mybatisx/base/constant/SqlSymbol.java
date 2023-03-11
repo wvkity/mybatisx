@@ -29,6 +29,10 @@ public interface SqlSymbol {
      */
     String EMPTY = "";
     /**
+     * NULL
+     */
+    String NULL = "NULL";
+    /**
      * 空格
      */
     String SPACE = " ";

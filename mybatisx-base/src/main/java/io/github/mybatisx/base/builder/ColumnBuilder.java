@@ -24,7 +24,6 @@ import io.github.mybatisx.base.metadata.Descriptor;
 import io.github.mybatisx.base.metadata.LogicDeleteMeta;
 import io.github.mybatisx.base.metadata.UniqueMeta;
 import io.github.mybatisx.base.metadata.VersionMeta;
-import io.github.mybatisx.builder.AssignConsumer;
 import io.github.mybatisx.builder.Builder;
 import io.github.mybatisx.keyword.ReservedKeywordRegistry;
 import io.github.mybatisx.lang.Objects;
@@ -56,7 +55,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
+public class ColumnBuilder extends AbstractBuilder implements Builder<Column, ColumnBuilder> {
 
     /**
      * 属性信息
@@ -299,17 +298,6 @@ public class ColumnBuilder extends AbstractBuilder implements Builder<Column> {
             }
         }
         return realColumn;
-    }
-
-    @Override
-    public <V> Builder<Column> with(AssignConsumer<Column, V> consumer, V value) {
-        // Empty
-        return this;
-    }
-
-    @Override
-    public void reset() {
-        // Empty
     }
 
     public static ColumnBuilder create() {
