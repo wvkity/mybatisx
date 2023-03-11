@@ -18,14 +18,14 @@ package io.github.mybatisx.builder;
 /**
  * 赋值消费接口
  *
- * @param <T> 泛型类型
+ * @param <T> 对象类型
  * @param <V> 值类型
  * @author wvkity
  * @created 2021/12/16
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface SetterConsumer<T, V> {
+public interface OneArgConsumer<T, V> {
 
     /**
      * 消费

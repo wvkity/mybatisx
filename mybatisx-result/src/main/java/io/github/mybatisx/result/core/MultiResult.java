@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.result.core;
 
-import io.github.mybatisx.builder.Builder;
-import io.github.mybatisx.builder.ObjectBuilder;
+import io.github.mybatisx.builder.BuilderFactory;
+import io.github.mybatisx.builder.DefaultObjectBuilder;
 import io.github.mybatisx.result.Result;
 import io.github.mybatisx.result.error.Error;
 import io.github.mybatisx.util.Maps;
@@ -93,8 +93,8 @@ public class MultiResult extends AbstractMultiResult implements Result {
 
     ///// static methods /////
 
-    public static Builder<MultiResult> create() {
-        return new ObjectBuilder<>(MultiResult::new);
+    public static DefaultObjectBuilder<MultiResult> create() {
+        return BuilderFactory.create(MultiResult::new);
     }
 
     public static MultiResult of() {

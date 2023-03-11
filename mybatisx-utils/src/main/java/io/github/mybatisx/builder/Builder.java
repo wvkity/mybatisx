@@ -19,26 +19,12 @@ package io.github.mybatisx.builder;
  * 构建器
  *
  * @param <T> 目标对象类型
+ * @param <C> 子类
  * @author wvkity
  * @created 2021/12/16
  * @since 1.0.0
  */
-public interface Builder<T> {
-
-    /**
-     * 设置值
-     *
-     * @param consumer {@link SetterConsumer}
-     * @param value    值
-     * @param <V>      值类型
-     * @return {@code this}
-     */
-    <V> Builder<T> with(final SetterConsumer<T, V> consumer, final V value);
-
-    /**
-     * 重置
-     */
-    void reset();
+public interface Builder<T, C extends Builder<T, C>> {
 
     /**
      * 构建对象

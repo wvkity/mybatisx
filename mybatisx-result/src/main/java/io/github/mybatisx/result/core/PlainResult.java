@@ -15,8 +15,8 @@
  */
 package io.github.mybatisx.result.core;
 
-import io.github.mybatisx.builder.Builder;
-import io.github.mybatisx.builder.ObjectBuilder;
+import io.github.mybatisx.builder.BuilderFactory;
+import io.github.mybatisx.builder.DefaultObjectBuilder;
 import io.github.mybatisx.result.DataResult;
 import io.github.mybatisx.result.error.Error;
 
@@ -82,8 +82,8 @@ public class PlainResult<T> extends AbstractResult<T> implements DataResult<T> {
 
     ///// static methods /////
 
-    public static <T> Builder<PlainResult<T>> create() {
-        return new ObjectBuilder<>(PlainResult::new);
+    public static <T> DefaultObjectBuilder<PlainResult<T>> create() {
+        return BuilderFactory.create(PlainResult::new);
     }
 
     public static <T> PlainResult<T> of() {

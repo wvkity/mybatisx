@@ -1,107 +1,90 @@
-/*
- * Copyright (c) 2021-Now, wvkity(wvkity@gmail.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.github.mybatisx.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Predicate;
 
 /**
- * 对象构建器
+ * 多值构建器
  *
- * @param <T> 待构建对象类型
+ * @param <T> 对象类型
+ * @param <C> 子类
  * @author wvkity
- * @created 2021/12/16
+ * @created 2023/3/11
  * @since 1.0.0
  */
-public class ObjectBuilder<T> implements Builder<T> {
+public interface ObjectBuilder<T, C extends ObjectBuilder<T, C>> extends Builder<T, C> {
 
     /**
-     * {@link Supplier}对象
-     */
-    private final Supplier<T> supplier;
-    /**
-     * {@link Consumer}数量
-     */
-    private final int size;
-    /**
-     * {@link Consumer}列表
-     */
-    private List<Consumer<T>> consumers;
-
-    public ObjectBuilder(Supplier<T> supplier) {
-        this.supplier = supplier;
-        this.size = 0;
-        this.consumers = new ArrayList<>();
-    }
-
-    public ObjectBuilder(Supplier<T> supplier, int size) {
-        this.supplier = supplier;
-        this.size = size;
-        this.consumers = new ArrayList<>(size);
-    }
-
-    @Override
-    public <V> ObjectBuilder<T> with(SetterConsumer<T, V> setter, V value) {
-        if (Objects.nonNull(setter)) {
-            this.consumers.add(it -> setter.accept(it, value));
-        }
-        return this;
-    }
-
-    @Override
-    public void reset() {
-        if (!this.consumers.isEmpty()) {
-            this.consumers.clear();
-            this.consumers = new ArrayList<>(this.size);
-        }
-    }
-
-    @Override
-    public T build() {
-        final T instance = this.supplier.get();
-        if (!this.consumers.isEmpty()) {
-            this.consumers.forEach(it -> it.accept(instance));
-        }
-        return instance;
-    }
-
-    /**
-     * 创建构建器
+     * 设置值
      *
-     * @param supplier {@link Supplier}
-     * @param <T>      目标对象类型
-     * @return {@link ObjectBuilder}
+     * @param consumer {@link OneArgConsumer}
+     * @param value    值
+     * @param <V>      值类型
+     * @return {@code this}
      */
-    public static <T> ObjectBuilder<T> of(final Supplier<T> supplier) {
-        return new ObjectBuilder<>(supplier);
-    }
+    <V> C with(final OneArgConsumer<T, V> consumer, final V value);
 
     /**
-     * 创建构建器
+     * 设置值
      *
-     * @param supplier {@link Supplier}
-     * @param size     {@link Consumer}数目
-     * @param <T>      目标对象类型
-     * @return {@link ObjectBuilder}
+     * @param consumer {@link OneArgConsumer}
+     * @param value    值
+     * @param accept   {@link Predicate}
+     * @param <V>      值类型
+     * @return {@code this}
      */
-    public static <T> ObjectBuilder<T> of(final Supplier<T> supplier, final int size) {
-        return new ObjectBuilder<>(supplier, size);
-    }
+    <V> C with(final OneArgConsumer<T, V> consumer, final V value, final Predicate<V> accept);
 
+    /**
+     * 设置值
+     *
+     * @param consumer {@link ThreeArgConsumer}
+     * @param v1       值1
+     * @param v2       值2
+     * @param <V1>     值类型
+     * @param <V2>     值类型
+     * @return {@code this}
+     */
+    <V1, V2> C with(final TwoArgConsumer<T, V1, V2> consumer, final V1 v1, final V2 v2);
+
+    /**
+     * 设置值
+     *
+     * @param consumer {@link ThreeArgConsumer}
+     * @param v1       值1
+     * @param v2       值2
+     * @param v3       值3
+     * @param <V1>     值类型
+     * @param <V2>     值类型
+     * @param <V3>     值类型
+     * @return {@code this}
+     */
+    <V1, V2, V3> C with(final ThreeArgConsumer<T, V1, V2, V3> consumer, final V1 v1, final V2 v2, final V3 v3);
+
+    /**
+     * 设置值
+     *
+     * @param consumer {@link ThreeArgConsumer}
+     * @param v1       值1
+     * @param v2       值2
+     * @param v3       值3
+     * @param <V1>     值类型
+     * @param <V2>     值类型
+     * @param <V3>     值类型
+     * @param <V4>     值类型
+     * @return {@code this}
+     */
+    <V1, V2, V3, V4> C with(final FourArgConsumer<T, V1, V2, V3, V4> consumer, final V1 v1, final V2 v2, final V3 v3, final V4 v4);
+
+    /**
+     * 重置
+     * {@code this}
+     */
+    C reset();
+
+    /**
+     * 释放资源
+     */
+    default void release() {
+        // Empty
+    }
 }

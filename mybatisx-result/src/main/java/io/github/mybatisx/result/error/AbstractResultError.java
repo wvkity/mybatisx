@@ -40,7 +40,7 @@ public abstract class AbstractResultError implements ResultError {
     /**
      * 响应描述信息
      */
-    protected String msg = "OK";
+    protected String msg;
 
     @Override
     public void error(int code, String msg) {
