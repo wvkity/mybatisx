@@ -33,7 +33,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SerializationUtils {
+public final class SerializationHelper {
 
 
     /**

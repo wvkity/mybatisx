@@ -15,7 +15,10 @@
  */
 package io.github.mybatisx.lang;
 
+import io.github.mybatisx.function.Absence;
+
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * 字符串工具
@@ -24,9 +27,9 @@ import java.util.function.Consumer;
  * @created 2021/12/16
  * @since 1.0.0
  */
-public final class Strings {
+public final class StringHelper {
 
-    private Strings() {
+    private StringHelper() {
     }
 
     public static final String DEFAULT_STR_NULL = "null";
@@ -49,7 +52,7 @@ public final class Strings {
      * @return 字符串
      */
     public static String toString(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof String) {
@@ -65,7 +68,7 @@ public final class Strings {
      * @return boolean
      */
     public static boolean isEmpty(final CharSequence arg) {
-        return Objects.isNull(arg) || arg.length() == 0;
+        return ObjectHelper.isNull(arg) || arg.length() == 0;
     }
 
     /**
@@ -124,7 +127,7 @@ public final class Strings {
      * @return 字符串
      */
     public static String ifNull(final String value, final String defaultValue) {
-        return Strings.isWhitespace(value) ? defaultValue : value;
+        return StringHelper.isWhitespace(value) ? defaultValue : value;
     }
 
     /**
@@ -147,7 +150,7 @@ public final class Strings {
      * @return 新字符串
      */
     public static String trim(final Object arg) {
-        if (Objects.isAssignable(String.class, arg)) {
+        if (ObjectHelper.isAssignable(String.class, arg)) {
             return trim(arg.toString());
         }
         return null;
@@ -174,7 +177,7 @@ public final class Strings {
      * @return boolean
      */
     public static boolean equals(final String a, final String b) {
-        return Objects.nonNull(a) && size(a) == size(b) && a.equals(b);
+        return ObjectHelper.nonNull(a) && size(a) == size(b) && a.equals(b);
     }
 
     /**
@@ -185,7 +188,7 @@ public final class Strings {
      * @return boolean
      */
     public static boolean equalsIC(final String a, final String b) {
-        return Objects.nonNull(a) && size(a) == size(b) && a.equalsIgnoreCase(b);
+        return ObjectHelper.nonNull(a) && size(a) == size(b) && a.equalsIgnoreCase(b);
     }
 
     /**
@@ -237,7 +240,7 @@ public final class Strings {
      * @return 新字符
      */
     public static char toLowerCase(final char c) {
-        return Strings.isLowerCase(c) ? c : Character.toLowerCase(c);
+        return StringHelper.isLowerCase(c) ? c : Character.toLowerCase(c);
     }
 
     /**
@@ -247,7 +250,7 @@ public final class Strings {
      * @return 新字符
      */
     public static char toUpperCase(final char c) {
-        return Strings.isUpperCase(c) ? c : Character.toUpperCase(c);
+        return StringHelper.isUpperCase(c) ? c : Character.toUpperCase(c);
     }
 
     /**
@@ -257,8 +260,8 @@ public final class Strings {
      * @return boolean
      */
     public static boolean isLowerStartsWith(final String source) {
-        if (Strings.isNotWhitespace(source)) {
-            return Strings.isLowerCase(source.charAt(0));
+        if (StringHelper.isNotWhitespace(source)) {
+            return StringHelper.isLowerCase(source.charAt(0));
         }
         return false;
     }
@@ -270,8 +273,8 @@ public final class Strings {
      * @return boolean
      */
     public static boolean isUpperStartsWith(final String source) {
-        if (Strings.isNotWhitespace(source)) {
-            return Strings.isUpperCase(source.charAt(0));
+        if (StringHelper.isNotWhitespace(source)) {
+            return StringHelper.isUpperCase(source.charAt(0));
         }
         return false;
     }
@@ -283,14 +286,14 @@ public final class Strings {
      * @return 新的字符串
      */
     public static String toLowerCase(final CharSequence source) {
-        if (Strings.isNotWhitespace(source)) {
+        if (StringHelper.isNotWhitespace(source)) {
             final String str = source.toString();
             for (int i = 0, size = str.length(); i < size; i++) {
-                if (Strings.isUpperCase(str.charAt(i))) {
+                if (StringHelper.isUpperCase(str.charAt(i))) {
                     final char[] array = str.toCharArray();
                     for (; i < size; i++) {
                         final char c = array[i];
-                        if (Strings.isUpperCase(c)) {
+                        if (StringHelper.isUpperCase(c)) {
                             array[i] = (char) (c ^ CASE_MASK);
                         }
                     }
@@ -299,7 +302,7 @@ public final class Strings {
             }
             return str;
         }
-        return Objects.isNull(source) ? null : source.toString();
+        return ObjectHelper.isNull(source) ? null : source.toString();
     }
 
     /**
@@ -309,14 +312,14 @@ public final class Strings {
      * @return 新的字符串
      */
     public static String toUpperCase(final CharSequence source) {
-        if (Strings.isNotWhitespace(source)) {
+        if (StringHelper.isNotWhitespace(source)) {
             final String str = source.toString();
             for (int i = 0, size = str.length(); i < size; i++) {
-                if (Strings.isLowerCase(str.charAt(i))) {
+                if (StringHelper.isLowerCase(str.charAt(i))) {
                     final char[] array = str.toCharArray();
                     for (; i < size; i++) {
                         final char c = array[i];
-                        if (Strings.isLowerCase(c)) {
+                        if (StringHelper.isLowerCase(c)) {
                             array[i] = (char) (c ^ CASE_MASK);
                         }
                     }
@@ -325,7 +328,7 @@ public final class Strings {
             }
             return str;
         }
-        return Objects.isNull(source) ? null : source.toString();
+        return ObjectHelper.isNull(source) ? null : source.toString();
     }
 
     /**
@@ -335,8 +338,8 @@ public final class Strings {
      * @return 新字符串
      */
     public static String firstToLowerCase(final String source) {
-        if (Strings.isNotWhitespace(source)) {
-            return Strings.toLowerCase(source.charAt(0)) + source.substring(1);
+        if (StringHelper.isNotWhitespace(source)) {
+            return StringHelper.toLowerCase(source.charAt(0)) + source.substring(1);
         }
         return source;
     }
@@ -348,8 +351,8 @@ public final class Strings {
      * @return 新字符串
      */
     public static String firstToUpperCase(final String source) {
-        if (Strings.isNotWhitespace(source)) {
-            return Strings.toUpperCase(source.charAt(0)) + source.substring(1);
+        if (StringHelper.isNotWhitespace(source)) {
+            return StringHelper.toUpperCase(source.charAt(0)) + source.substring(1);
         }
         return source;
     }
@@ -361,8 +364,8 @@ public final class Strings {
      * @return 新字符串
      */
     public static String firstOnlyToUpperCase(final String source) {
-        if (Strings.isNotWhitespace(source)) {
-            return Strings.toUpperCase(source.charAt(0)) + Strings.toLowerCase(source.substring(1));
+        if (StringHelper.isNotWhitespace(source)) {
+            return StringHelper.toUpperCase(source.charAt(0)) + StringHelper.toLowerCase(source.substring(1));
         }
         return source;
     }
@@ -385,7 +388,7 @@ public final class Strings {
      * @return 整数
      */
     public static int parseInt(final String arg, final int defaultValue) {
-        if (Strings.isNotEmpty(arg) && Regex.isInteger(arg)) {
+        if (StringHelper.isNotEmpty(arg) && RegexHelper.isInteger(arg)) {
             return Integer.parseInt(arg);
         }
         return defaultValue;
@@ -409,10 +412,48 @@ public final class Strings {
      * @return 整数
      */
     public static int parsePositiveInt(final String arg, final int defaultValue) {
-        if (Strings.isNotEmpty(arg) && Regex.isPositiveInteger(arg)) {
+        if (StringHelper.isNotEmpty(arg) && RegexHelper.isPositiveInteger(arg)) {
             return Integer.parseInt(arg);
         }
         return defaultValue;
+    }
+
+    /**
+     * 如果给定的值为null则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Absence}
+     */
+    public static void ifNullThen(final String v, final Absence consumer) {
+        if (v == null) {
+            consumer.accept();
+        }
+    }
+
+    /**
+     * 如果给定的值为null则消费
+     *
+     * @param v            指定字符串值
+     * @param defaultValue 默认值
+     * @param consumer     {@link Absence}
+     */
+    public static void ifNullThen(final String v, final String defaultValue, final Consumer<String> consumer) {
+        if (v == null) {
+            consumer.accept(defaultValue);
+        }
+    }
+
+    /**
+     * 如果给定的值为null则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Absence}
+     * @param source   {@link Supplier}
+     */
+    public static void ifNullThen(final String v, final Consumer<String> consumer, final Supplier<String> source) {
+        if (v == null && source != null) {
+            consumer.accept(source.get());
+        }
     }
 
     /**
@@ -424,6 +465,44 @@ public final class Strings {
     public static void ifNonNullThen(final String v, final Consumer<String> consumer) {
         if (v != null) {
             consumer.accept(v);
+        }
+    }
+
+    /**
+     * 如果指定值为空则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Absence}
+     */
+    public static void ifWhitespaceThen(final String v, final Absence consumer) {
+        if (StringHelper.isWhitespace(v)) {
+            consumer.accept();
+        }
+    }
+
+    /**
+     * 如果指定值为空则消费
+     *
+     * @param v            指定字符串值
+     * @param defaultValue 默认值
+     * @param consumer     {@link Consumer}
+     */
+    public static void ifWhitespaceThen(final String v, final String defaultValue, final Consumer<String> consumer) {
+        if (StringHelper.isWhitespace(v)) {
+            consumer.accept(defaultValue);
+        }
+    }
+
+    /**
+     * 如果指定值为空则消费
+     *
+     * @param v        指定字符串值
+     * @param consumer {@link Consumer}
+     * @param source   {@link Supplier}
+     */
+    public static void ifWhitespaceThen(final String v, final Consumer<String> consumer, final Supplier<String> source) {
+        if (StringHelper.isWhitespace(v) && source != null) {
+            consumer.accept(source.get());
         }
     }
 

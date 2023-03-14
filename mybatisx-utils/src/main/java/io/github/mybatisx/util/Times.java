@@ -1,6 +1,6 @@
 package io.github.mybatisx.util;
 
-import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.lang.StringHelper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +81,7 @@ public enum Times {
      * @return {@link Times}
      */
     public static Times convert(final String unit) {
-        if (Strings.isNotWhitespace(unit)) {
+        if (StringHelper.isNotWhitespace(unit)) {
             try {
                 return Times.valueOf(unit.toUpperCase(Locale.ENGLISH));
             } catch (Exception ignore) {

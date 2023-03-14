@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.builder;
 
-import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.util.CollectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +111,7 @@ public class DefaultObjectBuilder<T> implements ObjectBuilder<T, DefaultObjectBu
     @Override
     public T build() {
         final T instance = this.supplier.get();
-        if (Collections.isNotEmpty(this.consumers)) {
+        if (CollectionHelper.isNotEmpty(this.consumers)) {
             this.consumers.forEach(it -> it.accept(instance));
         }
         return instance;

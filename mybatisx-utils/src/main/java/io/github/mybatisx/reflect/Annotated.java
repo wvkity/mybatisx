@@ -15,9 +15,9 @@
  */
 package io.github.mybatisx.reflect;
 
-import io.github.mybatisx.lang.Objects;
-import io.github.mybatisx.lang.Strings;
-import io.github.mybatisx.util.Collections;
+import io.github.mybatisx.lang.ObjectHelper;
+import io.github.mybatisx.lang.StringHelper;
+import io.github.mybatisx.util.CollectionHelper;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public interface Annotated {
      * @return 注解实例
      */
     default <A extends Annotation> A getAnnotation(final Class<A> clazz) {
-        if (Objects.nonNull(clazz)) {
+        if (ObjectHelper.nonNull(clazz)) {
             return this.getAnnotation(clazz.getName());
         }
         return null;
@@ -57,7 +57,7 @@ public interface Annotated {
      */
     @SuppressWarnings({"unchecked"})
     default <A extends Annotation> A getAnnotation(final String className) {
-        if (Strings.isNotWhitespace(className)) {
+        if (StringHelper.isNotWhitespace(className)) {
             return (A) this.getAnnotationMap().get(className);
         }
         return null;
@@ -71,7 +71,7 @@ public interface Annotated {
      */
     default boolean isMatches(final Class<? extends Annotation> clazz) {
         final Set<? extends Annotation> annotations;
-        if (Objects.nonNull(clazz) && Collections.isNotEmpty((annotations = this.getAnnotations()))) {
+        if (ObjectHelper.nonNull(clazz) && CollectionHelper.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> clazz.equals(it.annotationType()));
         }
         return false;
@@ -85,7 +85,7 @@ public interface Annotated {
      */
     @SuppressWarnings({"unchecked"})
     default boolean isMatches(final Class<? extends Annotation>... classes) {
-        return this.isMatches(Collections.filterNull(classes));
+        return this.isMatches(CollectionHelper.filterNull(classes));
     }
 
     /**
@@ -97,8 +97,8 @@ public interface Annotated {
     default boolean isMatches(final Collection<Class<? extends Annotation>> classes) {
         final Set<? extends Annotation> annotations;
         final Set<Class<? extends Annotation>> annotationClasses;
-        if (Collections.isNotEmpty((annotationClasses = Collections.filterNull(classes)))
-                && Collections.isNotEmpty((annotations = this.getAnnotations()))) {
+        if (CollectionHelper.isNotEmpty((annotationClasses = CollectionHelper.filterNull(classes)))
+                && CollectionHelper.isNotEmpty((annotations = this.getAnnotations()))) {
             return annotations.stream().anyMatch(it -> annotationClasses.contains(it.annotationType()));
         }
         return false;
@@ -111,7 +111,7 @@ public interface Annotated {
      * @return boolean
      */
     default boolean isMatches(final String className) {
-        return Strings.isNotWhitespace(className) && this.getAnnotationMap().containsKey(className);
+        return StringHelper.isNotWhitespace(className) && this.getAnnotationMap().containsKey(className);
     }
 
     /**
@@ -141,7 +141,7 @@ public interface Annotated {
      * @return boolean
      */
     default boolean isEmpty() {
-        return Collections.isEmpty(this.getAnnotations());
+        return CollectionHelper.isEmpty(this.getAnnotations());
     }
 
     /**

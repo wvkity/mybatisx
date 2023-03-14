@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
  * @created 2021/12/16
  * @since 1.0.0
  */
-public final class Regex {
+public final class RegexHelper {
 
-    private Regex() {
+    private RegexHelper() {
     }
 
     public static final Pattern REGEX_NUMBER_WITH_TRAILING_ZEROS = Pattern.compile("\\.0*$");

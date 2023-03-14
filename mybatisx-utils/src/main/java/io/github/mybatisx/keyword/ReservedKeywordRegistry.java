@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.keyword;
 
-import io.github.mybatisx.lang.Strings;
+import io.github.mybatisx.lang.StringHelper;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -968,7 +968,7 @@ public final class ReservedKeywordRegistry {
      * @return boolean
      */
     public static boolean registry(final String keyword) {
-        if (Strings.isNotWhitespace(keyword)) {
+        if (StringHelper.isNotWhitespace(keyword)) {
             return RESERVED_KEYWORD_CACHE.add(keyword.trim().toUpperCase(Locale.ENGLISH));
         }
         return false;
@@ -981,7 +981,7 @@ public final class ReservedKeywordRegistry {
      * @return boolean
      */
     public static boolean remove(final String keyword) {
-        if (Strings.isNotWhitespace(keyword)) {
+        if (StringHelper.isNotWhitespace(keyword)) {
             final String kw = keyword.toUpperCase(Locale.ENGLISH);
             return RESERVED_KEYWORD_CACHE.removeIf(kw::equals);
         }
@@ -995,6 +995,6 @@ public final class ReservedKeywordRegistry {
      * @return boolean
      */
     public static boolean contains(String keyword) {
-        return Strings.isNotWhitespace(keyword) && RESERVED_KEYWORD_CACHE.contains(keyword.toUpperCase(Locale.ENGLISH));
+        return StringHelper.isNotWhitespace(keyword) && RESERVED_KEYWORD_CACHE.contains(keyword.toUpperCase(Locale.ENGLISH));
     }
 }

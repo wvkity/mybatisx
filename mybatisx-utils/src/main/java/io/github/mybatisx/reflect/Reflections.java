@@ -17,11 +17,11 @@ package io.github.mybatisx.reflect;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import io.github.mybatisx.lang.Objects;
-import io.github.mybatisx.lang.Strings;
-import io.github.mybatisx.lang.Types;
-import io.github.mybatisx.util.Collections;
-import io.github.mybatisx.util.Maps;
+import io.github.mybatisx.lang.ObjectHelper;
+import io.github.mybatisx.lang.StringHelper;
+import io.github.mybatisx.lang.TypeHepler;
+import io.github.mybatisx.util.CollectionHelper;
+import io.github.mybatisx.util.MapHelper;
 
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -128,10 +128,10 @@ public final class Reflections {
     public static final Predicate<Annotation> METADATA_ANNOTATION_FILTER;
 
     static {
-        SUPER_CLASS_FILTER = it -> Objects.nonNull(it) &&
-                !(Types.isObject(it) || Types.isSerializable(it) || Types.isAnnotation(it) || Objects.isCollection(it));
-        ANNOTATION_METHOD_FILTER = it -> !Types.ANNOTATION_METHOD_NAMES.contains(it.getName());
-        METADATA_ANNOTATION_FILTER = it -> !Types.METADATA_ANNOTATION_TYPES.contains(it.annotationType());
+        SUPER_CLASS_FILTER = it -> ObjectHelper.nonNull(it) &&
+                !(TypeHepler.isObject(it) || TypeHepler.isSerializable(it) || TypeHepler.isAnnotation(it) || ObjectHelper.isCollection(it));
+        ANNOTATION_METHOD_FILTER = it -> !TypeHepler.ANNOTATION_METHOD_NAMES.contains(it.getName());
+        METADATA_ANNOTATION_FILTER = it -> !TypeHepler.METADATA_ANNOTATION_TYPES.contains(it.annotationType());
         Method privateLookupIn;
         try {
             privateLookupIn = MethodHandles.class.getMethod(METHOD_PRIVATE_LOOKUP_IN,
@@ -208,7 +208,7 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isProxy(final Class<?> clazz) {
-        if (!Types.isObject(clazz)) {
+        if (!TypeHepler.isObject(clazz)) {
             return Arrays.stream(clazz.getInterfaces()).anyMatch(it -> PROXY_CLASS_NAMES.contains(it.getName()));
         }
         return false;
@@ -233,11 +233,11 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Class<?>> getAllTypes(final Class<?> clazz, final Predicate<? super Class<?>>... filters) {
-        final Set<Class<?>> classes = Maps.computeIfAbsent(CLASS_CACHES, clazz, k -> new LinkedHashSet<>());
-        if (Collections.isEmpty(classes)) {
+        final Set<Class<?>> classes = MapHelper.computeIfAbsent(CLASS_CACHES, clazz, k -> new LinkedHashSet<>());
+        if (CollectionHelper.isEmpty(classes)) {
             classes.addAll(Reflections.getAllSuperTypes(clazz, filters));
         }
-        return Collections.isEmpty(classes) ? new LinkedHashSet<>(0) : new LinkedHashSet<>(classes);
+        return CollectionHelper.isEmpty(classes) ? new LinkedHashSet<>(0) : new LinkedHashSet<>(classes);
     }
 
     /**
@@ -251,19 +251,19 @@ public final class Reflections {
     public static Set<Class<?>> getAllSuperTypes(final Class<?> clazz,
                                                  final Predicate<? super Class<?>>... filters) {
         final Set<Class<?>> classes = new LinkedHashSet<>();
-        if (Objects.nonNull(clazz) && !Types.isObject(clazz)) {
+        if (ObjectHelper.nonNull(clazz) && !TypeHepler.isObject(clazz)) {
             final Set<Class<?>> superClasses = getSuperTypes(clazz);
-            if (Collections.isNotEmpty(superClasses)) {
+            if (CollectionHelper.isNotEmpty(superClasses)) {
                 for (Class<?> it : superClasses) {
                     final Set<Class<?>> set = getAllSuperTypes(it);
-                    if (Collections.isNotEmpty(set)) {
+                    if (CollectionHelper.isNotEmpty(set)) {
                         classes.addAll(set);
                     }
                 }
             }
             classes.add(clazz);
         }
-        return Collections.filters(classes, filters);
+        return CollectionHelper.filters(classes, filters);
     }
 
     /**
@@ -276,10 +276,10 @@ public final class Reflections {
         final Set<Class<?>> classes = new LinkedHashSet<>();
         final Class<?> superClass = clazz.getSuperclass();
         final Class<?>[] interfaces = clazz.getInterfaces();
-        if (Objects.isNotEmpty(interfaces)) {
+        if (ObjectHelper.isNotEmpty(interfaces)) {
             classes.addAll(Arrays.asList(interfaces));
         }
-        if (!Types.isObject(clazz)) {
+        if (!TypeHepler.isObject(clazz)) {
             classes.add(superClass);
         }
         return classes;
@@ -322,7 +322,7 @@ public final class Reflections {
     @SafeVarargs
     public static Set<Method> getAllMethods(final Class<?>[] classes, final Predicate<? super Method>... filters) {
         final Set<Method> methods = new LinkedHashSet<>();
-        if (Objects.isNotEmpty(classes)) {
+        if (ObjectHelper.isNotEmpty(classes)) {
             final Map<String, Method> uniqueMethods = new HashMap<>();
             for (Class<?> it : classes) {
                 Reflections.addUniqueMethods(uniqueMethods, Reflections.getMethods(it, filters));
@@ -341,7 +341,7 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Method> getMethods(final Class<?> clazz, final Predicate<? super Method>... filters) {
-        return Collections.filters(clazz.isInterface() ? clazz.getMethods() : clazz.getDeclaredMethods(), filters);
+        return CollectionHelper.filters(clazz.isInterface() ? clazz.getMethods() : clazz.getDeclaredMethods(), filters);
     }
 
     /**
@@ -351,7 +351,7 @@ public final class Reflections {
      * @param methods       方法集合
      */
     public static void addUniqueMethods(final Map<String, Method> uniqueMethods, final Set<Method> methods) {
-        if (Collections.isNotEmpty(methods)) {
+        if (CollectionHelper.isNotEmpty(methods)) {
             for (Method it : methods) {
                 if (!it.isBridge()) {
                     uniqueMethods.putIfAbsent(Reflections.getMethodSignature(it), it);
@@ -367,13 +367,13 @@ public final class Reflections {
      * @return 签名
      */
     public static String getMethodSignature(final Method method) {
-        if (Objects.nonNull(method)) {
+        if (ObjectHelper.nonNull(method)) {
             final StringBuilder sb = new StringBuilder(60);
             final Class<?> returnType = method.getReturnType();
             sb.append(returnType.getName()).append("#");
             sb.append(method.getName());
             final Class<?>[] paramTypes = method.getParameterTypes();
-            if (Objects.isNotEmpty(paramTypes)) {
+            if (ObjectHelper.isNotEmpty(paramTypes)) {
                 sb.append(":");
                 sb.append(Arrays.stream(paramTypes).map(Class::getName).collect(Collectors.joining(",")));
             }
@@ -389,9 +389,9 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isGetter(final Method method) {
-        return Objects.nonNull(method) && Reflections.isGetter(method.getName())
-                && !Objects.isAssignable(Void.class, method.getReturnType())
-                && Objects.isEmpty(method.getParameterTypes());
+        return ObjectHelper.nonNull(method) && Reflections.isGetter(method.getName())
+                && !ObjectHelper.isAssignable(Void.class, method.getReturnType())
+                && ObjectHelper.isEmpty(method.getParameterTypes());
 
     }
 
@@ -402,8 +402,8 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isGetter(final String name) {
-        return Strings.isNotWhitespace(name) && ((name.startsWith(METHOD_PREFIX_GET) && Strings.size(name) > 3)
-                || name.startsWith(METHOD_PREFIX_IS) && Strings.size(name) > 2);
+        return StringHelper.isNotWhitespace(name) && ((name.startsWith(METHOD_PREFIX_GET) && StringHelper.size(name) > 3)
+                || name.startsWith(METHOD_PREFIX_IS) && StringHelper.size(name) > 2);
     }
 
     /**
@@ -413,8 +413,8 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isSetter(final Method method) {
-        return Objects.nonNull(method) && Reflections.isSetter(method.getName())
-                && Objects.size(method.getParameterTypes()) == 1;
+        return ObjectHelper.nonNull(method) && Reflections.isSetter(method.getName())
+                && ObjectHelper.size(method.getParameterTypes()) == 1;
     }
 
     /**
@@ -424,7 +424,7 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isSetter(final String name) {
-        return Strings.isNotWhitespace(name) && name.startsWith(METHOD_PREFIX_SET) && Strings.size(name) > 3;
+        return StringHelper.isNotWhitespace(name) && name.startsWith(METHOD_PREFIX_SET) && StringHelper.size(name) > 3;
     }
 
     /**
@@ -434,7 +434,7 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean isValidProperty(final String property) {
-        return Strings.isNotWhitespace(property) &&
+        return StringHelper.isNotWhitespace(property) &&
                 !(property.startsWith("$") || "serialVersionUID".equals(property) || "class".equals(property));
     }
 
@@ -475,7 +475,7 @@ public final class Reflections {
     @SafeVarargs
     public static Set<Field> getAllFields(final Class<?>[] classes, final Predicate<? super Field>... filters) {
         final Set<Field> fields = new LinkedHashSet<>();
-        if (Objects.isNotEmpty(classes)) {
+        if (ObjectHelper.isNotEmpty(classes)) {
             for (Class<?> it : classes) {
                 fields.addAll(Reflections.getFields(it, filters));
             }
@@ -492,7 +492,7 @@ public final class Reflections {
      */
     @SafeVarargs
     public static Set<Field> getFields(final Class<?> clazz, final Predicate<? super Field>... filters) {
-        return Collections.filters(clazz.getDeclaredFields(), filters);
+        return CollectionHelper.filters(clazz.getDeclaredFields(), filters);
     }
 
     /**
@@ -504,7 +504,7 @@ public final class Reflections {
      */
     public static <T extends AnnotatedElement> boolean isMatches(final T type,
                                                                  final Class<? extends Annotation> annotation) {
-        return Objects.nonNull(type) && Reflections.withAnnotation(annotation).test(type);
+        return ObjectHelper.nonNull(type) && Reflections.withAnnotation(annotation).test(type);
     }
 
     /**
@@ -519,9 +519,9 @@ public final class Reflections {
     @SafeVarargs
     public static <T extends AnnotatedElement> boolean isMatches(final T type, final String className,
                                                                  final Predicate<Annotation>... filters) {
-        if (Objects.nonNull(type) && Strings.isNotWhitespace(className)) {
+        if (ObjectHelper.nonNull(type) && StringHelper.isNotWhitespace(className)) {
             final Set<Annotation> annotations = Reflections.getAllAnnotations(type, filters);
-            return Collections.isNotEmpty(annotations) && annotations.stream().anyMatch(it ->
+            return CollectionHelper.isNotEmpty(annotations) && annotations.stream().anyMatch(it ->
                     className.equalsIgnoreCase(it.annotationType().getCanonicalName()));
         }
         return false;
@@ -551,7 +551,7 @@ public final class Reflections {
     @SafeVarargs
     public static Set<Annotation> getAnnotations(final AnnotatedElement type,
                                                  final Predicate<Annotation>... filters) {
-        return Collections.filters(type.getDeclaredAnnotations(), filters);
+        return CollectionHelper.filters(type.getDeclaredAnnotations(), filters);
     }
 
     /**
@@ -601,7 +601,7 @@ public final class Reflections {
     public static <T extends AnnotatedElement> Set<Annotation> getAllAnnotations(final List<T> types,
                                                                                  final Predicate<Annotation>... filters) {
         final Set<Annotation> annotations = new LinkedHashSet<>();
-        if (Collections.isNotEmpty(types)) {
+        if (CollectionHelper.isNotEmpty(types)) {
             int size = types.size();
             final List<AnnotatedElement> keys = new ArrayList<>(types);
             for (int i = 0; i < size; i++) {
@@ -623,7 +623,7 @@ public final class Reflections {
      * @return {@link Predicate}
      */
     public static Predicate<AnnotatedElement> withAnnotation(final Class<? extends Annotation> annotation) {
-        return it -> Objects.nonNull(it) && it.isAnnotationPresent(annotation);
+        return it -> ObjectHelper.nonNull(it) && it.isAnnotationPresent(annotation);
     }
 
     /**
@@ -645,11 +645,11 @@ public final class Reflections {
      * @return 泛型类
      */
     public static Class<?> getGenericClass(final Type type, final int index) {
-        if (!Objects.isAssignable(ParameterizedType.class, type)) {
+        if (!ObjectHelper.isAssignable(ParameterizedType.class, type)) {
             return Object.class;
         }
         final Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-        if (Objects.isEmpty(types)) {
+        if (ObjectHelper.isEmpty(types)) {
             return Object.class;
         }
         final Type it = types[index];
@@ -666,10 +666,10 @@ public final class Reflections {
      * @return 类型列表
      */
     public static Class<?>[] getArgumentTypes(final Object... args) {
-        if (Objects.isEmpty(args)) {
+        if (ObjectHelper.isEmpty(args)) {
             return new Class<?>[0];
         }
-        return Arrays.stream(args).map(it -> Objects.isNull(it) ? Object.class : it.getClass()).toArray(Class<?>[]::new);
+        return Arrays.stream(args).map(it -> ObjectHelper.isNull(it) ? Object.class : it.getClass()).toArray(Class<?>[]::new);
     }
 
     /**
@@ -680,10 +680,10 @@ public final class Reflections {
      * @return {@link Map}
      */
     public static <A extends Annotation> Map<String, Object> annotationToMap(final A instance) {
-        if (Objects.nonNull(instance)) {
+        if (ObjectHelper.nonNull(instance)) {
             final Set<Method> methods = Reflections.getAllMethods(instance.annotationType(), SUPER_CLASS_FILTER,
                     ANNOTATION_METHOD_FILTER);
-            if (Collections.isNotEmpty(methods)) {
+            if (CollectionHelper.isNotEmpty(methods)) {
                 final Map<String, Object> result = new HashMap<>(methods.size());
                 for (Method it : methods) {
                     final String property = it.getName();
@@ -751,7 +751,7 @@ public final class Reflections {
     public static <T> T newInstance(final Class<T> clazz, final Object... args) throws NoSuchMethodException,
             InvocationTargetException, InstantiationException, IllegalAccessException {
         final Constructor<T> constructor;
-        if (Objects.isEmpty(args)) {
+        if (ObjectHelper.isEmpty(args)) {
             constructor = clazz.getDeclaredConstructor();
             try {
                 return constructor.newInstance();
@@ -760,10 +760,10 @@ public final class Reflections {
                 return constructor.newInstance();
             }
         } else {
-            final int size = Objects.size(args);
+            final int size = ObjectHelper.size(args);
             final Constructor<?>[] constructors = Arrays.stream(clazz.getDeclaredConstructors()).filter(it ->
-                    Objects.size(it.getParameterTypes()) == size).toArray(Constructor[]::new);
-            if (Objects.isNotEmpty(constructors)) {
+                    ObjectHelper.size(it.getParameterTypes()) == size).toArray(Constructor[]::new);
+            if (ObjectHelper.isNotEmpty(constructors)) {
                 for (Constructor<?> it : constructors) {
                     if (Reflections.compareParameterType(it.getParameterTypes(), args)) {
                         try {
@@ -787,10 +787,10 @@ public final class Reflections {
      * @return boolean
      */
     public static boolean compareParameterType(final Class<?>[] types, final Object... args) {
-        final int size = Objects.size(types);
-        if (size == Objects.size(args)) {
+        final int size = ObjectHelper.size(types);
+        if (size == ObjectHelper.size(args)) {
             for (Class<?> it : types) {
-                if (Objects.isAssignable(it, args[0])) {
+                if (ObjectHelper.isAssignable(it, args[0])) {
                     return true;
                 }
             }
@@ -808,8 +808,8 @@ public final class Reflections {
      */
     public static Class<?> loadClass(final String className, final ClassLoader... classLoaders)
             throws ClassNotFoundException {
-        if (Strings.isNotWhitespace(className)) {
-            if (Objects.isNotEmpty(classLoaders)) {
+        if (StringHelper.isNotWhitespace(className)) {
+            if (ObjectHelper.isNotEmpty(classLoaders)) {
                 for (ClassLoader it : classLoaders) {
                     if (it != null) {
                         try {

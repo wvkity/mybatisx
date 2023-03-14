@@ -15,6 +15,8 @@
  */
 package io.github.mybatisx.lang;
 
+import io.github.mybatisx.util.OptionalHelper;
+
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,15 +33,15 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * Objects工具
+ * Object工具
  *
  * @author wvkity
  * @created 2021/12/16
  * @since 1.0.0
  */
-public final class Objects {
+public final class ObjectHelper {
 
-    private Objects() {
+    private ObjectHelper() {
     }
 
     /**
@@ -103,11 +105,11 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isAssignable(final Class<?> source, final Object arg) {
-        if (Objects.nonNull(arg)) {
+        if (ObjectHelper.nonNull(arg)) {
             if (arg instanceof Class) {
-                return Objects.isAssignable(source, (Class<?>) arg);
+                return ObjectHelper.isAssignable(source, (Class<?>) arg);
             }
-            return Objects.isAssignable(source, arg.getClass());
+            return ObjectHelper.isAssignable(source, arg.getClass());
         }
         return false;
     }
@@ -119,7 +121,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isObject(final Object arg) {
-        return Types.isObject(arg.getClass());
+        return TypeHepler.isObject(arg.getClass());
     }
 
     /**
@@ -129,7 +131,7 @@ public final class Objects {
      * @return boolean
      */
     public static boolean isAnnotation(final Object arg) {
-        return Objects.isAssignable(Annotation.class, arg);
+        return ObjectHelper.isAssignable(Annotation.class, arg);
     }
 
     /**
@@ -255,7 +257,7 @@ public final class Objects {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> Predicate<T> and(final Predicate... predicates) {
         final int size;
-        if ((size = Objects.size(predicates)) > 0) {
+        if ((size = ObjectHelper.size(predicates)) > 0) {
             if (size == 1) {
                 return predicates[0];
             }
@@ -273,7 +275,7 @@ public final class Objects {
      * @return 值
      */
     public static <T> T ifNull(final T t, final T defaultValue) {
-        return Objects.isNull(t) ? defaultValue : t;
+        return ObjectHelper.isNull(t) ? defaultValue : t;
     }
 
     /**
@@ -285,7 +287,7 @@ public final class Objects {
      * @return 值
      */
     public static <T> T ifNonNull(final T t, final T defaultValue) {
-        return Objects.nonNull(t) ? t : defaultValue;
+        return ObjectHelper.nonNull(t) ? t : defaultValue;
     }
 
     /**
@@ -298,7 +300,7 @@ public final class Objects {
      * @return 值
      */
     public static <T> T ifNonNull(final T t, final T t1, final T t2) {
-        return Objects.nonNull(t) ? t1 : t2;
+        return ObjectHelper.nonNull(t) ? t1 : t2;
     }
 
     /**
@@ -312,10 +314,24 @@ public final class Objects {
      * @return 处理后的值
      */
     public static <T, R> R ifNullThen(final T t, final R defaultValue, final Function<T, R> action) {
-        if (Objects.nonNull(t) && Objects.nonNull(action)) {
+        if (ObjectHelper.nonNull(t) && ObjectHelper.nonNull(action)) {
             return action.apply(t);
         }
         return defaultValue;
+    }
+
+    /**
+     * 指定值入股不为空则使用该值进行转换返回新的值，否则使用默认值进行转换返回
+     *
+     * @param t            指定值
+     * @param defaultValue 默认值
+     * @param function     {@link  Function}
+     * @param <T>          值类型
+     * @param <R>          返回值类型
+     * @return 新的值
+     */
+    public static <T, R> R ifNonNullThen(final T t, final T defaultValue, final Function<T, R> function) {
+        return ifTrueThen(t,defaultValue, ObjectHelper::nonNull, function);
     }
 
     /**
@@ -326,7 +342,7 @@ public final class Objects {
      * @param <T>      值类型
      */
     public static <T> void ifNonNullThen(final T t, final Consumer<T> consumer) {
-        Objects.ifTrueThen(t, Objects::nonNull, consumer);
+        ObjectHelper.ifTrueThen(t, ObjectHelper::nonNull, consumer);
     }
 
     /**
@@ -338,7 +354,7 @@ public final class Objects {
      * @param <T>       值类型
      */
     public static <T> void ifTrueThen(final T t, final Predicate<T> predicate, final Consumer<T> consumer) {
-        if (Objects.nonNull(predicate) && Objects.nonNull(consumer) && predicate.test(t)) {
+        if (ObjectHelper.nonNull(predicate) && ObjectHelper.nonNull(consumer) && predicate.test(t)) {
             consumer.accept(t);
         }
     }
@@ -354,13 +370,29 @@ public final class Objects {
      */
     public static <T> void ifTrueThen(final T t, final T defaultValue, final Predicate<T> predicate,
                                       final Consumer<T> consumer) {
-        if (Objects.nonNull(predicate) && Objects.nonNull(consumer)) {
+        if (ObjectHelper.nonNull(predicate) && ObjectHelper.nonNull(consumer)) {
             if (predicate.test(t)) {
                 consumer.accept(t);
             } else {
                 consumer.accept(defaultValue);
             }
         }
+    }
+
+    /**
+     * 指定值符合要求则使用该值进行转换返回新的值，否则使用默认值进行转换返回
+     *
+     * @param t            指定值
+     * @param defaultValue 默认值
+     * @param predicate    {@link  Predicate}
+     * @param function     {@link  Function}
+     * @param <T>          值类型
+     * @param <R>          返回值类型
+     * @return 新的值
+     */
+    public static <T, R> R ifTrueThen(final T t, final T defaultValue, final Predicate<T> predicate,
+                                      final Function<T, R> function) {
+        return function.apply(OptionalHelper.ofNullable(t).filter(predicate).orElse(defaultValue));
     }
 
     /**
@@ -375,10 +407,10 @@ public final class Objects {
      */
     public static <T> void ifTrueThen(final T expectValue, final T defaultValue, final Predicate<T> predicate,
                                       final Consumer<T> expectAction, final Consumer<T> defaultAction) {
-        if (Objects.nonNull(predicate)) {
-            if (predicate.test(expectValue) && Objects.nonNull(expectAction)) {
+        if (ObjectHelper.nonNull(predicate)) {
+            if (predicate.test(expectValue) && ObjectHelper.nonNull(expectAction)) {
                 expectAction.accept(expectValue);
-            } else if (Objects.nonNull(defaultAction)) {
+            } else if (ObjectHelper.nonNull(defaultAction)) {
                 defaultAction.accept(defaultValue);
             }
         }
@@ -397,6 +429,16 @@ public final class Objects {
     }
 
     /**
+     * 检查是否为有效端口
+     *
+     * @param port 端口
+     * @return boolean
+     */
+    public static boolean isPort(final Integer port) {
+        return port != null && 0 < port && port <= 65535;
+    }
+
+    /**
      * 将值转换成byte/char/boolean/short/int/long类型值
      *
      * @param javaType java类型
@@ -404,7 +446,7 @@ public final class Objects {
      * @return 值
      */
     public static Object convert(final Class<?> javaType, final String value) {
-        if (javaType == null || Strings.isWhitespace(value) || Types.is(String.class, javaType)) {
+        if (javaType == null || StringHelper.isWhitespace(value) || TypeHepler.is(String.class, javaType)) {
             return value;
         }
         if (javaType == Long.class || javaType == long.class) {
@@ -527,16 +569,16 @@ public final class Objects {
     public static <T> List<T> toList(final Object arg) {
         if (arg != null) {
             final Class<?> clazz = arg.getClass();
-            if (Objects.isAssignable(Map.class, clazz)) {
+            if (ObjectHelper.isAssignable(Map.class, clazz)) {
                 return new ArrayList<>((Collection<? extends T>) ((Map<?, ?>) arg).values());
-            } else if (Objects.isAssignable(Iterable.class, clazz)) {
+            } else if (ObjectHelper.isAssignable(Iterable.class, clazz)) {
                 if (arg instanceof Collection) {
                     return new ArrayList<>((Collection<? extends T>) arg);
                 } else {
                     return StreamSupport.stream(((Iterable<T>) arg).spliterator(), false).collect(Collectors.toList());
                 }
             } else if (clazz.isArray()) {
-                return Objects.objectAsList((T[]) arg);
+                return ObjectHelper.objectAsList((T[]) arg);
             }
             return new ArrayList<>(Collections.singletonList((T) arg));
         }
@@ -650,7 +692,7 @@ public final class Objects {
      * @return 字符串
      */
     public static String requireNonEmpty(final String value, final String message) {
-        if (Strings.isWhitespace(requireNonNull(value, message))) {
+        if (StringHelper.isWhitespace(requireNonNull(value, message))) {
             throw new IllegalArgumentException(message);
         }
         return value;

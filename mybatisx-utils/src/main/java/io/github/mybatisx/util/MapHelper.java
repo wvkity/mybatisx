@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.util;
 
-import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.lang.ObjectHelper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -36,7 +36,7 @@ import java.util.function.Supplier;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Maps {
+public final class MapHelper {
 
     /**
      * 检查Map集合是否为空
@@ -89,11 +89,11 @@ public final class Maps {
      */
     public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Supplier<V> supplier) {
         final V v = map.get(k);
-        if (Objects.nonNull(v)) {
+        if (ObjectHelper.nonNull(v)) {
             return v;
         }
         final V newValue = supplier.get();
-        return Objects.ifNull(map.putIfAbsent(k, newValue), newValue);
+        return ObjectHelper.ifNull(map.putIfAbsent(k, newValue), newValue);
     }
 
     /**
@@ -107,9 +107,9 @@ public final class Maps {
      * @return 值
      */
     public static <K, V> V computeIfAbsent(final Map<K, V> map, final K k, final Function<K, V> mappingFunction) {
-        if (Objects.isJAVA8()) {
+        if (ObjectHelper.isJAVA8()) {
             final V v = map.get(k);
-            if (Objects.nonNull(v)) {
+            if (ObjectHelper.nonNull(v)) {
                 return v;
             }
         }
@@ -311,7 +311,7 @@ public final class Maps {
     public static <K, V> Map<K, V> of(final K k1, final V v1, final K k2, final V v2, final K k3, final V v3,
                                       final K k4, final V v4, final K k5, final V v5, final K k6, final V v6,
                                       final K k7, final V v7, final K k8, final V v8, final Object... args) {
-        final List<Object> list = Objects.objectAsList(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8);
+        final List<Object> list = ObjectHelper.objectAsList(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5, k6, v6, k7, v7, k8, v8);
         list.addAll(Arrays.asList(args));
         return ofList(list);
     }

@@ -1,6 +1,6 @@
 package io.github.mybatisx.util;
 
-import io.github.mybatisx.lang.Objects;
+import io.github.mybatisx.lang.ObjectHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +24,9 @@ import java.util.stream.StreamSupport;
  * @created 2022/5/2
  * @since 1.0.0
  */
-public final class Collections {
+public final class CollectionHelper {
 
-    private Collections() {
+    private CollectionHelper() {
     }
 
     /**
@@ -62,17 +62,17 @@ public final class Collections {
      * @param <T>   元素类型
      * @return 元素
      */
-    public static <T> Optional<T> get(final List<T> list, final int index) {
-        if (Collections.isNotEmpty(list)) {
+    public static <T> OptionalHelper<T> get(final List<T> list, final int index) {
+        if (CollectionHelper.isNotEmpty(list)) {
             final int maxIndex = list.size() - 1;
             if (index == -1) {
-                return Optional.ofNullable(list.get(maxIndex));
+                return OptionalHelper.ofNullable(list.get(maxIndex));
             }
             if (0 <= index && index <= maxIndex) {
-                return Optional.ofNullable(list.get(index));
+                return OptionalHelper.ofNullable(list.get(index));
             }
         }
-        return Optional.empty();
+        return OptionalHelper.empty();
     }
 
     /**
@@ -82,8 +82,8 @@ public final class Collections {
      * @param <T>   元素类型
      * @return 元素
      */
-    public static <T> Optional<T> getFirst(final List<T> list) {
-        return Collections.get(list, 0);
+    public static <T> OptionalHelper<T> getFirst(final List<T> list) {
+        return CollectionHelper.get(list, 0);
     }
 
     /**
@@ -93,8 +93,8 @@ public final class Collections {
      * @param <T>   元素类型
      * @return 元素
      */
-    public static <T> Optional<T> getLast(final List<T> list) {
-        return Collections.get(list, -1);
+    public static <T> OptionalHelper<T> getLast(final List<T> list) {
+        return CollectionHelper.get(list, -1);
     }
 
     /**
@@ -106,7 +106,7 @@ public final class Collections {
      * @return 元素
      */
     public static <T> T getOrNullable(final List<T> list, final int index) {
-        return Collections.get(list, index).orElse(null);
+        return CollectionHelper.get(list, index).orElse(null);
     }
 
     /**
@@ -167,11 +167,11 @@ public final class Collections {
             for (Object it : iterable) {
                 if (it != null) {
                     final Class<?> clazz = it.getClass();
-                    if (clazz.isArray() || Objects.isAssignable(Iterable.class, clazz)
-                            || Objects.isAssignable(Map.class, clazz)) {
+                    if (clazz.isArray() || ObjectHelper.isAssignable(Iterable.class, clazz)
+                            || ObjectHelper.isAssignable(Map.class, clazz)) {
                         return false;
                     }
-                    if (current != null && !Objects.isAssignable(current, clazz)) {
+                    if (current != null && !ObjectHelper.isAssignable(current, clazz)) {
                         return false;
                     }
                     current = clazz;
@@ -260,7 +260,7 @@ public final class Collections {
      */
     @SafeVarargs
     public static <T> Set<T> filters(final T[] values, final Predicate<? super T>... filters) {
-        if (Objects.isEmpty(values)) {
+        if (ObjectHelper.isEmpty(values)) {
             return new LinkedHashSet<>(0);
         }
         return filters(Arrays.asList(values), filters);
@@ -281,7 +281,7 @@ public final class Collections {
         if (isEmpty(iterable)) {
             return new LinkedHashSet<>(0);
         }
-        return filter(iterable, Objects.and(filters));
+        return filter(iterable, ObjectHelper.and(filters));
     }
 
     /**
@@ -320,7 +320,7 @@ public final class Collections {
      * @return 新的列表
      */
     public static <T, C extends Collection<T>> C filterNull(final T[] values, final Supplier<C> collectionFactory) {
-        if (Objects.isEmpty(values)) {
+        if (ObjectHelper.isEmpty(values)) {
             return collectionFactory.get();
         }
         return filterNull(Arrays.asList(values), collectionFactory);
@@ -350,7 +350,7 @@ public final class Collections {
      */
     public static <T, Iter extends Iterable<? extends T>, C extends Collection<T>> C filterNull(final Iter iterable,
                                                                                                 final Supplier<C> collectionFactory) {
-        return asCollection(iterable, Objects::nonNull, collectionFactory);
+        return asCollection(iterable, ObjectHelper::nonNull, collectionFactory);
     }
 
     /**
@@ -393,7 +393,7 @@ public final class Collections {
      * @return 处理后的数据
      */
     public static <Iter extends Iterable<String>> List<String> lowerCase(final Iter iterable) {
-        return transform(iterable, Objects::nonNull, it -> it.toLowerCase(Locale.ENGLISH));
+        return transform(iterable, ObjectHelper::nonNull, it -> it.toLowerCase(Locale.ENGLISH));
     }
 
     /**
@@ -404,7 +404,7 @@ public final class Collections {
      * @return 处理后的字符串集合
      */
     public static <Iter extends Iterable<String>> List<String> upperCase(final Iter iterable) {
-        return transform(iterable, Objects::nonNull, it -> it.toUpperCase(Locale.ENGLISH));
+        return transform(iterable, ObjectHelper::nonNull, it -> it.toUpperCase(Locale.ENGLISH));
     }
 
     /**
@@ -452,7 +452,7 @@ public final class Collections {
     @SafeVarargs
     public static <T, Iter extends Iterable<? extends T>> List<T> combine(final Predicate<T> filter, final Iter... array) {
         final Predicate<T> ipt = filter == null ? __ -> true : filter;
-        if (Objects.isNotEmpty(array)) {
+        if (ObjectHelper.isNotEmpty(array)) {
             final List<T> result = new ArrayList<>();
             for (Iter c : array) {
                 if (c != null) {
@@ -474,17 +474,17 @@ public final class Collections {
      * @param iterable 集合类型
      * @param <T>      元素类型
      * @param <Iter>   {@link Iterable}
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
     @SuppressWarnings({"unchecked"})
-    public static <T, Iter extends Iterable<? extends T>> Optional<T> first(final Iter iterable) {
+    public static <T, Iter extends Iterable<? extends T>> OptionalHelper<T> first(final Iter iterable) {
         if (isEmpty(iterable)) {
-            return Optional.empty();
+            return OptionalHelper.empty();
         }
         if (iterable instanceof List) {
-            return Optional.ofNullable(((List<T>) iterable).get(0));
+            return OptionalHelper.ofNullable(((List<T>) iterable).get(0));
         }
-        return Optional.ofNullable(iterable.iterator().next());
+        return OptionalHelper.ofNullable(iterable.iterator().next());
     }
 
     /**
@@ -520,7 +520,7 @@ public final class Collections {
      * @param <Iter>   {@link Iterable}
      * @return 第一个元素或默认值
      */
-    public static <T, Iter extends Iterable<? extends T>> Optional<T> justOne(final Iter iterable) {
+    public static <T, Iter extends Iterable<? extends T>> OptionalHelper<T> justOne(final Iter iterable) {
         return justOne(iterable, "The result set is greater than one");
     }
 
@@ -534,17 +534,17 @@ public final class Collections {
      * @return 第一个元素或默认值
      */
     @SuppressWarnings({"unchecked"})
-    public static <T, Iter extends Iterable<? extends T>> Optional<T> justOne(final Iter iterable, final String error) {
-        if (Collections.isEmpty(iterable)) {
-            return Optional.empty();
+    public static <T, Iter extends Iterable<? extends T>> OptionalHelper<T> justOne(final Iter iterable, final String error) {
+        if (CollectionHelper.isEmpty(iterable)) {
+            return OptionalHelper.empty();
         }
         if (size(iterable) > 1) {
             throw new UnsupportedOperationException(error);
         }
         if (iterable instanceof List) {
-            return Optional.ofNullable(((List<T>) iterable).get(0));
+            return OptionalHelper.ofNullable(((List<T>) iterable).get(0));
         }
-        return Optional.ofNullable(iterable.iterator().next());
+        return OptionalHelper.ofNullable(iterable.iterator().next());
     }
 
     /**

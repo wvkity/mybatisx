@@ -43,11 +43,11 @@ import java.util.stream.Collectors;
  * @created 2021/12/16
  * @since 1.0.0
  */
-public final class Types {
+public final class TypeHepler {
 
-    private static final Logger log = LoggerFactory.getLogger(Types.class);
+    private static final Logger log = LoggerFactory.getLogger(TypeHepler.class);
 
-    private Types() {
+    private TypeHepler() {
     }
 
     /**
@@ -104,10 +104,10 @@ public final class Types {
         NEW_TIME_TYPE_NAMES = ImmutableSet.of("java.time.Instant", "java.time.LocalDateTime",
                 "java.time.LocalDate", "java.time.LocalTime", "java.time.OffsetDateTime", "java.time.OffsetTime",
                 "java.time.ZonedDateTime", "java.time.Year", "java.time.Month", "java.time.YearMonth");
-        NEW_TIME_TYPES = ImmutableSet.copyOf(NEW_TIME_TYPE_NAMES.stream().map(Types::loadClassIgnoreExp)
-                .filter(Objects::nonNull).collect(Collectors.toSet()));
+        NEW_TIME_TYPES = ImmutableSet.copyOf(NEW_TIME_TYPE_NAMES.stream().map(TypeHepler::loadClassIgnoreExp)
+                .filter(ObjectHelper::nonNull).collect(Collectors.toSet()));
         SIMPLE_TYPES = new HashSet<>(64);
-        SIMPLE_TYPES.addAll(Types.PRI_TYPES);
+        SIMPLE_TYPES.addAll(TypeHepler.PRI_TYPES);
         SIMPLE_TYPES.addAll(PRI_WRAPPER_TYPES);
         SIMPLE_TYPES.addAll(Arrays.asList(Date.class, Timestamp.class, Calendar.class, Class.class, BigInteger.class,
                 BigDecimal.class, String.class));
@@ -124,7 +124,7 @@ public final class Types {
      * @return 类对象
      */
     public static Class<?> loadClassIgnoreExp(final String className) {
-        if (Strings.isNotWhitespace(className)) {
+        if (StringHelper.isNotWhitespace(className)) {
             try {
                 return Class.forName(className);
             } catch (ClassNotFoundException e) {
@@ -140,8 +140,8 @@ public final class Types {
      * @param classes 多个全限定类名([,:;]分隔)
      */
     public static void registrySimpleTypeLicence(final String classes) {
-        if (Strings.isNotWhitespace(classes)) {
-            Arrays.stream(classes.split("([,:;])(\\s*)?")).forEach(Types::registrySimpleType);
+        if (StringHelper.isNotWhitespace(classes)) {
+            Arrays.stream(classes.split("([,:;])(\\s*)?")).forEach(TypeHepler::registrySimpleType);
         }
     }
 
@@ -151,7 +151,7 @@ public final class Types {
      * @param className 全限定类名
      */
     public static void registrySimpleType(final String className) {
-        Types.registrySimpleType(Types.loadClassIgnoreExp(className));
+        TypeHepler.registrySimpleType(TypeHepler.loadClassIgnoreExp(className));
     }
 
     /**
@@ -160,7 +160,7 @@ public final class Types {
      * @param clazz 类
      */
     public static void registrySimpleType(final Class<?> clazz) {
-        if (Objects.nonNull(clazz)) {
+        if (ObjectHelper.nonNull(clazz)) {
             SIMPLE_TYPES.add(clazz);
         }
     }
@@ -171,7 +171,7 @@ public final class Types {
      * @return 简单类型集合
      */
     public static Set<Class<?>> getSimpleTypes() {
-        return new HashSet<>(Types.SIMPLE_TYPES);
+        return new HashSet<>(TypeHepler.SIMPLE_TYPES);
     }
 
     /**
@@ -181,7 +181,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean isSimpleType(final Class<?> clazz) {
-        return Objects.nonNull(clazz) && !Types.isObject(clazz) && Types.SIMPLE_TYPES.contains(clazz);
+        return ObjectHelper.nonNull(clazz) && !TypeHepler.isObject(clazz) && TypeHepler.SIMPLE_TYPES.contains(clazz);
     }
 
     /**
@@ -192,7 +192,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean is(final Class<?> source, final Class<?> clazz) {
-        return Objects.nonNull(source) && source.equals(clazz);
+        return ObjectHelper.nonNull(source) && source.equals(clazz);
     }
 
     /**
@@ -202,7 +202,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean isObject(final Class<?> clazz) {
-        return Types.is(Object.class, clazz);
+        return TypeHepler.is(Object.class, clazz);
     }
 
     /**
@@ -212,7 +212,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean isSerializable(final Class<?> clazz) {
-        return Types.is(Serializable.class, clazz);
+        return TypeHepler.is(Serializable.class, clazz);
     }
 
     /**
@@ -222,7 +222,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean isAnnotation(final Class<?> clazz) {
-        return Types.is(Annotation.class, clazz);
+        return TypeHepler.is(Annotation.class, clazz);
     }
 
     /**
@@ -232,7 +232,7 @@ public final class Types {
      * @return boolean
      */
     public static boolean isPrimitiveOrWrapType(final Class<?> clazz) {
-        return Objects.nonNull(clazz) && (Types.PRI_TYPES.contains(clazz) || Types.PRI_WRAPPER_TYPES.contains(clazz));
+        return ObjectHelper.nonNull(clazz) && (TypeHepler.PRI_TYPES.contains(clazz) || TypeHepler.PRI_WRAPPER_TYPES.contains(clazz));
     }
 
     /**
@@ -242,7 +242,7 @@ public final class Types {
      * @return 字符串
      */
     public static String toString(final Object arg) {
-        return Strings.toString(arg);
+        return StringHelper.toString(arg);
     }
 
     /**
@@ -252,7 +252,7 @@ public final class Types {
      * @return {@link Character}
      */
     public static Character toChar(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Character) {
@@ -278,7 +278,7 @@ public final class Types {
      * @return {@link Short}
      */
     public static Short toShort(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Short) {
@@ -290,9 +290,9 @@ public final class Types {
         if (arg instanceof Number) {
             return ((Number) arg).shortValue();
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return 0;
             }
             return Short.parseShort(str);
@@ -307,7 +307,7 @@ public final class Types {
      * @return {@link Integer}
      */
     public static Integer toInt(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Integer) {
@@ -322,12 +322,12 @@ public final class Types {
         if (arg instanceof Boolean) {
             return (Boolean) arg ? 1 : 0;
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return 0;
             }
-            if (Regex.REGEX_INTEGER.matcher(str).matches()) {
+            if (RegexHelper.REGEX_INTEGER.matcher(str).matches()) {
                 return Integer.parseInt(str);
             }
         }
@@ -341,7 +341,7 @@ public final class Types {
      * @return {@link Long}
      */
     public static Long toLong(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Long) {
@@ -353,12 +353,12 @@ public final class Types {
         if (arg instanceof Boolean) {
             return (Boolean) arg ? 1L : 0L;
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return 0L;
             }
-            if (Regex.isInteger(str)) {
+            if (RegexHelper.isInteger(str)) {
                 return Long.parseLong(str);
             }
         }
@@ -372,7 +372,7 @@ public final class Types {
      * @return {@link Float}
      */
     public static Float toFloat(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Float) {
@@ -381,12 +381,12 @@ public final class Types {
         if (arg instanceof Boolean) {
             return (Boolean) arg ? 1.f : 0.f;
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return 0.f;
             }
-            if (Regex.isInteger(str)) {
+            if (RegexHelper.isInteger(str)) {
                 return Float.parseFloat(str);
             }
         }
@@ -400,7 +400,7 @@ public final class Types {
      * @return {@link Double}
      */
     public static Double toDouble(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof Double) {
@@ -409,12 +409,12 @@ public final class Types {
         if (arg instanceof Boolean) {
             return (Boolean) arg ? 1.d : 0.d;
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return 0.d;
             }
-            if (Regex.isInteger(str)) {
+            if (RegexHelper.isInteger(str)) {
                 return Double.parseDouble(str);
             }
         }
@@ -428,7 +428,7 @@ public final class Types {
      * @return {@link Boolean}
      */
     public static Boolean toBoolean(final Object arg) {
-        if (Objects.isNull(arg)) {
+        if (ObjectHelper.isNull(arg)) {
             return null;
         }
         if (arg instanceof BigDecimal) {
@@ -440,15 +440,15 @@ public final class Types {
         if (arg instanceof Boolean) {
             return (Boolean) arg;
         }
-        final String str = Strings.trim(arg);
-        if (Objects.nonNull(str)) {
-            if (Strings.isNull(str)) {
+        final String str = StringHelper.trim(arg);
+        if (ObjectHelper.nonNull(str)) {
+            if (StringHelper.isNull(str)) {
                 return false;
             }
-            if (Strings.isTrue(str)) {
+            if (StringHelper.isTrue(str)) {
                 return Boolean.TRUE;
             }
-            if (Strings.isFalse(str)) {
+            if (StringHelper.isFalse(str)) {
                 return Boolean.FALSE;
             }
         }
@@ -462,7 +462,7 @@ public final class Types {
      * @return short
      */
     public static short shortValue(final BigDecimal decimal) {
-        if (Objects.isNull(decimal)) {
+        if (ObjectHelper.isNull(decimal)) {
             return 0;
         }
         return checkScale(decimal.scale()) ? decimal.shortValue() : decimal.shortValueExact();
@@ -475,7 +475,7 @@ public final class Types {
      * @return int
      */
     public static int intValue(final BigDecimal decimal) {
-        if (Objects.isNull(decimal)) {
+        if (ObjectHelper.isNull(decimal)) {
             return 0;
         }
         return checkScale(decimal.scale()) ? decimal.intValue() : decimal.intValueExact();
@@ -488,7 +488,7 @@ public final class Types {
      * @return long
      */
     public static long longValue(final BigDecimal decimal) {
-        if (Objects.isNull(decimal)) {
+        if (ObjectHelper.isNull(decimal)) {
             return 0;
         }
         return checkScale(decimal.scale()) ? decimal.longValue() : decimal.longValueExact();
@@ -496,15 +496,15 @@ public final class Types {
 
     private static String trim(final Object arg) {
         String str = toString(arg);
-        if (Strings.isWhitespace(str) || Strings.DEFAULT_STR_NULL.equalsIgnoreCase(str)) {
+        if (StringHelper.isWhitespace(str) || StringHelper.DEFAULT_STR_NULL.equalsIgnoreCase(str)) {
             return null;
         }
-        if (str.contains(Strings.DEFAULT_STR_COMMA)) {
-            str = str.replaceAll(Strings.DEFAULT_STR_COMMA, Strings.DEFAULT_STR_EMPTY);
+        if (str.contains(StringHelper.DEFAULT_STR_COMMA)) {
+            str = str.replaceAll(StringHelper.DEFAULT_STR_COMMA, StringHelper.DEFAULT_STR_EMPTY);
         }
-        final Matcher matcher = Regex.REGEX_NUMBER_WITH_TRAILING_ZEROS.matcher(str);
+        final Matcher matcher = RegexHelper.REGEX_NUMBER_WITH_TRAILING_ZEROS.matcher(str);
         if (matcher.find()) {
-            str = matcher.replaceAll(Strings.DEFAULT_STR_EMPTY);
+            str = matcher.replaceAll(StringHelper.DEFAULT_STR_EMPTY);
         }
         return str;
     }

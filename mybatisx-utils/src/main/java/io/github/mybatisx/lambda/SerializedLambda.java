@@ -15,7 +15,7 @@
  */
 package io.github.mybatisx.lambda;
 
-import io.github.mybatisx.util.SerializationUtils;
+import io.github.mybatisx.util.SerializationHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class SerializedLambda implements Serializable {
      * @return {@link SerializedLambda}
      */
     public static SerializedLambda resolve(final Serializable serializable) {
-        final byte[] bytes = SerializationUtils.serialize(serializable);
+        final byte[] bytes = SerializationHelper.serialize(serializable);
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(Objects.requireNonNull(bytes))) {
             @Override
             protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {

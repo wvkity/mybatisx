@@ -22,9 +22,9 @@ package io.github.mybatisx.lang;
  * @created 2021/12/19
  * @since 1.0.0
  */
-public final class Maths {
+public final class MathHelper {
 
-    private Maths() {
+    private MathHelper() {
     }
 
     /**

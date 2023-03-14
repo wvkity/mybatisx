@@ -16,22 +16,22 @@ import java.util.function.Supplier;
  * @created 2022/11/20
  * @since 1.0.0
  */
-public final class Optional<T> {
+public final class OptionalHelper<T> {
 
     /**
      * 空值实例
      */
-    private static final Optional<?> EMPTY = new Optional<>();
+    private static final OptionalHelper<?> EMPTY = new OptionalHelper<>();
     /**
      * 值
      */
     private final T value;
 
-    private Optional() {
+    private OptionalHelper() {
         this.value = null;
     }
 
-    private Optional(T value) {
+    private OptionalHelper(T value) {
         this.value = Objects.requireNonNull(value, "The given value cannot be null");
     }
 
@@ -69,9 +69,9 @@ public final class Optional<T> {
      * 如果值不为空，则消费
      *
      * @param action {@link Consumer}
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public Optional<T> ifPresentPeek(final Consumer<T> action) {
+    public OptionalHelper<T> ifPresentPeek(final Consumer<T> action) {
         if (this.value != null) {
             action.accept(this.value);
         }
@@ -94,9 +94,9 @@ public final class Optional<T> {
      *
      * @param mapper {@link Function}
      * @param <U>    返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> ifPresentThen(final Function<? super T, ? extends U> mapper) {
+    public <U> OptionalHelper<U> ifPresentThen(final Function<? super T, ? extends U> mapper) {
         return this.map(mapper);
     }
 
@@ -127,14 +127,14 @@ public final class Optional<T> {
      *
      * @param mapper {@link Function}
      * @param <U>    返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
     @SuppressWarnings({"unchecked"})
-    public <U> Optional<U> ifAbsentThen(final Function<? super T, ? extends U> mapper) {
+    public <U> OptionalHelper<U> ifAbsentThen(final Function<? super T, ? extends U> mapper) {
         if (this.value == null) {
-            return Optional.ofNullable(mapper.apply(null));
+            return OptionalHelper.ofNullable(mapper.apply(null));
         } else {
-            return (Optional<U>) this;
+            return (OptionalHelper<U>) this;
         }
     }
 
@@ -143,14 +143,14 @@ public final class Optional<T> {
      *
      * @param supplier 其他值供给函数
      * @param <U>      返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
     @SuppressWarnings({"unchecked"})
-    public <U> Optional<U> ifAbsentThen(final Supplier<U> supplier) {
+    public <U> OptionalHelper<U> ifAbsentThen(final Supplier<U> supplier) {
         if (this.value == null) {
-            return Optional.ofNullable(supplier.get());
+            return OptionalHelper.ofNullable(supplier.get());
         } else {
-            return (Optional<U>) this;
+            return (OptionalHelper<U>) this;
         }
     }
 
@@ -160,13 +160,13 @@ public final class Optional<T> {
      * @param mapper {@link Function}
      * @param other  其他值
      * @param <U>    返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> ifAbsentOrElse(final Function<? super T, ? extends U> mapper, final U other) {
+    public <U> OptionalHelper<U> ifAbsentOrElse(final Function<? super T, ? extends U> mapper, final U other) {
         if (this.value == null) {
-            return Optional.ofNullable(mapper.apply(null));
+            return OptionalHelper.ofNullable(mapper.apply(null));
         } else {
-            return Optional.ofNullable(other);
+            return OptionalHelper.ofNullable(other);
         }
     }
 
@@ -176,13 +176,13 @@ public final class Optional<T> {
      * @param mapper {@link Function}
      * @param other  其他值供给函数
      * @param <U>    返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> ifAbsentOrElse(final Function<? super T, ? extends U> mapper, final Supplier<U> other) {
+    public <U> OptionalHelper<U> ifAbsentOrElse(final Function<? super T, ? extends U> mapper, final Supplier<U> other) {
         if (this.value == null) {
-            return Optional.ofNullable(mapper.apply(null));
+            return OptionalHelper.ofNullable(mapper.apply(null));
         } else {
-            return Optional.ofNullable(other.get());
+            return OptionalHelper.ofNullable(other.get());
         }
     }
 
@@ -192,13 +192,13 @@ public final class Optional<T> {
      * @param absence  {@link Function}
      * @param presence {@link Function}
      * @param <U>      返回值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> ifAbsentOrElse(final Function<? super T, ? extends U> absence, final Function<? super T, ? extends U> presence) {
+    public <U> OptionalHelper<U> ifAbsentOrElse(final Function<? super T, ? extends U> absence, final Function<? super T, ? extends U> presence) {
         if (this.value == null) {
-            return Optional.ofNullable(absence.apply(null));
+            return OptionalHelper.ofNullable(absence.apply(null));
         } else {
-            return Optional.ofNullable(presence.apply(this.value));
+            return OptionalHelper.ofNullable(presence.apply(this.value));
         }
     }
 
@@ -206,11 +206,11 @@ public final class Optional<T> {
      * 如果值不为空则消费并返回，否则返回空值
      *
      * @param action {@link Consumer}
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public Optional<T> either(final Consumer<? super T> action) {
+    public OptionalHelper<T> either(final Consumer<? super T> action) {
         if (this.value == null) {
-            return Optional.empty();
+            return OptionalHelper.empty();
         } else {
             action.accept(this.value);
             return this;
@@ -235,14 +235,14 @@ public final class Optional<T> {
      * 过滤
      *
      * @param predicate {@link Predicate}
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public Optional<T> filter(final Predicate<? super T> predicate) {
+    public OptionalHelper<T> filter(final Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate);
         if (this.isEmpty()) {
             return this;
         } else {
-            return predicate.test(this.value) ? this : Optional.empty();
+            return predicate.test(this.value) ? this : OptionalHelper.empty();
         }
     }
 
@@ -251,14 +251,14 @@ public final class Optional<T> {
      *
      * @param mapper {@link Function}
      * @param <U>    返回可选值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> map(final Function<? super T, ? extends U> mapper) {
+    public <U> OptionalHelper<U> map(final Function<? super T, ? extends U> mapper) {
         Objects.requireNonNull(mapper);
         if (this.isEmpty()) {
-            return Optional.empty();
+            return OptionalHelper.empty();
         } else {
-            return Optional.ofNullable(mapper.apply(this.value));
+            return OptionalHelper.ofNullable(mapper.apply(this.value));
         }
     }
 
@@ -267,12 +267,12 @@ public final class Optional<T> {
      *
      * @param mapper {@link Function}
      * @param <U>    可选值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public <U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper) {
+    public <U> OptionalHelper<U> flatMap(Function<? super T, OptionalHelper<U>> mapper) {
         Objects.requireNonNull(mapper);
         if (this.isEmpty()) {
-            return Optional.empty();
+            return OptionalHelper.empty();
         } else {
             return Objects.requireNonNull(mapper.apply(this.value));
         }
@@ -282,14 +282,14 @@ public final class Optional<T> {
      * 如果当前值不为空则返回当前对象，否则根据供给函数获取返回值
      *
      * @param other 供给函数
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public Optional<T> or(final Supplier<? extends Optional<? extends T>> other) {
+    public OptionalHelper<T> or(final Supplier<? extends OptionalHelper<? extends T>> other) {
         Objects.requireNonNull(other);
         if (isPresent()) {
             return this;
         } else {
-            @SuppressWarnings({"unchecked"}) final Optional<T> optional = (Optional<T>) other.get();
+            @SuppressWarnings({"unchecked"}) final OptionalHelper<T> optional = (OptionalHelper<T>) other.get();
             return optional;
         }
     }
@@ -343,12 +343,12 @@ public final class Optional<T> {
     }
 
     /**
-     * {@link Optional}转{@link java.util.Optional}
+     * {@link OptionalHelper}转{@link java.util.Optional}
      *
      * @return {@link java.util.Optional}
      */
     public java.util.Optional<T> to() {
-        return Optional.toOptional(this);
+        return OptionalHelper.toOptional(this);
     }
 
     @Override
@@ -357,11 +357,11 @@ public final class Optional<T> {
             return true;
         }
 
-        if (!(obj instanceof Optional)) {
+        if (!(obj instanceof OptionalHelper)) {
             return false;
         }
 
-        Optional<?> other = (Optional<?>) obj;
+        OptionalHelper<?> other = (OptionalHelper<?>) obj;
         return Objects.equals(value, other.value);
     }
 
@@ -383,10 +383,10 @@ public final class Optional<T> {
      * 空值可选实例
      *
      * @param <T> 值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public static <T> Optional<T> empty() {
-        @SuppressWarnings({"unchecked"}) final Optional<T> optional = (Optional<T>) Optional.EMPTY;
+    public static <T> OptionalHelper<T> empty() {
+        @SuppressWarnings({"unchecked"}) final OptionalHelper<T> optional = (OptionalHelper<T>) OptionalHelper.EMPTY;
         return optional;
     }
 
@@ -395,10 +395,10 @@ public final class Optional<T> {
      *
      * @param value 值
      * @param <T>   值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public static <T> Optional<T> of(final T value) {
-        return new Optional<>(value);
+    public static <T> OptionalHelper<T> of(final T value) {
+        return new OptionalHelper<>(value);
     }
 
     /**
@@ -406,10 +406,10 @@ public final class Optional<T> {
      *
      * @param other 供给函数
      * @param <T>   值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public static <T> Optional<T> ofFrom(final Supplier<T> other) {
-        return Optional.of(other.get());
+    public static <T> OptionalHelper<T> ofFrom(final Supplier<T> other) {
+        return OptionalHelper.of(other.get());
     }
 
     /**
@@ -417,10 +417,10 @@ public final class Optional<T> {
      *
      * @param value 值
      * @param <T>   值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public static <T> Optional<T> ofNullable(final T value) {
-        return value == null ? Optional.empty() : of(value);
+    public static <T> OptionalHelper<T> ofNullable(final T value) {
+        return value == null ? OptionalHelper.empty() : of(value);
     }
 
     /**
@@ -428,20 +428,20 @@ public final class Optional<T> {
      *
      * @param other 供给函数
      * @param <T>   值类型
-     * @return {@link Optional}
+     * @return {@link OptionalHelper}
      */
-    public static <T> Optional<T> ofNullableFrom(final Supplier<T> other) {
-        return Optional.ofNullable(other.get());
+    public static <T> OptionalHelper<T> ofNullableFrom(final Supplier<T> other) {
+        return OptionalHelper.ofNullable(other.get());
     }
 
     /**
-     * {@link Optional}转{@link java.util.Optional}
+     * {@link OptionalHelper}转{@link java.util.Optional}
      *
      * @param source 源对象
      * @param <T>    数据类型
      * @return {@link java.util.Optional}
      */
-    public static <T> java.util.Optional<T> toOptional(final Optional<T> source) {
+    public static <T> java.util.Optional<T> toOptional(final OptionalHelper<T> source) {
         return source.map(java.util.Optional::of).orElseGet(java.util.Optional::empty);
     }
 

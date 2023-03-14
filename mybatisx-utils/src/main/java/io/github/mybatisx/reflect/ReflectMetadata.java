@@ -16,8 +16,8 @@
 package io.github.mybatisx.reflect;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.mybatisx.lang.Objects;
-import io.github.mybatisx.lang.Types;
+import io.github.mybatisx.lang.ObjectHelper;
+import io.github.mybatisx.lang.TypeHepler;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -64,9 +64,9 @@ public class ReflectMetadata implements Metadata {
     @Override
     @SuppressWarnings({"unchecked"})
     public <T> T getValue(String property, Class<T> clazz, T defaultValue) {
-        if (Objects.nonNull(clazz) && this.data.containsKey(property)) {
+        if (ObjectHelper.nonNull(clazz) && this.data.containsKey(property)) {
             final Object value = this.data.get(property);
-            if (Objects.nonNull(value) && Types.is(clazz, value.getClass())) {
+            if (ObjectHelper.nonNull(value) && TypeHepler.is(clazz, value.getClass())) {
                 return (T) value;
             }
         }

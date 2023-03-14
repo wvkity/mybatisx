@@ -26,12 +26,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * @created 2021/12/19
  * @since 1.0.0
  */
-public class SystemClock {
+public class SystemClockHelper {
 
     private final long period;
     private final AtomicLong nowRef;
 
-    public SystemClock(long period) {
+    public SystemClockHelper(long period) {
         this.period = period;
         this.nowRef = new AtomicLong(System.currentTimeMillis());
         this.start();
@@ -52,10 +52,10 @@ public class SystemClock {
     }
 
     private static final class SingletonHolder {
-        private static final SystemClock INSTANCE = new SystemClock(1L);
+        private static final SystemClockHelper INSTANCE = new SystemClockHelper(1L);
     }
 
-    public static SystemClock getInstance() {
+    public static SystemClockHelper getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
