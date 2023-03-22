@@ -1,5 +1,8 @@
 package io.github.mybatisx.convert.converter;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * {@link Integer}类型转换器
  *
@@ -7,6 +10,7 @@ package io.github.mybatisx.convert.converter;
  * @created 2023/3/22
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IntegerConverter implements BasicTypeConverter<Integer> {
 
     @Override
@@ -17,5 +21,13 @@ public class IntegerConverter implements BasicTypeConverter<Integer> {
     @Override
     public Integer convert(Object source) {
         return this.convertToInteger(source);
+    }
+
+    private static final class IntegerConverterHolder {
+        private static final IntegerConverter INSTANCE = new IntegerConverter();
+    }
+
+    public static IntegerConverter getInstance() {
+        return IntegerConverterHolder.INSTANCE;
     }
 }

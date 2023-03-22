@@ -1,10 +1,12 @@
 package io.github.mybatisx.convert.converter;
 
 import io.github.mybatisx.lang.StringHelper;
+import io.github.mybatisx.util.ArrayHelper;
 
 /**
  * 基础类型转换器
  *
+ * @param <T> 目标对象类型
  * @author wvkity
  * @created 2023/3/22
  * @since 1.0.0
@@ -26,7 +28,7 @@ public interface BasicTypeConverter<T> extends ObjectConverter<T> {
      * @return boolean
      */
     default boolean isStringType(final Object source) {
-        return this.isTargetType(String.class, source);
+        return this.isTargetType(CharSequence.class, source);
     }
 
     /**
@@ -73,7 +75,35 @@ public interface BasicTypeConverter<T> extends ObjectConverter<T> {
     default String convertToString(final Object source) {
         if (source != null) {
             if (this.isTargetType(source)) {
-                return (String) source;
+                return source.toString();
+            }
+            final Class<?> type = source.getClass();
+            if (type.isArray()) {
+                if (type == byte[].class) {
+                    return ArrayHelper.toString((byte[]) source);
+                }
+                if (type == char[].class) {
+                    return ArrayHelper.toString((char[]) source);
+                }
+                if (type == boolean[].class) {
+                    return ArrayHelper.toString((boolean[]) source);
+                }
+                if (type == short[].class) {
+                    return ArrayHelper.toString((short[]) source);
+                }
+                if (type == int[].class) {
+                    return ArrayHelper.toString((int[]) source);
+                }
+                if (type == long[].class) {
+                    return ArrayHelper.toString((long[]) source);
+                }
+                if (type == float[].class) {
+                    return ArrayHelper.toString((float[]) source);
+                }
+                if (type == double[].class) {
+                    return ArrayHelper.toString((double[]) source);
+                }
+                return ArrayHelper.toString((Object[]) source);
             }
             return source.toString();
         }

@@ -1,5 +1,8 @@
 package io.github.mybatisx.convert.converter;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * {@link Long}类型转换器
  *
@@ -7,6 +10,7 @@ package io.github.mybatisx.convert.converter;
  * @created 2023/3/22
  * @since 1.0.0
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LongConverter implements BasicTypeConverter<Long> {
 
     @Override
@@ -17,5 +21,13 @@ public class LongConverter implements BasicTypeConverter<Long> {
     @Override
     public Long convert(Object source) {
         return this.convertToLong(source);
+    }
+
+    private static final class LongConverterHolder {
+        private static final LongConverter INSTANCE = new LongConverter();
+    }
+
+    public static LongConverter getInstance() {
+        return LongConverterHolder.INSTANCE;
     }
 }
