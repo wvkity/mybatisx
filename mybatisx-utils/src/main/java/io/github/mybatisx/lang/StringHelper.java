@@ -584,6 +584,9 @@ public final class StringHelper {
         if (RegexHelper.isInteger(arg)) {
             return Integer.valueOf(arg.replaceAll("_", ""));
         }
+        if (RegexHelper.isDecimal(arg)) {
+            return Double.valueOf(arg.replaceAll("_", "")).intValue();
+        }
         return defaultValue;
     }
 
@@ -607,6 +610,9 @@ public final class StringHelper {
     public static Long parseLong(final String arg, final Long defaultValue) {
         if (RegexHelper.isInteger(arg)) {
             return Long.valueOf(arg.replaceAll("_", ""));
+        }
+        if (RegexHelper.isDecimal(arg)) {
+            return Double.valueOf(arg.replaceAll("_", "")).longValue();
         }
         return defaultValue;
     }

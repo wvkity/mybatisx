@@ -31,10 +31,12 @@ public final class RegexHelper {
 
     public static final Pattern REGEX_NUMBER_WITH_TRAILING_ZEROS = Pattern.compile("\\.0*$");
     public static final Pattern REGEX_INTEGER = Pattern.compile("^([\\-+])?(0|[1-9]((_)?\\d)*)$");
+    public static final Pattern REGEX_DECIMAL = Pattern.compile("^([\\-+])?(0|[1-9]((_)?\\d)*)(\\.\\d+)$");
     public static final Pattern REGEX_POSITIVE_INTEGER = Pattern.compile("^\\+?(0|[1-9]((_)?\\d)*)$");
 
     /**
      * 检查是否为整数字符串
+     *
      * @param arg 字符串
      * @return boolean
      */
@@ -44,11 +46,22 @@ public final class RegexHelper {
 
     /**
      * 检查是否为正整数字符串
+     *
      * @param arg 字符串
      * @return boolean
      */
     public static boolean isPositiveInteger(final String arg) {
         return REGEX_POSITIVE_INTEGER.matcher(arg).matches();
+    }
+
+    /**
+     * 检查是否为小数字符串
+     *
+     * @param arg 字符串
+     * @return boolean
+     */
+    public static boolean isDecimal(final String arg) {
+        return REGEX_DECIMAL.matcher(arg).matches();
     }
 
 }
