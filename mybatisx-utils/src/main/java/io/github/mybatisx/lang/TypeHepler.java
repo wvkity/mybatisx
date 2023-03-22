@@ -496,15 +496,15 @@ public final class TypeHepler {
 
     private static String trim(final Object arg) {
         String str = toString(arg);
-        if (StringHelper.isWhitespace(str) || StringHelper.DEFAULT_STR_NULL.equalsIgnoreCase(str)) {
+        if (StringHelper.isWhitespace(str) || StringHelper.NULL.equalsIgnoreCase(str)) {
             return null;
         }
-        if (str.contains(StringHelper.DEFAULT_STR_COMMA)) {
-            str = str.replaceAll(StringHelper.DEFAULT_STR_COMMA, StringHelper.DEFAULT_STR_EMPTY);
+        if (str.contains(StringHelper.COMMA)) {
+            str = str.replaceAll(StringHelper.COMMA, StringHelper.EMPTY);
         }
         final Matcher matcher = RegexHelper.REGEX_NUMBER_WITH_TRAILING_ZEROS.matcher(str);
         if (matcher.find()) {
-            str = matcher.replaceAll(StringHelper.DEFAULT_STR_EMPTY);
+            str = matcher.replaceAll(StringHelper.EMPTY);
         }
         return str;
     }

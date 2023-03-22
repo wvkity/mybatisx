@@ -17,6 +17,7 @@ package io.github.mybatisx.lang;
 
 import io.github.mybatisx.function.Absence;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -32,17 +33,21 @@ public final class StringHelper {
     private StringHelper() {
     }
 
-    public static final String DEFAULT_STR_NULL = "null";
-    public static final String DEFAULT_STR_EMPTY = "";
-    public static final String DEFAULT_STR_ZERO = "0";
-    public static final String DEFAULT_STR_ONE = "1";
-    public static final String DEFAULT_STR_FALSE = "false";
-    public static final String DEFAULT_STR_F = "F";
-    public static final String DEFAULT_STR_N = "N";
-    public static final String DEFAULT_STR_TRUE = "true";
-    public static final String DEFAULT_STR_Y = "Y";
-    public static final String DEFAULT_STR_T = "T";
-    public static final String DEFAULT_STR_COMMA = ",";
+    public static final String NULL = "null";
+    public static final String EMPTY = "";
+    public static final String ZERO = "0";
+    public static final String ONE = "1";
+    public static final String TRUE = "true";
+    public static final String T = "t";
+    public static final String YES = "yes";
+    public static final String Y = "y";
+    public static final String ON = "on";
+    public static final String FALSE = "false";
+    public static final String F = "f";
+    public static final String NO = "no";
+    public static final String N = "n";
+    public static final String OFF = "off";
+    public static final String COMMA = ",";
     public static final char CASE_MASK = 0x20;
 
     /**
@@ -116,7 +121,7 @@ public final class StringHelper {
      * @return boolean
      */
     public static boolean isNull(final CharSequence arg) {
-        return isEmpty(arg) || DEFAULT_STR_NULL.equalsIgnoreCase(arg.toString());
+        return isEmpty(arg) || NULL.equalsIgnoreCase(arg.toString());
     }
 
     /**
@@ -198,8 +203,8 @@ public final class StringHelper {
      * @return boolean
      */
     public static boolean isTrue(final String arg) {
-        return equalsIC(DEFAULT_STR_TRUE, arg) || equalsIC(DEFAULT_STR_Y, arg) || equalsIC(DEFAULT_STR_T, arg)
-                || equals(DEFAULT_STR_ONE, arg);
+        return equalsIC(TRUE, arg) || equalsIC(Y, arg) || equalsIC(T, arg)
+                || equals(ONE, arg);
     }
 
     /**
@@ -209,8 +214,8 @@ public final class StringHelper {
      * @return boolean
      */
     public static boolean isFalse(final String arg) {
-        return equalsIC(DEFAULT_STR_FALSE, arg) || equalsIC(DEFAULT_STR_N, arg) || equalsIC(DEFAULT_STR_F, arg)
-                || equals(DEFAULT_STR_ZERO, arg);
+        return equalsIC(FALSE, arg) || equalsIC(N, arg) || equalsIC(F, arg)
+                || equals(ZERO, arg);
     }
 
     /**
@@ -371,54 +376,6 @@ public final class StringHelper {
     }
 
     /**
-     * 字符串转整数
-     *
-     * @param arg 字符串
-     * @return 整数
-     */
-    public static int parseInt(final String arg) {
-        return parseInt(arg, 0);
-    }
-
-    /**
-     * 字符串转整数
-     *
-     * @param arg          字符串
-     * @param defaultValue 默认值
-     * @return 整数
-     */
-    public static int parseInt(final String arg, final int defaultValue) {
-        if (StringHelper.isNotEmpty(arg) && RegexHelper.isInteger(arg)) {
-            return Integer.parseInt(arg);
-        }
-        return defaultValue;
-    }
-
-    /**
-     * 字符串转正整数
-     *
-     * @param arg 字符串
-     * @return 整数
-     */
-    public static int parsePositiveInt(final String arg) {
-        return parsePositiveInt(arg, 0);
-    }
-
-    /**
-     * 字符串转正整数
-     *
-     * @param arg          字符串
-     * @param defaultValue 默认值
-     * @return 整数
-     */
-    public static int parsePositiveInt(final String arg, final int defaultValue) {
-        if (StringHelper.isNotEmpty(arg) && RegexHelper.isPositiveInteger(arg)) {
-            return Integer.parseInt(arg);
-        }
-        return defaultValue;
-    }
-
-    /**
      * 如果给定的值为null则消费
      *
      * @param v        指定字符串值
@@ -516,6 +473,142 @@ public final class StringHelper {
         if (isNotWhitespace(v)) {
             consumer.accept(v);
         }
+    }
+
+    /**
+     * 字符串转整数
+     *
+     * @param arg 字符串
+     * @return 整数
+     */
+    public static int parseInt(final String arg) {
+        return parseInt(arg, 0);
+    }
+
+    /**
+     * 字符串转整数
+     *
+     * @param arg          字符串
+     * @param defaultValue 默认值
+     * @return 整数
+     */
+    public static int parseInt(final String arg, final int defaultValue) {
+        if (RegexHelper.isInteger(arg)) {
+            return Integer.parseInt(arg.replaceAll("_", ""));
+        }
+        return defaultValue;
+    }
+
+    /**
+     * 字符串转正整数
+     *
+     * @param arg 字符串
+     * @return 整数
+     */
+    public static int parsePositiveInt(final String arg) {
+        return parsePositiveInt(arg, 0);
+    }
+
+    /**
+     * 字符串转正整数
+     *
+     * @param arg          字符串
+     * @param defaultValue 默认值
+     * @return 整数
+     */
+    public static int parsePositiveInt(final String arg, final int defaultValue) {
+        if (StringHelper.isNotEmpty(arg) && RegexHelper.isPositiveInteger(arg)) {
+            return Integer.parseInt(arg.replaceAll("_", ""));
+        }
+        return defaultValue;
+    }
+
+    /**
+     * {@link String}转{@link Boolean}
+     *
+     * @param arg 字符串值
+     * @return {@link Boolean}
+     */
+    public static Boolean parseBoolean(final String arg) {
+        return StringHelper.parseBoolean(arg, null);
+    }
+
+    /**
+     * {@link String}转{@link Boolean}
+     *
+     * @param arg          字符串值
+     * @param defaultValue 默认值
+     * @return {@link Boolean}
+     */
+    public static Boolean parseBoolean(final String arg, final Boolean defaultValue) {
+        if (StringHelper.isNotWhitespace(arg)) {
+            final String _value = arg.toLowerCase(Locale.ENGLISH);
+            if (_value.equals(ONE) ||
+                    _value.equals(ON) ||
+                    _value.equals(TRUE) ||
+                    _value.equals(T) ||
+                    _value.equals(YES) ||
+                    _value.equals(Y)) {
+                return Boolean.TRUE;
+            }
+            if (_value.equals(ZERO) ||
+                    _value.equals(OFF) ||
+                    _value.equals(FALSE) ||
+                    _value.equals(F) ||
+                    _value.equals(NO) ||
+                    _value.equals(N)) {
+                return Boolean.FALSE;
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * {@link String}转{@link Integer}
+     *
+     * @param arg 字符串数字
+     * @return {@link Integer}
+     */
+    public static Integer parseInteger(final String arg) {
+        return StringHelper.parseInteger(arg, null);
+    }
+
+    /**
+     * {@link String}转{@link Integer}
+     *
+     * @param arg          字符串数字
+     * @param defaultValue 默认值
+     * @return {@link Integer}
+     */
+    public static Integer parseInteger(final String arg, final Integer defaultValue) {
+        if (RegexHelper.isInteger(arg)) {
+            return Integer.valueOf(arg.replaceAll("_", ""));
+        }
+        return defaultValue;
+    }
+
+    /**
+     * {@link String}转{@link Long}
+     *
+     * @param arg 字符串数字
+     * @return {@link Long}
+     */
+    public static Long parseLong(final String arg) {
+        return StringHelper.parseLong(arg, null);
+    }
+
+    /**
+     * {@link String}转{@link Long}
+     *
+     * @param arg          字符串数字
+     * @param defaultValue 默认值
+     * @return {@link Long}
+     */
+    public static Long parseLong(final String arg, final Long defaultValue) {
+        if (RegexHelper.isInteger(arg)) {
+            return Long.valueOf(arg.replaceAll("_", ""));
+        }
+        return defaultValue;
     }
 
 }

@@ -30,8 +30,8 @@ public final class RegexHelper {
     }
 
     public static final Pattern REGEX_NUMBER_WITH_TRAILING_ZEROS = Pattern.compile("\\.0*$");
-    public static final Pattern REGEX_INTEGER = Pattern.compile("^([\\-+])?(0|[1-9]\\d*)$");
-    public static final Pattern REGEX_POSITIVE_INTEGER = Pattern.compile("^\\+?(0|[1-9]\\d*)$");
+    public static final Pattern REGEX_INTEGER = Pattern.compile("^([\\-+])?(0|[1-9]((_)?\\d)*)$");
+    public static final Pattern REGEX_POSITIVE_INTEGER = Pattern.compile("^\\+?(0|[1-9]((_)?\\d)*)$");
 
     /**
      * 检查是否为整数字符串
