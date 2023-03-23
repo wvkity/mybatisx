@@ -4,6 +4,7 @@ import io.github.mybatisx.function.Absence;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -86,6 +87,19 @@ public final class OptionalHelper<T> {
     public void ifPresent(final Consumer<? super T> action) {
         if (this.value != null) {
             action.accept(this.value);
+        }
+    }
+
+    /**
+     * 如果值不为空，则消费
+     *
+     * @param mapper {@link Function}
+     * @param action {@link Consumer}
+     * @param <U>    值类型
+     */
+    public <U> void ifPresent(final Function<? super T, ? extends U> mapper, final Consumer<? super U> action) {
+        if (this.value != null && action != null) {
+            action.accept(mapper.apply(this.value));
         }
     }
 
@@ -408,7 +422,7 @@ public final class OptionalHelper<T> {
      * @param <T>   值类型
      * @return {@link OptionalHelper}
      */
-    public static <T> OptionalHelper<T> ofFrom(final Supplier<T> other) {
+    public static <T> OptionalHelper<T> from(final Supplier<T> other) {
         return OptionalHelper.of(other.get());
     }
 
@@ -430,19 +444,19 @@ public final class OptionalHelper<T> {
      * @param <T>   值类型
      * @return {@link OptionalHelper}
      */
-    public static <T> OptionalHelper<T> ofNullableFrom(final Supplier<T> other) {
+    public static <T> OptionalHelper<T> nullableFrom(final Supplier<T> other) {
         return OptionalHelper.ofNullable(other.get());
     }
 
     /**
-     * {@link OptionalHelper}转{@link java.util.Optional}
+     * {@link OptionalHelper}转{@link Optional}
      *
      * @param source 源对象
      * @param <T>    数据类型
-     * @return {@link java.util.Optional}
+     * @return {@link Optional}
      */
-    public static <T> java.util.Optional<T> toOptional(final OptionalHelper<T> source) {
-        return source.map(java.util.Optional::of).orElseGet(java.util.Optional::empty);
+    public static <T> Optional<T> toOptional(final OptionalHelper<T> source) {
+        return source.map(Optional::of).orElseGet(Optional::empty);
     }
 
 }
