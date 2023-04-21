@@ -4,14 +4,14 @@ import io.github.mybatisx.lang.StringHelper;
 import io.github.mybatisx.util.ArrayHelper;
 
 /**
- * 基础类型转换器
+ * 通用类型转换器
  *
  * @param <T> 目标对象类型
  * @author wvkity
  * @created 2023/3/22
  * @since 1.0.0
  */
-public interface BasicTypeConverter<T> extends ObjectConverter<T> {
+public interface GenericConverter<T> extends ObjectConverter<T> {
 
     /**
      * 检查值类型是否为目标类型

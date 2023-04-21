@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StringConverter implements BasicTypeConverter<String> {
+public class StringConverter implements GenericConverter<String> {
 
     @Override
     public boolean isTargetType(Object source) {
@@ -32,6 +32,11 @@ public class StringConverter implements BasicTypeConverter<String> {
         private static final StringConverter INSTANCE = new StringConverter();
     }
 
+    /**
+     * 获取{@link StringConverter}对象
+     *
+     * @return {@link StringConverter}对象
+     */
     public static StringConverter getInstance() {
         return StringConvertHolder.INSTANCE;
     }

@@ -1,5 +1,7 @@
 package io.github.mybatisx.convert.converter;
 
+import java.util.function.Function;
+
 /**
  * 转换器
  *
@@ -10,7 +12,7 @@ package io.github.mybatisx.convert.converter;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface Converter<S, T> {
+public interface Converter<S, T> extends Function<S, T> {
 
     /**
      * 将类型为{@code S}的源对象转换成目标类型{@code T}

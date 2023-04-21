@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IntegerConverter implements BasicTypeConverter<Integer> {
+public class IntegerConverter implements GenericConverter<Integer> {
 
     @Override
     public boolean isTargetType(Object source) {
@@ -27,6 +27,11 @@ public class IntegerConverter implements BasicTypeConverter<Integer> {
         private static final IntegerConverter INSTANCE = new IntegerConverter();
     }
 
+    /**
+     * 获取{@link IntegerConverter}对象
+     *
+     * @return {@link IntegerConverter}对象
+     */
     public static IntegerConverter getInstance() {
         return IntegerConverterHolder.INSTANCE;
     }

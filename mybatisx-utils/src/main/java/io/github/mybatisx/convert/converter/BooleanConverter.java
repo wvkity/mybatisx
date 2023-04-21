@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BooleanConverter implements BasicTypeConverter<Boolean> {
+public class BooleanConverter implements GenericConverter<Boolean> {
     @Override
     public boolean isTargetType(Object source) {
         return this.isBooleanType(source);
@@ -26,6 +26,11 @@ public class BooleanConverter implements BasicTypeConverter<Boolean> {
         private static final BooleanConverter INSTANCE = new BooleanConverter();
     }
 
+    /**
+     * 获取{@link BooleanConverter}对象
+     *
+     * @return {@link BooleanConverter}对象
+     */
     public static BooleanConverter getInstance() {
         return BooleanConverterHolder.INSTANCE;
     }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * @since 1.0.0
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LongConverter implements BasicTypeConverter<Long> {
+public class LongConverter implements GenericConverter<Long> {
 
     @Override
     public boolean isTargetType(Object source) {
@@ -27,6 +27,11 @@ public class LongConverter implements BasicTypeConverter<Long> {
         private static final LongConverter INSTANCE = new LongConverter();
     }
 
+    /**
+     * 获取{@link LongConverter}对象
+     *
+     * @return {@link LongConverter}对象
+     */
     public static LongConverter getInstance() {
         return LongConverterHolder.INSTANCE;
     }
