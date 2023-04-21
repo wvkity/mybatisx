@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  * @created 2023/3/11
  * @since 1.0.0
  */
-public interface ObjectBuilder<T, C extends ObjectBuilder<T, C>> extends Builder<T, C> {
+public interface ObjectBuilder<T, C extends ObjectBuilder<T, C>> extends Builder<T> {
 
     /**
      * 设置值

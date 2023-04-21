@@ -19,12 +19,11 @@ package io.github.mybatisx.builder;
  * 构建器
  *
  * @param <T> 目标对象类型
- * @param <C> 子类
  * @author wvkity
  * @created 2021/12/16
  * @since 1.0.0
  */
-public interface Builder<T, C extends Builder<T, C>> {
+public interface Builder<T> {
 
     /**
      * 构建对象
