@@ -25,4 +25,15 @@ public interface JSONConvert<K, V, T> extends Converter<Map<K, V>, T> {
     default boolean containsKey(final Map<K, V> source, final K key) {
         return source.containsKey(key);
     }
+
+    /**
+     * 获取值
+     *
+     * @param source 源对象
+     * @param key    键
+     * @return 值
+     */
+    default V get(final Map<K, V> source, final K key) {
+        return source.get(key);
+    }
 }
