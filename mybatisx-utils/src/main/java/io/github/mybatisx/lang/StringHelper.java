@@ -49,6 +49,8 @@ public final class StringHelper {
     public static final String OFF = "off";
     public static final String COMMA = ",";
     public static final char CASE_MASK = 0x20;
+    public static final String JSON_OBJECT_MASK = "^\\{(.*)}$";
+    public static final String JSON_ARRAY_MASK = "^\\[(.*)]$";
 
     /**
      * 对象转字符串
@@ -133,6 +135,32 @@ public final class StringHelper {
      */
     public static String ifNull(final String value, final String defaultValue) {
         return StringHelper.isWhitespace(value) ? defaultValue : value;
+    }
+
+    /**
+     * 检查字符串是否为JSON字符串
+     *
+     * @param value 字符串
+     * @return boolean
+     */
+    public static boolean isJSONObject(final String value) {
+        if (isWhitespace(value)) {
+            return false;
+        }
+        return value.matches(JSON_OBJECT_MASK);
+    }
+
+    /**
+     * 检查字符串是否为JSON数组字符串
+     *
+     * @param value 字符串
+     * @return boolean
+     */
+    public static boolean isJSONArray(final String value) {
+        if (isWhitespace(value)) {
+            return false;
+        }
+        return value.matches(JSON_ARRAY_MASK);
     }
 
     /**
